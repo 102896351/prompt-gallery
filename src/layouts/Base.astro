@@ -67,7 +67,8 @@ const hreflangs: Array<{ lang: string; href: string }> = isErrorPage
         }
       })();
     </script>
-    <link rel="icon" type="image/svg+xml" href={`${B}favicon.svg`} />
+    <link rel="icon" type="image/jpeg" href={`${B}favicon.jpg`} />
+    <link rel="apple-touch-icon" href={`${B}favicon.jpg`} />
     <!-- 性能优化：图片 CDN 预解析 + 预连接（LCP 优化） -->
     <link rel="dns-prefetch" href="https://img1.aiart.pics" />
     <link rel="preconnect" href="https://img1.aiart.pics" crossorigin />
@@ -138,7 +139,7 @@ const hreflangs: Array<{ lang: string; href: string }> = isErrorPage
         name: siteName,
         url: siteBase.toString(),
         description: finalDesc,
-        logo: new URL('favicon.svg', siteBase).toString(),
+        logo: new URL('favicon.jpg', siteBase).toString(),
       })}
     />
 
@@ -151,7 +152,7 @@ const hreflangs: Array<{ lang: string; href: string }> = isErrorPage
     <header class="site-header">
       <div class="container">
         <a href={B} class="brand">
-          <img src={`${B}favicon.svg`} alt="" />
+          <img src={`${B}favicon.jpg`} alt="" class="brand-logo" />
           {siteName}
         </a>
         <nav class="nav" aria-label="Primary">

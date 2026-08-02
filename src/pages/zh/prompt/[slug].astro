@@ -81,7 +81,7 @@ const articleLd = {
   publisher: {
     '@type': 'Organization',
     name: 'AI 魔法咒语',
-    logo: { '@type': 'ImageObject', url: new URL('favicon.svg', siteBase).toString() },
+    logo: { '@type': 'ImageObject', url: new URL('favicon.jpg', siteBase).toString() },
   },
   keywords: prompt.tags.join(', '),
   ...(prompt.images[0] ? { image: [prompt.images[0].src] } : {}),
