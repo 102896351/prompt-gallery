@@ -1,0 +1,67 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+
+<Base title="隐私" description="AI 魔法咒语隐私政策">
+  <section class="info-hero">
+    <div class="container">
+      <h1>隐私政策</h1>
+      <p class="info-meta">最近更新：2026-07-30</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container info-prose">
+      <div class="prose">
+        <h2>1. 我们收集什么</h2>
+        <p>
+          几乎没有。AI 魔法咒语是部署在 GitHub Pages 上的纯静态站点，没有后端数据库。我们不收集姓名、邮箱或任何个人信息。
+        </p>
+
+        <h2>2. Cookie 与本地存储</h2>
+        <p>
+          我们不设置追踪 Cookie。我们可能使用 localStorage 记录你的语言偏好（中/英），以便跨会话记忆。该值仅保存在你的浏览器中，可随时清除。
+        </p>
+
+        <h2>3. 第三方服务</h2>
+        <p>
+          我们可能使用 Google Analytics 统计匿名访问、使用 Cloudflare 提供 CDN 防护。这些服务各自有隐私政策。我们还可能在内容页投放 Google AdSense 广告，广告使用 Google 自己的 Cookie。
+        </p>
+
+        <h2>4. 嵌入资源</h2>
+        <p>
+          所有图片直接从原始图床（img1.aiart.pics）加载。当你浏览 prompt 详情页时，浏览器会向该 CDN 请求图片，CDN 会按其隐私政策看到你的 IP 地址。
+        </p>
+
+        <h2>5. 你的权利</h2>
+        <p>
+          如果你希望从画廊移除你的 prompt，请见<a href="/zh/contact">联系我们</a>。我们将在 48 小时内处理有效的下架请求。
+        </p>
+
+        <h2>6. 儿童隐私</h2>
+        <p>
+          本站不面向 13 岁以下儿童。我们不会有意收集儿童信息。
+        </p>
+
+        <h2>7. 政策更新</h2>
+        <p>
+          我们可能随时更新本隐私政策。变更将发布在本页。
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .info-hero { padding: 80px 0 32px; text-align: center; }
+  .info-hero h1 {
+    font-size: clamp(32px, 4.5vw, 44px);
+    margin: 0 0 12px;
+    font-weight: 800;
+  }
+  .info-meta { color: var(--text-muted); font-size: 14px; margin: 0; }
+  .info-prose { max-width: 760px; }
+  .prose h2 { font-size: 20px; margin: 28px 0 10px; font-weight: 700; }
+  .prose p { color: var(--text-soft); line-height: 1.75; }
+  .prose a { color: var(--accent-soft); }
+</style>

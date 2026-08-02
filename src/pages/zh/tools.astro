@@ -1,0 +1,172 @@
+---
+import Base from '../../layouts/Base.astro';
+import { tools, toolCategories, getAllTags } from '../../data/tools';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const tags = getAllTags();
+---
+
+<Base title="AI 工具集" description="精选最好用的 AI 绘画、写作、开发工具、模型站和辅助资源。">
+  <section class="hero tools-hero">
+    <div class="container">
+      <h1><span class="grad">AI 工具集</span></h1>
+      <p>精选最好用的 AI 绘画、写作、开发工具、模型站和辅助资源，助你的创作一臂之力。</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="pills" id="tool-filter-pills">
+        <button class="pill active" data-tag="all">全部</button>
+        {tags.map((tag) => (
+          <button class="pill" data-tag={tag}>{tag}</button>
+        ))}
+      </div>
+
+      {toolCategories.map((cat) => {
+        const catTools = tools.filter((t) => t.category === cat.id);
+        if (catTools.length === 0) return null;
+        return (
+          <div class="tool-section" data-section>
+            <div class="section-head">
+              <h2>{cat.labelZh}</h2>
+              <span class="count">{catTools.length} 款工具</span>
+            </div>
+            <div class="grid tool-grid">
+              {catTools.map((tool) => (
+                <a
+                  href={tool.url}
+                  target="_blank"
+                  rel="noopener"
+                  class="card tool-card"
+                  data-tags={tool.tags.join(' ')}
+                  data-name={tool.name.toLowerCase()}
+                >
+                  <div class="tool-card-head">
+                    {tool.icon && (
+                      <img
+                        src={tool.icon.startsWith('http') ? tool.icon : `${base}${tool.icon}`}
+                        alt=""
+                        class="tool-icon"
+                        width="32"
+                        height="32"
+                        loading="lazy"
+                        decoding="async"
+                        onerror="this.style.visibility='hidden'"
+                      />
+                    )}
+                    <h3>{tool.nameZh || tool.name}</h3>
+                    {tool.featured && <span class="tool-star" title="精选">★</span>}
+                  </div>
+                  <p class="tagline">{tool.descriptionZh}</p>
+                  <div class="card-meta">
+                    {tool.tags.slice(0, 3).map((tag) => (
+                      <span class="badge">{tag}</span>
+                    ))}
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+
+      <p class="empty hidden" id="tool-empty">没有匹配的工具。</p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .tools-hero { padding-bottom: 32px; }
+  .tools-hero h1 {
+    font-size: clamp(32px, 4.5vw, 44px);
+    margin: 0 0 12px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .tools-hero p {
+    color: var(--text-soft);
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .tool-section { margin-bottom: 48px; }
+  .tool-section .section-head { margin-bottom: 16px; }
+  .tool-card {
+    display: flex;
+    flex-direction: column;
+    padding: 16px 18px;
+  }
+  .tool-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .tool-card-head h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    flex: 1;
+    min-width: 0;
+  }
+  .tool-icon {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    object-fit: contain;
+    background: var(--bg-soft);
+    padding: 4px;
+    box-sizing: border-box;
+  }
+  .tool-star {
+    color: var(--amber);
+    font-size: 14px;
+  }
+  .tool-card .tagline {
+    flex: 1;
+    margin: 0 0 12px;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  .tool-card .card-meta {
+    margin-top: auto;
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    const pills = document.querySelectorAll('#tool-filter-pills .pill');
+    const sections = document.querySelectorAll('[data-section]');
+    const empty = document.getElementById('tool-empty');
+    if (!pills.length) return;
+
+    let activeTag = 'all';
+
+    function apply() {
+      let visibleTotal = 0;
+      sections.forEach((section) => {
+        const cards = section.querySelectorAll('.tool-card');
+        let visibleInSection = 0;
+        cards.forEach((card) => {
+          const tags = card.dataset.tags || '';
+          const match = activeTag === 'all' || tags.split(' ').includes(activeTag);
+          card.style.display = match ? '' : 'none';
+          if (match) { visibleInSection++; visibleTotal++; }
+        });
+        section.style.display = visibleInSection > 0 ? '' : 'none';
+      });
+      if (empty) empty.classList.toggle('hidden', visibleTotal > 0);
+    }
+
+    pills.forEach((p) => {
+      p.addEventListener('click', () => {
+        pills.forEach((q) => q.classList.remove('active'));
+        p.classList.add('active');
+        activeTag = p.dataset.tag;
+        apply();
+      });
+    });
+  })();
+</script>

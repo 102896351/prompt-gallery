@@ -1,0 +1,3 @@
+# Google AdSense publisher file
+# TODO: Apply for AdSense and replace with real publisher ID after launch
+# google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0

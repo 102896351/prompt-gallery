@@ -1,0 +1,380 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { collections, getCollectionBySlug } from '../../../data/collections';
+
+export function getStaticPaths() {
+  return collections.map((c) => ({
+    params: { slug: c.slug },
+    props: { collection: c },
+  }));
+}
+
+const { collection } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<Base title={collection.title} description={collection.description}>
+  <section class="collection-hero">
+    <div class="container">
+      <a href={`${base}/zh/collections`} class="back-link">← 全部专题</a>
+      <h1>{collection.title}</h1>
+      <p class="collection-desc">{collection.description}</p>
+      <span class="collection-count">{collection.count} 个提示词 · 显示 {collection.prompts.length} 个样本</span>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="prompt-grid">
+        {collection.prompts.map((p, idx) => (
+          <button
+            type="button"
+            class="prompt-item"
+            data-gallery-trigger={String(idx)}
+            data-img={p.image}
+            data-caption={p.title}
+            data-prompt-text={p.promptText || ''}
+            aria-label={`查看 ${p.title} 大图`}
+          >
+            <div class="prompt-item-cover">
+              <img
+                src={p.image}
+                alt={p.title}
+                width="400"
+                height="400"
+                loading="lazy"
+                decoding="async"
+                onerror="this.style.visibility='hidden'"
+              />
+            </div>
+            <h3>{p.title}</h3>
+          </button>
+        ))}
+      </div>
+
+      {collection.prompts.length > 0 && (
+        <div class="lightbox" data-lightbox hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="图片查看器">
+          <button class="lightbox-close" data-lightbox-close aria-label="关闭">×</button>
+          <button class="lightbox-prev" data-lightbox-prev aria-label="上一张">‹</button>
+          <button class="lightbox-next" data-lightbox-next aria-label="下一张">›</button>
+          <div class="lightbox-content">
+            <div class="lightbox-stage">
+              {collection.prompts.map((p, i) => (
+                <img
+                  src={p.image}
+                  alt={p.title}
+                  class={`lightbox-img${i === 0 ? ' active' : ''}`}
+                  data-lightbox-img={String(i)}
+                  loading="lazy"
+                  decoding="async"
+                />
+              ))}
+            </div>
+            <div class="lightbox-side">
+              <div class="lightbox-side-head">
+                <span class="lightbox-counter" data-lightbox-counter>1 / {collection.prompts.length}</span>
+                <span class="lightbox-title" data-lightbox-caption>{collection.prompts[0].title}</span>
+              </div>
+              <div class="lightbox-prompt-wrap">
+                <button type="button" class="lightbox-copy-btn" data-lightbox-copy aria-label="复制提示词">
+                  <span data-copy-text>📋 复制</span>
+                </button>
+                <pre class="lightbox-prompt" data-lightbox-prompt>{collection.prompts[0].promptText || '(暂无该样本的提示词)'}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div class="collection-footer">
+        <p>以上是本合集 {collection.count} 个提示词中的样本展示。</p>
+        <a href={`${base}/zh/#all`} class="btn primary">浏览全部提示词 →</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .collection-hero {
+    padding: 80px 0 32px;
+    text-align: center;
+  }
+  .back-link {
+    color: var(--text-muted);
+    font-size: 14px;
+    display: inline-block;
+    margin-bottom: 16px;
+  }
+  .back-link:hover { color: var(--accent-soft); }
+  .collection-hero h1 {
+    font-size: clamp(28px, 4vw, 40px);
+    margin: 0 0 12px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .collection-hero .collection-desc {
+    color: var(--text-soft);
+    max-width: 640px;
+    margin: 0 auto 16px;
+  }
+  .collection-count {
+    display: inline-block;
+    padding: 6px 14px;
+    background: var(--accent-bg);
+    color: var(--accent);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .prompt-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+  }
+  .prompt-item-cover {
+    aspect-ratio: 1 / 1;
+    background: var(--bg-soft);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .prompt-item-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+  }
+  .prompt-item:hover .prompt-item-cover img {
+    transform: scale(1.05);
+  }
+  .prompt-item h3 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .collection-footer {
+    margin-top: 48px;
+    text-align: center;
+    color: var(--text-muted);
+  }
+  .collection-footer p { margin: 0 0 16px; font-size: 14px; }
+  .btn.primary {
+    display: inline-block;
+    padding: 10px 20px;
+    background: var(--accent);
+    color: #ffffff;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .btn.primary:hover { filter: brightness(1.1); }
+
+  .prompt-item {
+    display: block;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-family: inherit;
+    text-align: left;
+    color: inherit;
+  }
+
+  .lightbox[hidden] { display: none; }
+  .lightbox {
+    position: fixed; inset: 0; z-index: 100;
+    background: rgba(0, 0, 0, 0.92);
+    backdrop-filter: blur(4px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  .lightbox-stage {
+    position: relative;
+    max-width: min(1200px, 92vw); max-height: 82vh;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .lightbox-img {
+    display: none;
+    max-width: 100%; max-height: 82vh;
+    object-fit: contain; border-radius: var(--radius-sm);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  }
+  .lightbox-img.active { display: block; }
+
+  .lightbox-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: 24px;
+    width: 100%;
+    max-width: 1400px;
+    max-height: 88vh;
+  }
+  .lightbox-side {
+    display: flex; flex-direction: column;
+    background: rgba(20, 22, 30, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius);
+    padding: 16px;
+    min-height: 0;
+  }
+  .lightbox-side-head {
+    display: flex; align-items: baseline; gap: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 12px;
+  }
+  .lightbox-counter {
+    color: var(--accent-soft); font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+  }
+  .lightbox-title {
+    color: #fff; font-size: 15px; font-weight: 600;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    min-width: 0;
+  }
+  .lightbox-prompt-wrap {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    display: flex; flex-direction: column;
+  }
+  .lightbox-copy-btn {
+    position: absolute;
+    top: 8px; right: 8px;
+    z-index: 2;
+    padding: 6px 12px;
+    background: rgba(236, 72, 153, 0.85);
+    color: #fff;
+    border: none; border-radius: 6px;
+    font-size: 12px; font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-family: inherit;
+  }
+  .lightbox-copy-btn:hover { background: var(--accent); }
+  .lightbox-prompt {
+    flex: 1;
+    margin: 0;
+    padding: 14px 16px;
+    padding-right: 80px;
+    background: rgba(0, 0, 0, 0.4);
+    color: rgba(255, 255, 255, 0.9);
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    border-radius: 8px;
+    overflow: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .lightbox-close, .lightbox-prev, .lightbox-next {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #fff; cursor: pointer; font-family: inherit;
+    transition: all 0.15s;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 3;
+  }
+  .lightbox-close { top: 20px; right: 20px; width: 44px; height: 44px; border-radius: 50%; font-size: 24px; line-height: 1; }
+  .lightbox-prev, .lightbox-next { top: 50%; transform: translateY(-50%); width: 56px; height: 56px; border-radius: 50%; font-size: 32px; line-height: 1; }
+  .lightbox-prev { left: 20px; }
+  .lightbox-next { right: 20px; }
+  .lightbox-close:hover, .lightbox-prev:hover, .lightbox-next:hover {
+    background: rgba(236, 72, 153, 0.25);
+    border-color: var(--accent);
+  }
+
+  @media (max-width: 800px) {
+    .lightbox-content {
+      grid-template-columns: 1fr;
+      grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+      max-height: 92vh;
+    }
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    const triggers = document.querySelectorAll('[data-gallery-trigger]');
+    const lightbox = document.querySelector('[data-lightbox]');
+    if (!triggers.length || !lightbox) return;
+    const lightboxImgs = lightbox.querySelectorAll('[data-lightbox-img]');
+    const counterEl = lightbox.querySelector('[data-lightbox-counter]');
+    const captionEl = lightbox.querySelector('[data-lightbox-caption]');
+    const promptEl = lightbox.querySelector('[data-lightbox-prompt]');
+    const copyBtn = lightbox.querySelector('[data-lightbox-copy]');
+    const promptTexts = Array.from(triggers).map(t => t.getAttribute('data-prompt-text') || '');
+    const total = lightboxImgs.length;
+    let current = 0;
+
+    function showLightboxImg(idx) {
+      current = idx;
+      lightboxImgs.forEach((img, i) => img.classList.toggle('active', i === idx));
+      if (counterEl) counterEl.textContent = (idx + 1) + ' / ' + total;
+      if (captionEl) captionEl.textContent = lightboxImgs[idx] ? (lightboxImgs[idx].alt || '') : '';
+      if (promptEl) promptEl.textContent = promptTexts[idx] || '(暂无该样本的提示词)';
+    }
+    function openLightbox(idx) {
+      current = idx; lightbox.hidden = false;
+      lightbox.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      showLightboxImg(idx);
+    }
+    function closeLightbox() {
+      lightbox.hidden = true;
+      lightbox.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+    function nav(delta) {
+      showLightboxImg((current + delta + total) % total);
+    }
+
+    triggers.forEach((t) => {
+      t.addEventListener('click', () => {
+        const idx = parseInt(t.getAttribute('data-gallery-trigger'), 10) || 0;
+        openLightbox(idx);
+      });
+    });
+    lightbox.querySelector('[data-lightbox-close]')?.addEventListener('click', closeLightbox);
+    lightbox.querySelector('[data-lightbox-prev]')?.addEventListener('click', () => nav(-1));
+    lightbox.querySelector('[data-lightbox-next]')?.addEventListener('click', () => nav(1));
+
+    copyBtn?.addEventListener('click', async () => {
+      const txt = promptEl ? promptEl.textContent : '';
+      try {
+        await navigator.clipboard.writeText(txt || '');
+        const span = copyBtn.querySelector('[data-copy-text]');
+        if (span) {
+          const orig = span.textContent;
+          span.textContent = '✓ 已复制';
+          setTimeout(() => { span.textContent = orig; }, 1500);
+        }
+      } catch (e) {
+        const span = copyBtn.querySelector('[data-copy-text]');
+        if (span) {
+          span.textContent = '✗ 失败';
+          setTimeout(() => { span.textContent = '📋 复制'; }, 1500);
+        }
+      }
+    });
+    lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', (e) => {
+      if (lightbox.hidden) return;
+      if (e.key === 'Escape') closeLightbox();
+      else if (e.key === 'ArrowLeft') nav(-1);
+      else if (e.key === 'ArrowRight') nav(1);
+    });
+  })();
+</script>

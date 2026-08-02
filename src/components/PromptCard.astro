@@ -1,0 +1,108 @@
+---
+// ============================================================
+//  PromptCard.astro
+//  首页 / 列表页的 prompt 卡片
+//  模式：仿 ai-agents-hub 的 AgentCard，无 <style>，样式用全局 .card 类
+// ============================================================
+
+import type { Prompt } from '../data/prompts';
+import { promptCategories } from '../data/prompts';
+import { getLocaleFromPath, en, zh, type Locale } from '../i18n';
+import PromptImage from './PromptImage.astro';
+
+interface Props {
+  prompt: Prompt;
+  base?: string;
+}
+const { prompt, base = import.meta.env.BASE_URL.replace(/\/$/, '') } = Astro.props;
+const cat = promptCategories.find((c) => c.id === prompt.category);
+const cover = prompt.images[0];
+// 根据当前页面 URL 推断 locale，决定卡片链接加不加 /zh 前缀
+const locale: Locale = getLocaleFromPath(Astro.url.pathname);
+const messages = locale === 'zh' ? zh : en;
+const promptHref = locale === 'zh' ? `${base}/zh/prompt/${prompt.slug}` : `${base}/prompt/${prompt.slug}`;
+// 英文页面：优先 titleEn，fallback 到 title；中文页：保持 title
+const displayTitle = locale === 'en' ? (prompt.titleEn || prompt.title) : prompt.title;
+// 分类标签：locale=zh 用 labelZh，否则用 label
+const displayCategoryLabel = locale === 'zh' ? (cat?.labelZh ?? cat?.label ?? prompt.category) : (cat?.label ?? prompt.category);
+// 引擎显示名（按 locale 翻译）
+const engineLabel = (key: string) => (messages.engines as Record<string, string>)[key] ?? key;
+// 标签显示名
+const tagLabel = (key: string) => (messages.tags as Record<string, string>)[key] ?? key;
+---
+
+<a href={promptHref} class="card prompt-card">
+  {cover && (
+    <div class="prompt-card-cover">
+      <PromptImage src={cover.src} alt={cover.alt ?? displayTitle} width={cover.width} />
+    </div>
+  )}
+  <div class="prompt-card-body">
+    <div class="card-top">
+      <h3>{displayTitle}</h3>
+    </div>
+    <p class="tagline">{prompt.tagline}</p>
+    <div class="card-meta">
+      <span class="pill active" style="font-size: 11px; padding: 2px 8px;">{displayCategoryLabel}</span>
+      {prompt.engines.slice(0, 2).map((e) => (
+        <span class="badge engine" style="font-size: 10px;">{engineLabel(e)}</span>
+      ))}
+      {prompt.reusable && (
+        <span class="badge host" style="font-size: 10px;">{tagLabel('reusable')}</span>
+      )}
+    </div>
+    <div class="prompt-card-footer">
+      <span class="prompt-card-author">@{prompt.source.authorName}</span>
+    </div>
+  </div>
+</a>
+
+<style>
+  .prompt-card {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+  }
+  .prompt-card-cover {
+    aspect-ratio: 4 / 3;
+    background: var(--bg-soft);
+    overflow: hidden;
+  }
+  .prompt-card-cover :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+  }
+  .prompt-card:hover .prompt-card-cover :global(img) {
+    transform: scale(1.05);
+  }
+  .prompt-card-body {
+    padding: 14px 16px 12px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .prompt-card-body .card-top {
+    margin-bottom: 6px;
+  }
+  .prompt-card-body h3 {
+    font-size: 15px;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .prompt-card-footer {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 11px;
+  }
+  .prompt-card-author {
+    color: var(--text-muted);
+  }
+</style>

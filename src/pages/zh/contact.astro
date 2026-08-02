@@ -1,0 +1,93 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+
+<Base title="联系" description="联系AI 魔法咒语">
+  <section class="info-hero">
+    <div class="container">
+      <h1>联系我们</h1>
+      <p class="info-meta">最近更新：2026-07-30</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container info-prose">
+      <div class="prose">
+        <h2>联系方式</h2>
+        <p>纠错、下架请求、建议或一般反馈：</p>
+        <div class="contact-card">
+          <a href="mailto:hello@example.com" class="contact-email">hello@example.com</a>
+          <span class="contact-note">（上线前请替换为真实邮箱）</span>
+        </div>
+
+        <h2>何时联系我们</h2>
+        <ul>
+          <li><strong>纠错</strong> — 作者错误、链接失效、标题翻译不准。</li>
+          <li><strong>下架请求</strong> — 如果您是原作者并希望移除您的 prompt。</li>
+          <li><strong>提交新 prompt</strong> — 上游仓库尚未收录的高质量提示词。</li>
+          <li><strong>Bug 报告</strong> — 站点显示问题、功能失效。</li>
+        </ul>
+
+        <h2>我们通常不回复的内容</h2>
+        <ul>
+          <li>通用 SEO 推销</li>
+          <li>友情链接请求</li>
+          <li>「送我免费提示词」类请求（这里所有内容都已经免费且署名）</li>
+        </ul>
+
+        <div class="verdict-box">
+          <div class="label">回复时效</div>
+          <p style="margin: 0;">我们力争 7 天内回复。下架请求通常 48 小时内处理。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .info-hero { padding: 80px 0 32px; text-align: center; }
+  .info-hero h1 {
+    font-size: clamp(32px, 4.5vw, 44px);
+    margin: 0 0 12px;
+    font-weight: 800;
+  }
+  .info-meta { color: var(--text-muted); font-size: 14px; margin: 0; }
+  .info-prose { max-width: 760px; }
+  .prose h2 { font-size: 22px; margin: 32px 0 12px; font-weight: 700; }
+  .prose p { color: var(--text-soft); line-height: 1.75; }
+  .prose ul { color: var(--text-soft); padding-left: 20px; }
+  .prose li { margin-bottom: 8px; line-height: 1.6; }
+  .prose a { color: var(--accent-soft); }
+  .contact-card {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 16px 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin: 16px 0;
+  }
+  .contact-email {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .contact-email:hover { color: var(--accent-soft); }
+  .contact-note { color: var(--text-muted); font-size: 12px; }
+  .verdict-box {
+    padding: 16px 20px;
+    background: var(--accent-bg);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    margin-top: 32px;
+  }
+  .verdict-box .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent-soft);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+</style>

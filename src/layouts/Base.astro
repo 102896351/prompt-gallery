@@ -1,0 +1,209 @@
+---
+import '../styles/global.css';
+import { getLocaleFromPath, swapLocale, en, zh, type Locale } from '../i18n';
+
+const { title, description, noAds = false, ogImage } = Astro.props as {
+  title?: string;
+  description?: string;
+  noAds?: boolean; // 404 / error pages: skip AdSense
+  ogImage?: string; // 页面级 OG 图（如详情页用 prompt 首图）
+};
+
+// 从 URL 自动判断 locale，避免 prop drilling
+const locale: Locale = getLocaleFromPath(Astro.url.pathname);
+const t = locale === 'zh' ? zh : en;
+
+const siteName = t.siteName;
+const finalTitle = title ? `${title} · ${siteName}` : `${siteName} — ${t.siteTagline}`;
+const finalDesc = description || t.siteTagline;
+const siteBase = Astro.site ?? new URL('https://prompt-gallery.example.com');
+const canonical = new URL(Astro.url.pathname, siteBase).toString();
+// OG 图：页面级优先，否则用默认图
+const defaultOgImage = new URL('og-default.svg', siteBase).toString();
+const resolvedOgImage = ogImage || defaultOgImage;
+
+// 语言切换：切到对端首页（而不是保持当前页面），避免 404 页切到对端也 404
+// 用相对路径而非绝对 URL，否则 dev 环境会跳到生产域名
+const B_switcher = import.meta.env.BASE_URL.replace(/\/$/, '');
+const otherLocaleHref = locale === 'zh' ? `${B_switcher}/` : `${B_switcher}/zh/`;
+// 动态读取 base 路径，避免硬编码（适配自定义域名 vs github.io/仓库名）
+const B = import.meta.env.BASE_URL; // 末尾带 /，如 '/' 或 '/prompt-gallery/'
+
+// 双语 hreflang：x-default 指向英文版（默认），并声明真实的两个语言版本
+// 404 / 错误页的 hreflang 指向各自首页（而不是当前错误 URL）
+const isErrorPage = Astro.url.pathname.startsWith('/404') || Astro.url.pathname === '/404.html';
+const hreflangs: Array<{ lang: string; href: string }> = isErrorPage
+  ? [
+      { lang: 'x-default', href: new URL('/', siteBase).toString() },
+      { lang: 'en', href: new URL('/', siteBase).toString() },
+      { lang: 'zh-Hans', href: new URL('/zh/', siteBase).toString() },
+    ]
+  : [
+      // x-default 始终指向英文版（默认语言）；en 指向当前英文对端；zh-Hans 指向当前中文对端
+      { lang: 'x-default', href: locale === 'en' ? canonical : new URL(swapLocale(Astro.url.pathname, 'zh'), siteBase).toString() },
+      { lang: 'en', href: locale === 'en' ? canonical : new URL(swapLocale(Astro.url.pathname, 'zh'), siteBase).toString() },
+      { lang: 'zh-Hans', href: locale === 'zh' ? canonical : new URL(swapLocale(Astro.url.pathname, 'en'), siteBase).toString() },
+    ];
+---
+
+<!doctype html>
+<html lang={locale === 'zh' ? 'zh-Hans' : 'en'}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- 主题切换：在 CSS 之前尽早执行，避免首屏闪烁 -->
+    <script is:inline>
+      (function () {
+        try {
+          var saved = localStorage.getItem('theme');
+          if (saved === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+          } else {
+            // 默认浅色（即使没有 saved 也走浅色）
+            document.documentElement.setAttribute('data-theme', 'light');
+          }
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      })();
+    </script>
+    <link rel="icon" type="image/svg+xml" href={`${B}favicon.svg`} />
+    <!-- 性能优化：图片 CDN 预解析 + 预连接（LCP 优化） -->
+    <link rel="dns-prefetch" href="https://img1.aiart.pics" />
+    <link rel="preconnect" href="https://img1.aiart.pics" crossorigin />
+    <title>{finalTitle}</title>
+    <meta name="description" content={finalDesc} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Hreflang: 真实存在的双语版本，避免 Google 假多语言惩罚 -->
+    {hreflangs.map((hl) => (
+      <link rel="alternate" hreflang={hl.lang} href={hl.href} />
+    ))}
+
+    <!-- SEO: explicit indexing directives -->
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="author" content={siteName} />
+    <meta name="generator" content={Astro.generator} />
+    <!-- theme-color 跟随主题（浅色/深色） -->
+    <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0b0d12" media="(prefers-color-scheme: dark)" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={finalTitle} />
+    <meta property="og:description" content={finalDesc} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content={locale === 'zh' ? 'zh_CN' : 'en_US'} />
+    <meta property="og:image" content={resolvedOgImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={finalTitle} />
+    <meta name="twitter:description" content={finalDesc} />
+    <meta name="twitter:image" content={resolvedOgImage} />
+
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+    <!-- JSON-LD: WebSite + SearchAction for sitelinks search box -->
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: siteName,
+        url: siteBase.toString(),
+        description: finalDesc,
+        inLanguage: locale === 'zh' ? 'zh-Hans' : 'en',
+        potentialAction: {
+          '@type': 'SearchAction',
+          target: {
+            '@type': 'EntryPoint',
+            urlTemplate: `${siteBase.toString()}?q={search_term_string}`,
+          },
+          'query-input': 'required name=search_term_string',
+        },
+      })}
+    />
+
+    <!-- JSON-LD: Organization（E-E-A-T 信号，所有页面输出） -->
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: siteName,
+        url: siteBase.toString(),
+        description: finalDesc,
+        logo: new URL('favicon.svg', siteBase).toString(),
+      })}
+    />
+
+    <!-- 页面级 head 内容插槽（如详情页的 CreativeWork JSON-LD）-->
+    <slot name="head" />
+  </head>
+  <body>
+    <!-- 可访问性：skip-to-content 链接 -->
+    <a href="#main-content" class="skip-link">Skip to content</a>
+    <header class="site-header">
+      <div class="container">
+        <a href={B} class="brand">
+          <img src={`${B}favicon.svg`} alt="" />
+          {siteName}
+        </a>
+        <nav class="nav" aria-label="Primary">
+          <a href={`${B}#all`}>{t.nav.categories}</a>
+          <a href={`${B}collections`}>{t.nav.collections}</a>
+          <a href={`${B}#featured`}>{t.nav.featured}</a>
+          <a href={`${B}tools`}>{t.nav.tools}</a>
+          <a href={`${B}about`}>{t.nav.about}</a>
+          <a href={otherLocaleHref} class="lang-switcher" aria-label={`Switch language to ${locale === 'zh' ? 'English' : '中文'}`}>
+            {t.langSwitcher.switchTo}
+          </a>
+          <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle light/dark">
+            <span class="theme-icon theme-icon-sun" aria-hidden="true">☀</span>
+            <span class="theme-icon theme-icon-moon" aria-hidden="true">☾</span>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-brand">
+          <a href={B} class="footer-brand-link">{siteName}</a>
+          <span class="footer-brand-sep">·</span>
+          <span>{t.footer.copyright}</span>
+        </div>
+        <nav class="footer-nav" aria-label="Site legal and info">
+          <a href={`${B}disclaimer`}>Disclaimer</a>
+          <a href={`${B}privacy`}>Privacy</a>
+          <a href={`${B}about`}>About</a>
+          <a href={`${B}contact`}>Contact</a>
+        </nav>
+        <p class="footer-tagline">{t.footer.legalNote}</p>
+      </div>
+    </footer>
+
+    <!-- 主题切换按钮逻辑 -->
+    <script is:inline>
+      (function () {
+        var btn = document.getElementById('theme-toggle');
+        if (!btn) return;
+        btn.addEventListener('click', function () {
+          var current = document.documentElement.getAttribute('data-theme') || 'light';
+          var next = current === 'dark' ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', next);
+          try { localStorage.setItem('theme', next); } catch (e) {}
+        });
+      })();
+    </script>
+  </body>
+</html>

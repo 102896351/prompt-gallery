@@ -1,0 +1,98 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Contact" description="Contact AI Magic Spells">
+  <section class="info-hero">
+    <div class="container">
+      <h1>Contact</h1>
+      <p class="info-meta">Last updated: 2026-07-30</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container info-prose">
+      <div class="prose">
+        <h2>Reach us</h2>
+        <p>
+          For corrections, takedown requests, suggestions, or general feedback:
+        </p>
+        <div class="contact-card">
+          <a href="mailto:hello@example.com" class="contact-email">hello@example.com</a>
+          <span class="contact-note">(Replace with your real address before launch)</span>
+        </div>
+
+        <h2>When to reach out</h2>
+        <ul>
+          <li><strong>Corrections</strong> — wrong author, broken link, mistranslated title.</li>
+          <li><strong>Takedown requests</strong> — if you are the original author and want your prompt removed.</li>
+          <li><strong>New prompt submissions</strong> — for high-quality prompts not yet in the upstream repo.</li>
+          <li><strong>Bug reports</strong> — site display issues, broken features.</li>
+        </ul>
+
+        <h2>What we usually don't reply to</h2>
+        <ul>
+          <li>Generic SEO pitches</li>
+          <li>Link-exchange requests</li>
+          <li>"Send me free prompts" requests (everything here is already free and attributed)</li>
+        </ul>
+
+        <div class="verdict-box">
+          <div class="label">Response time</div>
+          <p style="margin: 0;">We aim to respond within 7 days. Takedown requests are usually handled within 48 hours.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .info-hero { padding: 80px 0 32px; text-align: center; }
+  .info-hero h1 {
+    font-size: clamp(32px, 4.5vw, 44px);
+    margin: 0 0 12px;
+    font-weight: 800;
+  }
+  .info-meta { color: var(--text-muted); font-size: 14px; margin: 0; }
+  .info-prose { max-width: 760px; }
+  .prose h2 { font-size: 22px; margin: 32px 0 12px; font-weight: 700; }
+  .prose p { color: var(--text-soft); line-height: 1.75; }
+  .prose ul { color: var(--text-soft); padding-left: 20px; }
+  .prose li { margin-bottom: 8px; line-height: 1.6; }
+  .prose a { color: var(--accent-soft); }
+  .contact-card {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 16px 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin: 16px 0;
+  }
+  .contact-email {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .contact-email:hover { color: var(--accent-soft); }
+  .contact-note {
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+  .verdict-box {
+    padding: 16px 20px;
+    background: var(--accent-bg);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    margin-top: 32px;
+  }
+  .verdict-box .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent-soft);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+</style>

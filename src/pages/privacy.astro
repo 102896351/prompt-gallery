@@ -1,0 +1,76 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Privacy" description="Privacy policy for AI Magic Spells">
+  <section class="info-hero">
+    <div class="container">
+      <h1>Privacy Policy</h1>
+      <p class="info-meta">Last updated: 2026-07-30</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container info-prose">
+      <div class="prose">
+        <h2>1. What we collect</h2>
+        <p>
+          Almost nothing. AI Magic Spells is a static site hosted on GitHub Pages with no
+          backend database. We do not collect names, emails, or any personal information.
+        </p>
+
+        <h2>2. Cookies & local storage</h2>
+        <p>
+          We do not set tracking cookies. We may store a single localStorage value to remember
+          your language preference (en/zh) across sessions. This is purely client-side and
+          can be cleared at any time.
+        </p>
+
+        <h2>3. Third-party services</h2>
+        <p>
+          We may use Google Analytics to count anonymous visits and Cloudflare for CDN
+          protection. These services have their own privacy policies. We may display
+          Google AdSense ads on content pages; those ads use Google's own cookies.
+        </p>
+
+        <h2>4. Embedded resources</h2>
+        <p>
+          All images are loaded directly from the original source CDN (img1.aiart.pics).
+          When you view a prompt page, your browser requests these images from that CDN,
+          which sees your IP address per its own privacy policy.
+        </p>
+
+        <h2>5. Your rights</h2>
+        <p>
+          If you want your prompt removed from the gallery, see our <a href="/contact">contact</a>.
+          We will action valid takedown requests within 48 hours.
+        </p>
+
+        <h2>6. Children's privacy</h2>
+        <p>
+          This site is not directed at children under 13. We do not knowingly collect
+          information from children.
+        </p>
+
+        <h2>7. Updates</h2>
+        <p>
+          We may update this privacy policy at any time. Changes will be posted on this page.
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .info-hero { padding: 80px 0 32px; text-align: center; }
+  .info-hero h1 {
+    font-size: clamp(32px, 4.5vw, 44px);
+    margin: 0 0 12px;
+    font-weight: 800;
+  }
+  .info-meta { color: var(--text-muted); font-size: 14px; margin: 0; }
+  .info-prose { max-width: 760px; }
+  .prose h2 { font-size: 20px; margin: 28px 0 10px; font-weight: 700; }
+  .prose p { color: var(--text-soft); line-height: 1.75; }
+  .prose a { color: var(--accent-soft); }
+</style>

@@ -1,0 +1,72 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Disclaimer" description="Disclaimer for AI Magic Spells">
+  <section class="info-hero">
+    <div class="container">
+      <h1>Disclaimer</h1>
+      <p class="info-meta">Last updated: 2026-07-30</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container info-prose">
+      <div class="prose">
+        <h2>1. Purpose</h2>
+        <p>
+          AI Magic Spells is a non-commercial educational reference. We curate prompts for
+          AI image-generation models and always credit the original author of each entry.
+        </p>
+
+        <h2>2. No affiliation</h2>
+        <p>
+          We are not affiliated with any AI model provider (Google, OpenAI, Midjourney,
+          Stability AI, Black Forest Labs, etc.), or with the authors whose prompts we feature.
+          All trademarks belong to their respective owners.
+        </p>
+
+        <h2>3. Accuracy</h2>
+        <p>
+          Prompts are presented as-is from their original source. We do not verify whether a
+          prompt actually produces the visual result shown in the source image. Visual results
+          depend heavily on the specific model version, fine-tunes, and random seeds used.
+          Reproduction may require iteration.
+        </p>
+
+        <h2>4. Third-party content</h2>
+        <p>
+          Source URLs point to third-party platforms (X, Xiaohongshu, Discord, etc.). We are not
+          responsible for content, availability, or practices of those platforms. If you are a
+          copyright holder and want content removed, see our <a href="/contact">contact</a>.
+        </p>
+
+        <h2>5. Limitation of liability</h2>
+        <p>
+          This site is provided "as is" without warranties of any kind. Use prompts at your own
+          risk; comply with each model's terms of service and content policies.
+        </p>
+
+        <h2>6. Changes</h2>
+        <p>
+          We may update this disclaimer at any time. Continued use of the site after changes
+          constitutes acceptance.
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .info-hero { padding: 80px 0 32px; text-align: center; }
+  .info-hero h1 {
+    font-size: clamp(32px, 4.5vw, 44px);
+    margin: 0 0 12px;
+    font-weight: 800;
+  }
+  .info-meta { color: var(--text-muted); font-size: 14px; margin: 0; }
+  .info-prose { max-width: 760px; }
+  .prose h2 { font-size: 20px; margin: 28px 0 10px; font-weight: 700; }
+  .prose p { color: var(--text-soft); line-height: 1.75; }
+  .prose a { color: var(--accent-soft); }
+</style>

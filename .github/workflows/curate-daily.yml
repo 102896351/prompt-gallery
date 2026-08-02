@@ -1,0 +1,82 @@
+name: Daily curation
+
+# 每天北京时间 10:00（UTC 02:00）跑一次
+# 也允许手动触发（Actions 页面 → Run workflow）
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  curate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download latest community data
+        run: |
+          # TODO: 替换为您自己的数据源
+          curl -fsSL \
+            -A "prompt-gallery-bot/1.0" \
+            "${{ secrets.DATA_SOURCE_URL }}" \
+            -o /tmp/data.md
+          echo "Downloaded $(wc -c < /tmp/data.md) bytes"
+
+      - name: Extract candidates
+        run: |
+          LOCAL_FILE=/tmp/data.md MAX_CANDIDATES=1500 \
+            node scripts/extract-prompts.mjs > src/data/prompts.candidates.json
+
+      - name: Curate new prompts (append mode)
+        id: curate
+        run: |
+          node scripts/curate-prompts.mjs \
+            --mode append \
+            --limit 500 \
+            --input src/data/prompts.candidates.json \
+            --output src/data/prompts.ts \
+            --pr-body /tmp/pr-body.md 2>&1 | tee /tmp/curate.log
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if git diff --quiet src/data/prompts.ts; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "No new prompts; skipping PR creation."
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            NEW_COUNT=$(grep -c '^  {' src/data/prompts.ts || echo "0")
+            EXISTING_COUNT=$(git show HEAD:src/data/prompts.ts | grep -c '^  {' || echo "0")
+            ADDED=$((NEW_COUNT - EXISTING_COUNT))
+            echo "added=$ADDED" >> $GITHUB_OUTPUT
+            echo "Detected $ADDED new prompts."
+          fi
+
+      - name: Create Pull Request
+        if: steps.check_changes.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore: curate ${{ steps.check_changes.outputs.added }} new prompts'
+          title: 'Daily curation: ${{ steps.check_changes.outputs.added }} new prompts'
+          body-path: /tmp/pr-body.md
+          branch: curation/daily-${{ github.run_id }}
+          delete-branch: true
+          add-paths: |
+            src/data/prompts.ts
+            src/data/prompts.candidates.json

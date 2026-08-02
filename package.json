@@ -1,0 +1,27 @@
+{
+  "name": "prompt-gallery",
+  "type": "module",
+  "version": "0.1.0",
+  "description": "A curated bilingual gallery of AI image-generation prompts. Pure static site.",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "extract": "node scripts/extract-prompts.mjs",
+    "curate": "node scripts/curate-prompts.mjs",
+    "curate:append": "node scripts/curate-prompts.mjs --mode append"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.2.1",
+    "astro": "^5.0.0"
+  },
+  "devDependencies": {
+    "json5": "^2.2.3",
+    "playwright": "^1.62.1",
+    "remark-parse": "^11.0.0",
+    "translate": "^3.1.0",
+    "unified": "^11.0.5"
+  }
+}

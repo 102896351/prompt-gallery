@@ -1,0 +1,188 @@
+---
+import Base from '../layouts/Base.astro';
+
+const siteBase = Astro.site ?? new URL('https://prompt-gallery.example.com');
+
+const faqs = [
+  {
+    q: 'What is AI Magic Spells?',
+    a: 'A curated, bilingual (English & Simplified Chinese) gallery of AI image-generation prompts. We feature 300 hand-picked examples across 11 categories, with copy-paste ready text, visual evidence, and editorial framing.',
+  },
+  {
+    q: 'How do you pick the prompts?',
+    a: 'The curation pipeline runs daily via GitHub Actions: it pulls the latest community submissions, deduplicates, scores by quality (image count, JSON structure, field completeness, length), and applies diversity constraints. New entries appear as Pull Requests for human review before publishing.',
+  },
+  {
+    q: 'Are you affiliated with any AI model provider?',
+    a: 'No. We are not affiliated with Google, OpenAI, Midjourney, Stability AI, Black Forest Labs, or any other model provider. We are an independent editorial project.',
+  },
+  {
+    q: 'Do you sell prompts or accept sponsored listings?',
+    a: 'No. We do not sell prompts, do not accept sponsored listings, and do not auto-generate content. Entries are picked by score and editorial judgment only.',
+  },
+  {
+    q: 'Are the prompts and images modified?',
+    a: 'No. We do not modify the original prompt text or images. Every entry keeps its original author, source platform (X, Xiaohongshu, Discord, etc.), and source URL, under CC BY 4.0 attribution.',
+  },
+];
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<Base title="About" description="About AI Magic Spells">
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+  <section class="info-hero">
+    <div class="container">
+      <h1>About AI Magic Spells</h1>
+      <p class="info-meta">Last updated: 2026-07-30 · Maintained by the editorial team</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container info-prose">
+      <div class="prose">
+        <h2>What this is</h2>
+        <p>
+          AI Magic Spells is a curated, bilingual (English &amp; Simplified Chinese) gallery of
+          AI image-generation prompts. We feature 300 hand-picked examples across 11 categories,
+          with copy-paste ready text, visual evidence, and editorial framing.
+        </p>
+
+        <h2>How we curate</h2>
+        <p>
+          The collection is grown through a mix of community submissions, public posts, and
+          editorial research. We do not modify the original prompt text or images. Every entry
+          keeps its original author, source platform (X, Xiaohongshu, Discord, etc.), and source URL.
+        </p>
+        <p>
+          The curation pipeline runs daily via GitHub Actions: it pulls the latest community
+          submissions, extracts new candidates, deduplicates, scores by quality (image count, JSON
+          structure, field completeness, length), and applies diversity constraints (max 4 per
+          author, template-variant clustering, balanced JSON share). New entries appear as Pull
+          Requests for human review before publishing.
+        </p>
+
+        <h2>Editorial principles</h2>
+        <ul>
+          <li><strong>No paid placements.</strong> Entries are picked by score and editorial judgment, not by sponsorship.</li>
+          <li><strong>Real visual evidence.</strong> We only feature prompts with at least one source image.</li>
+          <li><strong>Author preserved.</strong> Every entry links back to the original source.</li>
+          <li><strong>Bilingual UI.</strong> Prompt text stays in its original language; only the surrounding UI is translated.</li>
+        </ul>
+
+        <h2>What this is not</h2>
+        <p>
+          We are <strong>not</strong> affiliated with any AI model provider (Google, OpenAI,
+          Midjourney, Stability AI, Black Forest Labs, etc.). We do not sell prompts, we do not
+          accept sponsored listings, and we do not auto-generate content.
+        </p>
+
+        <div class="verdict-box">
+          <div class="label">TL;DR</div>
+          <p style="margin: 0;">
+            A small, hand-curated, properly attributed prompt gallery. Not a marketplace, not
+            an aggregator, not a content farm.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container info-prose">
+      <h2 class="faq-title">Frequently asked questions</h2>
+      <div class="faq-list">
+        {faqs.map((f) => (
+          <details class="faq-item">
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .info-hero { padding: 80px 0 32px; text-align: center; }
+  .info-hero h1 {
+    font-size: clamp(32px, 4.5vw, 44px);
+    margin: 0 0 12px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .info-meta {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin: 0;
+  }
+  .info-prose { max-width: 760px; }
+  .prose h2 {
+    font-size: 22px;
+    margin: 32px 0 12px;
+    font-weight: 700;
+  }
+  .prose p { color: var(--text-soft); line-height: 1.75; }
+  .prose ul { color: var(--text-soft); padding-left: 20px; }
+  .prose li { margin-bottom: 8px; line-height: 1.6; }
+  .prose a { color: var(--accent-soft); }
+  .prose a:hover { color: var(--accent); }
+  .verdict-box {
+    padding: 16px 20px;
+    background: var(--accent-bg);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    margin-top: 32px;
+  }
+  .verdict-box .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent-soft);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .faq-title {
+    font-size: 22px;
+    margin: 0 0 16px;
+    font-weight: 700;
+  }
+  .faq-list { display: flex; flex-direction: column; gap: 12px; }
+  .faq-item {
+    border: 1px solid var(--border, rgba(0,0,0,0.1));
+    border-radius: var(--radius);
+    padding: 0;
+    background: var(--card-bg, transparent);
+    overflow: hidden;
+  }
+  .faq-item summary {
+    cursor: pointer;
+    padding: 14px 18px;
+    font-weight: 600;
+    font-size: 15px;
+    list-style: none;
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::before {
+    content: '+';
+    display: inline-block;
+    margin-right: 10px;
+    color: var(--accent-soft);
+    font-weight: 700;
+  }
+  .faq-item[open] summary::before { content: '−'; }
+  .faq-item p {
+    padding: 0 18px 16px;
+    margin: 0;
+    color: var(--text-soft);
+    line-height: 1.7;
+  }
+</style>

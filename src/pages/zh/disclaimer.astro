@@ -1,0 +1,62 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+
+<Base title="免责声明" description="AI 魔法咒语免责声明">
+  <section class="info-hero">
+    <div class="container">
+      <h1>免责声明</h1>
+      <p class="info-meta">最近更新：2026-07-30</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container info-prose">
+      <div class="prose">
+        <h2>1. 用途</h2>
+        <p>
+          AI 魔法咒语是非商业性的教育参考站点。我们精选 AI 图像生成提示词，每一条都完整署名原作者。
+        </p>
+
+        <h2>2. 无关联关系</h2>
+        <p>
+          我们与任何 AI 模型厂商（Google、OpenAI、Midjourney、Stability AI、Black Forest Labs 等）或被收录提示词的作者均无关联。所有商标归各自所有者。
+        </p>
+
+        <h2>3. 准确性</h2>
+        <p>
+          提示词文本按原作者呈现。我们不验证某条 prompt 是否真的能生成原图所示的视觉效果——视觉结果高度依赖具体的模型版本、微调与随机种子，可能需要迭代才能复现。
+        </p>
+
+        <h2>4. 第三方内容</h2>
+        <p>
+          来源 URL 指向第三方平台（X、小红书、Discord 等）。我们不对这些平台的内容、可用性或实践负责。如果您是版权所有者并希望移除内容，请见<a href="/zh/contact">联系我们</a>。
+        </p>
+
+        <h2>5. 责任限制</h2>
+        <p>
+          本站点按"原样"提供，不作任何担保。请自行承担使用 prompt 的风险，并遵守每个模型的服务条款与内容政策。
+        </p>
+
+        <h2>6. 变更</h2>
+        <p>
+          我们可能随时更新本免责声明。变更后继续使用本站即视为接受。
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .info-hero { padding: 80px 0 32px; text-align: center; }
+  .info-hero h1 {
+    font-size: clamp(32px, 4.5vw, 44px);
+    margin: 0 0 12px;
+    font-weight: 800;
+  }
+  .info-meta { color: var(--text-muted); font-size: 14px; margin: 0; }
+  .info-prose { max-width: 760px; }
+  .prose h2 { font-size: 20px; margin: 28px 0 10px; font-weight: 700; }
+  .prose p { color: var(--text-soft); line-height: 1.75; }
+  .prose a { color: var(--accent-soft); }
+</style>

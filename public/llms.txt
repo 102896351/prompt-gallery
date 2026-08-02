@@ -1,0 +1,49 @@
+# AI Magic Spells / AI 魔法咒语
+
+> A curated, bilingual (English & Simplified Chinese) gallery of AI image-generation prompts.
+> 300 hand-picked prompts across 11 categories, each with copy-paste ready text, source images,
+> and editorial framing. Prompt text stays in its original language; only the UI is translated.
+> Not affiliated with any AI model provider. No sponsored listings. CC BY 4.0 attribution preserved.
+
+## What this site is
+
+AI Magic Spells is a hand-curated prompt gallery, not a marketplace or aggregator. Every entry keeps its
+original author, source platform (X, Xiaohongshu, Discord, etc.), and source URL. The curation pipeline
+runs daily via GitHub Actions: pull community submissions, deduplicate, score by quality, apply diversity
+constraints, then open Pull Requests for human review.
+
+## Key pages
+
+- [Home (English)](/)
+- [首页（中文）](/zh/)
+- [About / 关于](/about)
+- [Collections / 合集](/collections)
+- [Tools / 工具](/tools)
+- [Contact](/contact)
+- [Privacy](/privacy)
+- [Disclaimer](/disclaimer)
+
+## Prompt categories (11)
+
+- [Portrait](/#portrait) — People, faces, characters in portrait style
+- [Illustration](/#illustration) — Hand-drawn, painted, stylized artwork
+- [Photography](/#photography) — Photo-realistic shots, studio lighting
+- [3D Render](/#3d-render) — Isometric, maquette, CGI, architectural
+- [Product](/#product) — Product shots, packaging, mockups
+- [Infographic](/#infographic) — Diagrams, charts, educational visuals
+- [Character Design](/#character-design) — Character sheets, turnarounds, merch
+- [Poster](/#poster) — Posters, covers, editorial layouts
+- [Concept Art](/#concept-art) — World-building, environment art
+- [UI Mockup](/#ui-mockup) — App, web, dashboard layouts
+- [Other](/#other) — Anything that does not fit the above
+
+## How to use a prompt
+
+Each prompt detail page shows the prompt text in a copy-ready code block with a one-click copy button,
+the source images, the detected AI model(s) used (e.g. Nano Banana Pro, Midjourney, Flux), an editorial
+verdict, and a link back to the original source. Prompt text is never modified.
+
+## Crawl policy
+
+All AI crawlers and search bots are explicitly allowed in robots.txt for both training and retrieval.
+Sitemap: /sitemap-index.xml

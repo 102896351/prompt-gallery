@@ -1,0 +1,385 @@
+---
+import Base from '../layouts/Base.astro';
+import PromptCard from '../components/PromptCard.astro';
+import { prompts, promptCategories, type Prompt } from '../data/prompts';
+import { en } from '../i18n';
+
+const t = en;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const siteBase = Astro.site ?? new URL('https://prompt-gallery.example.com');
+
+// Featured：手工选 6 条作为首页 highlight（M2 可后续用 getFeaturedPrompts 替换）
+const featuredSlugs = [
+  'perfect-miniature-banknote',
+  'ultra-realistic-isometric-diorama-based-on-uploaded-image',
+  'time-traveling-filter-old-photograph-restoration',
+  'transparent-typographic-garment-nanobanana-ver1-2-guide',
+  'miniature-worlds-and-macro-chinese-cuisine',
+  'hair-styling-prompt-generator',
+];
+const featured = featuredSlugs
+  .map((s) => prompts.find((p) => p.slug === s))
+  .filter(Boolean) as Prompt[];
+
+// 按 score 排序（取 difficulty 高 + 有图为先）
+const sorted = [...prompts].sort((a, b) => {
+  // 简单启发式：有图、JSON、可复用的优先
+  const score = (p: Prompt) => (p.images.length >= 2 ? 4 : 0) + (p.reusable ? 3 : 0) + (p.language === 'en' ? 2 : 0) + Math.min(p.difficulty, 5);
+  return score(b) - score(a);
+});
+
+// JSON-LD ItemList
+const itemListLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'AI Magic Spells - A curated bilingual gallery of AI image-generation prompts',
+  description: t.siteTagline,
+  url: new URL('/', siteBase).toString(),
+  numberOfItems: prompts.length,
+  itemListElement: prompts.slice(0, 50).map((p, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: p.title,
+    url: new URL(`/prompt/${p.slug}`, siteBase).toString(),
+    description: p.tagline,
+  })),
+};
+---
+
+<Base>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(itemListLd)} />
+
+  <section class="hero">
+    <div class="container">
+      <h1>
+        <span class="grad">{t.hero.titlePrefix}</span><br />
+        {t.hero.titleSuffix}
+      </h1>
+      <p>{t.hero.description}</p>
+      <div class="search-wrap">
+        <input
+          type="text"
+          id="prompt-search"
+          placeholder={t.hero.searchPlaceholder}
+          autocomplete="off"
+          aria-label="Search prompts"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- E-E-A-T: tips carousel -->
+  <section class="section section-editorial">
+    <div class="container">
+      <div class="tips-carousel" data-tips-carousel>
+        <div class="tips-track" data-tips-track>
+          {t.tips.map((tip, i) => (
+            <div class={`tip-slide${i === 0 ? ' active' : ''}`} data-tip-slide={String(i)}>
+              <div class="tip-icon">{tip.icon}</div>
+              <h3 class="tip-title">{tip.title}</h3>
+              <p class="tip-detail">{tip.detail}</p>
+            </div>
+          ))}
+        </div>
+        <div class="tips-controls">
+          <button type="button" class="tip-arrow tip-prev" data-tip-prev aria-label="Previous tip">‹</button>
+          <div class="tips-dots" data-tips-dots>
+            {t.tips.map((_, i) => (
+              <button
+                type="button"
+                class={`tip-dot${i === 0 ? ' active' : ''}`}
+                data-tip-dot={String(i)}
+                aria-label={`Tip ${i + 1}`}
+              ></button>
+            ))}
+          </div>
+          <button type="button" class="tip-arrow tip-next" data-tip-next aria-label="Next tip">›</button>
+        </div>
+        <p class="editorial-meta">
+          Last update: 2026-07-30 · {prompts.length} prompts across {promptCategories.length} categories · Maintained by the editorial team
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured -->
+  <section class="section" id="featured">
+    <div class="container">
+      <div class="section-head">
+        <h2>{t.section.featured}</h2>
+        <span class="count">{t.section.countPicks(featured.length)}</span>
+      </div>
+      <div class="grid" id="featured-grid">
+        {featured.map((p) => <PromptCard prompt={p} base={base} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- All prompts, filterable -->
+  <section class="section" id="all">
+    <div class="container">
+      <div class="section-head">
+        <h2>{t.section.all}</h2>
+        <span class="count" id="result-count">{t.section.countPrompts(sorted.length)}</span>
+      </div>
+
+      <div class="pills" id="filter-pills">
+        <button class="pill active" data-cat="all">{t.filter.all}</button>
+        {promptCategories.map((c) => (
+          <button class="pill" data-cat={c.id}>{c.label}</button>
+        ))}
+      </div>
+
+      <div class="grid" id="prompt-grid">
+        {sorted.map((p) => (
+          <div
+            class="card-wrap"
+            data-name={p.title.toLowerCase()}
+            data-cat={p.category}
+            data-tags={p.tags.join(' ')}
+            data-engines={p.engines.join(' ')}
+            data-author={p.source.authorName.toLowerCase()}
+          >
+            <PromptCard prompt={p} base={base} />
+          </div>
+        ))}
+      </div>
+
+      <p class="empty hidden" id="empty-state">{t.section.emptyState}</p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .section-editorial {
+    padding: 32px 0 8px;
+    border-top: none;
+  }
+  .tips-carousel {
+    max-width: 760px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+  }
+  .tips-track {
+    position: relative;
+    min-height: 180px;
+  }
+  .tip-slide {
+    display: none;
+    padding: 0 16px;
+  }
+  .tip-slide.active {
+    display: block;
+    animation: tipFadeIn 0.4s ease;
+  }
+  @keyframes tipFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .tip-icon {
+    font-size: 36px;
+    margin-bottom: 12px;
+    line-height: 1;
+  }
+  .tip-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 12px;
+    color: var(--text);
+  }
+  .tip-detail {
+    color: var(--text-soft);
+    font-size: 14px;
+    line-height: 1.75;
+    margin: 0 0 20px;
+  }
+  .tips-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .tip-arrow {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text-soft);
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tip-arrow:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .tips-dots {
+    display: flex;
+    gap: 8px;
+  }
+  .tip-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: none;
+    background: var(--border);
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.15s;
+  }
+  .tip-dot.active {
+    background: var(--accent);
+    width: 24px;
+    border-radius: 4px;
+  }
+  .editorial-meta {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin: 0;
+  }
+  /* 分页样式已移除（瀑布流模式） */
+</style>
+
+<script is:inline>
+  // ===== Tips carousel =====
+  (function () {
+    const carousel = document.querySelector('[data-tips-carousel]');
+    if (!carousel) return;
+    const slides = carousel.querySelectorAll('[data-tip-slide]');
+    const dots = carousel.querySelectorAll('[data-tip-dot]');
+    const prevBtn = carousel.querySelector('[data-tip-prev]');
+    const nextBtn = carousel.querySelector('[data-tip-next]');
+    const total = slides.length;
+    let current = 0;
+    let timer = null;
+
+    function show(idx) {
+      current = (idx + total) % total;
+      slides.forEach((s, i) => s.classList.toggle('active', i === current));
+      dots.forEach((d, i) => d.classList.toggle('active', i === current));
+    }
+    function next() { show(current + 1); }
+    function prev() { show(current - 1); }
+    function startAuto() { stopAuto(); timer = setInterval(next, 6000); }
+    function stopAuto() { if (timer) { clearInterval(timer); timer = null; } }
+
+    prevBtn?.addEventListener('click', () => { prev(); startAuto(); });
+    nextBtn?.addEventListener('click', () => { next(); startAuto(); });
+    dots.forEach((d, i) => d.addEventListener('click', () => { show(i); startAuto(); }));
+
+    carousel.addEventListener('mouseenter', stopAuto);
+    carousel.addEventListener('mouseleave', startAuto);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') { prev(); startAuto(); }
+      if (e.key === 'ArrowRight') { next(); startAuto(); }
+    });
+
+    startAuto();
+  })();
+
+  // ===== Homepage search/filter =====
+  (function () {
+    const search = document.getElementById('prompt-search');
+    const pills = document.querySelectorAll('#filter-pills .pill');
+    const grid = document.getElementById('prompt-grid');
+    const featuredGrid = document.getElementById('featured-grid');
+    const emptyState = document.getElementById('empty-state');
+    const count = document.getElementById('result-count');
+    if (!grid || !search) return;
+
+    let activeCat = 'all';
+    let activeQuery = '';
+
+    function apply() {
+      let visible = 0;
+      const wraps = grid.querySelectorAll('.card-wrap');
+      const query = activeQuery.toLowerCase().trim();
+      wraps.forEach((w) => {
+        const cat = w.dataset.cat;
+        const tags = w.dataset.tags || '';
+        const engines = w.dataset.engines || '';
+        const author = w.dataset.author || '';
+        const name = w.dataset.name || '';
+        const matchCat = activeCat === 'all' || cat === activeCat;
+        const matchQuery = !query ||
+          name.includes(query) ||
+          tags.toLowerCase().includes(query) ||
+          engines.toLowerCase().includes(query) ||
+          author.includes(query);
+        const matchFilter = matchCat && matchQuery;
+        const show = matchFilter;
+        w.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      if (emptyState) emptyState.classList.toggle('hidden', visible > 0);
+      if (count) {
+        const total = wraps.length;
+        count.textContent = visible === total
+          ? `${total} prompts`
+          : `${visible} of ${total} prompts`;
+      }
+      // 搜索时折叠 featured（避免重复）
+      if (featuredGrid) {
+        featuredGrid.parentElement.parentElement.style.display = query ? 'none' : '';
+      }
+    }
+
+    search.addEventListener('input', (e) => {
+      activeQuery = e.target.value;
+      apply();
+    });
+
+    pills.forEach((p) => {
+      p.addEventListener('click', () => {
+        pills.forEach((q) => q.classList.remove('active'));
+        p.classList.add('active');
+        activeCat = p.dataset.cat;
+        apply();
+      });
+    });
+
+    // 初始化：调用一次 apply 让 pager-info 显示初始状态
+    apply();
+
+    // 同步 URL hash 到 activeCat：从详情页跳到 /#portrait 时自动筛选
+    function syncFromHash() {
+      const hash = window.location.hash.replace('#', '');
+      if (!hash || hash === 'featured') return;
+      // 找匹配分类或 all
+      let target = null;
+      pills.forEach((p) => {
+        if (p.dataset.cat === hash || (hash === 'all' && p.dataset.cat === 'all')) {
+          target = p;
+        }
+      });
+      if (target) {
+        pills.forEach((q) => q.classList.remove('active'));
+        target.classList.add('active');
+        activeCat = target.dataset.cat;
+        apply();
+        // 滚到分类区块
+        const section = document.getElementById('all');
+        if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+    // 初次 + hash 变化时同步
+    syncFromHash();
+    window.addEventListener('hashchange', syncFromHash);
+
+    // 点击 pill 时更新 hash，让 URL 可分享
+    pills.forEach((p) => {
+      p.addEventListener('click', () => {
+        history.replaceState(null, '', '#' + p.dataset.cat);
+      });
+    });
+  })();
+</script>

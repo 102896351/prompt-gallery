@@ -1,0 +1,177 @@
+---
+import Base from '../../layouts/Base.astro';
+
+const siteBase = Astro.site ?? new URL('https://prompt-gallery.example.com');
+
+const faqs = [
+  {
+    q: 'AI 魔法咒语是什么？',
+    a: '一个精选的中英双语 AI 图像生成提示词画廊。我们收录 300 条人工挑选的样本，覆盖 11 个分类，提供一键复制的 prompt 文本、可视化证据与编辑点评。',
+  },
+  {
+    q: '你们怎么挑选提示词？',
+    a: '精选流水线由 GitHub Actions 每日自动运行：拉取最新社区投稿 -> 抽取候选 -> 去重 -> 按质量（图数、JSON 结构、字段完整度、长度）评分 -> 应用多样性约束（单作者最多 4 条、模板变体聚类、JSON 占比平衡）-> 新条目以 Pull Request 形式提交人工审核后再发布。',
+  },
+  {
+    q: '你们隶属于某个 AI 模型厂商吗？',
+    a: '不。我们不隶属于 Google、OpenAI、Midjourney、Stability AI、Black Forest Labs 或任何其他模型厂商。我们是独立的编辑项目。',
+  },
+  {
+    q: '你们出售提示词或接受赞助位吗？',
+    a: '不。我们不出售提示词，不接受赞助条目，也不自动生成内容。条目仅按评分与编辑判断筛选。',
+  },
+  {
+    q: '提示词和配图会被修改吗？',
+    a: '不会。我们不修改原始 prompt 文本与配图。每条都保留原作者、来源平台（X、小红书、Discord 等）和原始链接，遵循 CC BY 4.0 署名协议。',
+  },
+];
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<Base title="关于" description="关于AI 魔法咒语">
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+  <section class="info-hero">
+    <div class="container">
+      <h1>关于AI 魔法咒语</h1>
+      <p class="info-meta">最近更新：2026-07-30 · 由编辑团队维护</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container info-prose">
+      <div class="prose">
+        <h2>这是什么</h2>
+        <p>
+          AI 魔法咒语是一个精选的中英双语 AI 图像生成AI 魔法咒语。我们收录 300 条人工挑选的样本，覆盖 11 个分类，提供一键复制的 prompt 文本、可视化证据与编辑点评。
+        </p>
+
+        <h2>如何精选</h2>
+        <p>
+          我们的内容来自社区投稿、公开发布与编辑研究。我们不修改原始 prompt 文本与配图，每一条都保留原作者、来源平台（X、小红书、Discord 等）和原始链接。
+        </p>
+        <p>
+          精选流水线由 GitHub Actions 每日自动运行：拉取最新社区投稿 → 抽取候选 → 去重 → 按质量（图数、JSON 结构、字段完整度、长度）评分 → 应用多样性约束（单作者最多 4 条、模板变体聚类、JSON 占比平衡）→ 新条目以 Pull Request 形式提交人工审核后再发布。
+        </p>
+
+        <h2>编辑原则</h2>
+        <ul>
+          <li><strong>无付费置顶。</strong>条目按评分与编辑判断筛选，不接受赞助位。</li>
+          <li><strong>真实视觉证据。</strong>只收录至少有一张原图的 prompt。</li>
+          <li><strong>作者署名。</strong>每条都链接回原始来源。</li>
+          <li><strong>双语 UI。</strong>prompt 原文保持作者原始语言，仅 UI 框架翻译。</li>
+        </ul>
+
+        <h2>我们不是什么</h2>
+        <p>
+          我们<strong>不</strong>隶属于任何 AI 模型厂商（Google、OpenAI、Midjourney、Stability AI、Black Forest Labs 等）。我们不出售提示词，不接受赞助条目，也不自动生成内容。
+        </p>
+
+        <div class="verdict-box">
+          <div class="label">TL;DR</div>
+          <p style="margin: 0;">
+            一个小型、人工精选、正确署名的小AI 魔法咒语。不是市场，不是聚合器，不是内容农场。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container info-prose">
+      <h2 class="faq-title">常见问题</h2>
+      <div class="faq-list">
+        {faqs.map((f) => (
+          <details class="faq-item">
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .info-hero { padding: 80px 0 32px; text-align: center; }
+  .info-hero h1 {
+    font-size: clamp(32px, 4.5vw, 44px);
+    margin: 0 0 12px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .info-meta {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin: 0;
+  }
+  .info-prose { max-width: 760px; }
+  .prose h2 {
+    font-size: 22px;
+    margin: 32px 0 12px;
+    font-weight: 700;
+  }
+  .prose p { color: var(--text-soft); line-height: 1.75; }
+  .prose ul { color: var(--text-soft); padding-left: 20px; }
+  .prose li { margin-bottom: 8px; line-height: 1.6; }
+  .prose a { color: var(--accent-soft); }
+  .prose a:hover { color: var(--accent); }
+  .verdict-box {
+    padding: 16px 20px;
+    background: var(--accent-bg);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    margin-top: 32px;
+  }
+  .verdict-box .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent-soft);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .faq-title {
+    font-size: 22px;
+    margin: 0 0 16px;
+    font-weight: 700;
+  }
+  .faq-list { display: flex; flex-direction: column; gap: 12px; }
+  .faq-item {
+    border: 1px solid var(--border, rgba(0,0,0,0.1));
+    border-radius: var(--radius);
+    padding: 0;
+    background: var(--card-bg, transparent);
+    overflow: hidden;
+  }
+  .faq-item summary {
+    cursor: pointer;
+    padding: 14px 18px;
+    font-weight: 600;
+    font-size: 15px;
+    list-style: none;
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::before {
+    content: '+';
+    display: inline-block;
+    margin-right: 10px;
+    color: var(--accent-soft);
+    font-weight: 700;
+  }
+  .faq-item[open] summary::before { content: '−'; }
+  .faq-item p {
+    padding: 0 18px 16px;
+    margin: 0;
+    color: var(--text-soft);
+    line-height: 1.7;
+  }
+</style>
