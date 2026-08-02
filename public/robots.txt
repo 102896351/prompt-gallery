@@ -52,4 +52,4 @@ Allow: /
 User-agent: Bytespider
 Allow: /
 
-Sitemap: https://prompt-gallery.example.com/sitemap-index.xml
+Sitemap: https://102896351.github.io/prompt-gallery/sitemap-index.xml

@@ -2,11 +2,11 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 // GitHub Pages 部署配置
-// ⚠️ 绑定自定义域名后，域名走根路径，base 必须是 '/'
-//    （此时原始地址 <user>.github.io/<repo> 会样式错乱，属正常，用域名访问即可）
+// 用 GitHub Pages 默认地址访问：https://102896351.github.io/prompt-gallery/
+// site = Pages 域名，base = 仓库名（Pages 子路径）
 export default defineConfig({
-  site: 'https://prompt-gallery.example.com', // TODO: 上线时改为真实域名
-  base: '/',
+  site: 'https://102896351.github.io',
+  base: '/prompt-gallery/',
   build: {
     format: 'directory',
   },
