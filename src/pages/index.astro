@@ -21,6 +21,11 @@ const featured = featuredSlugs
   .map((s) => prompts.find((p) => p.slug === s))
   .filter(Boolean) as Prompt[];
 
+// Hero banner：从 6 条精选里取第一张图作为轮播背景（编辑挑选 = 高质量代表）
+const bannerImages = featured
+  .map((p) => p.images[0]?.src)
+  .filter((src): src is string => Boolean(src));
+
 // 按 score 排序（取 difficulty 高 + 有图为先）
 const sorted = [...prompts].sort((a, b) => {
   // 简单启发式：有图、JSON、可复用的优先
@@ -50,7 +55,19 @@ const itemListLd = {
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(itemListLd)} />
 
   <section class="hero">
-    <div class="container">
+    <!-- Banner 轮播背景（淡入淡出） -->
+    <div class="hero-banner" data-hero-banner aria-hidden="true">
+      {bannerImages.map((src, i) => (
+        <div
+          class={`hero-banner-slide${i === 0 ? ' active' : ''}`}
+          data-hero-slide={String(i)}
+          style={`background-image: url(${src})`}
+        />
+      ))}
+      <div class="hero-banner-overlay" />
+    </div>
+
+    <div class="container hero-content">
       <h1>
         <span class="grad">{t.hero.titlePrefix}</span><br />
         {t.hero.titleSuffix}
@@ -64,6 +81,17 @@ const itemListLd = {
           autocomplete="off"
           aria-label="Search prompts"
         />
+      </div>
+      <!-- Banner 指示器 -->
+      <div class="hero-dots" data-hero-dots role="tablist" aria-label="Banner pagination">
+        {bannerImages.map((_, i) => (
+          <button
+            type="button"
+            class={`hero-dot${i === 0 ? ' active' : ''}`}
+            data-hero-dot={String(i)}
+            aria-label={`Show banner ${i + 1}`}
+          />
+        ))}
       </div>
     </div>
   </section>
@@ -249,6 +277,38 @@ const itemListLd = {
 </style>
 
 <script is:inline>
+  // ===== Hero banner carousel =====
+  (function () {
+    const banner = document.querySelector('[data-hero-banner]');
+    if (!banner) return;
+    const slides = banner.querySelectorAll('[data-hero-slide]');
+    const dots = document.querySelectorAll('[data-hero-dot]');
+    const total = slides.length;
+    if (total === 0) return;
+    let current = 0;
+    let timer = null;
+
+    function show(idx) {
+      current = (idx + total) % total;
+      slides.forEach((s, i) => s.classList.toggle('active', i === current));
+      dots.forEach((d, i) => d.classList.toggle('active', i === current));
+    }
+    function next() { show(current + 1); }
+    function startAuto() { stopAuto(); timer = setInterval(next, 5000); }
+    function stopAuto() { if (timer) { clearInterval(timer); timer = null; } }
+
+    dots.forEach((d, i) => d.addEventListener('click', () => { show(i); startAuto(); }));
+    banner.addEventListener('mouseenter', stopAuto);
+    banner.addEventListener('mouseleave', startAuto);
+
+    // 当标签页隐藏时暂停（省 CPU）
+    document.addEventListener('visibilitychange', () => {
+      document.hidden ? stopAuto() : startAuto();
+    });
+
+    startAuto();
+  })();
+
   // ===== Tips carousel =====
   (function () {
     const carousel = document.querySelector('[data-tips-carousel]');
