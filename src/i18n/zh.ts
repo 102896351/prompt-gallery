@@ -24,38 +24,7 @@ export const zh: Messages = {
     introDetail:
       '进阶技巧：用方括号 [INSERT ...] 标记可替换变量，让 prompt 变成可复用模板；用 negative prompt 排除不想要的元素；JSON 结构化写法适合复杂场景。本站每条提示词都标注了难度、引擎和画面比例，方便对照学习。',
   },
-  tips: [
-    {
-      title: '五要素法',
-      icon: '🎯',
-      detail: '写好 AI 提示词的 5 个关键：主体、风格、构图、光线、画面比例。把这五要素说清楚，模型才能精准理解你想要的画面。',
-    },
-    {
-      title: '可复用模板',
-      icon: '🔄',
-      detail: '用方括号 [INSERT ...] 标记可替换变量，让 prompt 变成可复用模板。比如 [INSERT CITY NAME] 可以换成东京、巴黎、上海，一条 prompt 生成无数变体。',
-    },
-    {
-      title: '反向提示词',
-      icon: '🚫',
-      detail: '用 negative prompt 排除不想要的元素。比如 "flat image, cartoon, low resolution, watermark" 能让模型避开低质量输出，专注生成你想要的写实风格。',
-    },
-    {
-      title: 'JSON 结构化',
-      icon: '📦',
-      detail: '复杂场景用 JSON 结构化写法：把 prompt、negative_prompt、aspect_ratio 分字段写清楚。模型能更精准解析每个参数，适合多场景、多主体的复杂构图。',
-    },
-    {
-      title: '画面比例',
-      icon: '📐',
-      detail: '16:9 适合风景和横构图，3:4 适合人像和竖构图，1:1 适合社交媒体头像。选对比例，画面叙事感立刻不同。本站每条都标注了 aspect_ratio 方便对照。',
-    },
-    {
-      title: '迭代技巧',
-      icon: '🔁',
-      detail: '从简单描述开始，逐步添加细节。先写主体和风格，看效果后再加光线、材质、镜头参数。一次写太长反而容易让模型"跑偏"，分步迭代更可控。',
-    },
-  ],
+  tips: [],
   section: {
     featured: '精选',
     all: '全部提示词',

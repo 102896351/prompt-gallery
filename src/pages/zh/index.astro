@@ -91,45 +91,15 @@ const itemListLd = {
     </div>
   </section>
 
-  <section class="section section-editorial">
-    <div class="container">
-      <div class="tips-carousel" data-tips-carousel>
-        <div class="tips-track" data-tips-track>
-          {t.tips.map((tip, i) => (
-            <div class={`tip-slide${i === 0 ? ' active' : ''}`} data-tip-slide={String(i)}>
-              <div class="tip-icon">{tip.icon}</div>
-              <h3 class="tip-title">{tip.title}</h3>
-              <p class="tip-detail">{tip.detail}</p>
-            </div>
-          ))}
-        </div>
-        <div class="tips-controls">
-          <button type="button" class="tip-arrow tip-prev" data-tip-prev aria-label="上一条">‹</button>
-          <div class="tips-dots" data-tips-dots>
-            {t.tips.map((_, i) => (
-              <button
-                type="button"
-                class={`tip-dot${i === 0 ? ' active' : ''}`}
-                data-tip-dot={String(i)}
-                aria-label={`第 ${i + 1} 条`}
-              ></button>
-            ))}
-          </div>
-          <button type="button" class="tip-arrow tip-next" data-tip-next aria-label="下一条">›</button>
-        </div>
-        <p class="editorial-meta">
-          最近更新：2026-07-30 · 共 {prompts.length} 条提示词，{promptCategories.length} 个分类
-        </p>
-      </div>
-    </div>
-  </section>
-
   <section class="section" id="featured">
     <div class="container">
       <div class="section-head">
         <h2>{t.section.featured}</h2>
         <span class="count">{t.section.countPicks(featured.length)}</span>
       </div>
+      <p class="editorial-meta">
+        最近更新：2026-07-30 · 共 {prompts.length} 条提示词，{promptCategories.length} 个分类
+      </p>
       <div class="grid" id="featured-grid">
         {featured.map((p) => <PromptCard prompt={p} base={base} />)}
       </div>
@@ -171,100 +141,10 @@ const itemListLd = {
 </Base>
 
 <style>
-  .section-editorial {
-    padding: 32px 0 8px;
-    border-top: none;
-  }
-  /* 提示词教程轮播 */
-  .tips-carousel {
-    max-width: 760px;
-    margin: 0 auto;
-    text-align: center;
-    position: relative;
-  }
-  .tips-track {
-    position: relative;
-    min-height: 180px;
-  }
-  .tip-slide {
-    display: none;
-    padding: 0 16px;
-  }
-  .tip-slide.active {
-    display: block;
-    animation: tipFadeIn 0.4s ease;
-  }
-  @keyframes tipFadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .tip-icon {
-    font-size: 36px;
-    margin-bottom: 12px;
-    line-height: 1;
-  }
-  .tip-title {
-    font-size: 18px;
-    font-weight: 700;
-    margin: 0 0 12px;
-    color: var(--text);
-  }
-  .tip-detail {
-    color: var(--text-soft);
-    font-size: 14px;
-    line-height: 1.75;
-    margin: 0 0 20px;
-  }
-  .tips-controls {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    margin-bottom: 16px;
-  }
-  .tip-arrow {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border: 1px solid var(--border);
-    background: var(--bg-card);
-    color: var(--text-soft);
-    font-size: 20px;
-    line-height: 1;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.15s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .tip-arrow:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-  .tips-dots {
-    display: flex;
-    gap: 8px;
-  }
-  .tip-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    border: none;
-    background: var(--border);
-    cursor: pointer;
-    padding: 0;
-    transition: all 0.15s;
-  }
-  .tip-dot.active {
-    background: var(--accent);
-    width: 24px;
-    border-radius: 4px;
-  }
   .editorial-meta {
     color: var(--text-muted);
     font-size: 13px;
-    margin: 0;
+    margin: 0 0 24px;
   }
   /* 分页样式已移除（瀑布流模式） */
 </style>
@@ -296,45 +176,6 @@ const itemListLd = {
 
     document.addEventListener('visibilitychange', () => {
       document.hidden ? stopAuto() : startAuto();
-    });
-
-    startAuto();
-  })();
-
-  // ===== 提示词教程轮播 =====
-  (function () {
-    const carousel = document.querySelector('[data-tips-carousel]');
-    if (!carousel) return;
-    const slides = carousel.querySelectorAll('[data-tip-slide]');
-    const dots = carousel.querySelectorAll('[data-tip-dot]');
-    const prevBtn = carousel.querySelector('[data-tip-prev]');
-    const nextBtn = carousel.querySelector('[data-tip-next]');
-    const total = slides.length;
-    let current = 0;
-    let timer = null;
-
-    function show(idx) {
-      current = (idx + total) % total;
-      slides.forEach((s, i) => s.classList.toggle('active', i === current));
-      dots.forEach((d, i) => d.classList.toggle('active', i === current));
-    }
-    function next() { show(current + 1); }
-    function prev() { show(current - 1); }
-    function startAuto() { stopAuto(); timer = setInterval(next, 6000); }
-    function stopAuto() { if (timer) { clearInterval(timer); timer = null; } }
-
-    prevBtn?.addEventListener('click', () => { prev(); startAuto(); });
-    nextBtn?.addEventListener('click', () => { next(); startAuto(); });
-    dots.forEach((d, i) => d.addEventListener('click', () => { show(i); startAuto(); }));
-
-    // 鼠标悬停暂停
-    carousel.addEventListener('mouseenter', stopAuto);
-    carousel.addEventListener('mouseleave', startAuto);
-
-    // 键盘
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowLeft') { prev(); startAuto(); }
-      if (e.key === 'ArrowRight') { next(); startAuto(); }
     });
 
     startAuto();
