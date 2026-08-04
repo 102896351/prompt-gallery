@@ -1,12 +1,11 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// GitHub Pages 部署配置
-// 用 GitHub Pages 默认地址访问：https://102896351.github.io/prompt-gallery/
-// site = Pages 域名，base = 仓库名（Pages 子路径）
+// GitHub Pages + 自定义域名部署配置
+// 自定义域名走根路径：base 必须是 '/'，site 设为真实域名
 export default defineConfig({
-  site: 'https://102896351.github.io',
-  base: '/prompt-gallery/',
+  site: 'https://aiartspell.art',
+  base: '/',
   build: {
     format: 'directory',
   },
