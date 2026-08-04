@@ -12,9 +12,40 @@ export const en = {
   hero: {
     titlePrefix: 'AI image-generation',
     titleSuffix: 'prompt inspiration library.',
-    description:
-      'A hand-picked collection of high-quality prompts for Gemini, ChatGPT, Midjourney, Stable Diffusion and more. Curated by humans, sourced from the community.',
     searchPlaceholder: 'Search prompts, authors, engines…',
+    // 与首页 banner 一一对应的介绍文案（同步轮播）
+    slides: [
+      {
+        badge: '3D Render · 5/5',
+        description:
+          'Perfect miniature banknotes that look like real currency art. This prompt pushes ultra-macro detail and paper-engineering constraints for a museum-piece feel.',
+      },
+      {
+        badge: 'Photography · 4/5',
+        description:
+          'Turn any uploaded photo into an ultra-realistic isometric diorama. Great for showcasing architecture, products, or portraits as tiny worlds.',
+      },
+      {
+        badge: 'Photography · 3/5',
+        description:
+          'Restore old photographs by remixing them through a time-traveling filter. The prompt adds gentle grain, soft halation, and color shifts for authentic vintage feel.',
+      },
+      {
+        badge: 'Tutorial · 4/5',
+        description:
+          'A reusable Nanobanana v1.2 guide for transparent typographic garments: brand-safe, parameter-driven, works with any logo or text you feed in.',
+      },
+      {
+        badge: 'Photography · 4/5',
+        description:
+          'Miniature worlds and macro Chinese cuisine: tiny figures, tiny kitchens, tiny steam. Editorial, mouth-watering, instantly viral on social.',
+      },
+      {
+        badge: 'Utility · 2/5',
+        description:
+          'A hairstyle prompt generator that turns a selfie into 10 different looks. Useful for salons, stylists, and anyone shopping for a new cut.',
+      },
+    ],
   },
   editorial: {
     introLead:

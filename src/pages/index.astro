@@ -72,7 +72,15 @@ const itemListLd = {
         <span class="grad">{t.hero.titlePrefix}</span><br />
         {t.hero.titleSuffix}
       </h1>
-      <p>{t.hero.description}</p>
+      <!-- 描述轮播：与 banner 同步切换（图文一体） -->
+      <div class="hero-slides" data-hero-slides aria-live="polite">
+        {t.hero.slides.map((s, i) => (
+          <div class={`hero-slide${i === 0 ? ' active' : ''}`} data-hero-text-slide={String(i)}>
+            <span class="hero-badge">{s.badge}</span>
+            <p class="hero-desc">{s.description}</p>
+          </div>
+        ))}
+      </div>
       <div class="search-wrap">
         <input
           type="text"
@@ -163,6 +171,7 @@ const itemListLd = {
     if (!banner) return;
     const slides = banner.querySelectorAll('[data-hero-slide]');
     const dots = document.querySelectorAll('[data-hero-dot]');
+    const textSlides = document.querySelectorAll('[data-hero-text-slide]');
     const total = slides.length;
     if (total === 0) return;
     let current = 0;
@@ -172,6 +181,7 @@ const itemListLd = {
       current = (idx + total) % total;
       slides.forEach((s, i) => s.classList.toggle('active', i === current));
       dots.forEach((d, i) => d.classList.toggle('active', i === current));
+      textSlides.forEach((s, i) => s.classList.toggle('active', i === current));
     }
     function next() { show(current + 1); }
     function startAuto() { stopAuto(); timer = setInterval(next, 5000); }

@@ -14,9 +14,40 @@ export const zh: Messages = {
   hero: {
     titlePrefix: 'AI 图像生成',
     titleSuffix: '提示词灵感库。',
-    description:
-      '精选 Gemini、ChatGPT、Midjourney、Stable Diffusion 等高质量提示词。人工筛选，社区贡献。',
     searchPlaceholder: '搜索提示词、作者、引擎…',
+    // 与首页 banner 一一对应的介绍文案（同步轮播）
+    slides: [
+      {
+        badge: '3D 渲染 · 5/5',
+        description:
+          '真实纸币级别的微缩纸币作品。这个提示词把超微距细节和纸艺工程推到极致，生成博物馆藏品质感。',
+      },
+      {
+        badge: '摄影 · 4/5',
+        description:
+          '把任意上传照片变成超写实等距微缩场景。适合把建筑、产品、人像做成迷你小世界。',
+      },
+      {
+        badge: '摄影 · 3/5',
+        description:
+          '用穿越时空滤镜修复老照片：添加柔和颗粒、光晕、色偏，还原真实复古质感。',
+      },
+      {
+        badge: '教程 · 4/5',
+        description:
+          'Nanobanana v1.2 透明文字服装可复用指南：参数化、品牌安全，输入任意 logo 都能直接生成。',
+      },
+      {
+        badge: '摄影 · 4/5',
+        description:
+          '微缩世界 + 宏观中国菜：小人、小厨房、小蒸汽。画面有食欲、适合社媒传播。',
+      },
+      {
+        badge: '实用工具 · 2/5',
+        description:
+          '发型提示词生成器：一张自拍生成 10 种发型。适合发型师、沙龙、想换发型的人。',
+      },
+    ],
   },
   editorial: {
     introLead:
