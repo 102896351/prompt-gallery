@@ -71,6 +71,14 @@ const hreflangs: Array<{ lang: string; href: string }> = isErrorPage
     <link rel="apple-touch-icon" href={`${B}favicon.jpg`} />
     <!-- Google Search Console 站点验证 -->
     <meta name="google-site-verification" content="ChnoGh1EmJpFJ6hAgW6zpjUPygJXAgYLdXQFXGlhKiw" />
+    <!-- Google tag (gtag.js) - GA4，初始以 consent 模式加载，用户同意后才发送数据 -->
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-H7HN8NZMWF', { anonymize_ip: true });
+    </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-H7HN8NZMWF"></script>
     <!-- 性能优化：图片 CDN 预解析 + 预连接（LCP 优化） -->
     <link rel="dns-prefetch" href="https://img1.aiart.pics" />
     <link rel="preconnect" href="https://img1.aiart.pics" crossorigin />
@@ -194,6 +202,108 @@ const hreflangs: Array<{ lang: string; href: string }> = isErrorPage
         <p class="footer-tagline">{t.footer.legalNote}</p>
       </div>
     </footer>
+
+    <!-- Cookie consent banner: GDPR / PIPL 合规。用户接受前不发送 GA 数据。 -->
+    <div id="cookie-banner" class="cookie-banner" hidden>
+      <div class="cookie-banner-inner">
+        <p class="cookie-banner-text">{locale === 'zh' ? '我们使用 Google Analytics 收集匿名访问数据以改进网站。继续浏览即视为接受。' : 'We use Google Analytics to collect anonymous usage data. Continuing to browse implies consent.'}</p>
+        <div class="cookie-banner-actions">
+          <a href={`${B}privacy`} class="cookie-banner-link">{locale === 'zh' ? '隐私政策' : 'Privacy'}</a>
+          <button type="button" class="cookie-banner-btn" data-cookie-accept>{locale === 'zh' ? '接受' : 'Accept'}</button>
+        </div>
+      </div>
+    </div>
+    <style>
+      .cookie-banner {
+        position: fixed;
+        bottom: 16px;
+        left: 16px;
+        right: 16px;
+        z-index: 9999;
+        background: rgba(20, 22, 28, 0.96);
+        color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(10px);
+        animation: cookie-slide-up 0.4s ease-out;
+      }
+      .cookie-banner[hidden] { display: none; }
+      .cookie-banner-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 14px 20px;
+        flex-wrap: wrap;
+      }
+      .cookie-banner-text {
+        margin: 0;
+        flex: 1;
+        min-width: 240px;
+        font-size: 14px;
+        line-height: 1.5;
+        color: rgba(255, 255, 255, 0.9);
+      }
+      .cookie-banner-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-shrink: 0;
+      }
+      .cookie-banner-link {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 13px;
+        text-decoration: underline;
+      }
+      .cookie-banner-link:hover { color: #fff; }
+      .cookie-banner-btn {
+        background: #fff;
+        color: #111;
+        border: 0;
+        padding: 8px 18px;
+        border-radius: 999px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.15s;
+      }
+      .cookie-banner-btn:hover { background: #e5e5e5; }
+      @keyframes cookie-slide-up {
+        from { transform: translateY(20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+      }
+      @media (max-width: 520px) {
+        .cookie-banner-inner { flex-direction: column; align-items: stretch; }
+        .cookie-banner-actions { justify-content: space-between; }
+      }
+    </style>
+
+    <!-- Cookie consent + GA opt-in: 如果用户已同意，gtag 不变；如果未同意，等用户点 accept 后才 enable -->
+    <script is:inline>
+      (function () {
+        var KEY = 'aip-gallery-consent';
+        var banner = document.getElementById('cookie-banner');
+        if (!banner) return;
+        // 已同意过 -> 不显示 banner；未同意 -> 显示 banner
+        var consented = false;
+        try { consented = localStorage.getItem(KEY) === '1'; } catch (e) {}
+        if (consented) {
+          banner.hidden = true;
+          return;
+        }
+        banner.hidden = false;
+        var btn = banner.querySelector('[data-cookie-accept]');
+        btn?.addEventListener('click', function () {
+          try { localStorage.setItem(KEY, '1'); } catch (e) {}
+          banner.hidden = true;
+          // 用户同意后才正式发 page_view（之前 gtag('config') 已配置 consent 默认 mode）
+          if (window.gtag) {
+            gtag('event', 'consent_update', { analytics_storage: 'granted' });
+            gtag('event', 'page_view'); // 手动补一次 page_view
+          }
+        });
+      })();
+    </script>
 
     <!-- 主题切换按钮逻辑 -->
     <script is:inline>
