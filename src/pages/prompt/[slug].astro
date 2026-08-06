@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import PromptImage from '../../components/PromptImage.astro';
 import PromptCard from '../../components/PromptCard.astro';
 import { prompts, promptCategories, getRelatedPrompts } from '../../data/prompts';
+import { getCompatibleEngines } from '../../data/engines';
 import { en } from '../../i18n';
 
 export function getStaticPaths() {
@@ -19,6 +20,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const cat = promptCategories.find((c) => c.id === prompt.category);
 const related = getRelatedPrompts(prompt.slug, 3);
 const fullPrompt = prompt.structuredData ? JSON.stringify(prompt.structuredData, null, 2) : prompt.prompt;
+// 适用引擎列表（详情页底部"适用于"区块用）
+const compatibleEngines = getCompatibleEngines(prompt.engines);
+const verifiedEngineKeys = new Set(prompt.engines.filter((k: string) => k !== 'other'));
 // 用于模型识别：合并 prompt 原文 + rawBlock + structuredData
 const textForModelDetection = [prompt.prompt, prompt.rawBlock, fullPrompt].filter(Boolean).join('\n');
 // 英文页面：优先使用 titleEn（如果有），否则 fallback 到 title（原文）
@@ -222,6 +226,30 @@ const breadcrumbLd = {
           <div class="label">Our take</div>
           <p style="margin: 0; color: var(--text);">{prompt.verdict}</p>
         </div>
+
+        <!-- 适用引擎列表（B 列表型卡片，整张卡可点跳转） -->
+        <section class="engines-list" aria-label="Compatible AI engines">
+          <h2 class="engines-heading">Works with these AI tools</h2>
+          <p class="engines-sub">Copy the prompt below and paste it into any of these tools. Verified engines are marked with a check.</p>
+          <div class="engine-rows">
+            {compatibleEngines.map((e) => {
+              const verified = verifiedEngineKeys.has(e.key);
+              return (
+                <a href={e.url} target="_blank" rel="noopener" class="engine-row">
+                  <span class="engine-emoji" aria-hidden="true">{e.emoji}</span>
+                  <span class="engine-info">
+                    <span class="engine-name">
+                      {e.nameEn}
+                      {verified && <span class="engine-verified" title="Verified for this prompt">✓</span>}
+                    </span>
+                    <span class="engine-desc">{e.descEn}</span>
+                  </span>
+                  <span class="engine-arrow" aria-hidden="true">→</span>
+                </a>
+              );
+            })}
+          </div>
+        </section>
 
         <!-- 完整 prompt（隐藏的 copy source） -->
         <pre id="prompt-full" class="prompt-source" style="display:none;">{fullPrompt}</pre>
@@ -638,6 +666,89 @@ const breadcrumbLd = {
     color: var(--accent-soft);
     font-weight: 700;
     margin-bottom: 6px;
+  }
+  /* ---- 适用引擎列表 (B 列表型) ---- */
+  .engines-list {
+    margin: 32px 0;
+    padding: 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .engines-heading {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 8px;
+    color: var(--text);
+  }
+  .engines-sub {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin: 0 0 16px;
+    line-height: 1.5;
+  }
+  .engine-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .engine-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    text-decoration: none;
+    transition: border-color 0.15s, background 0.15s, transform 0.05s;
+  }
+  .engine-row:hover {
+    border-color: var(--accent);
+    background: var(--accent-bg);
+  }
+  .engine-row:active { transform: scale(0.99); }
+  .engine-emoji {
+    font-size: 24px;
+    line-height: 1;
+    width: 32px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .engine-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .engine-name {
+    font-weight: 600;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .engine-verified {
+    font-size: 12px;
+    color: #16a34a;
+    font-weight: 700;
+  }
+  .engine-desc {
+    color: var(--text-soft);
+    font-size: 13px;
+    line-height: 1.4;
+  }
+  .engine-arrow {
+    color: var(--text-muted);
+    font-size: 18px;
+    flex-shrink: 0;
+    transition: transform 0.15s, color 0.15s;
+  }
+  .engine-row:hover .engine-arrow {
+    color: var(--accent);
+    transform: translateX(2px);
   }
 
   /* prompt display */
