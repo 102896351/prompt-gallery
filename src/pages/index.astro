@@ -210,20 +210,31 @@ const itemListLd = {
     margin: 0 0 24px;
   }
   /* 分页样式已移除（瀑布流模式） */
-  /* ---- 精选轮播 (carousel) ---- */
+  /* ---- 精选轮播 (水平滚动 carousel) ---- */
   .carousel {
     position: relative;
-    overflow: hidden;
     margin: 0 0 8px;
   }
   .carousel-track {
     display: flex;
-    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    will-change: transform;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    padding: 8px 4px 16px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+  .carousel-track::-webkit-scrollbar { height: 6px; }
+  .carousel-track::-webkit-scrollbar-track { background: transparent; }
+  .carousel-track::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 3px;
   }
   .carousel-slide {
-    flex: 0 0 12.5%; /* 1/8 = 12.5%（每页 8 张） */
-    padding: 0 6px;
+    flex: 0 0 240px;  /* 固定宽度，不收缩 */
+    scroll-snap-align: start;
     box-sizing: border-box;
   }
   .carousel-arrow {
@@ -251,23 +262,22 @@ const itemListLd = {
     border-color: var(--accent);
     color: var(--accent);
   }
-  .carousel-arrow:disabled,
   .carousel-arrow[aria-disabled="true"] {
     opacity: 0.3;
     cursor: default;
     pointer-events: none;
   }
-  .carousel-prev { left: 8px; }
-  .carousel-next { right: 8px; }
+  .carousel-prev { left: -8px; }
+  .carousel-next { right: -8px; }
   .carousel-dots {
     display: flex;
     justify-content: center;
-    gap: 8px;
-    margin-top: 16px;
+    gap: 6px;
+    margin-top: 4px;
   }
   .carousel-dot {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
     padding: 0;
     border: 0;
     border-radius: 50%;
@@ -277,20 +287,20 @@ const itemListLd = {
   }
   .carousel-dot.active {
     background: var(--accent);
-    width: 24px;
-    border-radius: 4px;
+    width: 18px;
+    border-radius: 3px;
   }
   @media (max-width: 900px) {
-    .carousel-slide { flex: 0 0 25%; }  /* 4/页 */
+    .carousel-slide { flex: 0 0 200px; }
     .carousel-arrow { width: 32px; height: 32px; font-size: 18px; }
   }
   @media (max-width: 560px) {
-    .carousel-slide { flex: 0 0 50%; }  /* 2/页 */
+    .carousel-slide { flex: 0 0 160px; }
   }
 </style>
 
 <script is:inline>
-  // ===== Featured carousel (37 prompts / 8 per page) =====
+  // ===== Featured carousel (水平滚动, 每次滑 1 张) =====
   (function () {
     const carousel = document.querySelector('[data-featured-carousel]');
     if (!carousel) return;
@@ -301,52 +311,68 @@ const itemListLd = {
     const dotsBox = carousel.querySelector('[data-featured-dots]');
     const total = slides.length;
     if (total === 0) return;
-    // responsive per-page（与 CSS 媒体查询一致）
-    function perPage() {
-      if (window.innerWidth <= 560) return 2;
-      if (window.innerWidth <= 900) return 4;
-      return 8;
-    }
-    const totalPages = Math.max(1, Math.ceil(total / perPage()));
-    let current = 0;
     let timer = null;
 
-    function pageWidth() { return 100 / perPage(); }
-    function show(idx) {
-      current = ((idx % totalPages) + totalPages) % totalPages;
-      const offset = current * pageWidth();
-      track.style.transform = `translateX(-${offset}%)`;
-      // 更新 dots
-      Array.from(dotsBox.children).forEach((d, i) => d.classList.toggle('active', i === current));
-      // 边界箭头禁用
-      if (prevBtn) prevBtn.setAttribute('aria-disabled', current === 0 ? 'true' : 'false');
-      if (nextBtn) nextBtn.setAttribute('aria-disabled', current === totalPages - 1 ? 'true' : 'false');
+    // 每张卡片的实际宽度（含 gap）
+    function stepWidth() {
+      if (slides.length === 0) return 252; // 240 + 12 gap
+      const slide = slides[0];
+      const style = window.getComputedStyle(track);
+      const gap = parseFloat(style.gap) || 12;
+      return slide.getBoundingClientRect().width + gap;
     }
-    function next() { show(current + 1); }
-    function prev() { show(current - 1); }
-
-    // 构建 dots
-    for (let i = 0; i < totalPages; i++) {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'carousel-dot';
-      btn.setAttribute('aria-label', `Go to page ${i + 1}`);
-      btn.addEventListener('click', () => { show(i); startAuto(); });
-      dotsBox.appendChild(btn);
+    // 可见区域内最多能塞几张
+    function visibleCount() {
+      return Math.max(1, Math.floor(track.clientWidth / stepWidth()));
     }
-    // 初始化
-    show(0);
-    prevBtn?.addEventListener('click', () => { prev(); startAuto(); });
-    nextBtn?.addEventListener('click', () => { next(); startAuto(); });
+    // 总共需要多少步（步长 = 1 张）
+    function maxStep() { return Math.max(0, total - visibleCount()); }
 
-    // 自动轮播（5s）
-    function startAuto() { stopAuto(); timer = setInterval(next, 5000); }
+    function updateArrows() {
+      const scrollLeft = track.scrollLeft;
+      const max = track.scrollWidth - track.clientWidth - 2;
+      if (prevBtn) prevBtn.setAttribute('aria-disabled', scrollLeft < 2 ? 'true' : 'false');
+      if (nextBtn) nextBtn.setAttribute('aria-disabled', scrollLeft >= max ? 'true' : 'false');
+    }
+    function next() { track.scrollBy({ left: stepWidth(), behavior: 'smooth' }); }
+    function prev() { track.scrollBy({ left: -stepWidth(), behavior: 'smooth' }); }
+
+    prevBtn?.addEventListener('click', () => { prev(); stopAuto(); });
+    nextBtn?.addEventListener('click', () => { next(); stopAuto(); });
+
+    // 滚动时更新箭头状态 + dots
+    let scrollTicking = false;
+    track.addEventListener('scroll', () => {
+      if (!scrollTicking) {
+        window.requestAnimationFrame(() => { updateArrows(); scrollTicking = false; });
+        scrollTicking = true;
+      }
+    });
+
+    // 不再生成 dots（连续滚动用箭头即可，dots 会误导）
+    if (dotsBox) dotsBox.style.display = 'none';
+
+    // 自动轮播（每 4s 滑 1 张；到末尾回到开头）
+    function startAuto() {
+      stopAuto();
+      timer = setInterval(() => {
+        const max = track.scrollWidth - track.clientWidth - 2;
+        if (track.scrollLeft >= max) {
+          track.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          next();
+        }
+      }, 4000);
+    }
     function stopAuto() { if (timer) { clearInterval(timer); timer = null; } }
     carousel.addEventListener('mouseenter', stopAuto);
     carousel.addEventListener('mouseleave', startAuto);
     document.addEventListener('visibilitychange', () => {
       document.hidden ? stopAuto() : startAuto();
     });
+    window.addEventListener('resize', updateArrows);
+
+    updateArrows();
     startAuto();
   })();
 
