@@ -226,6 +226,10 @@ const breadcrumbLd = {
 
         <h2>提示词内容</h2>
         <div class="prompt-display">
+          <button type="button" class="prompt-copy-btn" data-prompt-copy aria-label="复制提示词">
+            <span class="copy-default">📋 复制</span>
+            <span class="copy-success hidden">✓ 已复制</span>
+          </button>
           <pre><code>{fullPrompt}</code></pre>
         </div>
 
@@ -233,6 +237,10 @@ const breadcrumbLd = {
           <>
             <h2>反向提示词</h2>
             <div class="prompt-display">
+              <button type="button" class="prompt-copy-btn" data-prompt-copy aria-label="复制反向提示词">
+                <span class="copy-default">📋 复制</span>
+                <span class="copy-success hidden">✓ 已复制</span>
+              </button>
               <pre><code>{prompt.negativePrompt}</code></pre>
             </div>
           </>
@@ -760,8 +768,35 @@ const breadcrumbLd = {
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 16px;
+    padding-top: 48px;
     overflow-x: auto;
+    position: relative;
   }
+  /* 右上角复制按钮 */
+  .prompt-copy-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    color: var(--text);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    z-index: 1;
+  }
+  .prompt-copy-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .prompt-copy-btn .copy-success { color: #16a34a; }
+  .prompt-copy-btn .copy-success.hidden { display: none; }
+  .prompt-copy-btn .copy-default.hidden { display: none; }
   .prompt-display pre {
     margin: 0;
     color: var(--text);
@@ -913,6 +948,37 @@ const breadcrumbLd = {
         }
       });
     }
+
+    // ===== Inline copy buttons (代码框右上角) =====
+    document.querySelectorAll('[data-prompt-copy]').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const container = btn.closest('.prompt-display');
+        if (!container) return;
+        const pre = container.querySelector('pre');
+        const text = pre ? (pre.textContent || '') : '';
+        try {
+          await navigator.clipboard.writeText(text);
+          const def = btn.querySelector('.copy-default');
+          const ok = btn.querySelector('.copy-success');
+          if (def && ok) {
+            def.classList.add('hidden');
+            ok.classList.remove('hidden');
+            setTimeout(() => {
+              def.classList.remove('hidden');
+              ok.classList.add('hidden');
+            }, 1800);
+          }
+        } catch (e) {
+          if (pre) {
+            const range = document.createRange();
+            range.selectNode(pre);
+            const sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+          }
+        }
+      });
+    });
 
     // ===== Image gallery + lightbox =====
     const gallery = document.querySelector('[data-gallery]');

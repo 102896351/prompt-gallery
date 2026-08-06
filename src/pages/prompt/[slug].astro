@@ -233,6 +233,10 @@ const breadcrumbLd = {
         <!-- 渲染的 prompt 显示 -->
         <h2>The prompt</h2>
         <div class="prompt-display">
+          <button type="button" class="prompt-copy-btn" data-prompt-copy aria-label="Copy prompt">
+            <span class="copy-default">📋 Copy</span>
+            <span class="copy-success hidden">✓ Copied</span>
+          </button>
           <pre><code>{fullPrompt}</code></pre>
         </div>
 
@@ -240,6 +244,10 @@ const breadcrumbLd = {
           <>
             <h2>Negative prompt</h2>
             <div class="prompt-display">
+              <button type="button" class="prompt-copy-btn" data-prompt-copy aria-label="Copy negative prompt">
+                <span class="copy-default">📋 Copy</span>
+                <span class="copy-success hidden">✓ Copied</span>
+              </button>
               <pre><code>{prompt.negativePrompt}</code></pre>
             </div>
           </>
@@ -782,8 +790,35 @@ const breadcrumbLd = {
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 16px;
+    padding-top: 48px; /* 顶部空间给复制按钮 */
     overflow-x: auto;
+    position: relative;
   }
+  /* 右上角复制按钮 */
+  .prompt-copy-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    color: var(--text);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    z-index: 1;
+  }
+  .prompt-copy-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .prompt-copy-btn .copy-success { color: #16a34a; }
+  .prompt-copy-btn .copy-success.hidden { display: none; }
+  .prompt-copy-btn .copy-default.hidden { display: none; }
   .prompt-display pre {
     margin: 0;
     color: var(--text);
@@ -913,7 +948,7 @@ const breadcrumbLd = {
 
 <script is:inline>
   (function () {
-    // ===== Copy prompt button =====
+    // ===== Copy prompt button (顶部) =====
     const btn = document.getElementById('copy-btn');
     const src = document.getElementById('prompt-full');
     if (btn && src) {
@@ -939,6 +974,38 @@ const breadcrumbLd = {
         }
       });
     }
+
+    // ===== Inline copy buttons (代码框右上角) =====
+    document.querySelectorAll('[data-prompt-copy]').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const container = btn.closest('.prompt-display');
+        if (!container) return;
+        const pre = container.querySelector('pre');
+        const text = pre ? (pre.textContent || '') : '';
+        try {
+          await navigator.clipboard.writeText(text);
+          const def = btn.querySelector('.copy-default');
+          const ok = btn.querySelector('.copy-success');
+          if (def && ok) {
+            def.classList.add('hidden');
+            ok.classList.remove('hidden');
+            setTimeout(() => {
+              def.classList.remove('hidden');
+              ok.classList.add('hidden');
+            }, 1800);
+          }
+        } catch (e) {
+          // fallback: select text
+          if (pre) {
+            const range = document.createRange();
+            range.selectNode(pre);
+            const sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+          }
+        }
+      });
+    });
 
     // ===== Image gallery + lightbox =====
     const gallery = document.querySelector('[data-gallery]');
