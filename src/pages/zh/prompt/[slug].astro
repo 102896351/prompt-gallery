@@ -80,7 +80,7 @@ const articleLd = {
   },
   publisher: {
     '@type': 'Organization',
-    name: 'AI 魔法咒语',
+    name: 'Ai Art Spell',
     logo: { '@type': 'ImageObject', url: new URL('favicon.jpg', siteBase).toString() },
   },
   keywords: prompt.tags.join(', '),
@@ -94,7 +94,7 @@ const breadcrumbLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'AI 魔法咒语', item: homeUrl },
+    { '@type': 'ListItem', position: 1, name: 'Ai Art Spell', item: homeUrl },
     { '@type': 'ListItem', position: 2, name: displayCatLabel, item: catUrl },
     { '@type': 'ListItem', position: 3, name: prompt.title, item: pageUrl },
   ],

@@ -1,4 +1,4 @@
-# AI Magic Spells / AI 魔法咒语
+# Ai Art Spell / Ai Art Spell
 
 > A curated, bilingual (English & Simplified Chinese) gallery of AI image-generation prompts.
 > 300 hand-picked prompts across 11 categories, each with copy-paste ready text, source images,
@@ -7,7 +7,7 @@
 
 ## What this site is
 
-AI Magic Spells is a hand-curated prompt gallery, not a marketplace or aggregator. Every entry keeps its
+Ai Art Spell is a hand-curated prompt gallery, not a marketplace or aggregator. Every entry keeps its
 original author, source platform (X, Xiaohongshu, Discord, etc.), and source URL. The curation pipeline
 runs daily via GitHub Actions: pull community submissions, deduplicate, score by quality, apply diversity
 constraints, then open Pull Requests for human review.

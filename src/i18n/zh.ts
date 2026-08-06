@@ -2,7 +2,7 @@
 import type { Messages } from './en';
 
 export const zh: Messages = {
-  siteName: 'AI 魔法咒语',
+  siteName: 'Ai Art Spell',
   siteTagline: '一个精选的中英双语 AI 图像生成提示词画廊。',
   nav: {
     categories: '分类',
