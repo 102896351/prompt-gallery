@@ -55,8 +55,9 @@ const featured = featuredSlugs
   .map((s) => prompts.find((p) => p.slug === s))
   .filter(Boolean) as Prompt[];
 
-// Hero banner：从 6 条精选里取第一张图作为轮播背景（编辑挑选 = 高质量代表）
+// Hero banner：取前 5 条精选的首图作为轮播背景（与 i18n hero.slides 数量一致）
 const bannerImages = featured
+  .slice(0, 5)
   .map((p) => p.images[0]?.src)
   .filter((src): src is string => Boolean(src));
 

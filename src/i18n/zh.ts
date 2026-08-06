@@ -42,11 +42,6 @@ export const zh: Messages = {
         description:
           '微缩世界 + 宏观中国菜：小人、小厨房、小蒸汽。画面有食欲、适合社媒传播。',
       },
-      {
-        badge: '实用工具 · 2/5',
-        description:
-          '发型提示词生成器：一张自拍生成 10 种发型。适合发型师、沙龙、想换发型的人。',
-      },
     ],
   },
   editorial: {

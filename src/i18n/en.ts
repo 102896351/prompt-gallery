@@ -40,11 +40,6 @@ export const en = {
         description:
           'Miniature worlds and macro Chinese cuisine: tiny figures, tiny kitchens, tiny steam. Editorial, mouth-watering, instantly viral on social.',
       },
-      {
-        badge: 'Utility · 2/5',
-        description:
-          'A hairstyle prompt generator that turns a selfie into 10 different looks. Useful for salons, stylists, and anyone shopping for a new cut.',
-      },
     ],
   },
   editorial: {
