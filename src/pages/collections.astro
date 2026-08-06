@@ -21,15 +21,15 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
             <div class="collection-cover">
               <img
                 src={c.cover.startsWith('http') ? c.cover : `${base}${c.cover}`}
-                alt={c.title}
+                alt={c.titleEn}
                 loading="lazy"
                 decoding="async"
                 onerror="this.style.visibility='hidden'"
               />
             </div>
             <div class="collection-body">
-              <h2>{c.title}</h2>
-              <p class="collection-desc">{c.description}</p>
+              <h2>{c.titleEn}</h2>
+              <p class="collection-desc">{c.descriptionEn}</p>
               <span class="collection-count">{c.count} prompts</span>
             </div>
           </a>
