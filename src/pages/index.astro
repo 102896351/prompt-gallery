@@ -8,14 +8,44 @@ const t = en;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const siteBase = Astro.site ?? new URL('https://prompt-gallery.example.com');
 
-// Featured：手工选 6 条作为首页 highlight（M2 可后续用 getFeaturedPrompts 替换）
+// Featured：精选 37 条（按分类选 top-N，去重），用于轮播
 const featuredSlugs = [
-  'perfect-miniature-banknote',
-  'ultra-realistic-isometric-diorama-based-on-uploaded-image',
+  'sci-fi-sculptural-representation-zhi-zi-and-trisolar-system',
+  'cloud-white-earphone-making-process-share',
+  'shout-with-me-and-i-will-be-your-girlfriend',
+  'artistic-elevation-street-fighter-character-portfolio',
+  'dress-from-the-inside-out-clothing-isn-t-just-a-uniform',
+  'atmospheric-haze-scene',
+  'today-post-text-clothing-first-step',
+  'fireworks-over-waterfront-city-at-night',
+  'ingredient-orbit-shot',
+  'silhouette-photography',
+  'hero-gazing-out-at-the-stormy-sea',
+  'the-architecture-of-becoming',
+  'exploring-the-miniature-world',
+  'mcdonalds-advertising-workflow-sharing',
+  'baoyu-teacher-s-movie-style-miniature-diorama',
+  'teach-easily-create-edc-image-conventional-mystery-box-mode-full-analysis',
+  'mirror-product-photography',
+  'product-interaction-photography-powder-explosion',
+  'gemini-nano-banana-pro-product-shot',
+  'infographic-indian-man-yoga-steps-aesthetics',
+  'exaggerated-perspective-illustration-style-analysis',
+  'nano-banana-pro-dragon-ball-z-style-q-version-pseudo-3d-illustration',
+  'one-piece-style-devil-fruit-ability-transformation',
+  'miniature-world-inside-a-sphere',
+  'wuta-zhenri-poster-contest',
+  'kling-o1-poster-generation',
+  'text-rendering-parameters-in-image-prompts',
+  'porcelain-sculpture-figurine-friens-dreamlike-art',
+  'high-end-leather-clutch',
+  'surreal-bird-fantasy',
+  'cyber-business-card',
   'time-traveling-filter-old-photograph-restoration',
   'transparent-typographic-garment-nanobanana-ver1-2-guide',
-  'miniature-worlds-and-macro-chinese-cuisine',
-  'hair-styling-prompt-generator',
+  'a-mesmerizing-passage-of-time-at-shanghai-bund',
+  'y2k-aesthetic-city-impression-collage-poster',
+  'nano-banana-pro-t0r7mf',
 ];
 const featured = featuredSlugs
   .map((s) => prompts.find((p) => p.slug === s))
@@ -109,7 +139,7 @@ const itemListLd = {
     </div>
   </section>
 
-  <!-- Featured -->
+  <!-- Featured：轮播 8 条/页 -->
   <section class="section" id="featured">
     <div class="container">
       <div class="section-head">
@@ -119,8 +149,17 @@ const itemListLd = {
       <p class="editorial-meta">
         Last update: 2026-07-30 · {prompts.length} prompts across {promptCategories.length} categories · Maintained by the editorial team
       </p>
-      <div class="grid" id="featured-grid">
-        {featured.map((p) => <PromptCard prompt={p} base={base} />)}
+      <div class="carousel" data-featured-carousel data-per-page="8">
+        <div class="carousel-track" data-featured-track>
+          {featured.map((p) => (
+            <div class="carousel-slide" data-featured-slide>
+              <PromptCard prompt={p} base={base} />
+            </div>
+          ))}
+        </div>
+        <button type="button" class="carousel-arrow carousel-prev" data-featured-prev aria-label="Previous">‹</button>
+        <button type="button" class="carousel-arrow carousel-next" data-featured-next aria-label="Next">›</button>
+        <div class="carousel-dots" data-featured-dots></div>
       </div>
     </div>
   </section>
@@ -167,9 +206,146 @@ const itemListLd = {
     margin: 0 0 24px;
   }
   /* 分页样式已移除（瀑布流模式） */
+  /* ---- 精选轮播 (carousel) ---- */
+  .carousel {
+    position: relative;
+    overflow: hidden;
+    margin: 0 0 8px;
+  }
+  .carousel-track {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+  }
+  .carousel-slide {
+    flex: 0 0 12.5%; /* 1/8 = 12.5%（每页 8 张） */
+    padding: 0 6px;
+    box-sizing: border-box;
+  }
+  .carousel-arrow {
+    position: absolute;
+    top: 40%;
+    transform: translateY(-50%);
+    z-index: 5;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--text);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, border-color 0.15s, opacity 0.15s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  .carousel-arrow:hover {
+    background: #fff;
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .carousel-arrow:disabled,
+  .carousel-arrow[aria-disabled="true"] {
+    opacity: 0.3;
+    cursor: default;
+    pointer-events: none;
+  }
+  .carousel-prev { left: 8px; }
+  .carousel-next { right: 8px; }
+  .carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .carousel-dot {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--border);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .carousel-dot.active {
+    background: var(--accent);
+    width: 24px;
+    border-radius: 4px;
+  }
+  @media (max-width: 900px) {
+    .carousel-slide { flex: 0 0 25%; }  /* 4/页 */
+    .carousel-arrow { width: 32px; height: 32px; font-size: 18px; }
+  }
+  @media (max-width: 560px) {
+    .carousel-slide { flex: 0 0 50%; }  /* 2/页 */
+  }
 </style>
 
 <script is:inline>
+  // ===== Featured carousel (37 prompts / 8 per page) =====
+  (function () {
+    const carousel = document.querySelector('[data-featured-carousel]');
+    if (!carousel) return;
+    const track = carousel.querySelector('[data-featured-track]');
+    const slides = carousel.querySelectorAll('[data-featured-slide]');
+    const prevBtn = carousel.querySelector('[data-featured-prev]');
+    const nextBtn = carousel.querySelector('[data-featured-next]');
+    const dotsBox = carousel.querySelector('[data-featured-dots]');
+    const total = slides.length;
+    if (total === 0) return;
+    // responsive per-page（与 CSS 媒体查询一致）
+    function perPage() {
+      if (window.innerWidth <= 560) return 2;
+      if (window.innerWidth <= 900) return 4;
+      return 8;
+    }
+    const totalPages = Math.max(1, Math.ceil(total / perPage()));
+    let current = 0;
+    let timer = null;
+
+    function pageWidth() { return 100 / perPage(); }
+    function show(idx) {
+      current = ((idx % totalPages) + totalPages) % totalPages;
+      const offset = current * pageWidth();
+      track.style.transform = `translateX(-${offset}%)`;
+      // 更新 dots
+      Array.from(dotsBox.children).forEach((d, i) => d.classList.toggle('active', i === current));
+      // 边界箭头禁用
+      if (prevBtn) prevBtn.setAttribute('aria-disabled', current === 0 ? 'true' : 'false');
+      if (nextBtn) nextBtn.setAttribute('aria-disabled', current === totalPages - 1 ? 'true' : 'false');
+    }
+    function next() { show(current + 1); }
+    function prev() { show(current - 1); }
+
+    // 构建 dots
+    for (let i = 0; i < totalPages; i++) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'carousel-dot';
+      btn.setAttribute('aria-label', `Go to page ${i + 1}`);
+      btn.addEventListener('click', () => { show(i); startAuto(); });
+      dotsBox.appendChild(btn);
+    }
+    // 初始化
+    show(0);
+    prevBtn?.addEventListener('click', () => { prev(); startAuto(); });
+    nextBtn?.addEventListener('click', () => { next(); startAuto(); });
+
+    // 自动轮播（5s）
+    function startAuto() { stopAuto(); timer = setInterval(next, 5000); }
+    function stopAuto() { if (timer) { clearInterval(timer); timer = null; } }
+    carousel.addEventListener('mouseenter', stopAuto);
+    carousel.addEventListener('mouseleave', startAuto);
+    document.addEventListener('visibilitychange', () => {
+      document.hidden ? stopAuto() : startAuto();
+    });
+    startAuto();
+  })();
+
   // ===== Hero banner carousel =====
   (function () {
     const banner = document.querySelector('[data-hero-banner]');
