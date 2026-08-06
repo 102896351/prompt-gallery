@@ -25,10 +25,17 @@ const bannerImages = featured
   .map((p) => p.images[0]?.src)
   .filter((src): src is string => Boolean(src));
 
+// 按 dateAdded 倒序排序（最新添加的排前）；同日期内用 quality score 兜底
 const sorted = [...prompts].sort((a, b) => {
+  const dateDiff = (b.dateAdded || '').localeCompare(a.dateAdded || '');
+  if (dateDiff !== 0) return dateDiff;
+  // tiebreaker: 图多、可复用、英文优先
   const score = (p: Prompt) => (p.images.length >= 2 ? 4 : 0) + (p.reusable ? 3 : 0) + (p.language === 'en' ? 2 : 0) + Math.min(p.difficulty, 5);
   return score(b) - score(a);
 });
+// grid 排除已展示的 featured 6 条，避免重复
+const featuredSet = new Set(featuredSlugs);
+const sortedExcludingFeatured = sorted.filter((p) => !featuredSet.has(p.slug));
 
 const itemListLd = {
   '@context': 'https://schema.org',
@@ -129,7 +136,7 @@ const itemListLd = {
       </div>
 
       <div class="grid" id="prompt-grid">
-        {sorted.map((p) => (
+        {sortedExcludingFeatured.map((p) => (
           <div
             class="card-wrap"
             data-name={p.title.toLowerCase()}
