@@ -8,7 +8,7 @@ const t = en;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const siteBase = Astro.site ?? new URL('https://prompt-gallery.example.com');
 
-// Featured：精选 37 条（按分类选 top-N，去重），用于轮播
+// Featured：精选 40 条（8 条/页 × 5 页 = 40 条），按分类选 top-N，去重
 const featuredSlugs = [
   'sci-fi-sculptural-representation-zhi-zi-and-trisolar-system',
   'cloud-white-earphone-making-process-share',
@@ -46,6 +46,10 @@ const featuredSlugs = [
   'a-mesmerizing-passage-of-time-at-shanghai-bund',
   'y2k-aesthetic-city-impression-collage-poster',
   'nano-banana-pro-t0r7mf',
+  'ultra-cute-isometric-3d-miniature-chengdu-city-diorama-with-panda-theme',
+  'eternal-cycle-of-architecture-of-mortality',
+  'perfect-miniature-banknote',
+  'floating-product-photography',
 ];
 const featured = featuredSlugs
   .map((s) => prompts.find((p) => p.slug === s))
