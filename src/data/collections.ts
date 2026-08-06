@@ -13,7 +13,9 @@ export interface CollectionPrompt {
 export interface Collection {
   slug: string;
   title: string;
+  titleEn: string;
   description: string;
+  descriptionEn: string;
   cover: string;
   count: number;
   prompts: CollectionPrompt[];
@@ -23,7 +25,9 @@ export const collections: Collection[] = [
   {
     slug: 'collection-01',
     title: '抽象·极简主义·头像',
+    titleEn: 'Abstract · Minimalism · Portraits',
     description: '收录 12 个 抽象·极简主义·头像 主题作品，探索现实与人物的创作灵感',
+    descriptionEn: 'A curated set of 12 abstract minimalism portrait prompts exploring reality and character.',
     cover: 'https://img1.aiart.pics/images/prompts/20251224/minimalist-monochromatic-purple-studio-portrait-1.jpg',
     count: 11,
     prompts: [
@@ -37,7 +41,9 @@ export const collections: Collection[] = [
   {
     slug: 'collection-02',
     title: 'Nano Banana Pro·科技·科幻',
+    titleEn: 'Nano Banana Pro · Tech · Sci-Fi',
     description: '187 个 Nano Banana Pro·科技·科幻 精选集，涵盖现实、人物、产品等丰富风格',
+    descriptionEn: '187 Nano Banana Pro tech and sci-fi prompts covering reality, characters, and product styles.',
     cover: 'https://img1.aiart.pics/images/prompts/20260106/new-creators-never-spend-enough-time-on-their-titles-and-thumbnails-1.png',
     count: 163,
     prompts: [
@@ -51,7 +57,9 @@ export const collections: Collection[] = [
   {
     slug: 'collection-03',
     title: '头像·抽象·人物',
+    titleEn: 'Portraits · Abstract · Characters',
     description: '147 个 头像·抽象·人物 精选集，涵盖人物、现实、头像等丰富风格',
+    descriptionEn: '147 portrait, abstract, and character prompts — characters, reality, avatars and more.',
     cover: 'https://img1.aiart.pics/images/prompts/20251219/nano-banana-pro-front-view-1.jpg',
     count: 142,
     prompts: [
@@ -65,7 +73,9 @@ export const collections: Collection[] = [
   {
     slug: 'collection-04',
     title: '年轻女子·人物·时尚',
+    titleEn: 'Young Woman · Characters · Fashion',
     description: '158 个 年轻女子·人物·时尚 精选集，涵盖人物、现实、头像等丰富风格',
+    descriptionEn: '158 prompts featuring young women, characters, and fashion — portraits, reality, avatars.',
     cover: 'https://img1.aiart.pics/images/prompts/20251208/heart-melting-eyes-of-beauty-1.jpg',
     count: 157,
     prompts: [
@@ -79,7 +89,9 @@ export const collections: Collection[] = [
   {
     slug: 'collection-05',
     title: '3D·游戏·写实风格',
+    titleEn: '3D · Game · Realism Style',
     description: '收录 28 个 3D·游戏·写实风格 主题作品，探索3D与现实的创作灵感',
+    descriptionEn: '28 3D, game, and realism prompts exploring the boundaries of 3D and reality.',
     cover: 'https://img1.aiart.pics/images/prompts/20251220/q-version-3d-characters-in-crystal-ball-1.jpg',
     count: 25,
     prompts: [
@@ -93,7 +105,9 @@ export const collections: Collection[] = [
   {
     slug: 'collection-06',
     title: 'Nano Banana·Nano Banana Pro·插画',
+    titleEn: 'Nano Banana · Nano Banana Pro · Illustration',
     description: '109 个 Nano Banana·Nano Banana Pro·插画 精选集，涵盖人物、Nano Banana Pro、插画等丰富风格',
+    descriptionEn: '109 Nano Banana and Nano Banana Pro illustration prompts — characters and styles.',
     cover: 'https://img1.aiart.pics/images/prompts/20251204/character-merch-creation-random-nano-banana-use-case-1-thumb.jpg',
     count: 95,
     prompts: [
@@ -107,7 +121,9 @@ export const collections: Collection[] = [
   {
     slug: 'collection-07',
     title: '自拍·年轻女子·自然美',
+    titleEn: 'Selfie · Young Woman · Natural Beauty',
     description: '收录 29 个 自拍·年轻女子·自然美 主题作品，探索人物与现实的创作灵感',
+    descriptionEn: '29 selfie, young woman, and natural beauty prompts exploring characters and reality.',
     cover: 'https://img1.aiart.pics/images/prompts/20251228/gemini-3-0-nano-banana-pro-young-woman-selfie-1.jpg',
     count: 28,
     prompts: [
@@ -121,7 +137,9 @@ export const collections: Collection[] = [
   {
     slug: 'collection-08',
     title: '玩具·图案·3D',
+    titleEn: 'Toys · Pattern · 3D',
     description: '34 个 玩具·图案·3D 精选集，涵盖图案、3D、产品等丰富风格',
+    descriptionEn: '34 toy, pattern, and 3D prompts — patterns, 3D, products, and more.',
     cover: 'https://img1.aiart.pics/images/prompts/20251217/hyper-vibrant-3d-layered-paper-cut-out-artwork-1.jpg',
     count: 32,
     prompts: [
@@ -135,7 +153,9 @@ export const collections: Collection[] = [
   {
     slug: 'collection-09',
     title: '时尚·人物·年轻女子',
+    titleEn: 'Fashion · Characters · Young Woman',
     description: '226 个 时尚·人物·年轻女子 精选集，涵盖人物、现实、时尚等丰富风格',
+    descriptionEn: '226 fashion, character, and young woman prompts — characters, reality, fashion styles.',
     cover: 'https://img1.aiart.pics/images/prompts/20260106/effortless-chic-selfie-1.jpg',
     count: 225,
     prompts: [
@@ -149,7 +169,9 @@ export const collections: Collection[] = [
   {
     slug: 'collection-10',
     title: '车辆·3D·卡通',
+    titleEn: 'Vehicles · 3D · Cartoon',
     description: '收录 16 个 车辆·3D·卡通 主题作品，探索人物与3D的创作灵感',
+    descriptionEn: '16 vehicle, 3D, and cartoon prompts exploring characters and 3D.',
     cover: 'https://img1.aiart.pics/images/prompts/20260106/threadcrafted-portraits-1.jpg',
     count: 15,
     prompts: [
@@ -163,7 +185,9 @@ export const collections: Collection[] = [
   {
     slug: 'collection-11',
     title: '人物肖像·头像·特写',
+    titleEn: 'Character Portrait · Avatar · Close-up',
     description: '31 个 人物肖像·头像·特写 精选集，涵盖人物、现实、头像等丰富风格',
+    descriptionEn: '31 character portrait, avatar, and close-up prompts — characters, reality, avatars.',
     cover: 'https://img1.aiart.pics/images/prompts/20260105/close-up-of-a-womans-hand-1.jpg',
     count: 31,
     prompts: [
@@ -177,7 +201,9 @@ export const collections: Collection[] = [
   {
     slug: 'collection-12',
     title: 'GPT 4o·GPT-4o·3D',
+    titleEn: 'GPT-4o · GPT-4o · 3D',
     description: '精选 9 个 GPT 4o·GPT-4o·3D 风格提示词',
+    descriptionEn: '9 curated GPT-4o plus 3D style prompts.',
     cover: 'https://img1.aiart.pics/images/prompts/20251216/gpt-4o-transforms-anything-into-transparent-glass-instantly-1.jpg',
     count: 9,
     prompts: [
@@ -191,7 +217,9 @@ export const collections: Collection[] = [
   {
     slug: 'collection-13',
     title: '插画·科技·产品',
+    titleEn: 'Illustration · Tech · Product',
     description: '223 个 插画·科技·产品 精选集，涵盖现实、人物、产品等丰富风格',
+    descriptionEn: '223 illustration, tech, and product prompts — reality, characters, products.',
     cover: 'https://img1.aiart.pics/images/prompts/20260104/art-student-sketching-prompt-analysis-1.jpg',
     count: 200,
     prompts: [
@@ -205,7 +233,9 @@ export const collections: Collection[] = [
   {
     slug: 'collection-14',
     title: '3D·插画·游戏',
+    titleEn: '3D · Illustration · Game',
     description: '63 个 3D·插画·游戏 精选集，涵盖3D、现实、人物等丰富风格',
+    descriptionEn: '63 3D, illustration, and game prompts — 3D, reality, characters.',
     cover: 'https://img1.aiart.pics/images/prompts/20251209/nano-banana-pro-make-this-lego-1.jpg',
     count: 58,
     prompts: [
@@ -219,7 +249,9 @@ export const collections: Collection[] = [
   {
     slug: 'collection-15',
     title: '特写·节庆·雪域',
+    titleEn: 'Close-up · Festive · Snow Scene',
     description: '收录 21 个 特写·节庆·雪域 主题作品，探索人物与现实的创作灵感',
+    descriptionEn: '21 close-up, festive, and snow scene prompts exploring characters and reality.',
     cover: 'https://img1.aiart.pics/images/prompts/20251230/winter-landscape-korean-idol-1.jpg',
     count: 18,
     prompts: [
@@ -233,7 +265,9 @@ export const collections: Collection[] = [
   {
     slug: 'collection-16',
     title: 'Nano Banana Pro·产品评测·技术',
+    titleEn: 'Nano Banana Pro · Product Review · Tech',
     description: '76 个 Nano Banana Pro·产品评测·技术 精选集，涵盖Nano Banana Pro、现实、产品等丰富风格',
+    descriptionEn: '76 Nano Banana Pro product review and tech prompts.',
     cover: 'https://img1.aiart.pics/images/prompts/20251214/image-generation-future-and-opportunities-1.jpg',
     count: 66,
     prompts: [
@@ -247,7 +281,9 @@ export const collections: Collection[] = [
   {
     slug: 'collection-17',
     title: '人物肖像·头像·人物',
+    titleEn: 'Character Portrait · Avatar · Character',
     description: '170 个 人物肖像·头像·人物 精选集，涵盖人物、现实、头像等丰富风格',
+    descriptionEn: '170 character portrait, avatar, and character prompts — characters, reality, avatars.',
     cover: 'https://img1.aiart.pics/images/prompts/20251230/young-man-mugshot-1.jpg',
     count: 167,
     prompts: [
@@ -261,7 +297,9 @@ export const collections: Collection[] = [
   {
     slug: 'collection-18',
     title: '节庆·圣诞节·圣诞主题',
+    titleEn: 'Festive · Christmas · Holiday Theme',
     description: '48 个 节庆·圣诞节·圣诞主题 精选集，涵盖节庆、圣诞节、人物等丰富风格',
+    descriptionEn: '48 festive, Christmas, and holiday theme prompts.',
     cover: 'https://img1.aiart.pics/images/prompts/20251218/christmas-snow-globe-characters-by-nano-banana-pro-1.png',
     count: 43,
     prompts: [
@@ -275,7 +313,9 @@ export const collections: Collection[] = [
   {
     slug: 'collection-19',
     title: '时尚·人物肖像·人物',
+    titleEn: 'Fashion · Character Portrait · Character',
     description: '121 个 时尚·人物肖像·人物 精选集，涵盖人物、现实、时尚等丰富风格',
+    descriptionEn: '121 fashion and character portrait prompts — characters, reality, fashion.',
     cover: 'https://img1.aiart.pics/images/prompts/20251224/dark-orange-studio-photo-1.jpg',
     count: 116,
     prompts: [
@@ -289,7 +329,9 @@ export const collections: Collection[] = [
   {
     slug: 'collection-20',
     title: '漫画·3D·角色',
+    titleEn: 'Comic · 3D · Character',
     description: '57 个 漫画·3D·角色 精选集，涵盖人物、3D、现实等丰富风格',
+    descriptionEn: '57 comic, 3D, and character prompts — characters, 3D, reality.',
     cover: 'https://img1.aiart.pics/images/prompts/20251215/egg-carving-art-inspired-by-teacher-baoju-1.jpg',
     count: 49,
     prompts: [
