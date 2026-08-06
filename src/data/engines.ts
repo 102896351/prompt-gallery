@@ -35,7 +35,7 @@ export const engines: Record<string, Engine> = {
     descEn: "Google's multimodal AI. Nano Banana Pro is its image model.",
     descZh: '谷歌多模态 AI，Nano Banana Pro 是其图像生成模型。',
     url: 'https://gemini.google.com/',
-    icon: 'tool-icons/google-gemini.png',
+    icon: '/tool-icons/google-gemini.png',
     emoji: '✨',
   },
   'nano-banana-pro': {
@@ -45,7 +45,7 @@ export const engines: Record<string, Engine> = {
     descEn: 'Google DeepMind image model, strong at text and detail.',
     descZh: 'Google DeepMind 图像模型，文字渲染与细节出色。',
     url: 'https://gemini.google.com/',
-    icon: 'tool-icons/google-gemini.png',
+    icon: '/tool-icons/google-gemini.png',
     emoji: '🍌',
   },
   midjourney: {
@@ -55,7 +55,7 @@ export const engines: Record<string, Engine> = {
     descEn: 'Discord-based, strong artistic style and cinematic look.',
     descZh: '基于 Discord，擅长艺术风格与电影感画面。',
     url: 'https://www.midjourney.com/',
-    icon: 'tool-icons/midjourney.png',
+    icon: '/tool-icons/midjourney.png',
     emoji: '🎨',
   },
   flux: {
@@ -65,7 +65,7 @@ export const engines: Record<string, Engine> = {
     descEn: 'Black Forest Labs open model, photorealistic + typography.',
     descZh: 'Black Forest Labs 开源模型，写实与排版能力强。',
     url: 'https://blackforestlabs.ai/',
-    icon: 'tool-icons/flux-1.ico',
+    icon: '/tool-icons/flux-1.ico',
     emoji: '🌊',
   },
   'stable-diffusion': {
@@ -75,7 +75,7 @@ export const engines: Record<string, Engine> = {
     descEn: 'Open-source diffusion model, runs locally or in the cloud.',
     descZh: '开源扩散模型，可本地或云端运行。',
     url: 'https://stability.ai/',
-    icon: 'tool-icons/stable-diffusion.webp',
+    icon: '/tool-icons/stable-diffusion.webp',
     emoji: '⚙️',
   },
   'chatgpt-image': {
@@ -85,7 +85,7 @@ export const engines: Record<string, Engine> = {
     descEn: 'OpenAI conversational interface + DALL-E image model.',
     descZh: 'OpenAI 对话式界面 + DALL-E 图像模型。',
     url: 'https://chatgpt.com/',
-    icon: 'tool-icons/openai.ico',
+    icon: '/tool-icons/openai.ico',
     emoji: '💬',
   },
   sora: {
@@ -95,7 +95,7 @@ export const engines: Record<string, Engine> = {
     descEn: 'OpenAI video generation, cinematic clips up to 60s.',
     descZh: 'OpenAI 视频生成，可输出最长 60 秒电影感片段。',
     url: 'https://sora.com/',
-    icon: 'tool-icons/openai.ico',
+    icon: '/tool-icons/openai.ico',
     emoji: '🎬',
   },
   veo: {
@@ -105,7 +105,7 @@ export const engines: Record<string, Engine> = {
     descEn: 'Google DeepMind video model, 1080p clips with audio.',
     descZh: 'Google DeepMind 视频模型，1080p 含音轨。',
     url: 'https://deepmind.google/technologies/veo/',
-    icon: 'tool-icons/google-gemini.png',
+    icon: '/tool-icons/google-gemini.png',
     emoji: '🎞️',
   },
   kling: {
@@ -115,7 +115,7 @@ export const engines: Record<string, Engine> = {
     descEn: 'Kuaishou video model, motion + camera control.',
     descZh: '快手视频模型，运镜与动作控制细腻。',
     url: 'https://klingai.com/',
-    icon: 'tool-icons/kling-ai.ico',
+    icon: '/tool-icons/kling-ai.ico',
     emoji: '🎥',
   },
 
@@ -127,7 +127,7 @@ export const engines: Record<string, Engine> = {
     descEn: "ByteDance AI chatbot. Nano Banana Pro is its image model.",
     descZh: '字节跳动 AI 对话产品，支持图像生成与多模态。',
     url: 'https://www.doubao.com/chat/',
-    icon: 'tool-icons/doubao.png',
+    icon: '/tool-icons/doubao.png',
     emoji: '🥟',
   },
   jimeng: {
@@ -137,7 +137,7 @@ export const engines: Record<string, Engine> = {
     descEn: "ByteDance consumer image tool. Mobile-friendly.",
     descZh: '字节跳动消费级图像工具，移动端体验好。',
     url: 'https://jimeng.jianying.com/',
-    icon: 'tool-icons/jianying.ico',
+    icon: '/tool-icons/jianying.ico',
     emoji: '🌸',
   },
   tongyi: {
@@ -147,7 +147,7 @@ export const engines: Record<string, Engine> = {
     descEn: 'Alibaba image model, strong B2B and Chinese style.',
     descZh: '阿里图像模型，B 端与中文风格场景强。',
     url: 'https://tongyi.aliyun.com/wanxiang/',
-    icon: 'tool-icons/aliyun.svg',
+    icon: '/tool-icons/aliyun.svg',
     emoji: '🪄',
   },
   wenxin: {
@@ -157,7 +157,7 @@ export const engines: Record<string, Engine> = {
     descEn: "Baidu's image generation, Chinese art and ink painting.",
     descZh: '百度图像生成，国风与中国画风格突出。',
     url: 'https://yige.baidu.com/',
-    icon: 'tool-icons/baidu.ico',
+    icon: '/tool-icons/baidu.ico',
     emoji: '🖌️',
   },
   zhipu: {
@@ -167,7 +167,7 @@ export const engines: Record<string, Engine> = {
     descEn: 'Zhipu AI image/video model, GLM series.',
     descZh: '智谱 AI 图视频模型，GLM 系列。',
     url: 'https://www.zhipuai.cn/',
-    icon: 'tool-icons/chatglm.png',
+    icon: '/tool-icons/chatglm.png',
     emoji: '🔮',
   },
 
@@ -179,7 +179,7 @@ export const engines: Record<string, Engine> = {
     descEn: 'Compatible with most modern text-to-image and image models.',
     descZh: '兼容大多数主流文生图与图生图模型。',
     url: 'https://aiartspell.art/',
-    icon: 'tool-icons/v0.svg',
+    icon: '/tool-icons/v0.svg',
     emoji: '🪐',
   },
 };

@@ -319,7 +319,7 @@ const breadcrumbLd = {
               return (
                 <a href={e.url} target="_blank" rel="noopener" class="engine-row">
                   {e.icon ? (
-                    <img class="engine-logo" src={`${base}${e.icon}`} alt={e.nameEn} loading="lazy" width="32" height="32" />
+                    <img class="engine-logo" src={e.icon} alt={e.nameEn} loading="lazy" width="32" height="32" />
                   ) : (
                     <span class="engine-emoji" aria-hidden="true">{e.emoji}</span>
                   )}
