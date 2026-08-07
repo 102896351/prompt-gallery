@@ -4,6 +4,7 @@ import PromptImage from '../../../components/PromptImage.astro';
 import PromptCard from '../../../components/PromptCard.astro';
 import { prompts, promptCategories, getRelatedPrompts } from '../../../data/prompts';
 import { getCompatibleEngines } from '../../../data/engines';
+import { getDetailSeoTitle, getDetailSeoDescription } from '../../../utils/seo';
 import { zh } from '../../../i18n';
 
 export function getStaticPaths() {
@@ -105,7 +106,7 @@ const breadcrumbLd = {
 };
 ---
 
-<Base title={prompt.title} description={prompt.tagline} ogImage={prompt.images[0]?.src}>
+<Base title={getDetailSeoTitle(prompt, prompt.title, 'zh')} description={getDetailSeoDescription(prompt, prompt.title, 'zh')} ogImage={prompt.images[0]?.src}>
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(articleLd)} />
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
 
