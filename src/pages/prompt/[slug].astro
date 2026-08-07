@@ -28,6 +28,8 @@ const verifiedEngineKeys = new Set(prompt.engines.filter((k: string) => k !== 'o
 const textForModelDetection = [prompt.prompt, prompt.rawBlock, fullPrompt].filter(Boolean).join('\n');
 // 英文页面：优先使用 titleEn（如果有），否则 fallback 到 title（原文）
 const displayTitle = prompt.titleEn || prompt.title;
+// 英文页面：优先使用 taglineEn（如果有），否则 fallback 到 tagline（原文）
+const displayTagline = prompt.taglineEn || prompt.tagline;
 // 分类标签：英文页用 label
 const displayCatLabel = cat?.label ?? prompt.category;
 // 引擎显示名（按 locale 翻译）
@@ -71,7 +73,7 @@ const articleLd = {
   '@type': 'Article',
   headline: displayTitle,
   name: displayTitle,
-  description: prompt.tagline,
+  description: displayTagline,
   url: pageUrl,
   mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
   datePublished: prompt.dateAdded,
@@ -132,7 +134,7 @@ const breadcrumbLd = {
       </div>
 
       <h1>{displayTitle}</h1>
-      <p class="tagline">{prompt.tagline}</p>
+      <p class="tagline">{displayTagline}</p>
 
       <div class="detail-actions">
         <button type="button" class="btn primary" data-copy-target="prompt-full" id="copy-btn">

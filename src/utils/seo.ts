@@ -82,9 +82,11 @@ export function getDetailSeoDescription(prompt: Prompt, displayTitle: string, lo
   }
 
   // 取干净的内容段
+  // EN locale 优先用 taglineEn（如果有），ZH 用 tagline
+  const tagline = locale === 'en' ? (prompt.taglineEn || prompt.tagline) : prompt.tagline;
   let body = '';
-  if (isTaglineClean(prompt.tagline, displayTitle)) {
-    body = prompt.tagline;
+  if (isTaglineClean(tagline, displayTitle)) {
+    body = tagline;
   } else if (prompt.verdict && prompt.verdict.length > 20) {
     body = prompt.verdict;
   } else {

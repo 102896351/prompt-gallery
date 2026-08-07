@@ -52,7 +52,9 @@ export interface PromptSource {
 export interface Prompt {
   slug: string;
   title: string;
+  titleEn?: string;
   tagline: string;
+  taglineEn?: string;
   category: PromptStyle;
   engines: PromptEngine[];
   difficulty: 1 | 2 | 3 | 4 | 5;
@@ -5516,8 +5518,9 @@ export const prompts: Prompt[] = [
   {
     slug: "y2k-aesthetic-city-impression-collage-poster",
     title: "Y2K拼贴美学城市印象海报",
-    titleEn: "Y2K拼贴美学城市印象海报",
+    titleEn: "Y2K Aesthetic City Impression Collage Poster",
     tagline: "用 Y2K 拼贴美学重新诠释城市印象，把街头文化、时尚人像和杂志排版糅合成一张纸质拼贴海报。",
+    taglineEn: "Y2K collage aesthetic reimagines city impressions, blending street culture, fashion portraits, and magazine layout into a paper-cut poster.",
     category: "other",
     engines: ["other"],
     difficulty: 3,
@@ -5535,8 +5538,9 @@ export const prompts: Prompt[] = [
   {
     slug: "d-ultraman-limited-edition-general-version",
     title: "D+奥特曼限时发售通用版",
-    titleEn: "D+奥特曼限时发售通用版",
+    titleEn: "D+ Ultraman Limited Edition General Version",
     tagline: "masterpiece, best quality, ultra detailed, 8k, high resolution, photorealistic cinematic photography, movie-grade shot, professional cinema ",
+    taglineEn: "Cinematic Ultraman character poster with exploding glass shards filled with iconic anime scenes.",
     category: "other",
     engines: ["other"],
     difficulty: 3,
@@ -5554,8 +5558,9 @@ export const prompts: Prompt[] = [
   {
     slug: "sci-fi-industrial-food-fusion",
     title: "太空科幻硬核工业风食品结合",
-    titleEn: "太空科幻硬核工业风食品结合",
+    titleEn: "Sci-Fi Industrial Food Fusion",
     tagline: "太空科幻的硬核工业风与食品的结合，效果惊艳",
+    taglineEn: "Hardcore sci-fi industrial style meets food photography for stunning visual results.",
     category: "other",
     engines: ["nano-banana-pro"],
     difficulty: 3,
@@ -5573,8 +5578,9 @@ export const prompts: Prompt[] = [
   {
     slug: "extreme-wide-angle-perspective-and-dynamic-pose-remix-edit-of-the-original-image",
     title: "原始图像的极端广角视角和动态姿态混剪编辑",
-    titleEn: "原始图像的极端广角视角和动态姿态混剪编辑",
+    titleEn: "Extreme Wide-Angle Perspective and Dynamic Pose Remix Edit",
     tagline: "一番最後の[Prompt for original image]の部分に画像生成に使用したPromptを入れると一貫性が増します。不要な場合は3行削ってしまっても大丈夫です。",
+    taglineEn: "Remix any image with extreme wide-angle perspective and dynamic pose editing.",
     category: "other",
     engines: ["nano-banana-pro"],
     difficulty: 3,
@@ -5611,8 +5617,9 @@ export const prompts: Prompt[] = [
   {
     slug: "golden-hour-self-portrait",
     title: "金色调自我人像",
-    titleEn: "金色调自我人像",
+    titleEn: "Golden Hour Self-Portrait",
     tagline: "That golden hour glow makes everything look cinematic! Drop an emoji that describes your current mood right now.",
+    taglineEn: "Golden hour glow makes everything look cinematic. Drop your photo and generate a stunning self-portrait.",
     category: "other",
     engines: ["nano-banana-pro"],
     difficulty: 3,
@@ -5630,8 +5637,9 @@ export const prompts: Prompt[] = [
   {
     slug: "night-portrait-young-woman-yellow-cutout-dress",
     title: "夜景中穿着黄色连衣裙的年轻女性肖像",
-    titleEn: "夜景中穿着黄色连衣裙的年轻女性肖像",
+    titleEn: "Night Portrait of Young Woman in Yellow Cutout Dress",
     tagline: "Nano banana Pro with Gemini 3.0:",
+    taglineEn: "Night portrait of a young woman in a yellow cutout dress, generated with Nano Banana Pro and Gemini 3.0.",
     category: "other",
     engines: ["nano-banana-pro"],
     difficulty: 3,
@@ -5668,8 +5676,9 @@ export const prompts: Prompt[] = [
   {
     slug: "nano-banana-pro-t0r7mf",
     title: "纳米香蕉专业版",
-    titleEn: "纳米香蕉专业版",
+    titleEn: "Nano Banana Pro",
     tagline: "Nano Banana Pro",
+    taglineEn: "Surreal diorama depicting astronauts on a pizza slice as a lunar base operation.",
     category: "other",
     engines: ["nano-banana-pro"],
     difficulty: 3,
@@ -5687,8 +5696,9 @@ export const prompts: Prompt[] = [
   {
     slug: "dark-underwater-siren",
     title: "深海暗黑美人",
-    titleEn: "深海暗黑美人",
+    titleEn: "Dark Underwater Siren",
     tagline: "Nano Banana Pro @NanoBanana",
+    taglineEn: "Dark mermaid underwater editorial portrait with cinematic god rays and wet skin texture.",
     category: "other",
     engines: ["nano-banana-pro"],
     difficulty: 3,
@@ -5706,8 +5716,9 @@ export const prompts: Prompt[] = [
   {
     slug: "upscale-party-photography",
     title: "高端派对摄影",
-    titleEn: "高端派对摄影",
+    titleEn: "Upscale Party Photography",
     tagline: "Cheers 🍸 Nano Banana Pro @NanoBanana",
+    taglineEn: "High-end party photography prompt for Nano Banana Pro with glamorous lighting.",
     category: "other",
     engines: ["nano-banana-pro"],
     difficulty: 3,
@@ -5725,8 +5736,9 @@ export const prompts: Prompt[] = [
   {
     slug: "cozy-christmas-couple-photo",
     title: "圣诞情侣生活照",
-    titleEn: "圣诞情侣生活照",
+    titleEn: "Cozy Christmas Couple Photo",
     tagline: "Nano Banana Pro @bageldotcom",
+    taglineEn: "Cozy Christmas couple lifestyle photo, warm and natural candid style.",
     category: "other",
     engines: ["nano-banana-pro"],
     difficulty: 3,
@@ -5744,8 +5756,9 @@ export const prompts: Prompt[] = [
   {
     slug: "high-fashion-studio-editorial-portrait-southeast-asian-ceremonial-regalia",
     title: "东南亚宫廷服饰高级时尚摄影",
-    titleEn: "东南亚宫廷服饰高级时尚摄影",
+    titleEn: "High Fashion Studio Editorial Portrait - Southeast Asian Ceremonial Regalia",
     tagline: "Nano Banana Pro @NanoBanana  🪙",
+    taglineEn: "High fashion studio editorial portrait featuring Southeast Asian ceremonial regalia.",
     category: "other",
     engines: ["nano-banana-pro","kling"],
     difficulty: 3,
@@ -5763,8 +5776,9 @@ export const prompts: Prompt[] = [
   {
     slug: "creative-phone-edit",
     title: "创意手机编辑",
-    titleEn: "创意手机编辑",
+    titleEn: "Creative Phone Edit",
     tagline: "[Nano Banana Pro]",
+    taglineEn: "Creative phone photo editing prompt for Nano Banana Pro.",
     category: "other",
     engines: ["nano-banana-pro"],
     difficulty: 3,
@@ -5782,7 +5796,7 @@ export const prompts: Prompt[] = [
   {
     slug: "pop-mart-the-monsters-x-real-human-fashion-editorial-generator",
     title: "Pop Mart “怪物家族”×真人时尚编辑生成器",
-    titleEn: "Pop Mart “怪物家族”×真人时尚编辑生成器",
+    titleEn: "Pop Mart The Monsters x Real Human Fashion Editorial Generator",
     tagline: "Pop Mart \"The Monsters\" x Real Human Fashion Editorial Generator",
     category: "other",
     engines: ["other"],
@@ -5801,8 +5815,9 @@ export const prompts: Prompt[] = [
   {
     slug: "modern-bento-grid-layout-product-display-design",
     title: "现代Bento网格布局产品展示设计",
-    titleEn: "现代Bento网格布局产品展示设计",
+    titleEn: "Modern Bento Grid Layout Product Display Design",
     tagline: "🫰来啊！兄弟们！这套提示词的效果我可太心水啊！！！用它小红书起号，不香么！！",
+    taglineEn: "Modern Bento grid layout for product display design, perfect for social media branding.",
     category: "other",
     engines: ["other"],
     difficulty: 3,
@@ -5820,8 +5835,9 @@ export const prompts: Prompt[] = [
   {
     slug: "business-application-case-analysis-and-tag-extraction",
     title: "商业应用案例分析与标签提取",
-    titleEn: "商业应用案例分析与标签提取",
+    titleEn: "Business Application Case Analysis and Tag Extraction",
     tagline: "🔥兄弟们！爆肝一晚上整理了一份10+的生图商业应用案例2.0！（收藏🔖）",
+    taglineEn: "Business application case analysis with 10+ AI image generation examples and tag extraction.",
     category: "other",
     engines: ["nano-banana-pro"],
     difficulty: 3,
@@ -5839,8 +5855,9 @@ export const prompts: Prompt[] = [
   {
     slug: "masterpiece-warring-states-robe-portrait",
     title: "战国袍大师级写真",
-    titleEn: "战国袍大师级写真",
+    titleEn: "Masterpiece Warring States Robe Portrait",
     tagline: "第八版 大师级写真来袭： 战国袍！",
+    taglineEn: "Masterpiece-level Warring States robe portrait photography prompt.",
     category: "other",
     engines: ["other"],
     difficulty: 3,
@@ -5858,8 +5875,9 @@ export const prompts: Prompt[] = [
   {
     slug: "ai-generated-fit-female-mirror-selfie",
     title: "AI创作的健身美女镜子自拍",
-    titleEn: "AI创作的健身美女镜子自拍",
+    titleEn: "AI-Generated Fit Female Mirror Selfie",
     tagline: "I know you're trying hard not to fall in love with this girl. but she was created with AI",
+    taglineEn: "AI-generated fitness female mirror selfie with realistic lighting.",
     category: "other",
     engines: ["nano-banana-pro"],
     difficulty: 3,
@@ -5877,8 +5895,9 @@ export const prompts: Prompt[] = [
   {
     slug: "young-woman-pink-supercar-urban-setting",
     title: "现代都市背景下的年轻女子与粉色超跑",
-    titleEn: "现代都市背景下的年轻女子与粉色超跑",
+    titleEn: "Young Woman with Pink Supercar in Urban Setting",
     tagline: "这个nano banana pro提示词真牛逼。",
+    taglineEn: "Young woman with pink supercar in modern urban setting.",
     category: "other",
     engines: ["nano-banana-pro"],
     difficulty: 3,
@@ -5915,8 +5934,9 @@ export const prompts: Prompt[] = [
   {
     slug: "leaf-cutout-art-scene",
     title: "树叶剪纸艺术场景",
-    titleEn: "树叶剪纸艺术场景",
+    titleEn: "Leaf Cutout Art Scene",
     tagline: "🍃 One leaf, one world. Intricate leaf-cutout art brings enchanting scenes to life with mesmerizing detail!",
+    taglineEn: "One leaf, one world. Intricate leaf-cutout art brings enchanting scenes to life.",
     category: "other",
     engines: ["nano-banana-pro","kling"],
     difficulty: 3,
@@ -5934,8 +5954,9 @@ export const prompts: Prompt[] = [
   {
     slug: "high-fashion-streetwear-editorial-photo",
     title: "时尚街头服饰编辑照片",
-    titleEn: "时尚街头服饰编辑照片",
+    titleEn: "High Fashion Streetwear Editorial Photo",
     tagline: "✨ Sube tu foto a Nano Banana Pro para obtener esta cuadrícula fashion de ti mismo",
+    taglineEn: "High fashion streetwear editorial photo prompt for Nano Banana Pro.",
     category: "other",
     engines: ["nano-banana-pro"],
     difficulty: 3,
@@ -5953,8 +5974,9 @@ export const prompts: Prompt[] = [
   {
     slug: "from-single-reference-image-to-cinematic-short",
     title: "从单一参考图像到电影短片的导演之路",
-    titleEn: "从单一参考图像到电影短片的导演之路",
+    titleEn: "From Single Reference Image to Cinematic Short",
     tagline: "You are an award-winning trailer director + cinematographer + storyboard artist. Your job: turn ONE reference image into a cohesive cinemati",
+    taglineEn: "Award-winning trailer director prompt: turn a single reference image into a cinematic short.",
     category: "other",
     engines: ["other"],
     difficulty: 3,
@@ -5972,8 +5994,9 @@ export const prompts: Prompt[] = [
   {
     slug: "modern-resistance-movement-storyboard-generator-la-resistenza",
     title: "现代抵抗运动电影分镜生成器 - La Resistenza",
-    titleEn: "现代抵抗运动电影分镜生成器 - La Resistenza",
+    titleEn: "Modern Resistance Movement Storyboard Generator - La Resistenza",
     tagline: "I tested this prompt really amazing 🤩",
+    taglineEn: "Modern resistance movement storyboard generator - La Resistenza cinematic edition.",
     category: "other",
     engines: ["nano-banana-pro"],
     difficulty: 3,
@@ -5991,8 +6014,9 @@ export const prompts: Prompt[] = [
   {
     slug: "candid-portrait-on-urban-balcony",
     title: "都市阳台上的非正式肖像",
-    titleEn: "都市阳台上的非正式肖像",
+    titleEn: "Candid Portrait on Urban Balcony",
     tagline: "Nano Banana Pro",
+    taglineEn: "Candid portrait on urban balcony, natural light, Nano Banana Pro.",
     category: "other",
     engines: ["nano-banana-pro"],
     difficulty: 3,
@@ -6010,8 +6034,9 @@ export const prompts: Prompt[] = [
   {
     slug: "fancy-perfume-bottle-photography",
     title: "时尚香水瓶摆拍",
-    titleEn: "时尚香水瓶摆拍",
+    titleEn: "Fancy Perfume Bottle Photography",
     tagline: "Nano Banana Pro Gemini 3.0",
+    taglineEn: "Fancy perfume bottle product photography, Nano Banana Pro with Gemini 3.0.",
     category: "other",
     engines: ["nano-banana-pro"],
     difficulty: 3,
@@ -6048,8 +6073,9 @@ export const prompts: Prompt[] = [
   {
     slug: "young-woman-beach-wet-hair",
     title: "沙滩上的湿发金发女郎",
-    titleEn: "沙滩上的湿发金发女郎",
+    titleEn: "Young Woman Beach Wet Hair",
     tagline: "have you seen a realistic prompt like this before?",
+    taglineEn: "Realistic young woman with wet hair on beach, golden hour lighting.",
     category: "other",
     engines: ["nano-banana-pro"],
     difficulty: 3,
@@ -6067,8 +6093,9 @@ export const prompts: Prompt[] = [
   {
     slug: "ancient-forest-goddess-portrait",
     title: "古代森林女神肖像",
-    titleEn: "古代森林女神肖像",
+    titleEn: "Ancient Forest Goddess Portrait",
     tagline: "Nano Banana over Gemini Prompt:",
+    taglineEn: "Ancient forest goddess portrait with mystical atmosphere and natural lighting.",
     category: "other",
     engines: ["nano-banana-pro"],
     difficulty: 3,
