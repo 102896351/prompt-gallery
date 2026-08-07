@@ -28,6 +28,8 @@ const B_switcher = import.meta.env.BASE_URL.replace(/\/$/, '');
 const otherLocaleHref = locale === 'zh' ? `${B_switcher}/` : `${B_switcher}/zh/`;
 // 动态读取 base 路径，避免硬编码（适配自定义域名 vs github.io/仓库名）
 const B = import.meta.env.BASE_URL; // 末尾带 /，如 '/' 或 '/prompt-gallery/'
+// ZH 页面需要在链接前加 /zh，EN 页面用 base 即可
+const localePrefix = locale === 'zh' ? `${B}zh/` : B;
 
 // 双语 hreflang：x-default 指向英文版（默认），并声明真实的两个语言版本
 // 404 / 错误页的 hreflang 指向各自首页（而不是当前错误 URL）
@@ -161,16 +163,16 @@ const hreflangs: Array<{ lang: string; href: string }> = isErrorPage
     <a href="#main-content" class="skip-link">Skip to content</a>
     <header class="site-header">
       <div class="container">
-        <a href={B} class="brand">
+        <a href={localePrefix} class="brand">
           <img src={`${B}favicon.jpg`} alt="" class="brand-logo" />
           {siteName}
         </a>
         <nav class="nav" aria-label="Primary">
-          <a href={`${B}#all`}>{t.nav.categories}</a>
-          <a href={`${B}collections`}>{t.nav.collections}</a>
-          <a href={`${B}#featured`}>{t.nav.featured}</a>
-          <a href={`${B}tools`}>{t.nav.tools}</a>
-          <a href={`${B}about`}>{t.nav.about}</a>
+          <a href={`${localePrefix}#all`}>{t.nav.categories}</a>
+          <a href={`${localePrefix}collections`}>{t.nav.collections}</a>
+          <a href={`${localePrefix}#featured`}>{t.nav.featured}</a>
+          <a href={`${localePrefix}tools`}>{t.nav.tools}</a>
+          <a href={`${localePrefix}about`}>{t.nav.about}</a>
           <a href={otherLocaleHref} class="lang-switcher" aria-label={`Switch language to ${locale === 'zh' ? 'English' : '中文'}`}>
             {t.langSwitcher.switchTo}
           </a>
@@ -194,10 +196,10 @@ const hreflangs: Array<{ lang: string; href: string }> = isErrorPage
           <span>{t.footer.copyright}</span>
         </div>
         <nav class="footer-nav" aria-label="Site legal and info">
-          <a href={`${B}disclaimer`}>Disclaimer</a>
-          <a href={`${B}privacy`}>Privacy</a>
-          <a href={`${B}about`}>About</a>
-          <a href={`${B}contact`}>Contact</a>
+          <a href={`${localePrefix}disclaimer`}>Disclaimer</a>
+          <a href={`${localePrefix}privacy`}>Privacy</a>
+          <a href={`${localePrefix}about`}>About</a>
+          <a href={`${localePrefix}contact`}>Contact</a>
         </nav>
         <p class="footer-tagline">{t.footer.legalNote}</p>
       </div>
@@ -208,7 +210,7 @@ const hreflangs: Array<{ lang: string; href: string }> = isErrorPage
       <div class="cookie-banner-inner">
         <p class="cookie-banner-text">{locale === 'zh' ? '我们使用 Google Analytics 收集匿名访问数据以改进网站。继续浏览即视为接受。' : 'We use Google Analytics to collect anonymous usage data. Continuing to browse implies consent.'}</p>
         <div class="cookie-banner-actions">
-          <a href={`${B}privacy`} class="cookie-banner-link">{locale === 'zh' ? '隐私政策' : 'Privacy'}</a>
+          <a href={`${localePrefix}privacy`} class="cookie-banner-link">{locale === 'zh' ? '隐私政策' : 'Privacy'}</a>
           <button type="button" class="cookie-banner-btn" data-cookie-accept>{locale === 'zh' ? '接受' : 'Accept'}</button>
         </div>
       </div>
