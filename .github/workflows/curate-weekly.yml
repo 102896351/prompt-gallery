@@ -1,0 +1,129 @@
+name: Weekly curation
+
+# 每周一北京时间 09:00（UTC 01:00）跑一次
+# 也允许手动触发（Actions 页面 → Run workflow）
+on:
+  schedule:
+    - cron: '0 1 * * 1'
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: 'Number of new prompts to add (default 30)'
+        required: false
+        default: '30'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  curate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download latest community README
+        run: |
+          mkdir -p /tmp/curate
+          curl -fsSL \
+            -A "prompt-gallery-bot/1.0" \
+            "https://raw.githubusercontent.com/Jermic/awesome-aiart-pics-prompts/master/README.md" \
+            -o /tmp/curate/readme.md
+          echo "Downloaded $(wc -c < /tmp/curate/readme.md) bytes"
+
+      - name: Extract candidates (limit 1500)
+        run: |
+          LOCAL_FILE=/tmp/curate/readme.md \
+          MAX_CANDIDATES=1500 \
+            node scripts/extract-prompts.mjs > /tmp/curate/candidates.json
+          echo "Extracted $(node -e "console.log(JSON.parse(require('fs').readFileSync('/tmp/curate/candidates.json','utf8')).candidates.length)") candidates"
+
+      - name: Select 30 fresh prompts (max 3 per author)
+        run: |
+          node scripts/select-fresh.cjs \
+            --candidates /tmp/curate/candidates.json \
+            --existing src/data/prompts.ts \
+            --output /tmp/curate/selected.json \
+            --limit ${GITHUB_INPUT_LIMIT:-30}
+          echo "Selected $(node -e "console.log(require('/tmp/curate/selected.json').length)") prompts"
+
+      - name: Generate TypeScript fragments
+        run: |
+          if [ ! -s /tmp/curate/selected.json ]; then
+            echo "No new prompts to add; exiting early."
+            exit 0
+          fi
+          node scripts/generate-fragments.cjs \
+            --input /tmp/curate/selected.json \
+            --output /tmp/curate/fragments.ts
+
+      - name: Inject fragments into prompts.ts
+        run: |
+          if [ ! -s /tmp/curate/selected.json ]; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          node scripts/inject-fragments.cjs \
+            --existing src/data/prompts.ts \
+            --fragments /tmp/curate/fragments.ts \
+            --output src/data/prompts.ts
+
+      - name: Build to verify
+        run: npm run build
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if git diff --quiet src/data/prompts.ts; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "No new prompts to curate."
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            NEW_COUNT=$(grep -c '^    slug:' src/data/prompts.ts || echo "0")
+            EXISTING_COUNT=$(git show HEAD:src/data/prompts.ts | grep -c '^    slug:' || echo "0")
+            ADDED=$((NEW_COUNT - EXISTING_COUNT))
+            echo "added=$ADDED" >> $GITHUB_OUTPUT
+            echo "Curated $ADDED new prompts."
+          fi
+
+      - name: Generate PR body
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          node scripts/generate-pr-body.cjs \
+            --selected /tmp/curate/selected.json \
+            --added ${{ steps.check_changes.outputs.added }} \
+            --output /tmp/pr-body.md
+
+      - name: Create Pull Request
+        if: steps.check_changes.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore: curate ${{ steps.check_changes.outputs.added }} new prompts (weekly)'
+          title: 'Weekly curation: ${{ steps.check_changes.outputs.added }} new prompts'
+          body-path: /tmp/pr-body.md
+          branch: curation/weekly-${{ github.run_id }}
+          delete-branch: true
+          add-paths: |
+            src/data/prompts.ts
+            src/data/curation-meta.json
+
+      - name: Upload artifacts (for debugging)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: curate-logs
+          path: |
+            /tmp/curate/
+          retention-days: 7
