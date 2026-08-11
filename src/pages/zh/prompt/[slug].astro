@@ -19,7 +19,7 @@ const t = zh;
 const messages = zh;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const cat = promptCategories.find((c) => c.id === prompt.category);
-const related = getRelatedPrompts(prompt.slug, 3);
+const related = getRelatedPrompts(prompt.slug, 8);
 const fullPrompt = prompt.structuredData ? JSON.stringify(prompt.structuredData, null, 2) : prompt.prompt;
 // 适用引擎列表（详情页底部"适用于"区块用）
 const compatibleEngines = getCompatibleEngines(prompt.engines);
