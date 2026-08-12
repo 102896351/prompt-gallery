@@ -6,6 +6,9 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://aiartspell.art',
   base: '/',
+  // 强制所有内部 URL 输出带尾斜杠（消除 GitHub Pages 的 301 slash 补全）
+  // 物理文件仍是 /foo/index.html，但 Astro router 不会再生成无尾斜杠的链接
+  trailingSlash: 'always',
   build: {
     format: 'directory',
   },
