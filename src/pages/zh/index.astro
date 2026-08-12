@@ -91,6 +91,10 @@ const itemListLd = {
 
 <Base>
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(itemListLd)} />
+  {/* Preload hero banner 第一张图：CSS background-image 也能借此机会提前下载（救 LCP） */}
+  {bannerImages[0] && (
+    <link slot="head" rel="preload" as="image" href={bannerImages[0]} fetchpriority="high" />
+  )}
 
   <section class="hero">
     <!-- Banner 轮播背景（淡入淡出） -->
@@ -152,9 +156,14 @@ const itemListLd = {
       </p>
       <div class="carousel" data-featured-carousel data-per-page="8">
         <div class="carousel-track" data-featured-track>
-          {featured.map((p) => (
+          {featured.map((p, i) => (
             <div class="carousel-slide" data-featured-slide>
-              <PromptCard prompt={p} base={base} />
+              <PromptCard
+                prompt={p}
+                base={base}
+                eager={i < 2}
+                fetchpriority={i < 2 ? 'high' : 'auto'}
+              />
             </div>
           ))}
         </div>

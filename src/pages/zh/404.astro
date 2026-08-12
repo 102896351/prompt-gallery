@@ -1,13 +1,13 @@
 ---
-import Base from '../layouts/Base.astro';
-import { prompts } from '../data/prompts';
+import Base from '../../layouts/Base.astro';
+import { prompts } from '../../data/prompts';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 // 推荐前 6 个 prompt 给用户
 const featured = prompts.slice(0, 6);
 ---
 
-<Base title="404 · Page Not Found" description="The page you're looking for doesn't exist. Browse our prompt gallery instead." noAds>
+<Base title="404 · 页面未找到" description="您访问的页面不存在。可以浏览我们的提示词库或返回首页。" noAds>
   <section class="hero not-found-hero">
     <div class="container">
       <div class="not-found-content">
@@ -15,9 +15,9 @@ const featured = prompts.slice(0, 6);
         <h1>页面没找到</h1>
         <p class="not-found-sub">您访问的链接可能已失效，或内容已被移除。</p>
         <div class="not-found-actions">
-          <a href={`${base}/`} class="btn primary">← 返回首页</a>
-          <a href={`${base}/#all`} class="btn">浏览全部提示词</a>
-          <a href={`${base}/tools`} class="btn">AI 工具集</a>
+          <a href={`${base}/zh/`} class="btn primary">← 返回首页</a>
+          <a href={`${base}/zh/#all`} class="btn">浏览全部提示词</a>
+          <a href={`${base}/zh/tools`} class="btn">AI 工具集</a>
         </div>
       </div>
 
@@ -25,11 +25,11 @@ const featured = prompts.slice(0, 6);
         <h2>或者浏览精选提示词：</h2>
         <div class="not-found-grid">
           {featured.map((p, i) => (
-            <a href={`${base}/prompt/${p.slug}`} class="card not-found-card">
+            <a href={`${base}/zh/prompt/${p.slug}`} class="card not-found-card">
               <div class="not-found-card-cover">
                 <img
                   src={p.images[0]?.src}
-                  alt={p.titleEn || p.title}
+                  alt={p.title}
                   width="400"
                   height="300"
                   loading={i < 2 ? 'eager' : 'lazy'}
@@ -40,7 +40,7 @@ const featured = prompts.slice(0, 6);
                 />
               </div>
               <div class="not-found-card-body">
-                <h3>{p.titleEn || p.title}</h3>
+                <h3>{p.title}</h3>
                 <span class="badge">{p.category}</span>
               </div>
             </a>

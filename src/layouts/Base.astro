@@ -18,8 +18,8 @@ const finalTitle = title ? `${title} · ${siteName}` : `${siteName} — ${t.site
 const finalDesc = description || t.siteTagline;
 const siteBase = Astro.site ?? new URL('https://prompt-gallery.example.com');
 const canonical = new URL(Astro.url.pathname, siteBase).toString();
-// OG 图：页面级优先，否则用默认图
-const defaultOgImage = new URL('og-default.svg', siteBase).toString();
+// OG 图：页面级优先，否则用默认图（JPG 格式，社交平台对 SVG 抓取常常失败）
+const defaultOgImage = new URL('og-default.jpg', siteBase).toString();
 const resolvedOgImage = ogImage || defaultOgImage;
 
 // 语言切换：切到对端首页（而不是保持当前页面），避免 404 页切到对端也 404
@@ -98,6 +98,13 @@ const hreflangs: Array<{ lang: string; href: string }> = isErrorPage
     <meta name="googlebot" content="index, follow" />
     <meta name="author" content={siteName} />
     <meta name="generator" content={Astro.generator} />
+
+    <!-- Security headers (best-effort via meta; HSTS 必须服务器头，GitHub Pages 不支持，跳过)
+         CSP：允许自有源 + GA + Google 图片 + JSON-LD；unsafe-inline 用于 inline script (主题切换 / Cookie banner)
+         COOP/XFO：缓解侧信道 + 点击劫持。注意：XFO meta 在老浏览器无效，新浏览器 OK。-->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://img1.aiart.pics https://*.aiart.pics; connect-src 'self' https://www.google-analytics.com; font-src 'self' data:; frame-ancestors 'none'" />
+    <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
     <!-- theme-color 跟随主题（浅色/深色） -->
     <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0b0d12" media="(prefers-color-scheme: dark)" />

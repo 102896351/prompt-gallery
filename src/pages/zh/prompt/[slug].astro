@@ -161,6 +161,8 @@ const breadcrumbLd = {
                 alt={prompt.images[0].alt ?? prompt.title}
                 width={prompt.images[0].width}
                 className="prompt-main-image-img"
+                eager={true}
+                fetchpriority="high"
               />
               <span class="prompt-image-count">
                 <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">

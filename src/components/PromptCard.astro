@@ -13,8 +13,16 @@ import PromptImage from './PromptImage.astro';
 interface Props {
   prompt: Prompt;
   base?: string;
+  // 性能优化：列表里前几张首屏可见的卡片传 eager，提示浏览器提前加载并提升 LCP
+  eager?: boolean;
+  fetchpriority?: 'high' | 'low' | 'auto';
 }
-const { prompt, base = import.meta.env.BASE_URL.replace(/\/$/, '') } = Astro.props;
+const {
+  prompt,
+  base = import.meta.env.BASE_URL.replace(/\/$/, ''),
+  eager = false,
+  fetchpriority = 'auto',
+} = Astro.props;
 const cat = promptCategories.find((c) => c.id === prompt.category);
 const cover = prompt.images[0];
 // 根据当前页面 URL 推断 locale，决定卡片链接加不加 /zh 前缀
@@ -34,7 +42,13 @@ const tagLabel = (key: string) => (messages.tags as Record<string, string>)[key]
 <a href={promptHref} class="card prompt-card">
   {cover && (
     <div class="prompt-card-cover">
-      <PromptImage src={cover.src} alt={cover.alt ?? displayTitle} width={cover.width} />
+      <PromptImage
+        src={cover.src}
+        alt={cover.alt ?? displayTitle}
+        width={cover.width}
+        eager={eager}
+        fetchpriority={fetchpriority}
+      />
     </div>
   )}
   <div class="prompt-card-body">

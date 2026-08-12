@@ -9,9 +9,22 @@ interface Props {
   alt?: string;
   width?: number;
   className?: string;
+  // 性能优化：首屏可见的图（hero / featured 头部 / 详情页主图）应传 eager + high
+  eager?: boolean; // 默认 false (lazy)；首屏图传 true
+  fetchpriority?: 'high' | 'low' | 'auto'; // 默认 auto；首屏关键图传 'high'
+  // 外链图（img1.aiart.pics）防防盗链参数（_nc_gid / oh / oe）污染：传 no-referrer
+  referrerpolicy?: 'no-referrer' | 'origin' | 'strict-origin-when-cross-origin';
 }
 
-const { src, alt = '', width = 500, className } = Astro.props;
+const {
+  src,
+  alt = '',
+  width = 500,
+  className,
+  eager = false,
+  fetchpriority = 'auto',
+  referrerpolicy = 'no-referrer',
+} = Astro.props;
 const height = Math.round((width / 4) * 3); // 4:3 比例，避免 CLS
 const fallbackSrc = `${import.meta.env.BASE_URL}fallback.svg`;
 ---
@@ -21,8 +34,10 @@ const fallbackSrc = `${import.meta.env.BASE_URL}fallback.svg`;
   alt={alt}
   width={width}
   height={height}
-  loading="lazy"
-  decoding="async"
+  loading={eager ? 'eager' : 'lazy'}
+  fetchpriority={fetchpriority}
+  decoding={eager ? 'sync' : 'async'}
+  referrerpolicy={referrerpolicy}
   data-fallback={fallbackSrc}
   class={className}
   onerror="if(this.src!==this.dataset.fallback)this.src=this.dataset.fallback"
