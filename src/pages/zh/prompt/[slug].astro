@@ -104,11 +104,66 @@ const breadcrumbLd = {
     { '@type': 'ListItem', position: 3, name: prompt.title, item: pageUrl },
   ],
 };
+
+// SEO 长尾：取第一个非 "other" 引擎作为显示名，兜底 "AI 图像"
+const primaryEngineKey = prompt.engines.find(e => e !== 'other') || prompt.engines[0] || 'other';
+const engineName = engineLabel(primaryEngineKey);
+
+// JSON-LD FAQPage（中文版问题用中文，吃百度/搜狗长尾词）
+const faqItems: Array<{ q: string; a: string }> = [
+  {
+    q: `这条「${prompt.title}」提示词是什么？`,
+    a: prompt.tagline || `用于 ${engineName} AI 图像生成的${displayCatLabel}提示词。`,
+  },
+  {
+    q: '这条提示词适用于哪些 AI 工具？',
+    a: `兼容：${displayEngines.join('、')}。复制后粘贴到任一工具即可生成图片。`,
+  },
+  {
+    q: '怎么使用这条提示词？',
+    a: prompt.reusable && prompt.placeholders?.length
+      ? `这是可复用模板，请将 ${prompt.placeholders.slice(0, 2).map(p => '`' + p + '`').join('、')} 等占位符替换为你自己的内容，然后粘贴到 ${engineName} 即可。`
+      : `点击上方"复制提示词"按钮，粘贴到 ${engineName} 或其他兼容的 AI 图像生成工具中生成。可根据具体需求微调提示词。`,
+  },
+  {
+    q: '生成的图片可以商用吗？',
+    a: `请查阅原始来源（${prompt.source.platform}）的授权条款。本站仅整理提示词文本，图片版权归原作者所有。`,
+  },
+];
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map(item => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
+  })),
+};
+
+// meta keywords: Bing/Yandex 用
+const metaKeywords = [
+  prompt.title,
+  `${engineName} 提示词`,
+  `${displayCatLabel}提示词`,
+  `${engineName} ${displayCatLabel}`,
+  ...prompt.tags,
+  ...displayEngines,
+  'AI 图像生成',
+  '提示词库',
+  '一键复制',
+].join('，');
+
+// 优化 <h1>：包含引擎 + use case 长尾词
+const optimizedH1 = `${prompt.title} — ${engineName} ${displayCatLabel}提示词`;
 ---
 
 <Base title={getDetailSeoTitle(prompt, prompt.title, 'zh')} description={getDetailSeoDescription(prompt, prompt.title, 'zh')} ogImage={prompt.images[0]?.src}>
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(articleLd)} />
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+  <Fragment slot="head">
+    <meta name="keywords" content={metaKeywords} />
+  </Fragment>
 
   <div class="container">
     <!-- 视觉面包屑导航（与 JSON-LD BreadcrumbList 对应） -->
@@ -132,7 +187,7 @@ const breadcrumbLd = {
         {prompt.reusable && <span class="badge host">{tagLabel('reusable')}</span>}
       </div>
 
-      <h1>{prompt.title}</h1>
+      <h1>{optimizedH1}</h1>
       <p class="tagline">{prompt.tagline}</p>
 
       <div class="detail-actions">
@@ -224,6 +279,17 @@ const breadcrumbLd = {
           <div class="label">编辑点评</div>
           <p style="margin: 0; color: var(--text);">{prompt.verdict}</p>
         </div>
+
+        <!-- FAQ 区块：长尾搜索 + Google 富媒体片段 -->
+        <section class="faq-block" aria-label="常见问题">
+          <h2>常见问题</h2>
+          {faqItems.map((item) => (
+            <details class="faq-item">
+              <summary>{item.q}</summary>
+              <p>{item.a}</p>
+            </details>
+          ))}
+        </section>
 
         <pre id="prompt-full" class="prompt-source" style="display:none;">{fullPrompt}</pre>
 
@@ -764,6 +830,53 @@ const breadcrumbLd = {
     color: var(--accent-soft);
     font-weight: 700;
     margin-bottom: 6px;
+  }
+  /* ---- FAQ 区块 ---- */
+  .faq-block {
+    margin: 32px 0;
+    padding: 20px 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .faq-block h2 {
+    font-size: 18px;
+    margin: 0 0 16px;
+    color: var(--text);
+    font-weight: 700;
+  }
+  .faq-item {
+    border-top: 1px solid var(--border);
+    padding: 12px 0;
+  }
+  .faq-item:first-child { border-top: none; padding-top: 0; }
+  .faq-item summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::before {
+    content: '+';
+    font-weight: 400;
+    font-size: 20px;
+    color: var(--accent);
+    line-height: 1;
+    flex-shrink: 0;
+    width: 14px;
+    text-align: center;
+  }
+  .faq-item[open] summary::before { content: '−'; }
+  .faq-item p {
+    margin: 10px 0 0 22px;
+    color: var(--text-soft);
+    font-size: 14px;
+    line-height: 1.6;
   }
 
   .prompt-display {

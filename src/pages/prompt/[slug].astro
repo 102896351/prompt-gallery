@@ -105,11 +105,71 @@ const breadcrumbLd = {
     { '@type': 'ListItem', position: 3, name: displayTitle, item: pageUrl },
   ],
 };
+
+// JSON-LD FAQPage（Google 富媒体片段：常见问题）
+// 每个详情页自动生成 4 个 FAQ，吃搜索长尾词（"how to use X prompt"、"what engine" 等）
+// ★ Google FAQ 富媒体只在政府/医疗/教育类站点有限显示，但 schema 仍然帮助理解内容
+// SEO 长尾：取第一个非 "other" 引擎作为显示名，兜底 "AI image"
+const primaryEngineKey = prompt.engines.find(e => e !== 'other') || prompt.engines[0] || 'other';
+const engineName = engineLabel(primaryEngineKey);
+
+const faqItems: Array<{ q: string; a: string }> = [
+  {
+    q: `What is this ${displayTitle} prompt?`,
+    a: displayTagline || `A ${displayCatLabel.toLowerCase()} prompt for ${engineName} AI image generation.`,
+  },
+  {
+    q: `Which AI tools work with this prompt?`,
+    a: `This prompt is compatible with: ${prompt.engines.map(e => engineLabel(e)).join(', ')}.${prompt.engines.filter(e => e !== 'other').length > 0 ? ' Copy and paste it into your preferred tool.' : ''}`,
+  },
+  {
+    q: 'How do I use this prompt?',
+    a: prompt.reusable && prompt.placeholders?.length
+      ? `This is a reusable template. Replace placeholders like ${prompt.placeholders.slice(0, 2).map(p => '`' + p + '`').join(', ')} with your own values, then paste into ${engineName}.`
+      : `Click "Copy prompt" above, paste it into ${engineName} or any compatible AI image generator, and generate. Adjust the prompt for your specific use case.`,
+  },
+  {
+    q: 'Can I use the generated images commercially?',
+    a: `Check the original source (${prompt.source.platform}) for licensing terms. This page only curates the prompt text — image rights follow the source author's policy.`,
+  },
+];
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map(item => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
+  })),
+};
+
+// meta keywords：Google 不用，但 Bing/Yandex 用
+const metaKeywords = [
+  displayTitle,
+  `${engineName} prompt`,
+  `${displayCatLabel} prompt`,
+  `${engineName} ${displayCatLabel}`,
+  ...prompt.tags,
+  ...prompt.engines.map(e => engineLabel(e)),
+  'AI image generation',
+  'prompt library',
+  'copy prompt',
+].join(', ');
+
+// 优化 <h1>：包含引擎 + use case 长尾词
+// 原始: displayTitle（裸 prompt 标题）
+// 优化: displayTitle + 引擎 + 用途短语
+const optimizedH1 = `${displayTitle} — ${engineName} ${displayCatLabel} Prompt`;
 ---
 
 <Base title={getDetailSeoTitle(prompt, displayTitle, 'en')} description={getDetailSeoDescription(prompt, displayTitle, 'en')} ogImage={prompt.images[0]?.src}>
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(articleLd)} />
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+  {/* meta keywords: Google 不用但 Bing/Yandex 用 */}
+  <Fragment slot="head">
+    <meta name="keywords" content={metaKeywords} />
+  </Fragment>
 
   <div class="container">
     <!-- Visual breadcrumb (matches JSON-LD BreadcrumbList) -->
@@ -133,7 +193,7 @@ const breadcrumbLd = {
         {prompt.reusable && <span class="badge host">↻ Reusable</span>}
       </div>
 
-      <h1>{displayTitle}</h1>
+      <h1>{optimizedH1}</h1>
       <p class="tagline">{displayTagline}</p>
 
       <div class="detail-actions">
@@ -231,6 +291,17 @@ const breadcrumbLd = {
           <div class="label">Our take</div>
           <p style="margin: 0; color: var(--text);">{prompt.verdict}</p>
         </div>
+
+        <!-- FAQ 区块：用户长尾搜索 + Google 富媒体片段 -->
+        <section class="faq-block" aria-label="Frequently asked questions">
+          <h2>Frequently asked questions</h2>
+          {faqItems.map((item) => (
+            <details class="faq-item">
+              <summary>{item.q}</summary>
+              <p>{item.a}</p>
+            </details>
+          ))}
+        </section>
 
         <!-- 完整 prompt（隐藏的 copy source） -->
         <pre id="prompt-full" class="prompt-source" style="display:none;">{fullPrompt}</pre>
@@ -683,6 +754,53 @@ const breadcrumbLd = {
     color: var(--accent-soft);
     font-weight: 700;
     margin-bottom: 6px;
+  }
+  /* ---- FAQ 区块 (long-tail SEO + 提升停留时间) ---- */
+  .faq-block {
+    margin: 32px 0;
+    padding: 20px 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .faq-block h2 {
+    font-size: 18px;
+    margin: 0 0 16px;
+    color: var(--text);
+    font-weight: 700;
+  }
+  .faq-item {
+    border-top: 1px solid var(--border);
+    padding: 12px 0;
+  }
+  .faq-item:first-child { border-top: none; padding-top: 0; }
+  .faq-item summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::before {
+    content: '+';
+    font-weight: 400;
+    font-size: 20px;
+    color: var(--accent);
+    line-height: 1;
+    flex-shrink: 0;
+    width: 14px;
+    text-align: center;
+  }
+  .faq-item[open] summary::before { content: '−'; }
+  .faq-item p {
+    margin: 10px 0 0 22px;
+    color: var(--text-soft);
+    font-size: 14px;
+    line-height: 1.6;
   }
   /* ---- 适用引擎列表 (B 列表型，紧凑版适配 280px 右栏) ---- */
   .engines-list {
