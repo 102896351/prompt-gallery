@@ -390,21 +390,17 @@ img { max-width: 100%; display: block; }
   -webkit-column-break-inside: avoid;
   page-break-inside: avoid;       /* legacy fallback */
 }
-/* In the masonry grid, let images display at their NATURAL aspect
-   ratio instead of forcing 4:3 with object-fit: cover. Otherwise
-   tall portraits / 9-grid collages get cropped at top/bottom.
-   The card-wrap's break-inside: avoid still keeps each card intact.
-   Carousel and detail-page cards (.prompt-card-cover outside this
-   grid) keep their original 4:3 aspect-ratio from PromptCard.astro. */
+/* In the masonry grid, force object-fit: contain (instead of
+   cover from PromptCard.astro) so tall images are not cropped
+   at top/bottom. The card-wrap's break-inside: avoid still keeps
+   each card intact. Carousel and detail-page cards use the
+   inherited cover (fixed aspect ratio there is intentional). */
 #prompt-grid :global(.prompt-card-cover) {
   aspect-ratio: auto;
   overflow: visible;
 }
 #prompt-grid :global(.prompt-card-cover img) {
-  width: 100%;
-  height: auto;
   object-fit: contain;
-  display: block;
 }
 @media (max-width: 1100px) {
   #prompt-grid { column-count: 3; }
