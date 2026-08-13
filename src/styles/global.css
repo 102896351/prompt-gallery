@@ -356,7 +356,7 @@ img { max-width: 100%; display: block; }
   color: var(--accent-soft);
 }
 
-/* ---------- Grid ---------- */
+/* ---------- Grid (CSS Grid default; masonry for #prompt-grid) ---------- */
 .grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -370,6 +370,34 @@ img { max-width: 100%; display: block; }
 }
 @media (max-width: 500px) {
   .grid { grid-template-columns: 1fr; }
+}
+
+/* ---------- Masonry via CSS columns (prompt-grid only) ---------- */
+/* Apply true masonry to the main prompt listing pages only.
+   This eliminates the "fake waterfall" gap seen when CSS Grid forces
+   equal row heights. Other grids (tools, similar-prompts) keep
+   the simple grid layout. */
+#prompt-grid {
+  display: block;
+  column-count: 4;
+  column-gap: 20px;
+}
+#prompt-grid > .card-wrap {
+  display: block;
+  width: 100%;
+  margin-bottom: 20px;
+  break-inside: avoid;            /* prevent card from being split */
+  -webkit-column-break-inside: avoid;
+  page-break-inside: avoid;       /* legacy fallback */
+}
+@media (max-width: 1100px) {
+  #prompt-grid { column-count: 3; }
+}
+@media (max-width: 800px) {
+  #prompt-grid { column-count: 2; }
+}
+@media (max-width: 500px) {
+  #prompt-grid { column-count: 1; }
 }
 .card {
   display: block;
