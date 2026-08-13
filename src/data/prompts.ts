@@ -695,7 +695,7 @@ export const prompts: Prompt[] = [
     language: "en",
   },
   {
-    slug: "2x2_grid_split_screen_collage_hyperrealistic_anime_style_chiaroscuro_lighting",
+    slug: "2x2-grid-split-screen-collage-hyperrealistic-anime-style-chiaroscuro-lighting",
     title: "2x2网格分屏拼贴，超现实主义动漫风格，光影交错",
     titleEn: "2x2 Grid Split-Screen Collage — Hyperrealistic Anime Style with Chiaroscuro Lighting",
     tagline: "2x2 grid, split screen, distinct white borders separating the 4 panels, collage, quadtych.",
@@ -4274,9 +4274,9 @@ export const prompts: Prompt[] = [
     language: "en",
   },
   {
-    slug: "nano-banana-pro-prompt-🤯🤯",
+    slug: "nano-banana-pro-prompt-shocked-shocked",
     title: "纳米香蕉Pro提示：🤯🤯",
-    titleEn: "Nano Banana Pro Prompt 🤯🤯",
+    titleEn: "Nano Banana Pro Prompt Shocked Shocked",
     tagline: "Nano Banana Pro Prompt : 🤯🤯",
     category: "product",
     engines: ["nano-banana-pro"],
@@ -6537,7 +6537,7 @@ export const prompts: Prompt[] = [
 {
     slug: "upscale-party-photography",
     title: "高端派对摄影",
-    titleEn: "高端派对摄影",
+    titleEn: "Upscale Party Photography",
     tagline: "Cheers 🍸 Nano Banana Pro @NanoBanana",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -6557,7 +6557,7 @@ export const prompts: Prompt[] = [
   {
     slug: "cozy-christmas-couple-photo",
     title: "圣诞情侣生活照",
-    titleEn: "圣诞情侣生活照",
+    titleEn: "Cozy Christmas Couple Photo",
     tagline: "Nano Banana Pro @bageldotcom",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -6577,7 +6577,7 @@ export const prompts: Prompt[] = [
   {
     slug: "high-fashion-studio-editorial-portrait-southeast-asian-ceremonial-regalia",
     title: "东南亚宫廷服饰高级时尚摄影",
-    titleEn: "东南亚宫廷服饰高级时尚摄影",
+    titleEn: "High Fashion Studio Editorial Portrait Southeast Asian Ceremonial Regalia",
     tagline: "Nano Banana Pro @NanoBanana  🪙",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -6597,7 +6597,7 @@ export const prompts: Prompt[] = [
   {
     slug: "creative-phone-edit",
     title: "创意手机编辑",
-    titleEn: "创意手机编辑",
+    titleEn: "Creative Phone Edit",
     tagline: "[Nano Banana Pro]",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -6617,7 +6617,7 @@ export const prompts: Prompt[] = [
   {
     slug: "pop-mart-the-monsters-x-real-human-fashion-editorial-generator",
     title: "Pop Mart “怪物家族”×真人时尚编辑生成器",
-    titleEn: "Pop Mart “怪物家族”×真人时尚编辑生成器",
+    titleEn: "Pop Mart The Monsters X Real Human Fashion Editorial Generator",
     tagline: "Pop Mart \"The Monsters\" x Real Human Fashion Editorial Generator",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -6637,7 +6637,7 @@ export const prompts: Prompt[] = [
   {
     slug: "modern-bento-grid-layout-product-display-design",
     title: "现代Bento网格布局产品展示设计",
-    titleEn: "现代Bento网格布局产品展示设计",
+    titleEn: "Modern Bento Grid Layout Product Display Design",
     tagline: "🫰来啊！兄弟们！这套提示词的效果我可太心水啊！！！用它小红书起号，不香么！！",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -6657,7 +6657,7 @@ export const prompts: Prompt[] = [
   {
     slug: "business-application-case-analysis-and-tag-extraction",
     title: "商业应用案例分析与标签提取",
-    titleEn: "商业应用案例分析与标签提取",
+    titleEn: "Business Application Case Analysis And Tag Extraction",
     tagline: "🔥兄弟们！爆肝一晚上整理了一份10+的生图商业应用案例2.0！（收藏🔖）",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -6677,7 +6677,7 @@ export const prompts: Prompt[] = [
   {
     slug: "masterpiece-warring-states-robe-portrait",
     title: "战国袍大师级写真",
-    titleEn: "战国袍大师级写真",
+    titleEn: "Masterpiece Warring States Robe Portrait",
     tagline: "第八版 大师级写真来袭： 战国袍！",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -6697,7 +6697,7 @@ export const prompts: Prompt[] = [
   {
     slug: "ai-generated-fit-female-mirror-selfie",
     title: "AI创作的健身美女镜子自拍",
-    titleEn: "AI创作的健身美女镜子自拍",
+    titleEn: "Ai Generated Fit Female Mirror Selfie",
     tagline: "I know you're trying hard not to fall in love with this girl. but she was created with AI",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -6717,7 +6717,7 @@ export const prompts: Prompt[] = [
   {
     slug: "young-woman-pink-supercar-urban-setting",
     title: "现代都市背景下的年轻女子与粉色超跑",
-    titleEn: "现代都市背景下的年轻女子与粉色超跑",
+    titleEn: "Young Woman Pink Supercar Urban Setting",
     tagline: "这个nano banana pro提示词真牛逼。",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -6757,7 +6757,7 @@ export const prompts: Prompt[] = [
   {
     slug: "leaf-cutout-art-scene",
     title: "树叶剪纸艺术场景",
-    titleEn: "树叶剪纸艺术场景",
+    titleEn: "Leaf Cutout Art Scene",
     tagline: "🍃 One leaf, one world. Intricate leaf-cutout art brings enchanting scenes to life with mesmerizing detail!",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -6777,7 +6777,7 @@ export const prompts: Prompt[] = [
   {
     slug: "high-fashion-streetwear-editorial-photo",
     title: "时尚街头服饰编辑照片",
-    titleEn: "时尚街头服饰编辑照片",
+    titleEn: "High Fashion Streetwear Editorial Photo",
     tagline: "✨ Sube tu foto a Nano Banana Pro para obtener esta cuadrícula fashion de ti mismo",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -6797,7 +6797,7 @@ export const prompts: Prompt[] = [
   {
     slug: "from-single-reference-image-to-cinematic-short",
     title: "从单一参考图像到电影短片的导演之路",
-    titleEn: "从单一参考图像到电影短片的导演之路",
+    titleEn: "From Single Reference Image To Cinematic Short",
     tagline: "You are an award-winning trailer director + cinematographer + storyboard artist. Your job: turn ONE reference image into",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -6817,7 +6817,7 @@ export const prompts: Prompt[] = [
   {
     slug: "modern-resistance-movement-storyboard-generator-la-resistenza",
     title: "现代抵抗运动电影分镜生成器 - La Resistenza",
-    titleEn: "现代抵抗运动电影分镜生成器 - La Resistenza",
+    titleEn: "Modern Resistance Movement Storyboard Generator La Resistenza",
     tagline: "I tested this prompt really amazing 🤩",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -6837,7 +6837,7 @@ export const prompts: Prompt[] = [
   {
     slug: "candid-portrait-on-urban-balcony",
     title: "都市阳台上的非正式肖像",
-    titleEn: "都市阳台上的非正式肖像",
+    titleEn: "Candid Portrait On Urban Balcony",
     tagline: "Nano Banana Pro",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -6857,7 +6857,7 @@ export const prompts: Prompt[] = [
   {
     slug: "fancy-perfume-bottle-photography",
     title: "时尚香水瓶摆拍",
-    titleEn: "时尚香水瓶摆拍",
+    titleEn: "Fancy Perfume Bottle Photography",
     tagline: "Nano Banana Pro Gemini 3.0",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -6897,7 +6897,7 @@ export const prompts: Prompt[] = [
   {
     slug: "young-woman-beach-wet-hair",
     title: "沙滩上的湿发金发女郎",
-    titleEn: "沙滩上的湿发金发女郎",
+    titleEn: "Young Woman Beach Wet Hair",
     tagline: "have you seen a realistic prompt like this before?",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -6917,7 +6917,7 @@ export const prompts: Prompt[] = [
   {
     slug: "ancient-forest-goddess-portrait",
     title: "古代森林女神肖像",
-    titleEn: "古代森林女神肖像",
+    titleEn: "Ancient Forest Goddess Portrait",
     tagline: "Nano Banana over Gemini Prompt:",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -6937,7 +6937,7 @@ export const prompts: Prompt[] = [
   {
     slug: "infographic-explaining-how-tesla-fsd-works",
     title: "特斯拉FSD工作原理图解",
-    titleEn: "特斯拉FSD工作原理图解",
+    titleEn: "Infographic Explaining How Tesla Fsd Works",
     tagline: "Nano Banana Pro prompt: “Make an infographic that explains how Tesla FSD works”",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -6957,7 +6957,7 @@ export const prompts: Prompt[] = [
   {
     slug: "nano-banana-pro-easy-line-sticker-creation",
     title: "Nano Banana Pro轻松制作LINE表情包，外包需数万？",
-    titleEn: "Nano Banana Pro轻松制作LINE表情包，外包需数万？",
+    titleEn: "Nano Banana Pro Easy Line Sticker Creation",
     tagline: "Nano Banana ProでLINEスタンプも一瞬で作れた。外注したら数万かかるよね？スタンプ作りたい人はこのプロンプト使ってみて。",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -6977,7 +6977,7 @@ export const prompts: Prompt[] = [
   {
     slug: "character-merch-creation-random-nano-banana-use-case",
     title: "角色周边制作：随机Nano Banana用法",
-    titleEn: "角色周边制作：随机Nano Banana用法",
+    titleEn: "Character Merch Creation Random Nano Banana Use Case",
     tagline: "One of the most random Nano Banana use cases I’ve found is asking it to create merch for your character.",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -6997,7 +6997,7 @@ export const prompts: Prompt[] = [
   {
     slug: "old-artwork-rework",
     title: "旧艺术作品的再次创作",
-    titleEn: "旧艺术作品的再次创作",
+    titleEn: "Old Artwork Rework",
     tagline: "one more rework of my old artwork with Nano Banana pro and Kling 2.6",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7017,7 +7017,7 @@ export const prompts: Prompt[] = [
   {
     slug: "applying-new-workflow-to-old-artworks",
     title: "将新工作流程应用于旧艺术作品",
-    titleEn: "将新工作流程应用于旧艺术作品",
+    titleEn: "Applying New Workflow To Old Artworks",
     tagline: "love applying my new workflow to my old artworks",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7037,7 +7037,7 @@ export const prompts: Prompt[] = [
   {
     slug: "character-design-with-freepik-spaces-and-nano-banana-pro",
     title: "使用Freepik Spaces和Nano Banana Pro的笔触人物设计",
-    titleEn: "使用Freepik Spaces和Nano Banana Pro的笔触人物设计",
+    titleEn: "Character Design With Freepik Spaces And Nano Banana Pro",
     tagline: "character design using Freepik Spaces and Nano Banana Pro",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7057,7 +7057,7 @@ export const prompts: Prompt[] = [
   {
     slug: "inception",
     title: "盗梦空间",
-    titleEn: "盗梦空间",
+    titleEn: "Inception",
     tagline: "Banana Prompt👇",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7077,7 +7077,7 @@ export const prompts: Prompt[] = [
   {
     slug: "3d-paper-cutout-collage",
     title: "纸雕立体拼贴",
-    titleEn: "纸雕立体拼贴",
+    titleEn: "3d Paper Cutout Collage",
     tagline: "A four-panel photo split collage arranged in a 2x2 grid, presenting four fully layered 3D paper cut-out dioramas.",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7097,7 +7097,7 @@ export const prompts: Prompt[] = [
   {
     slug: "seamless-four-quadrant-paper-composite-image",
     title: "无缝四分屏纸张合成图像",
-    titleEn: "无缝四分屏纸张合成图像",
+    titleEn: "Seamless Four Quadrant Paper Composite Image",
     tagline: "调了一下午，都快给我调崩溃了",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7117,7 +7117,7 @@ export const prompts: Prompt[] = [
   {
     slug: "foggy-minimalist-lithograph",
     title: "极简雾感石版画",
-    titleEn: "极简雾感石版画",
+    titleEn: "Foggy Minimalist Lithograph",
     tagline: "感谢原作者 @tisch_eins  的灵感，我好像更喜欢这种风格！",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7137,7 +7137,7 @@ export const prompts: Prompt[] = [
   {
     slug: "cinematic-ballroom-gown",
     title: "电影感宴会礼服",
-    titleEn: "电影感宴会礼服",
+    titleEn: "Cinematic Ballroom Gown",
     tagline: "Nano Banana Pro @higgsfield_ai  🤍",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7157,7 +7157,7 @@ export const prompts: Prompt[] = [
   {
     slug: "luxury-pop-culture-fashion-curator-ai-image-generator-iteration-v5-pure-illustrated-journal-mode",
     title: "奢华流行文化时尚策展人（AI图像生成器）- 第五迭代（纯插画期刊模式）",
-    titleEn: "奢华流行文化时尚策展人（AI图像生成器）- 第五迭代（纯插画期刊模式）",
+    titleEn: "Luxury Pop Culture Fashion Curator Ai Image Generator Iteration V5 Pure Illustrated Journal Mode",
     tagline: "# Role: Luxury Pop-Culture Fashion Curator (AI Image Generator) - Iteration v5 (Pure Illustrated Journal Mode)",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7177,7 +7177,7 @@ export const prompts: Prompt[] = [
   {
     slug: "ultra-realistic-premium-transparent-acrylic-signage-panel",
     title: "高端透明亚克力招牌",
-    titleEn: "高端透明亚克力招牌",
+    titleEn: "Ultra Realistic Premium Transparent Acrylic Signage Panel",
     tagline: "🔥兄弟们我来啦！圣诞🎄别人狂欢，我在家卷一卷？",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7197,7 +7197,7 @@ export const prompts: Prompt[] = [
   {
     slug: "city-puzzle-exploring-city-name",
     title: "城市拼图：探索[城市名]的微型文化宝藏",
-    titleEn: "城市拼图：探索[城市名]的微型文化宝藏",
+    titleEn: "City Puzzle Exploring City Name",
     tagline: "📺今天来玩冰箱贴！其实在🍌1代就玩过，我迭代一系统提示词~",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7217,7 +7217,7 @@ export const prompts: Prompt[] = [
   {
     slug: "hyper-realistic-young-woman-portrait-luxury-bathroom",
     title: "Gemini Nano Banana 3.0 - 高清晰度女性肖像",
-    titleEn: "Gemini Nano Banana 3.0 - 高清晰度女性肖像",
+    titleEn: "Hyper Realistic Young Woman Portrait Luxury Bathroom",
     tagline: "Gemini Nano Banana 3.0",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7237,7 +7237,7 @@ export const prompts: Prompt[] = [
   {
     slug: "gym-mirror-selfie-series",
     title: "健身镜自拍系列",
-    titleEn: "健身镜自拍系列",
+    titleEn: "Gym Mirror Selfie Series",
     tagline: "Nano Banana Pro",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7277,7 +7277,7 @@ export const prompts: Prompt[] = [
   {
     slug: "hyper-detailed-fashion-photography-character-consistency",
     title: "时尚摄影：超高清人物一致性",
-    titleEn: "时尚摄影：超高清人物一致性",
+    titleEn: "Hyper Detailed Fashion Photography Character Consistency",
     tagline: "4K hyper-detailed fashion photograph featuring hyper-realistic rendering.",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7297,7 +7297,7 @@ export const prompts: Prompt[] = [
   {
     slug: "fashion-party-character",
     title: "时尚派对人物",
-    titleEn: "时尚派对人物",
+    titleEn: "Fashion Party Character",
     tagline: "Gemini Nano Banana Pro",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7317,7 +7317,7 @@ export const prompts: Prompt[] = [
   {
     slug: "high-fashion-magazine-cover-aesthetic-chest-level-holographic-viewfinder-large-2026-winking-smile",
     title: "时尚杂志封面美学 - 胸部水平全息取景器（大2026）与眨眼微笑",
-    titleEn: "时尚杂志封面美学 - 胸部水平全息取景器（大2026）与眨眼微笑",
+    titleEn: "High Fashion Magazine Cover Aesthetic Chest Level Holographic Viewfinder Large 2026 Winking Smile",
     tagline: "[Nano Banana Pro]",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7337,7 +7337,7 @@ export const prompts: Prompt[] = [
   {
     slug: "extreme-macro-inner-lip-tattoo-with-lip-gloss",
     title: "微观唇部纹身与唇彩",
-    titleEn: "微观唇部纹身与唇彩",
+    titleEn: "Extreme Macro Inner Lip Tattoo With Lip Gloss",
     tagline: "\"task\": \"front_view_extreme_macro_inner_lip_tattoo_with_lip_gloss\",",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7357,7 +7357,7 @@ export const prompts: Prompt[] = [
   {
     slug: "nano-banana-pro-8k-high-resolution-portrait",
     title: "纳米香蕉Pro 8K高清人像",
-    titleEn: "纳米香蕉Pro 8K高清人像",
+    titleEn: "Nano Banana Pro 8k High Resolution Portrait",
     tagline: "nano banana pro",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7377,7 +7377,7 @@ export const prompts: Prompt[] = [
   {
     slug: "urban-fashion-magazine-effect",
     title: "都市时尚杂志效果",
-    titleEn: "都市时尚杂志效果",
+    titleEn: "Urban Fashion Magazine Effect",
     tagline: "[Nano Banana Pro]",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7397,7 +7397,7 @@ export const prompts: Prompt[] = [
   {
     slug: "green-realm-tilted-stele-effect",
     title: "绿境 × 斜碑效果",
-    titleEn: "绿境 × 斜碑效果",
+    titleEn: "Green Realm Tilted Stele Effect",
     tagline: "[Nano Banana Pro]",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7437,7 +7437,7 @@ export const prompts: Prompt[] = [
   {
     slug: "jojo-style-pose-transformation",
     title: "乔乔风格摆姿势",
-    titleEn: "乔乔风格摆姿势",
+    titleEn: "Jojo Style Pose Transformation",
     tagline: "◆JOJO立ち　アングル",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7457,7 +7457,7 @@ export const prompts: Prompt[] = [
   {
     slug: "low-profile-cactus-thumbsticks-dualsense-controller",
     title: "精心设计的低矮仙人掌手柄的DualSense控制器",
-    titleEn: "精心设计的低矮仙人掌手柄的DualSense控制器",
+    titleEn: "Low Profile Cactus Thumbsticks Dualsense Controller",
     tagline: "Handle with care 🌵",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7477,7 +7477,7 @@ export const prompts: Prompt[] = [
   {
     slug: "holiday-chic-seated-woman",
     title: "节日时尚坐姿女性",
-    titleEn: "节日时尚坐姿女性",
+    titleEn: "Holiday Chic Seated Woman",
     tagline: "are we in christmas mode or nano banana pro mode?🎄",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7497,7 +7497,7 @@ export const prompts: Prompt[] = [
   {
     slug: "powerpuff-girl-grok-beauty",
     title: "PowerPuff女孩Grok美妆",
-    titleEn: "PowerPuff女孩Grok美妆",
+    titleEn: "Powerpuff Girl Grok Beauty",
     tagline: "PowerPuff girl Grok Ai beauty 😍",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7517,7 +7517,7 @@ export const prompts: Prompt[] = [
   {
     slug: "neon-lit-urban-alleyway-portrait",
     title: "都市霓虹小巷肖像",
-    titleEn: "都市霓虹小巷肖像",
+    titleEn: "Neon Lit Urban Alleyway Portrait",
     tagline: "Nano Banana Pro prompt : (works with every reference image!)",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7537,7 +7537,7 @@ export const prompts: Prompt[] = [
   {
     slug: "new-york-times-square-christmas-nightscape",
     title: "纽约时代广场圣诞夜景",
-    titleEn: "纽约时代广场圣诞夜景",
+    titleEn: "New York Times Square Christmas Nightscape",
     tagline: "Nano Banana Pro @NanoBanana ❤️",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7557,7 +7557,7 @@ export const prompts: Prompt[] = [
   {
     slug: "gemini-nano-banana-pro-alev-cartoon-character-illustration",
     title: "Gemini Nano Banana Pro - Alev的卡通风格画像",
-    titleEn: "Gemini Nano Banana Pro - Alev的卡通风格画像",
+    titleEn: "Gemini Nano Banana Pro Alev Cartoon Character Illustration",
     tagline: "Gemini Nano Banana Pro",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7577,7 +7577,7 @@ export const prompts: Prompt[] = [
   {
     slug: "transparent-glass-heart-sculpture-photography",
     title: "透明玻璃心雕塑摄影",
-    titleEn: "透明玻璃心雕塑摄影",
+    titleEn: "Transparent Glass Heart Sculpture Photography",
     tagline: "Is that really fragile?🫀",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7597,7 +7597,7 @@ export const prompts: Prompt[] = [
   {
     slug: "nano-banana-pro-strict-photorealism-photography",
     title: "纳米香蕉Pro - 严格真实主义摄影",
-    titleEn: "纳米香蕉Pro - 严格真实主义摄影",
+    titleEn: "Nano Banana Pro Strict Photorealism Photography",
     tagline: "nano banana pro",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7617,7 +7617,7 @@ export const prompts: Prompt[] = [
   {
     slug: "cinematic-photo",
     title: "电影感十足的照片",
-    titleEn: "电影感十足的照片",
+    titleEn: "Cinematic Photo",
     tagline: "{\\n  \"subject\": {\\n    \"description\": \"A rugged male survivor walking through an overgrown city street\",\\n    \"mirror_ru",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7637,7 +7637,7 @@ export const prompts: Prompt[] = [
   {
     slug: "nano-banana-pro-selfie",
     title: "纳米香蕉Pro自拍",
-    titleEn: "纳米香蕉Pro自拍",
+    titleEn: "Nano Banana Pro Selfie",
     tagline: "Nano banana Pro, use this prompt and show me your result",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7657,7 +7657,7 @@ export const prompts: Prompt[] = [
   {
     slug: "3d-fashion-style-raw-image",
     title: "裸眼3D时装风格生图",
-    titleEn: "裸眼3D时装风格生图",
+    titleEn: "3d Fashion Style Raw Image",
     tagline: "裸眼3D时装风格，生图应该是12层了，不是九宫格了，稍微做了修改",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7677,7 +7677,7 @@ export const prompts: Prompt[] = [
   {
     slug: "ai-girl-just-out-of-the-gym-preparing-for-sunbathing",
     title: "健身房刚出来的AI女孩准备日光浴",
-    titleEn: "健身房刚出来的AI女孩准备日光浴",
+    titleEn: "Ai Girl Just Out Of The Gym Preparing For Sunbathing",
     tagline: "this girl just got out of the gym and is now going to sunbathe. but there's a problem: she's an AI.",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7697,7 +7697,7 @@ export const prompts: Prompt[] = [
   {
     slug: "indoor-evening-flash-portrait",
     title: "室内黄昏闪光人像",
-    titleEn: "室内黄昏闪光人像",
+    titleEn: "Indoor Evening Flash Portrait",
     tagline: "stunning 🤩💫",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7717,7 +7717,7 @@ export const prompts: Prompt[] = [
   {
     slug: "cooking-dinner-being-watched",
     title: "烹饪晚餐。被注视着。",
-    titleEn: "烹饪晚餐。被注视着。",
+    titleEn: "Cooking Dinner Being Watched",
     tagline: "Cooking dinner. Getting watched.",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7737,7 +7737,7 @@ export const prompts: Prompt[] = [
   {
     slug: "outfit-poster-generation-guidelines",
     title: "服装海报生成指南",
-    titleEn: "服装海报生成指南",
+    titleEn: "Outfit Poster Generation Guidelines",
     tagline: "很多人都问提示词，提示词评论区见：",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7757,7 +7757,7 @@ export const prompts: Prompt[] = [
   {
     slug: "add-candy-monsters-around-character",
     title: "在人物周围添加糖果怪兽",
-    titleEn: "在人物周围添加糖果怪兽",
+    titleEn: "Add Candy Monsters Around Character",
     tagline: "Use the uploaded photo. \\nDo NOT alter the person’s real appearance — keep the person’s face, body, clothing, colors, an",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7777,7 +7777,7 @@ export const prompts: Prompt[] = [
   {
     slug: "scene-variations-experiment",
     title: "场景变化实验",
-    titleEn: "场景变化实验",
+    titleEn: "Scene Variations Experiment",
     tagline: "Scene Variations",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7797,7 +7797,7 @@ export const prompts: Prompt[] = [
   {
     slug: "nano-banana-professional-prompt",
     title: "纳米香蕉专业提示",
-    titleEn: "纳米香蕉专业提示",
+    titleEn: "Nano Banana Professional Prompt",
     tagline: "Nano-banana pro prompt.",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7817,7 +7817,7 @@ export const prompts: Prompt[] = [
   {
     slug: "urban-night-glamorous-woman",
     title: "都市之夜时尚女性",
-    titleEn: "都市之夜时尚女性",
+    titleEn: "Urban Night Glamorous Woman",
     tagline: "Nano Banana Pro @bageldotcom  🖤",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7837,7 +7837,7 @@ export const prompts: Prompt[] = [
   {
     slug: "nano-banana-universal-product-editorial-ad-template",
     title: "Nano Banana - 通用产品编辑广告模板",
-    titleEn: "Nano Banana - 通用产品编辑广告模板",
+    titleEn: "Nano Banana Universal Product Editorial Ad Template",
     tagline: "Universal JSON template for creating editorial ads without logos in Nano Banana Pro. Nano Banana decides the use-case sc",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7857,7 +7857,7 @@ export const prompts: Prompt[] = [
   {
     slug: "kids-crayon-travel-journal-illustration",
     title: "儿童蜡笔风格旅行日志插画",
-    titleEn: "儿童蜡笔风格旅行日志插画",
+    titleEn: "Kids Crayon Travel Journal Illustration",
     tagline: "Kids’ Crayon Travel Journal Illustration Prompt",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7877,7 +7877,7 @@ export const prompts: Prompt[] = [
   {
     slug: "pixar-style-3d-animation-scene",
     title: "皮克斯风格3D动画场景",
-    titleEn: "皮克斯风格3D动画场景",
+    titleEn: "Pixar Style 3d Animation Scene",
     tagline: "A vibrant Pixar-style 3D animated scene depicting a joyful group selfie moment featuring <group of characters> in a <cul",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7897,7 +7897,7 @@ export const prompts: Prompt[] = [
   {
     slug: "put-logo-into-minecraft",
     title: "Logo放进我的世界中",
-    titleEn: "Logo放进我的世界中",
+    titleEn: "Put Logo Into Minecraft",
     tagline: "Recreate the [BRAND NAME] logo following the JSON Aesthetic below: {\\n\"style\": \"Minecraft-style voxel 3D rendering\",\\n\"l",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7917,7 +7917,7 @@ export const prompts: Prompt[] = [
   {
     slug: "mirror-selfie-in-an-instagram-night-out-story",
     title: "Instagram夜晚故事中的镜面自拍",
-    titleEn: "Instagram夜晚故事中的镜面自拍",
+    titleEn: "Mirror Selfie In An Instagram Night Out Story",
     tagline: "Mirror selfie Instagram Story",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7937,7 +7937,7 @@ export const prompts: Prompt[] = [
   {
     slug: "shifting-emotions-hairstyles-and-backgrounds-with-one-prompt",
     title: "一语多态：情绪、发型与背景的转换艺术",
-    titleEn: "一语多态：情绪、发型与背景的转换艺术",
+    titleEn: "Shifting Emotions Hairstyles And Backgrounds With One Prompt",
     tagline: "3. Shifting emotions, hairstyle, and background with one prompt",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7957,7 +7957,7 @@ export const prompts: Prompt[] = [
   {
     slug: "ultra-photorealistic-coca-cola-christmas-bottle-photography",
     title: "可口可乐圣诞节日瓶高清摄影",
-    titleEn: "可口可乐圣诞节日瓶高清摄影",
+    titleEn: "Ultra Photorealistic Coca Cola Christmas Bottle Photography",
     tagline: "🚨PromptShare📷",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7977,7 +7977,7 @@ export const prompts: Prompt[] = [
   {
     slug: "steel-steam-engines-and-infinite-minds",
     title: "钢铁、蒸汽机与无限大脑",
-    titleEn: "钢铁、蒸汽机与无限大脑",
+    titleEn: "Steel Steam Engines And Infinite Minds",
     tagline: "Notion 的创始人 Ivan Zhao 的精彩文章：《钢铁、蒸汽机与无限大脑》",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -7997,7 +7997,7 @@ export const prompts: Prompt[] = [
   {
     slug: "nano-banana-pro-photography",
     title: "纳米香蕉Pro摄影作品",
-    titleEn: "纳米香蕉Pro摄影作品",
+    titleEn: "Nano Banana Pro Photography",
     tagline: "Nano Banana Pro 📸 available on LetzAI",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8017,7 +8017,7 @@ export const prompts: Prompt[] = [
   {
     slug: "forgotten-memories-2002",
     title: "遗忘的回忆 - 2002",
-    titleEn: "遗忘的回忆 - 2002",
+    titleEn: "Forgotten Memories 2002",
     tagline: "Create a candid, amateur-style photograph captured with the aesthetic of an early 2000s first-generation digital camera ",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8037,7 +8037,7 @@ export const prompts: Prompt[] = [
   {
     slug: "ultra-realistic-portrait-nano-banana-pro",
     title: "超现实主义肖像 - 纳诺香蕉专业版",
-    titleEn: "超现实主义肖像 - 纳诺香蕉专业版",
+    titleEn: "Ultra Realistic Portrait Nano Banana Pro",
     tagline: "\"project\": \"Ultra-Realistic Portrait\",",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8057,7 +8057,7 @@ export const prompts: Prompt[] = [
   {
     slug: "gemini-nano-banana-pro-model-selfie",
     title: "Gemini Nano Banana Pro 模特自拍",
-    titleEn: "Gemini Nano Banana Pro 模特自拍",
+    titleEn: "Gemini Nano Banana Pro Model Selfie",
     tagline: "Gemini Nano Banana Pro",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8077,7 +8077,7 @@ export const prompts: Prompt[] = [
   {
     slug: "nano-banana-prompt-unveiled",
     title: "ナノバナナのプロンプト大公開",
-    titleEn: "ナノバナナのプロンプト大公開",
+    titleEn: "Nano Banana Prompt Unveiled",
     tagline: "\"target\": \"NanoBanana\",",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8097,7 +8097,7 @@ export const prompts: Prompt[] = [
   {
     slug: "young-woman-arcade-portrait-candy-monster-frenzy",
     title: "年轻女子在复古游戏厅中的糖果怪物狂欢肖像",
-    titleEn: "年轻女子在复古游戏厅中的糖果怪物狂欢肖像",
+    titleEn: "Young Woman Arcade Portrait Candy Monster Frenzy",
     tagline: "Nano Banana Pro - prompt share",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8117,7 +8117,7 @@ export const prompts: Prompt[] = [
   {
     slug: "k-pop-idols-backstage-selfie",
     title: "K-pop天后后台自拍",
-    titleEn: "K-pop天后后台自拍",
+    titleEn: "K Pop Idols Backstage Selfie",
     tagline: "Idea from @underwoodxie96",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8138,7 +8138,7 @@ export const prompts: Prompt[] = [
 {
     slug: "dan-dan-noodles-premium-poster",
     title: "担担面高级海报",
-    titleEn: "担担面高级海报",
+    titleEn: "Dan Dan Noodles Premium Poster",
     tagline: "At the very top center of the composition, floating prominently above the ingredient layers, is a luxurious title label.",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8158,7 +8158,7 @@ export const prompts: Prompt[] = [
   {
     slug: "paper-cutting-stack-art",
     title: "剪纸堆叠艺术化",
-    titleEn: "剪纸堆叠艺术化",
+    titleEn: "Paper Cutting Stack Art",
     tagline: "🤣哈哈~做文旅工作的童鞋又有新题材可以玩啦！",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8178,7 +8178,7 @@ export const prompts: Prompt[] = [
   {
     slug: "urban-asian-female-perspective",
     title: "街头亚洲女性视角",
-    titleEn: "街头亚洲女性视角",
+    titleEn: "Urban Asian Female Perspective",
     tagline: "QT your camera angle 📷",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8198,7 +8198,7 @@ export const prompts: Prompt[] = [
   {
     slug: "ai-edited-high-fidelity-portrait-of-gemini-3-0-nano-banana-pro",
     title: "Gemini 3.0 Nano Banana Pro - AI编辑高保真人像",
-    titleEn: "Gemini 3.0 Nano Banana Pro - AI编辑高保真人像",
+    titleEn: "Ai Edited High Fidelity Portrait Of Gemini 3 0 Nano Banana Pro",
     tagline: "Gemini 3.0 Nano Banana Pro",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8218,7 +8218,7 @@ export const prompts: Prompt[] = [
   {
     slug: "walmart-shopping-journey",
     title: "前往沃尔玛的购物之旅",
-    titleEn: "前往沃尔玛的购物之旅",
+    titleEn: "Walmart Shopping Journey",
     tagline: "This is your sign to go to Walmart today",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8238,7 +8238,7 @@ export const prompts: Prompt[] = [
   {
     slug: "virtual-realistic-fusion-concept-poster",
     title: "虚拟与现实融合概念海报",
-    titleEn: "虚拟与现实融合概念海报",
+    titleEn: "Virtual Realistic Fusion Concept Poster",
     tagline: "兄弟们，这个风格你会决绝嘛？🧐",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8258,7 +8258,7 @@ export const prompts: Prompt[] = [
   {
     slug: "urban-streetwear-editorial-collage-japan-edition",
     title: "都市街头服饰编辑集锦（日本版）",
-    titleEn: "都市街头服饰编辑集锦（日本版）",
+    titleEn: "Urban Streetwear Editorial Collage Japan Edition",
     tagline: "[Nano Banana Pro]",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8278,7 +8278,7 @@ export const prompts: Prompt[] = [
   {
     slug: "pink-secretary",
     title: "粉紅秘書",
-    titleEn: "粉紅秘書",
+    titleEn: "Pink Secretary",
     tagline: "[Grok Imagine]",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8298,7 +8298,7 @@ export const prompts: Prompt[] = [
   {
     slug: "acne-gone-before-and-after-comparison",
     title: "痘痘消除前后对比",
-    titleEn: "痘痘消除前后对比",
+    titleEn: "Acne Gone Before And After Comparison",
     tagline: "\"task\": \"photorealistic_before_after_comparison\",",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8316,9 +8316,9 @@ export const prompts: Prompt[] = [
     structuredData: null,
   },
   {
-    slug: "fragile-ultra_minimal_glass_object_photography",
+    slug: "fragile-ultra-minimal-glass-object-photography",
     title: "脆弱",
-    titleEn: "脆弱",
+    titleEn: "Fragile Ultra Minimal Glass Object Photography",
     tagline: "\"task\": \"ultra_minimal_glass_object_photography\",",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8338,7 +8338,7 @@ export const prompts: Prompt[] = [
   {
     slug: "fashion-model-and-oversized-beauty-product",
     title: "时尚模特与超大美妆产品",
-    titleEn: "时尚模特与超大美妆产品",
+    titleEn: "Fashion Model And Oversized Beauty Product",
     tagline: "That’s the point",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8358,7 +8358,7 @@ export const prompts: Prompt[] = [
   {
     slug: "samoyed-puppy-portrait",
     title: "Samoyed幼犬肖像",
-    titleEn: "Samoyed幼犬肖像",
+    titleEn: "Samoyed Puppy Portrait",
     tagline: "Nano Banana Pro @bageldotcom 🤍",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8378,7 +8378,7 @@ export const prompts: Prompt[] = [
   {
     slug: "unlock-the-cosmos-magical-tarot-reading-prompt-zodiac-insights-fortune-scoring-and-enchanted-tarot-cards-in-a-mystical-ritual-circle",
     title: "解锁宇宙的魔法塔罗牌阅读——包含星座洞察、运势评分和神秘仪式圈中的四张魔幻塔罗牌",
-    titleEn: "解锁宇宙的魔法塔罗牌阅读——包含星座洞察、运势评分和神秘仪式圈中的四张魔幻塔罗牌",
+    titleEn: "Unlock The Cosmos Magical Tarot Reading Prompt Zodiac Insights Fortune Scoring And Enchanted Tarot Cards In A Mystical Ritual Circle",
     tagline: "Unlock the cosmos with this all-in-one magical Tarot Reading prompt—complete with zodiac insights, fortune scoring, and ",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8398,7 +8398,7 @@ export const prompts: Prompt[] = [
   {
     slug: "nano-banana-pro-the-victory-of-a-stylish-alternative-young-woman",
     title: "Nano Banana Pro：时尚另类女性的胜利",
-    titleEn: "Nano Banana Pro：时尚另类女性的胜利",
+    titleEn: "Nano Banana Pro The Victory Of A Stylish Alternative Young Woman",
     tagline: "Wow. I think we’ve found the real winner. 🍌",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8418,7 +8418,7 @@ export const prompts: Prompt[] = [
   {
     slug: "announcing-prompt-answers",
     title: "公布提示词答案",
-    titleEn: "公布提示词答案",
+    titleEn: "Announcing Prompt Answers",
     tagline: "Subject：Cinematic hyper-realistic movie stills in comic page format, full comic page with 5 panels and thick black panel",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8438,7 +8438,7 @@ export const prompts: Prompt[] = [
   {
     slug: "raw-candid-flash-style-mirror-photograph-young-woman",
     title: "青年女性浴室镜像照片",
-    titleEn: "青年女性浴室镜像照片",
+    titleEn: "Raw Candid Flash Style Mirror Photograph Young Woman",
     tagline: "Nano Banana Pro 📸",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8458,7 +8458,7 @@ export const prompts: Prompt[] = [
   {
     slug: "mysterious-warrior-and-time-fragments",
     title: "神秘女战士与时间碎片",
-    titleEn: "神秘女战士与时间碎片",
+    titleEn: "Mysterious Warrior And Time Fragments",
     tagline: "🌸 Google Gemini ai Nano Banana 3 Pro 🌸",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8478,7 +8478,7 @@ export const prompts: Prompt[] = [
   {
     slug: "create-a-high-aesthetic-2026-vision-board-collage",
     title: "2026年愿景板提示：创建高美学感的愿景板拼贴",
-    titleEn: "2026年愿景板提示：创建高美学感的愿景板拼贴",
+    titleEn: "Create A High Aesthetic 2026 Vision Board Collage",
     tagline: "Melis bu nasıl bir prompt çok tatlı ya",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8498,7 +8498,7 @@ export const prompts: Prompt[] = [
   {
     slug: "cartoon-character-photo-session-series",
     title: "卡通人物合影系列",
-    titleEn: "卡通人物合影系列",
+    titleEn: "Cartoon Character Photo Session Series",
     tagline: "想要与你喜欢的卡通人物合影吗？这个系列我太喜欢了！",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8518,7 +8518,7 @@ export const prompts: Prompt[] = [
   {
     slug: "auto-cinematic-9-angle-grid-generator-3-0",
     title: "自动9角电影网格生成器3.0",
-    titleEn: "自动9角电影网格生成器3.0",
+    titleEn: "Auto Cinematic 9 Angle Grid Generator 3 0",
     tagline: "\"project_name\": \"Auto_Cinematic_9_Angle_Grid_Generator\",",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8538,7 +8538,7 @@ export const prompts: Prompt[] = [
   {
     slug: "auto-cinematic-grid-generator-v3-0-focus-on-angle-and-anatomy",
     title: "自动电影网格生成器V3.0：角度与解剖学焦点",
-    titleEn: "自动电影网格生成器V3.0：角度与解剖学焦点",
+    titleEn: "Auto Cinematic Grid Generator V3 0 Focus On Angle And Anatomy",
     tagline: "\"project_name\": \"Auto_Cinematic_9_Angle_Grid_Generator\",",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8558,7 +8558,7 @@ export const prompts: Prompt[] = [
   {
     slug: "3d-q-version-pokemon-movie-poster",
     title: "3D Q版宝可梦电影海报",
-    titleEn: "3D Q版宝可梦电影海报",
+    titleEn: "3d Q Version Pokemon Movie Poster",
     tagline: "【なんだこれ楽しすぎる...！】",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8578,7 +8578,7 @@ export const prompts: Prompt[] = [
   {
     slug: "urban-street-banana-ghost-sweet-pop-art-photography",
     title: "都市街头香蕉幽灵甜味流行艺术摄影",
-    titleEn: "都市街头香蕉幽灵甜味流行艺术摄影",
+    titleEn: "Urban Street Banana Ghost Sweet Pop Art Photography",
     tagline: "\"subject\": {",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8598,7 +8598,7 @@ export const prompts: Prompt[] = [
   {
     slug: "prismatic-crystal",
     title: "棱柱形水晶",
-    titleEn: "棱柱形水晶",
+    titleEn: "Prismatic Crystal",
     tagline: "Recreate this image using the parameters of the JSON provided.\\n{\\n  \"style_transfer\": {\\n    \"name\": \"Prismatic Crystal",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8618,7 +8618,7 @@ export const prompts: Prompt[] = [
   {
     slug: "superhero-ensemble-film-set-scene",
     title: "超级英雄主题拍摄场景",
-    titleEn: "超级英雄主题拍摄场景",
+    titleEn: "Superhero Ensemble Film Set Scene",
     tagline: "Nano Banana Pro @bageldotcom 🤳",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8638,7 +8638,7 @@ export const prompts: Prompt[] = [
   {
     slug: "fashionable-vintage-collage-young-beauty",
     title: "时尚复古风拼贴：青春美女的多面魅力",
-    titleEn: "时尚复古风拼贴：青春美女的多面魅力",
+    titleEn: "Fashionable Vintage Collage Young Beauty",
     tagline: "Just getting silly.",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8658,7 +8658,7 @@ export const prompts: Prompt[] = [
   {
     slug: "cinematic-night-street-selfie-high-speed-escape",
     title: "雨夜高速逃逸街景自拍",
-    titleEn: "雨夜高速逃逸街景自拍",
+    titleEn: "Cinematic Night Street Selfie High Speed Escape",
     tagline: "Higgsfield powered by GPT Image 1.5 enhances even the busiest scenes.",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8678,7 +8678,7 @@ export const prompts: Prompt[] = [
   {
     slug: "bold-and-bright-colorful-city-paper-cutout-diorama",
     title: "大胆鲜艳的撞色城市纸雕立体模型",
-    titleEn: "大胆鲜艳的撞色城市纸雕立体模型",
+    titleEn: "Bold And Bright Colorful City Paper Cutout Diorama",
     tagline: "还是喜欢这种大胆鲜艳的撞色",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8698,7 +8698,7 @@ export const prompts: Prompt[] = [
   {
     slug: "white-portrait",
     title: "白色肖像",
-    titleEn: "白色肖像",
+    titleEn: "White Portrait",
     tagline: "New Portrait.",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8718,7 +8718,7 @@ export const prompts: Prompt[] = [
   {
     slug: "internet-slang-version-of-journey-to-the-west",
     title: "互联网黑话之西游记版",
-    titleEn: "互联网黑话之西游记版",
+    titleEn: "Internet Slang Version Of Journey To The West",
     tagline: "- Gemini 3 Pro 生成剧本",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8738,7 +8738,7 @@ export const prompts: Prompt[] = [
 {
     slug: "nano-banana-pro-freepik-creation-nkrh26",
     title: "Nano Banana Pro - FREEPIK 创作作品",
-    titleEn: "Nano Banana Pro - FREEPIK 创作作品",
+    titleEn: "Nano Banana Pro Freepik Creation Nkrh26",
     tagline: "Nano Banana Pro",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8778,7 +8778,7 @@ export const prompts: Prompt[] = [
   {
     slug: "berry-beef-noodle-transparent-acrylic-signage-panel",
     title: "Berry牛肉面透明亚克力标识面板",
-    titleEn: "Berry牛肉面透明亚克力标识面板",
+    titleEn: "Berry Beef Noodle Transparent Acrylic Signage Panel",
     tagline: "Verison 2：【以Berry 牛肉面为例】",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8798,7 +8798,7 @@ export const prompts: Prompt[] = [
   {
     slug: "city-life-series-posters",
     title: "城市生活系列海报",
-    titleEn: "城市生活系列海报",
+    titleEn: "City Life Series Posters",
     tagline: "Gemini 3.0 Nano Banana Pro",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8818,7 +8818,7 @@ export const prompts: Prompt[] = [
   {
     slug: "food-blogger-joy-updated-panoramic-showcase-of-seasonal-delicacies",
     title: "美食博主大喜！四季美食全景更新",
-    titleEn: "美食博主大喜！四季美食全景更新",
+    titleEn: "Food Blogger Joy Updated Panoramic Showcase Of Seasonal Delicacies",
     tagline: "再次Update一个美食版，适用于展示四季变化中的代表美食，使用方式还是如主贴中的一样。模型依旧是🍌。",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8838,7 +8838,7 @@ export const prompts: Prompt[] = [
   {
     slug: "tourism-promotion-creative-four-seasons-prompt-model",
     title: "文旅宣传创意：四季变化提示词模型",
-    titleEn: "文旅宣传创意：四季变化提示词模型",
+    titleEn: "Tourism Promotion Creative Four Seasons Prompt Model",
     tagline: "🔥文旅宣传的的同学们，不要错过啊！（🍌模型为例）",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8858,7 +8858,7 @@ export const prompts: Prompt[] = [
   {
     slug: "before-and-after-dental-transformation",
     title: "牙齿整形前后对比",
-    titleEn: "牙齿整形前后对比",
+    titleEn: "Before And After Dental Transformation",
     tagline: "Dental transformation 🦷",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8878,7 +8878,7 @@ export const prompts: Prompt[] = [
   {
     slug: "before-and-after-lip-filler-comparison-same-woman",
     title: "同一位女性前后唇填充对比",
-    titleEn: "同一位女性前后唇填充对比",
+    titleEn: "Before And After Lip Filler Comparison Same Woman",
     tagline: "Nano Banana Pro is on fire and insanely precise 🔥",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8898,7 +8898,7 @@ export const prompts: Prompt[] = [
   {
     slug: "maximum-hydration-photography",
     title: "极致补水摄影",
-    titleEn: "极致补水摄影",
+    titleEn: "Maximum Hydration Photography",
     tagline: "Maximum hydration",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8918,7 +8918,7 @@ export const prompts: Prompt[] = [
   {
     slug: "young-woman-in-doorway",
     title: "门道中的年轻女子",
-    titleEn: "门道中的年轻女子",
+    titleEn: "Young Woman In Doorway",
     tagline: "In my own little in-between.",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8938,7 +8938,7 @@ export const prompts: Prompt[] = [
   {
     slug: "high-end-american-photography-book-scanned-page-9-grid-story-man-vs-sea",
     title: "高端美国摄影书扫描页：海与人的9宫格故事",
-    titleEn: "高端美国摄影书扫描页：海与人的9宫格故事",
+    titleEn: "High End American Photography Book Scanned Page 9 Grid Story Man Vs Sea",
     tagline: "[Type]: A scanned page",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8958,7 +8958,7 @@ export const prompts: Prompt[] = [
   {
     slug: "gemini-nano-banana-pro-with-grok",
     title: "Gemini Nano香蕉Pro与Grok",
-    titleEn: "Gemini Nano香蕉Pro与Grok",
+    titleEn: "Gemini Nano Banana Pro With Grok",
     tagline: "Gemini Nano banana pro with Grok",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8978,7 +8978,7 @@ export const prompts: Prompt[] = [
   {
     slug: "time-travel-contrast-1920s-vs-present-day-times-square-new-york",
     title: "时光交错：纽约时代广场1920年代与今日的对比",
-    titleEn: "时光交错：纽约时代广场1920年代与今日的对比",
+    titleEn: "Time Travel Contrast 1920s Vs Present Day Times Square New York",
     tagline: "🎬✨ Experience cinematic magic: a stunning split-screen photo seamlessly merging past and present, capturing dynamic int",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -8998,7 +8998,7 @@ export const prompts: Prompt[] = [
   {
     slug: "gym-beautiful-model-close-up",
     title: "健身馆美丽模特特写",
-    titleEn: "健身馆美丽模特特写",
+    titleEn: "Gym Beautiful Model Close Up",
     tagline: "Let's join our beautiful model in the Gym.",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9018,7 +9018,7 @@ export const prompts: Prompt[] = [
   {
     slug: "modern-hilton-hotel-rainy-night-bedroom-photography-style",
     title: "现代希尔顿酒店雨夜客房摄影风格",
-    titleEn: "现代希尔顿酒店雨夜客房摄影风格",
+    titleEn: "Modern Hilton Hotel Rainy Night Bedroom Photography Style",
     tagline: "\"prompt\": \"Night hotel style\",",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9038,7 +9038,7 @@ export const prompts: Prompt[] = [
   {
     slug: "crazy-nano-banana-pro",
     title: "疯狂！纳米香蕉Pro",
-    titleEn: "疯狂！纳米香蕉Pro",
+    titleEn: "Crazy Nano Banana Pro",
     tagline: "Damn, Nano Banana Pro is crazy.",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9058,7 +9058,7 @@ export const prompts: Prompt[] = [
   {
     slug: "high-fashion-studio-photo-collage",
     title: "时尚摄影工作室照片拼贴",
-    titleEn: "时尚摄影工作室照片拼贴",
+    titleEn: "High Fashion Studio Photo Collage",
     tagline: "Prompt: Create a realistic high-fashion studio photo collage featuring the same woman in six to eight different poses, u",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9078,7 +9078,7 @@ export const prompts: Prompt[] = [
   {
     slug: "japanese-style-wealthy-person-sitting-on-bed-ledge-photography",
     title: "日本风宝物堆叠的床沿人物摄影",
-    titleEn: "日本风宝物堆叠的床沿人物摄影",
+    titleEn: "Japanese Style Wealthy Person Sitting On Bed Ledge Photography",
     tagline: "いろんなバッグを持ってるみたいです😌",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9098,7 +9098,7 @@ export const prompts: Prompt[] = [
   {
     slug: "beauty-in-pleated-mini-skirt",
     title: "百褶迷你裙美女",
-    titleEn: "百褶迷你裙美女",
+    titleEn: "Beauty In Pleated Mini Skirt",
     tagline: "The image features a subject with long, dark hair, dressed in a short-sleeved, cropped white top and a high-waisted, ple",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9118,7 +9118,7 @@ export const prompts: Prompt[] = [
   {
     slug: "nano-banana-pro-photography-222alr",
     title: "纳米香蕉专业摄影",
-    titleEn: "纳米香蕉专业摄影",
+    titleEn: "Nano Banana Pro Photography 222alr",
     tagline: "Nano Banana Pro 📸",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9138,7 +9138,7 @@ export const prompts: Prompt[] = [
   {
     slug: "creating-miniature-isometric-dioramas-from-your-favorite-movie-scenes",
     title: "电影场景迷你等距立体模型制作指南",
-    titleEn: "电影场景迷你等距立体模型制作指南",
+    titleEn: "Creating Miniature Isometric Dioramas From Your Favorite Movie Scenes",
     tagline: "You can turn your favorite movie scenes into miniature isometric dioramas with this prompt.",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9178,7 +9178,7 @@ export const prompts: Prompt[] = [
   {
     slug: "luxury-hacienda-foyer-group-mirror-selfie",
     title: "豪华庄园前厅闺蜜自拍",
-    titleEn: "豪华庄园前厅闺蜜自拍",
+    titleEn: "Luxury Hacienda Foyer Group Mirror Selfie",
     tagline: "Out of office 👯‍♀️🛫",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9198,7 +9198,7 @@ export const prompts: Prompt[] = [
   {
     slug: "perspective-variant-photographic-wonders-of-shibuya-crossing-tokyo-after-summer-shower",
     title: "视角变种：东京涩谷跨街的夏雨后摄影奇观",
-    titleEn: "视角变种：东京涩谷跨街的夏雨后摄影奇观",
+    titleEn: "Perspective Variant Photographic Wonders Of Shibuya Crossing Tokyo After Summer Shower",
     tagline: "将宝玉的提示词进行了视角变种，也是一种非常特别的风格，大家可以试试看。",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9218,7 +9218,7 @@ export const prompts: Prompt[] = [
   {
     slug: "cinematic-front-facing-christmas-market-portrait-outdoors-night",
     title: "户外夜间拍摄的电影感圣诞市场肖像",
-    titleEn: "户外夜间拍摄的电影感圣诞市场肖像",
+    titleEn: "Cinematic Front Facing Christmas Market Portrait Outdoors Night",
     tagline: "Google Nano Banana Pro",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9238,7 +9238,7 @@ export const prompts: Prompt[] = [
   {
     slug: "pirate-sea-battle-inside-coffee-cup",
     title: "咖啡杯内的海盗海战",
-    titleEn: "咖啡杯内的海盗海战",
+    titleEn: "Pirate Sea Battle Inside Coffee Cup",
     tagline: "☕️⚔️ A raging pirate sea battle unfolds inside a cup of coffee — where crema becomes waves and cannon fire shatters real",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9258,7 +9258,7 @@ export const prompts: Prompt[] = [
   {
     slug: "young-woman-cozy-christmas-atmosphere",
     title: "温馨节日氛围的年轻女子",
-    titleEn: "温馨节日氛围的年轻女子",
+    titleEn: "Young Woman Cozy Christmas Atmosphere",
     tagline: "Nano Banana Pro ❤️",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9276,9 +9276,9 @@ export const prompts: Prompt[] = [
     structuredData: null,
   },
   {
-    slug: "hyper-realistic-isometric-architectural-maquette-[city-location-name]",
+    slug: "hyper-realistic-isometric-architectural-maquette-city-location-name-v2",
     title: "城市/地点名称超写实等距建筑模型",
-    titleEn: "城市/地点名称超写实等距建筑模型",
+    titleEn: "Hyper-Realistic Isometric Architectural Maquette City Location Name",
     tagline: "\"prompt\": \"Subject: [INSERT CITY/LOCATION NAME].  n nCreate a hyper-realistic isometric architectural maquette of the Su",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9298,7 +9298,7 @@ export const prompts: Prompt[] = [
   {
     slug: "before-and-after-makeup-comparison",
     title: "妆前妆后对比",
-    titleEn: "妆前妆后对比",
+    titleEn: "Before And After Makeup Comparison",
     tagline: "Before/After Make-up.",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9318,7 +9318,7 @@ export const prompts: Prompt[] = [
   {
     slug: "hyper-realistic-portrait-woman-gemini-nano-banana-pro",
     title: "Gemini Nano Banana Pro - 超逼真女性肖像",
-    titleEn: "Gemini Nano Banana Pro - 超逼真女性肖像",
+    titleEn: "Hyper Realistic Portrait Woman Gemini Nano Banana Pro",
     tagline: "Gemini Nano Banana Pro",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9338,7 +9338,7 @@ export const prompts: Prompt[] = [
   {
     slug: "creative-toilet-image",
     title: "创意 toilet 图像",
-    titleEn: "创意 toilet 图像",
+    titleEn: "Creative Toilet Image",
     tagline: "@nurpraditya For those who want to create something like this, simply write what you want and paste this JSON profile.",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9358,7 +9358,7 @@ export const prompts: Prompt[] = [
   {
     slug: "hyper-realistic-portrait-cute-asian-woman",
     title: "超写实亚洲女性肖像",
-    titleEn: "超写实亚洲女性肖像",
+    titleEn: "Hyper Realistic Portrait Cute Asian Woman",
     tagline: "Gemini Nano Banana Pro",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9378,7 +9378,7 @@ export const prompts: Prompt[] = [
   {
     slug: "puzzle-toy-character",
     title: "益智玩具角色",
-    titleEn: "益智玩具角色",
+    titleEn: "Puzzle Toy Character",
     tagline: "SUBJECT: Chibi-style [CHARACTER NAME] reimagined as a Puzzle Toy character, ultra-cute proportions with oversized head a",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9398,7 +9398,7 @@ export const prompts: Prompt[] = [
   {
     slug: "young-woman-selfie-with-gemini-nano-banana-pro",
     title: "Gemini Nano Banana Pro - 年轻女性自拍",
-    titleEn: "Gemini Nano Banana Pro - 年轻女性自拍",
+    titleEn: "Young Woman Selfie With Gemini Nano Banana Pro",
     tagline: "Gemini Nano Banana Pro",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9418,7 +9418,7 @@ export const prompts: Prompt[] = [
   {
     slug: "nano-banana-portrait-photography-profound-silhouette-interwoven-with-light-and-shadow",
     title: "纳米香蕉人像摄影：光影交织的深邃轮廓",
-    titleEn: "纳米香蕉人像摄影：光影交织的深邃轮廓",
+    titleEn: "Nano Banana Portrait Photography Profound Silhouette Interwoven With Light And Shadow",
     tagline: "Usa Nano Banana con una foto tuya para obtener esto...",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9438,7 +9438,7 @@ export const prompts: Prompt[] = [
   {
     slug: "time-warp-visual-fusion-at-the-university-of-oxford",
     title: "牛津大学：穿越时空的视觉融合",
-    titleEn: "牛津大学：穿越时空的视觉融合",
+    titleEn: "Time Warp Visual Fusion At The University Of Oxford",
     tagline: "Another version",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9458,7 +9458,7 @@ export const prompts: Prompt[] = [
   {
     slug: "beauty-in-tokyo-subway-stairwell",
     title: "东京地铁楼梯间美女照",
-    titleEn: "东京地铁楼梯间美女照",
+    titleEn: "Beauty In Tokyo Subway Stairwell",
     tagline: "A blurry, high-grain snapshot taken in a Tokyo subway stairwell, charged with motion, humidity, and raw urban energy. Th",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9478,7 +9478,7 @@ export const prompts: Prompt[] = [
   {
     slug: "cyber-liminal-dream-sequence",
     title: "赛博临界梦境序列",
-    titleEn: "赛博临界梦境序列",
+    titleEn: "Cyber Liminal Dream Sequence",
     tagline: "Gemini Nano Banana Pro",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9498,7 +9498,7 @@ export const prompts: Prompt[] = [
   {
     slug: "loki-tv-series-inspired-nano-banana-pro-effect",
     title: "Loki系列灵感：纳米香蕉专业效果",
-    titleEn: "Loki系列灵感：纳米香蕉专业效果",
+    titleEn: "Loki Tv Series Inspired Nano Banana Pro Effect",
     tagline: "[Nano Banana Pro] prompt below",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9518,7 +9518,7 @@ export const prompts: Prompt[] = [
   {
     slug: "high-fashion-portrait-of-a-woman",
     title: "时尚女性肖像",
-    titleEn: "时尚女性肖像",
+    titleEn: "High Fashion Portrait Of A Woman",
     tagline: "Google Gemini Nano Banana pro 3.0",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9538,7 +9538,7 @@ export const prompts: Prompt[] = [
   {
     slug: "beauty-third-wave-golden-eyed-gaze",
     title: "美的感觉之第三波：金色眼眸",
-    titleEn: "美的感觉之第三波：金色眼眸",
+    titleEn: "Beauty Third Wave Golden Eyed Gaze",
     tagline: "继续发掘美的感觉-第三波",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9558,7 +9558,7 @@ export const prompts: Prompt[] = [
   {
     slug: "veo3--prompt-ford-mustang-assembly-scene",
     title: "Veo3 JSON提示：酷炫的福特野马组装场景",
-    titleEn: "Veo3 JSON提示：酷炫的福特野马组装场景",
+    titleEn: "Veo3  Prompt Ford Mustang Assembly Scene",
     tagline: "🚨PromptShare🚨",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9578,7 +9578,7 @@ export const prompts: Prompt[] = [
   {
     slug: "flash-photo-of-beauty-in-izakaya",
     title: "居酒屋里用闪光灯拍摄的美女照片",
-    titleEn: "居酒屋里用闪光灯拍摄的美女照片",
+    titleEn: "Flash Photo Of Beauty In Izakaya",
     tagline: "A flash snapshot taken in a small, crowded Japanese izakaya, filled with handwritten menus, old posters, and wooden text",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9598,7 +9598,7 @@ export const prompts: Prompt[] = [
   {
     slug: "ice-blue-sequin-girl",
     title: "冰藍亮片女孩",
-    titleEn: "冰藍亮片女孩",
+    titleEn: "Ice Blue Sequin Girl",
     tagline: "[Grok Imagine]",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9618,7 +9618,7 @@ export const prompts: Prompt[] = [
   {
     slug: "contextual-lifestyle-shot",
     title: "生活化场景拍摄",
-    titleEn: "生活化场景拍摄",
+    titleEn: "Contextual Lifestyle Shot",
     tagline: "Prompt Studio: Contextual Lifestyle",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9638,7 +9638,7 @@ export const prompts: Prompt[] = [
   {
     slug: "dressing-room-mirror",
     title: "试衣间镜子",
-    titleEn: "试衣间镜子",
+    titleEn: "Dressing Room Mirror",
     tagline: "Dressing Room Mirror",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9658,7 +9658,7 @@ export const prompts: Prompt[] = [
   {
     slug: "portrait-young-adult-woman",
     title: "青年女性肖像",
-    titleEn: "青年女性肖像",
+    titleEn: "Portrait Young Adult Woman",
     tagline: "Nano Banana Pro @bageldotcom 🖤",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9678,7 +9678,7 @@ export const prompts: Prompt[] = [
   {
     slug: "nano-banana-pro-realistic-image-prompt",
     title: "Nano Banana Pro 实际图像提示",
-    titleEn: "Nano Banana Pro 实际图像提示",
+    titleEn: "Nano Banana Pro Realistic Image Prompt",
     tagline: "Nano Banana Pro prompt to make realistic images like this:",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9698,7 +9698,7 @@ export const prompts: Prompt[] = [
   {
     slug: "top-concept-art-design-panoramic-character-depth-deconstruction",
     title: "顶尖概念美术设计：全景式角色深度分解图",
-    titleEn: "顶尖概念美术设计：全景式角色深度分解图",
+    titleEn: "Top Concept Art Design Panoramic Character Depth Deconstruction",
     tagline: "神佬的这个太强了，稍微微改了一点点，娜美来啦：",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9718,7 +9718,7 @@ export const prompts: Prompt[] = [
   {
     slug: "3x3-woman-portrait-collage",
     title: "3X3女子肖像照拼贴画",
-    titleEn: "3X3女子肖像照拼贴画",
+    titleEn: "3x3 Woman Portrait Collage",
     tagline: "Create a full Instagram-style 3×3 grid feed composed of nine different portrait images, all featuring the person and the",
     taglineEn: "AI image prompt.",
     category: "other",
@@ -9761,7 +9761,7 @@ export function getRelatedPrompts(slug: string, limit = 3): Prompt[] {
   {
     slug: "y2k-aesthetic-city-impression-collage-poster",
     title: "Y2K拼贴美学城市印象海报",
-    titleEn: "Y2K拼贴美学城市印象海报",
+    titleEn: "Y2k Aesthetic City Impression Collage Poster",
     tagline: "用 Y2K 拼贴美学重新诠释城市印象，把街头文化、时尚人像和杂志排版糅合成一张纸质拼贴海报。",
     category: "other",
     engines: ["other"],
@@ -9780,7 +9780,7 @@ export function getRelatedPrompts(slug: string, limit = 3): Prompt[] {
   {
     slug: "d-ultraman-limited-edition-general-version",
     title: "D+奥特曼限时发售通用版",
-    titleEn: "D+奥特曼限时发售通用版",
+    titleEn: "D Ultraman Limited Edition General Version",
     tagline: "masterpiece, best quality, ultra detailed, 8k, high resolution, photorealistic cinematic photography, movie-grade shot, professional cinema ",
     category: "other",
     engines: ["other"],
@@ -9799,7 +9799,7 @@ export function getRelatedPrompts(slug: string, limit = 3): Prompt[] {
   {
     slug: "sci-fi-industrial-food-fusion",
     title: "太空科幻硬核工业风食品结合",
-    titleEn: "太空科幻硬核工业风食品结合",
+    titleEn: "Sci Fi Industrial Food Fusion",
     tagline: "太空科幻的硬核工业风与食品的结合，效果惊艳",
     category: "other",
     engines: ["nano-banana-pro"],
@@ -9818,7 +9818,7 @@ export function getRelatedPrompts(slug: string, limit = 3): Prompt[] {
   {
     slug: "extreme-wide-angle-perspective-and-dynamic-pose-remix-edit-of-the-original-image",
     title: "原始图像的极端广角视角和动态姿态混剪编辑",
-    titleEn: "原始图像的极端广角视角和动态姿态混剪编辑",
+    titleEn: "Extreme Wide Angle Perspective And Dynamic Pose Remix Edit Of The Original Image",
     tagline: "一番最後の[Prompt for original image]の部分に画像生成に使用したPromptを入れると一貫性が増します。不要な場合は3行削ってしまっても大丈夫です。",
     category: "other",
     engines: ["nano-banana-pro"],
@@ -9856,7 +9856,7 @@ export function getRelatedPrompts(slug: string, limit = 3): Prompt[] {
   {
     slug: "golden-hour-self-portrait",
     title: "金色调自我人像",
-    titleEn: "金色调自我人像",
+    titleEn: "Golden Hour Self Portrait",
     tagline: "That golden hour glow makes everything look cinematic! Drop an emoji that describes your current mood right now.",
     category: "other",
     engines: ["nano-banana-pro"],
@@ -9875,7 +9875,7 @@ export function getRelatedPrompts(slug: string, limit = 3): Prompt[] {
   {
     slug: "night-portrait-young-woman-yellow-cutout-dress",
     title: "夜景中穿着黄色连衣裙的年轻女性肖像",
-    titleEn: "夜景中穿着黄色连衣裙的年轻女性肖像",
+    titleEn: "Night Portrait Young Woman Yellow Cutout Dress",
     tagline: "Nano banana Pro with Gemini 3.0:",
     category: "other",
     engines: ["nano-banana-pro"],
@@ -9913,7 +9913,7 @@ export function getRelatedPrompts(slug: string, limit = 3): Prompt[] {
   {
     slug: "nano-banana-pro-t0r7mf",
     title: "纳米香蕉专业版",
-    titleEn: "纳米香蕉专业版",
+    titleEn: "Nano Banana Pro T0r7mf",
     tagline: "Nano Banana Pro",
     category: "other",
     engines: ["nano-banana-pro"],
@@ -9932,7 +9932,7 @@ export function getRelatedPrompts(slug: string, limit = 3): Prompt[] {
   {
     slug: "dark-underwater-siren",
     title: "深海暗黑美人",
-    titleEn: "深海暗黑美人",
+    titleEn: "Dark Underwater Siren",
     tagline: "Nano Banana Pro @NanoBanana",
     category: "other",
     engines: ["nano-banana-pro"],

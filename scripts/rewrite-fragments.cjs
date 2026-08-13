@@ -38,6 +38,25 @@ function pickTagline(prompt) {
   return (prompt || '').slice(0, 100);
 }
 
+// 检查字符串是否含 CJK 字符
+function hasCJK(s) {
+  return /[一-鿿]/.test(s || '');
+}
+
+// 安全的 titleEn 生成: 优先 c.titleEn, 否则尝试 c.title, 但如果是中文/日文则用 slug 兜底
+function deriveTitleEn(c) {
+  if (c.titleEn && !hasCJK(c.titleEn)) return c.titleEn;
+  if (c.title && !hasCJK(c.title)) return c.title;
+  // fallback: 从 slug 生成 Title Case
+  if (c.slug) {
+    return c.slug
+      .split('-')
+      .map(w => /^[A-Z0-9]+$/.test(w) ? w : (w.charAt(0).toUpperCase() + w.slice(1)))
+      .join(' ');
+  }
+  return c.title || 'AI Image Prompt';
+}
+
 const fragments = all30.map(c => {
   const slug = c.slug;
   const imgs = (c.images || []).map(i => ({
@@ -54,7 +73,7 @@ const fragments = all30.map(c => {
   return `  {
     slug: "${esc(slug)}",
     title: "${esc(c.title)}",
-    titleEn: "${esc(c.titleEn || c.title)}",
+    titleEn: "${esc(deriveTitleEn(c))}",
     tagline: "${esc(pickTagline(c.prompt || c.rawBlock || ''))}",
     taglineEn: "${esc(c.taglineEn || 'AI image prompt.')}",
     category: "other",
