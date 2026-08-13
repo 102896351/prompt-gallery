@@ -99,12 +99,6 @@ const hreflangs: Array<{ lang: string; href: string }> = isErrorPage
     <meta name="author" content={siteName} />
     <meta name="generator" content={Astro.generator} />
 
-    <!-- Security headers (best-effort via meta; HSTS 必须服务器头，GitHub Pages 不支持，跳过)
-         CSP：允许自有源 + GA + Google 图片 + JSON-LD；unsafe-inline 用于 inline script (主题切换 / Cookie banner)
-         COOP/XFO：缓解侧信道 + 点击劫持。注意：XFO meta 在老浏览器无效，新浏览器 OK。-->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://img1.aiart.pics https://*.aiart.pics; connect-src 'self' https://www.google-analytics.com; font-src 'self' data:; frame-ancestors 'none'" />
-    <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin" />
-    <meta http-equiv="X-Frame-Options" content="DENY" />
     <!-- theme-color 跟随主题（浅色/深色） -->
     <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0b0d12" media="(prefers-color-scheme: dark)" />
