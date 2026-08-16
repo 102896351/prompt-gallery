@@ -575,12 +575,11 @@ img { max-width: 100%; display: block; }
 }
 .fs-col-head h2 { margin: 0; }
 
-/* Specials (right column) — cover height matches the Featured card
-   covers (160px) so both columns align; dots overlay inside the
-   image to save vertical space. */
+/* Specials (right column) — cover 176px per user request; dots sit
+   BELOW the image (not overlaid). */
 .specials-cover {
   position: relative;
-  height: 160px;
+  height: 176px;
   border-radius: var(--radius);
   overflow: hidden;
   background: var(--bg-soft);
@@ -601,9 +600,7 @@ img { max-width: 100%; display: block; }
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  /* extra bottom padding keeps text clear of the dots that now
-     overlay inside the image bottom */
-  padding: 12px 14px 30px;
+  padding: 12px 14px;
   color: #fff;
   background: linear-gradient(
     to top,
@@ -639,12 +636,9 @@ img { max-width: 100%; display: block; }
   display: flex;
   justify-content: center;
   gap: 6px;
-  /* negative margin pulls the dots up INTO the cover image,
-     saving a row of vertical space */
-  margin-top: -24px;
-  margin-bottom: 12px;
-  position: relative;
-  z-index: 2; /* above the cover and its overlay */
+  /* dots sit BELOW the cover image (per user request) */
+  margin-top: 10px;
+  margin-bottom: 0;
 }
 .specials-dot {
   width: 6px;
@@ -652,9 +646,7 @@ img { max-width: 100%; display: block; }
   padding: 0;
   border: 0;
   border-radius: 50%;
-  /* translucent white so dots read on the dark image gradient */
-  background: rgba(255, 255, 255, 0.55);
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
+  background: var(--border);
   cursor: pointer;
   transition: all 0.15s;
 }
