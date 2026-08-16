@@ -16,12 +16,16 @@ interface Props {
   // 性能优化：列表里前几张首屏可见的卡片传 eager，提示浏览器提前加载并提升 LCP
   eager?: boolean;
   fetchpriority?: 'high' | 'low' | 'auto';
+  // overlay 模式（首页精选 carousel 用）：只渲染图片 + 图片底部叠加标题，
+  // 不渲染 body（tagline/badges/作者）。标题单行截断，样式仿专题区。
+  overlay?: boolean;
 }
 const {
   prompt,
   base = import.meta.env.BASE_URL.replace(/\/$/, ''),
   eager = false,
   fetchpriority = 'auto',
+  overlay = false,
 } = Astro.props;
 const cat = promptCategories.find((c) => c.id === prompt.category);
 const cover = prompt.images[0];
@@ -39,7 +43,7 @@ const engineLabel = (key: string) => (messages.engines as Record<string, string>
 const tagLabel = (key: string) => (messages.tags as Record<string, string>)[key] ?? key;
 ---
 
-<a href={promptHref} class="card prompt-card">
+<a href={promptHref} class={`card prompt-card${overlay ? ' prompt-card--overlay' : ''}`}>
   {cover && (
     <div class="prompt-card-cover">
       <PromptImage
@@ -49,26 +53,33 @@ const tagLabel = (key: string) => (messages.tags as Record<string, string>)[key]
         eager={eager}
         fetchpriority={fetchpriority}
       />
-    </div>
-  )}
-  <div class="prompt-card-body">
-    <div class="card-top">
-      <h3>{displayTitle}</h3>
-    </div>
-    <p class="tagline">{prompt.tagline}</p>
-    <div class="card-meta">
-      <span class="pill active" style="font-size: 11px; padding: 2px 8px;">{displayCategoryLabel}</span>
-      {prompt.engines.slice(0, 2).map((e) => (
-        <span class="badge engine" style="font-size: 10px;">{engineLabel(e)}</span>
-      ))}
-      {prompt.reusable && (
-        <span class="badge host" style="font-size: 10px;">{tagLabel('reusable')}</span>
+      {overlay && (
+        <div class="prompt-card-overlay">
+          <h3>{displayTitle}</h3>
+        </div>
       )}
     </div>
-    <div class="prompt-card-footer">
-      <span class="prompt-card-author">@{prompt.source.authorName}</span>
+  )}
+  {!overlay && (
+    <div class="prompt-card-body">
+      <div class="card-top">
+        <h3>{displayTitle}</h3>
+      </div>
+      <p class="tagline">{prompt.tagline}</p>
+      <div class="card-meta">
+        <span class="pill active" style="font-size: 11px; padding: 2px 8px;">{displayCategoryLabel}</span>
+        {prompt.engines.slice(0, 2).map((e) => (
+          <span class="badge engine" style="font-size: 10px;">{engineLabel(e)}</span>
+        ))}
+        {prompt.reusable && (
+          <span class="badge host" style="font-size: 10px;">{tagLabel('reusable')}</span>
+        )}
+      </div>
+      <div class="prompt-card-footer">
+        <span class="prompt-card-author">@{prompt.source.authorName}</span>
+      </div>
     </div>
-  </div>
+  )}
 </a>
 
 <style>
@@ -121,5 +132,31 @@ const tagLabel = (key: string) => (messages.tags as Record<string, string>)[key]
   }
   .prompt-card-author {
     color: var(--text-muted);
+  }
+  /* ---- overlay 模式（首页精选 carousel）：标题叠加在图片底部 ---- */
+  .prompt-card--overlay .prompt-card-cover {
+    position: relative;
+  }
+  .prompt-card-overlay {
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: 22px 10px 8px;
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.78) 0%,
+      rgba(0, 0, 0, 0.35) 55%,
+      rgba(0, 0, 0, 0) 100%
+    );
+  }
+  .prompt-card-overlay h3 {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.35;
+    font-weight: 600;
+    color: #fff;
+    /* 标题字数限制：单行截断 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 </style>

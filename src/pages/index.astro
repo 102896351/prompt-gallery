@@ -139,6 +139,7 @@ const itemListLd = {
           autocomplete="off"
           aria-label="Search prompts"
         />
+        <button type="button" class="search-clear" data-search-clear aria-label="Clear search" hidden>×</button>
       </div>
     </div>
   </section>
@@ -163,6 +164,7 @@ const itemListLd = {
                   <PromptCard
                     prompt={p}
                     base={base}
+                    overlay={true}
                     eager={i < 2}
                     fetchpriority={i < 2 ? 'high' : 'auto'}
                   />
@@ -568,8 +570,25 @@ const itemListLd = {
 
     search.addEventListener('input', (e) => {
       activeQuery = e.target.value;
+      syncClearBtn();
       apply();
     });
+
+    // ===== 搜索清除按钮：输入内容后显示，点击清空 =====
+    const clearBtn = document.querySelector('[data-search-clear]');
+    function syncClearBtn() {
+      if (clearBtn) clearBtn.hidden = !search.value;
+    }
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        search.value = '';
+        activeQuery = '';
+        clearBtn.hidden = true;
+        apply();
+        search.focus();
+      });
+      syncClearBtn();
+    }
 
     pills.forEach((p) => {
       p.addEventListener('click', () => {
