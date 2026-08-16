@@ -551,14 +551,12 @@ img { max-width: 100%; display: block; }
 }
 .fs-col-head h2 { margin: 0; }
 
-/* Specials (right column) */
+/* Specials (right column) — compact band per user request:
+   both Featured and Specials should be narrow/short rows. */
 .specials-cover {
   position: relative;
-  /* Use max-height as a hard cap, with aspect-ratio as a fallback
-     for tall viewports. Keeps the right column from dominating
-     the row when the Featured column is much shorter. */
-  aspect-ratio: 16 / 9;
-  max-height: 360px;
+  aspect-ratio: 21 / 9;   /* wider, flatter cinematic band */
+  max-height: 220px;
   border-radius: var(--radius);
   overflow: hidden;
   background: var(--bg-soft);
@@ -579,7 +577,7 @@ img { max-width: 100%; display: block; }
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 16px 18px;
+  padding: 12px 14px;
   color: #fff;
   background: linear-gradient(
     to top,
@@ -589,16 +587,20 @@ img { max-width: 100%; display: block; }
   );
 }
 .specials-overlay h3 {
-  margin: 0 0 4px;
-  font-size: 18px;
+  margin: 0 0 3px;
+  font-size: 15px;
   font-weight: 700;
   color: #fff;
   text-shadow: 0 1px 4px rgba(0,0,0,0.5);
 }
 .specials-overlay p {
-  margin: 0 0 6px;
-  font-size: 12px;
+  margin: 0 0 5px;
+  font-size: 11px;
+  line-height: 1.4;
   color: rgba(255, 255, 255, 0.9);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .specials-overlay a {
   color: #fff;
@@ -632,20 +634,38 @@ img { max-width: 100%; display: block; }
 /* Featured (left column) - keep existing carousel, just constrain within column */
 .fs-col .carousel { margin-bottom: 0; }
 
-/* Featured carousel card covers: FIXED height with crop.
-   Rationale: these are preview thumbnails in a horizontal carousel;
-   the full uncropped image lives on the detail page (which uses
-   natural height + contain, see 352a06e). Without this cap, tall
-   source images stretch cards to 500-600px and blow up the row.
-   240px matches the ~240px slide width for a balanced 1:1 thumb.
+/* Featured carousel card covers: FIXED height with crop — compact band.
+   These are preview thumbnails in a horizontal carousel; the full
+   uncropped image lives on the detail page (natural height + contain,
+   see 352a06e). 160px keeps the row narrow per user request; at the
+   ~240px slide width that's a 3:2 landscape thumb.
    Specificity: 3 classes > PromptCard's scoped 2-class rule. */
 .carousel .carousel-slide .prompt-card-cover {
-  height: 240px;
+  height: 160px;
   overflow: hidden;
 }
 .carousel .carousel-slide .prompt-card-cover img {
-  height: 240px;
+  height: 160px;
   width: 100%;
   object-fit: cover;
   object-position: center;
+}
+/* Compact card body inside the carousel only */
+.carousel .carousel-slide .prompt-card-body {
+  padding: 10px 12px 9px;
+}
+.carousel .carousel-slide .prompt-card-body h3 {
+  font-size: 13px;
+}
+.carousel .carousel-slide .prompt-card-body .tagline {
+  font-size: 11px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.carousel .carousel-slide .prompt-card-footer {
+  margin-top: 8px;
+  padding-top: 6px;
+  font-size: 10px;
 }
