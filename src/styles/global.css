@@ -631,3 +631,21 @@ img { max-width: 100%; display: block; }
 
 /* Featured (left column) - keep existing carousel, just constrain within column */
 .fs-col .carousel { margin-bottom: 0; }
+
+/* Featured carousel card covers: FIXED height with crop.
+   Rationale: these are preview thumbnails in a horizontal carousel;
+   the full uncropped image lives on the detail page (which uses
+   natural height + contain, see 352a06e). Without this cap, tall
+   source images stretch cards to 500-600px and blow up the row.
+   240px matches the ~240px slide width for a balanced 1:1 thumb.
+   Specificity: 3 classes > PromptCard's scoped 2-class rule. */
+.carousel .carousel-slide .prompt-card-cover {
+  height: 240px;
+  overflow: hidden;
+}
+.carousel .carousel-slide .prompt-card-cover img {
+  height: 240px;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+}
