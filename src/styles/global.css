@@ -702,3 +702,17 @@ img { max-width: 100%; display: block; }
   padding-top: 6px;
   font-size: 10px;
 }
+
+/* Align the Featured carousel image band with the Specials cover:
+   kill the carousel-track's vertical padding and hide the scrollbar
+   (Netflix-style — arrows + drag still work). Without this the left
+   column sat ~30px taller than the right despite both images being
+   160px, from 8px top + 16px bottom padding + 6px scrollbar. */
+.fs-col .carousel-track {
+  padding: 0 4px 6px;
+  scrollbar-width: none;               /* Firefox */
+  -ms-overflow-style: none;            /* legacy IE/Edge */
+}
+.fs-col .carousel-track::-webkit-scrollbar {
+  display: none;                       /* Chrome/Safari */
+}
