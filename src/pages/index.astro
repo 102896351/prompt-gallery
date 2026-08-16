@@ -2,11 +2,26 @@
 import Base from '../layouts/Base.astro';
 import PromptCard from '../components/PromptCard.astro';
 import { prompts, promptCategories, type Prompt } from '../data/prompts';
+import { collections } from '../data/collections';
 import { en } from '../i18n';
 
 const t = en;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const siteBase = Astro.site ?? new URL('https://prompt-gallery.example.com');
+
+// Specials (right column): 5 random collections for the rotating
+// hero. Re-derived from collections.ts to keep the data path single-
+// sourced; only the visible 5 are picked at build time.
+const specialSlugs = [
+  'collection-18',
+  'collection-16',
+  'collection-20',
+  'collection-14',
+  'collection-09',
+];
+const specials = specialSlugs
+  .map((s) => collections.find((c) => c.slug === s))
+  .filter((c): c is NonNullable<typeof c> => Boolean(c));
 
 // Featured：精选 40 条（8 条/页 × 5 页 = 40 条），按分类选 top-N，去重
 const featuredSlugs = [
@@ -148,32 +163,80 @@ const itemListLd = {
     </div>
   </section>
 
-  <!-- Featured：轮播 8 条/页 -->
-  <section class="section" id="featured">
+  <!-- Featured + Specials: two-column row -->
+  <section class="section">
     <div class="container">
-      <div class="section-head">
-        <h2>{t.section.featured}</h2>
-        <span class="count">{t.section.countPicks(featured.length)}</span>
-      </div>
-      <p class="editorial-meta">
-        Last update: 2026-07-30 · {prompts.length} prompts across {promptCategories.length} categories · Maintained by the editorial team
-      </p>
-      <div class="carousel" data-featured-carousel data-per-page="8">
-        <div class="carousel-track" data-featured-track>
-          {featured.map((p, i) => (
-            <div class="carousel-slide" data-featured-slide>
-              <PromptCard
-                prompt={p}
-                base={base}
-                eager={i < 2}
-                fetchpriority={i < 2 ? 'high' : 'auto'}
-              />
+      <div class="fs-row">
+        <!-- LEFT: Featured (8 horizontal-scroll cards) -->
+        <div class="fs-col">
+          <div class="fs-col-head">
+            <h2>{t.section.featured}</h2>
+            <span class="count">{t.section.countPicks(featured.length)}</span>
+          </div>
+          <p class="editorial-meta" style="font-size: 12px; margin: 0 0 12px;">
+            Last update: 2026-07-30 · {prompts.length} prompts across {promptCategories.length} categories
+          </p>
+          <div class="carousel" data-featured-carousel data-per-page="8">
+            <div class="carousel-track" data-featured-track>
+              {featured.map((p, i) => (
+                <div class="carousel-slide" data-featured-slide>
+                  <PromptCard
+                    prompt={p}
+                    base={base}
+                    eager={i < 2}
+                    fetchpriority={i < 2 ? 'high' : 'auto'}
+                  />
+                </div>
+              ))}
             </div>
-          ))}
+            <button type="button" class="carousel-arrow carousel-prev" data-featured-prev aria-label="Previous">‹</button>
+            <button type="button" class="carousel-arrow carousel-next" data-featured-next aria-label="Next">›</button>
+            <div class="carousel-dots" data-featured-dots></div>
+          </div>
         </div>
-        <button type="button" class="carousel-arrow carousel-prev" data-featured-prev aria-label="Previous">‹</button>
-        <button type="button" class="carousel-arrow carousel-next" data-featured-next aria-label="Next">›</button>
-        <div class="carousel-dots" data-featured-dots></div>
+
+        <!-- RIGHT: Specials (5 large images, auto-rotating) -->
+        <div class="fs-col">
+          <div class="fs-col-head">
+            <h2>{t.section.specials}</h2>
+            <a href={`${base}/collections`}>{t.section.specialsBrowse}</a>
+          </div>
+          <p class="editorial-meta" style="font-size: 12px; margin: 0 0 12px;">
+            {specials.length} curated channels · rotating every 5s
+          </p>
+          <div class="specials-cover" data-specials-cover>
+            {specials.map((c, i) => (
+              <img
+                src={c.cover}
+                alt={c.titleEn}
+                data-specials-img={String(i)}
+                data-title={c.titleEn}
+                data-desc={c.descriptionEn}
+                data-href={`${base}/collections/${c.slug}`}
+                class={i === 0 ? 'active' : ''}
+                style={i === 0 ? '' : 'display:none;'}
+                loading={i === 0 ? 'eager' : 'lazy'}
+                fetchpriority={i === 0 ? 'high' : 'auto'}
+                decoding="async"
+              />
+            ))}
+            <div class="specials-overlay">
+              <h3 data-specials-title>{specials[0]?.titleEn}</h3>
+              <p data-specials-desc>{specials[0]?.descriptionEn}</p>
+              <a href={`${base}/collections/${specials[0]?.slug}`}>View collection →</a>
+            </div>
+          </div>
+          <div class="specials-dots" data-specials-dots>
+            {specials.map((_, i) => (
+              <button
+                type="button"
+                class={`specials-dot${i === 0 ? ' active' : ''}`}
+                data-specials-dot={String(i)}
+                aria-label={`Show specials ${i + 1}`}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -308,6 +371,67 @@ const itemListLd = {
     .carousel-slide { flex: 0 0 160px; }
   }
 </style>
+
+<script is:inline>
+  // ===== Specials (right column): auto-rotate 5 collection covers =====
+  (function () {
+    const cover = document.querySelector('[data-specials-cover]');
+    if (!cover) return;
+    const imgs = cover.querySelectorAll('[data-specials-img]');
+    const dots = document.querySelectorAll('[data-specials-dot]');
+    const titleEl = cover.querySelector('[data-specials-title]');
+    const descEl = cover.querySelector('[data-specials-desc]');
+    const linkEl = cover.querySelector('.specials-overlay a');
+    if (imgs.length < 2) return;
+    // Data captured at render time: title, desc, slug, link for each idx
+    const meta = Array.from(imgs).map((img) => {
+      const m = img.alt.match(/^.+?$/);
+      return {
+        alt: img.alt,
+        href: (img.parentElement.querySelector('a') || {}).href || '',
+      };
+    });
+    // We need more data: build meta server-side by reading from
+    // data attributes; use a hidden JSON block as the source of truth.
+    // Simpler: read from the elements themselves (title/desc/links)
+    // by re-rendering on every tick.
+    const buildMeta = (i) => {
+      const link = imgs[i];
+      return {
+        alt: link.alt,
+      };
+    };
+    let current = 0;
+    let timer = null;
+    function show(idx) {
+      current = (idx + imgs.length) % imgs.length;
+      imgs.forEach((img, i) => {
+        const active = i === current;
+        img.style.display = active ? 'block' : 'none';
+        img.classList.toggle('active', active);
+      });
+      dots.forEach((d, i) => d.classList.toggle('active', i === current));
+      // title/desc/links are baked into the first img via data attrs
+      const dataTitle = imgs[current].getAttribute('data-title');
+      const dataDesc = imgs[current].getAttribute('data-desc');
+      const dataHref = imgs[current].getAttribute('data-href');
+      if (titleEl && dataTitle) titleEl.textContent = dataTitle;
+      if (descEl && dataDesc) descEl.textContent = dataDesc;
+      if (linkEl && dataHref) linkEl.setAttribute('href', dataHref);
+    }
+    function next() { show(current + 1); }
+    function start() { stop(); timer = setInterval(next, 5000); }
+    function stop() { if (timer) { clearInterval(timer); timer = null; } }
+    dots.forEach((d, i) => d.addEventListener('click', () => { show(i); start(); }));
+    cover.addEventListener('mouseenter', stop);
+    cover.addEventListener('mouseleave', start);
+    document.addEventListener('visibilitychange', () => {
+      document.hidden ? stop() : start();
+    });
+    show(0);
+    start();
+  })();
+</script>
 
 <script is:inline>
   // ===== Featured carousel (水平滚动, 每次滑 1 张) =====

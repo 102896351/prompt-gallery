@@ -2,11 +2,25 @@
 import Base from '../../layouts/Base.astro';
 import PromptCard from '../../components/PromptCard.astro';
 import { prompts, promptCategories, type Prompt } from '../../data/prompts';
+import { collections } from '../../data/collections';
 import { zh } from '../../i18n';
 
 const t = zh;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const siteBase = Astro.site ?? new URL('https://prompt-gallery.example.com');
+
+// 专题（右栏）：5 个随机专题轮换。从 collections.ts 单一数据源
+// pick 5 个；只 build-time 选定，不重复。
+const specialSlugs = [
+  'collection-18',
+  'collection-16',
+  'collection-20',
+  'collection-14',
+  'collection-09',
+];
+const specials = specialSlugs
+  .map((s) => collections.find((c) => c.slug === s))
+  .filter((c): c is NonNullable<typeof c> => Boolean(c));
 
 const featuredSlugs = [
   'sci-fi-sculptural-representation-zhi-zi-and-trisolar-system',
@@ -145,31 +159,79 @@ const itemListLd = {
     </div>
   </section>
 
-  <section class="section" id="featured">
+  <section class="section">
     <div class="container">
-      <div class="section-head">
-        <h2>{t.section.featured}</h2>
-        <span class="count">{t.section.countPicks(featured.length)}</span>
-      </div>
-      <p class="editorial-meta">
-        最近更新：2026-07-30 · 共 {prompts.length} 条提示词，{promptCategories.length} 个分类
-      </p>
-      <div class="carousel" data-featured-carousel data-per-page="8">
-        <div class="carousel-track" data-featured-track>
-          {featured.map((p, i) => (
-            <div class="carousel-slide" data-featured-slide>
-              <PromptCard
-                prompt={p}
-                base={base}
-                eager={i < 2}
-                fetchpriority={i < 2 ? 'high' : 'auto'}
-              />
+      <div class="fs-row">
+        <!-- LEFT: 精品 8 张小卡片横滚 -->
+        <div class="fs-col">
+          <div class="fs-col-head">
+            <h2>{t.section.featured}</h2>
+            <span class="count">{t.section.countPicks(featured.length)}</span>
+          </div>
+          <p class="editorial-meta" style="font-size: 12px; margin: 0 0 12px;">
+            最近更新：2026-07-30 · 共 {prompts.length} 条提示词
+          </p>
+          <div class="carousel" data-featured-carousel data-per-page="8">
+            <div class="carousel-track" data-featured-track>
+              {featured.map((p, i) => (
+                <div class="carousel-slide" data-featured-slide>
+                  <PromptCard
+                    prompt={p}
+                    base={base}
+                    eager={i < 2}
+                    fetchpriority={i < 2 ? 'high' : 'auto'}
+                  />
+                </div>
+              ))}
             </div>
-          ))}
+            <button type="button" class="carousel-arrow carousel-prev" data-featured-prev aria-label="上一组">‹</button>
+            <button type="button" class="carousel-arrow carousel-next" data-featured-next aria-label="下一组">›</button>
+            <div class="carousel-dots" data-featured-dots></div>
+          </div>
         </div>
-        <button type="button" class="carousel-arrow carousel-prev" data-featured-prev aria-label="上一组">‹</button>
-        <button type="button" class="carousel-arrow carousel-next" data-featured-next aria-label="下一组">›</button>
-        <div class="carousel-dots" data-featured-dots></div>
+
+        <!-- RIGHT: 专题 5 张大图轮换 -->
+        <div class="fs-col">
+          <div class="fs-col-head">
+            <h2>{t.section.specials}</h2>
+            <a href={`${base}/collections`}>{t.section.specialsBrowse}</a>
+          </div>
+          <p class="editorial-meta" style="font-size: 12px; margin: 0 0 12px;">
+            {specials.length} 个专题频道 · 每 5 秒自动轮换
+          </p>
+          <div class="specials-cover" data-specials-cover>
+            {specials.map((c, i) => (
+              <img
+                src={c.cover}
+                alt={c.title}
+                data-specials-img={String(i)}
+                data-title={c.title}
+                data-desc={c.description}
+                data-href={`${base}/collections/${c.slug}`}
+                class={i === 0 ? 'active' : ''}
+                style={i === 0 ? '' : 'display:none;'}
+                loading={i === 0 ? 'eager' : 'lazy'}
+                fetchpriority={i === 0 ? 'high' : 'auto'}
+                decoding="async"
+              />
+            ))}
+            <div class="specials-overlay">
+              <h3 data-specials-title>{specials[0]?.title}</h3>
+              <p data-specials-desc>{specials[0]?.description}</p>
+              <a href={`${base}/collections/${specials[0]?.slug}`}>查看专题 →</a>
+            </div>
+          </div>
+          <div class="specials-dots" data-specials-dots>
+            {specials.map((_, i) => (
+              <button
+                type="button"
+                class={`specials-dot${i === 0 ? ' active' : ''}`}
+                data-specials-dot={String(i)}
+                aria-label={`显示专题 ${i + 1}`}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -303,6 +365,48 @@ const itemListLd = {
     .carousel-slide { flex: 0 0 160px; }
   }
 </style>
+
+<script is:inline>
+  // ===== 专题 (右栏): 5 张 collection cover 自动轮换 =====
+  (function () {
+    const cover = document.querySelector('[data-specials-cover]');
+    if (!cover) return;
+    const imgs = cover.querySelectorAll('[data-specials-img]');
+    const dots = document.querySelectorAll('[data-specials-dot]');
+    const titleEl = cover.querySelector('[data-specials-title]');
+    const descEl = cover.querySelector('[data-specials-desc]');
+    const linkEl = cover.querySelector('.specials-overlay a');
+    if (imgs.length < 2) return;
+    let current = 0;
+    let timer = null;
+    function show(idx) {
+      current = (idx + imgs.length) % imgs.length;
+      imgs.forEach((img, i) => {
+        const active = i === current;
+        img.style.display = active ? 'block' : 'none';
+        img.classList.toggle('active', active);
+      });
+      dots.forEach((d, i) => d.classList.toggle('active', i === current));
+      const dataTitle = imgs[current].getAttribute('data-title');
+      const dataDesc = imgs[current].getAttribute('data-desc');
+      const dataHref = imgs[current].getAttribute('data-href');
+      if (titleEl && dataTitle) titleEl.textContent = dataTitle;
+      if (descEl && dataDesc) descEl.textContent = dataDesc;
+      if (linkEl && dataHref) linkEl.setAttribute('href', dataHref);
+    }
+    function next() { show(current + 1); }
+    function start() { stop(); timer = setInterval(next, 5000); }
+    function stop() { if (timer) { clearInterval(timer); timer = null; } }
+    dots.forEach((d, i) => d.addEventListener('click', () => { show(i); start(); }));
+    cover.addEventListener('mouseenter', stop);
+    cover.addEventListener('mouseleave', start);
+    document.addEventListener('visibilitychange', () => {
+      document.hidden ? stop() : start();
+    });
+    show(0);
+    start();
+  })();
+</script>
 
 <script is:inline>
   // ===== 精选轮播 (水平滚动, 每次滑 1 张) =====

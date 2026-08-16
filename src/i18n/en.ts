@@ -51,6 +51,8 @@ export const en = {
 tips: [],
   section: {
     featured: 'Featured',
+    specials: 'Specials',
+    specialsBrowse: 'Browse all specials →',
     all: 'Browse all',
     countPrompts: (n: number) => `${n} prompts`,
     countPicks: (n: number) => `${n} picks`,

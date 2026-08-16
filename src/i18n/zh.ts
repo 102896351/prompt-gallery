@@ -53,6 +53,8 @@ export const zh: Messages = {
   tips: [],
   section: {
     featured: '精选',
+    specials: '专题',
+    specialsBrowse: '查看全部专题 →',
     all: '全部提示词',
     countPrompts: (n: number) => `${n} 条提示词`,
     countPicks: (n: number) => `${n} 条精选`,
