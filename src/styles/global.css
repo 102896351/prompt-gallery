@@ -528,7 +528,12 @@ img { max-width: 100%; display: block; }
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
   gap: 20px;
-  align-items: stretch;
+  /* align-items: start so each column sizes to its own content
+     instead of stretching to match the tallest column. With
+     stretch (default) the Featured carousel became ~700px tall
+     because the Specials cover image is tall, leaving a huge
+     empty band under the small featured cards. */
+  align-items: start;
 }
 @media (max-width: 800px) {
   .fs-row { grid-template-columns: 1fr; }
@@ -549,7 +554,11 @@ img { max-width: 100%; display: block; }
 /* Specials (right column) */
 .specials-cover {
   position: relative;
+  /* Use max-height as a hard cap, with aspect-ratio as a fallback
+     for tall viewports. Keeps the right column from dominating
+     the row when the Featured column is much shorter. */
   aspect-ratio: 16 / 9;
+  max-height: 360px;
   border-radius: var(--radius);
   overflow: hidden;
   background: var(--bg-soft);
