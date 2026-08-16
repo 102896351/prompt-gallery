@@ -495,9 +495,9 @@ img { max-width: 100%; display: block; }
 .footer-tagline { width: 100%; text-align: center; margin: 12px 0 0; }
 /* ---------- New Home Layout: hero compact + Featured/Specials two-column row ---------- */
 .hero {
-  /* Tighter: less padding, banner height ~ 220px */
+  /* Title + search only (badge/desc/dots removed per user request) */
   padding: 56px 0 28px;
-  min-height: 320px;
+  min-height: 220px;
 }
 .hero-banner-slide {
   background-size: cover;
