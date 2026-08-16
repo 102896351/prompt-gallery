@@ -575,12 +575,12 @@ img { max-width: 100%; display: block; }
 }
 .fs-col-head h2 { margin: 0; }
 
-/* Specials (right column) — compact band per user request:
-   both Featured and Specials should be narrow/short rows. */
+/* Specials (right column) — cover height matches the Featured card
+   covers (160px) so both columns align; dots overlay inside the
+   image to save vertical space. */
 .specials-cover {
   position: relative;
-  aspect-ratio: 21 / 9;   /* wider, flatter cinematic band */
-  max-height: 220px;
+  height: 160px;
   border-radius: var(--radius);
   overflow: hidden;
   background: var(--bg-soft);
@@ -601,7 +601,9 @@ img { max-width: 100%; display: block; }
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 12px 14px;
+  /* extra bottom padding keeps text clear of the dots that now
+     overlay inside the image bottom */
+  padding: 12px 14px 30px;
   color: #fff;
   background: linear-gradient(
     to top,
@@ -637,7 +639,12 @@ img { max-width: 100%; display: block; }
   display: flex;
   justify-content: center;
   gap: 6px;
-  margin-top: 10px;
+  /* negative margin pulls the dots up INTO the cover image,
+     saving a row of vertical space */
+  margin-top: -24px;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 2; /* above the cover and its overlay */
 }
 .specials-dot {
   width: 6px;
@@ -645,7 +652,9 @@ img { max-width: 100%; display: block; }
   padding: 0;
   border: 0;
   border-radius: 50%;
-  background: var(--border);
+  /* translucent white so dots read on the dark image gradient */
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
   cursor: pointer;
   transition: all 0.15s;
 }
