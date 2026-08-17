@@ -178,6 +178,9 @@ const optimizedH1 = `${prompt.title} — ${engineName} ${displayCatLabel}提示�
     </nav>
 
     <div class="detail-head">
+      <p style="margin: 0 0 12px; font-size: 13px;">
+        <a href={base} style="color: var(--text-soft); text-decoration: none;">← 返回首页</a>
+      </p>
       <div class="detail-pills">
         <span class="pill active">{displayCatLabel}</span>
         {prompt.engines.filter(e => e !== 'other').map(e => (
