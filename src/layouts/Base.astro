@@ -53,6 +53,10 @@ const hreflangs: Array<{ lang: string; href: string }> = isErrorPage
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- 浏览器缓存策略：HTML 立即重新校验（保证更新立即生效）
+         Cloudflare 默认会缓存静态资源 10 分钟，这个 meta + 下面
+         的 _headers 文件一起把缓存策略缩短 -->
+    <meta http-equiv="Cache-Control" content="no-cache, must-revalidate" />
     <!-- 主题切换：在 CSS 之前尽早执行，避免首屏闪烁 -->
     <script is:inline>
       (function () {

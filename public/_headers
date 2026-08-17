@@ -1,0 +1,23 @@
+# /_headers — HTTP response headers
+# 作用：
+# - HTML 页面 0 缓存，浏览器每次都重新验证（保证内容改动立即生效）
+# - 静态资源（图片/CSS/JS）保留 7 天缓存（性能）
+# - Cloudflare Pages 会自动应用这些规则
+# - GitHub Pages 不读 _headers 文件，但 _headers 作为静态文件
+#   部署到 dist/ 后 Cloudflare CDN 不会重新优化 HTML（Cloudflare
+#   只能改静态资源响应头，HTML 头由 origin 决定）
+# - 所以 HTML 的即时刷新主要靠 meta 标签（上方加的）兜底
+
+/*
+  Cache-Control: no-cache, must-revalidate
+
+/*.css
+/*.js
+  Cache-Control: public, max-age=604800, immutable
+
+/*.png
+/*.jpg
+/*.jpeg
+/*.webp
+/*.svg
+  Cache-Control: public, max-age=2592000
