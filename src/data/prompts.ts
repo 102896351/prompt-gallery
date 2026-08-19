@@ -6464,25 +6464,6 @@ language: "en",
   }
 ,
 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   {
     slug: "infographic-explaining-how-tesla-fsd-works",
     title: "特斯拉FSD工作原理图解",
@@ -12353,26 +12334,6 @@ language: "en",
     verdict: "Community submission. Curated by editorial team.",
     reusable: false,
     language: "zh",
-    structuredData: null,
-  },
-  {
-    slug: "hyperrealistic-caricature-portrait",
-    title: "超现实主义夸张肖像",
-    titleEn: "Hyperrealistic Caricature Portrait",
-    tagline: "Hyperrealistic Caricature Portrait",
-    taglineEn: "AI image prompt.",
-    category: "other",
-    engines: ["nano-banana-pro"],
-    difficulty: 3,
-    prompt: "Hyperrealistic Caricature Portrait\nGoogle Gemini ai Nano Banana 3 Pro ✨\nPrompt ⤵️\n{\n\"style\": {\n\"type\": \"hyperrealistic caricature\",\n\"lighting\": \"soft studio lighting\",\n\"mood\": \"serious, dramatic\",\n\"details\": \"exaggerated facial proportions, smooth skin texture, painterly realism\"\n},\n\"subject\": {\n\"type\": \"older man\",\n\"features\": {\n\"hair\": \"light blond, voluminous, swept to the side with dramatic flow\",\n\"face\": \"large exaggerated cheeks and chin, deep frown lines, pronounced brows, slightly drooping eyelids\",\n\"expression\": \"stern, pouting, serious\"\n},\n\"clothing\": {\n\"outfit\": \"dark formal suit\",\n\"shirt\": \"light-colored dress shirt\",\n\"tie\": \"light blue textured tie\"\n},\n\"pose\": \"straight posture, facing forward\"\n},\n\"background\": {\n\"type\": \"plain dark gradient\",\n\"atmosphere\": \"studio portrait, minimalistic\"\n},\n\"camera\": {\n\"angle\": \"straight-on\",\n\"depth_of_field\": \"shallow, soft background\",\n\"focus\": \"sharp on",
-    rawBlock: "Hyperrealistic Caricature Portrait\nGoogle Gemini ai Nano Banana 3 Pro ✨\nPrompt ⤵️\n{\n\"style\": {\n\"type\": \"hyperrealistic caricature\",\n\"lighting\": \"soft studio lighting\",\n\"mood\": \"serious, dramatic\",\n\"details\": \"exaggerated facial proportions, smooth skin texture, painterly realism\"\n},\n\"subject\": {\n\"type\": \"older man\",\n\"features\": {\n\"hair\": \"light blond, voluminous, swept to the side with dramatic flow\",\n\"face\": \"large exaggerated cheeks and chin, deep frown lines, pronounced brows, slightly drooping eyelids\",\n\"expression\": \"stern, pouting, serious\"\n},\n\"clothing\": {\n\"outfit\": \"dark formal suit\",\n\"shirt\": \"light-colored dress shirt\",\n\"tie\": \"light blue textured tie\"\n},\n\"pose\": \"straight posture, facing forward\"\n},\n\"background\": {\n\"type\": \"plain dark gradient\",\n\"atmosphere\": \"studio portrait, minimalistic\"\n},\n\"camera\": {\n\"angle\": \"straight-on\",\n\"depth_of_field\": \"shallow, soft background\",\n\"focus\": \"sharp on",
-    images: [{"src":"https://img1.aiart.pics/images/prompts/20251213/hyperrealistic-caricature-portrait-1.jpg","alt":"超现实主义夸张肖像","width":500,"isThumb":false}],
-    source: {"platform":"X","sourceUrl":"https://x.com/Abdullah__Ai7/status/1998506607282631122","statusId":"1998506607282631122","authorName":"Abdullah AI"},
-    dateAdded: "2026-08-17",
-    tags: ["fresh","community"],
-    verdict: "Community submission. Curated by editorial team.",
-    reusable: false,
-    language: "en",
     structuredData: null,
   },
   {
