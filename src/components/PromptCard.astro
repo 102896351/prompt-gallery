@@ -35,6 +35,14 @@ const messages = locale === 'zh' ? zh : en;
 const promptHref = locale === 'zh' ? `${base}/zh/prompt/${prompt.slug}` : `${base}/prompt/${prompt.slug}`;
 // 英文页面：优先 titleEn，fallback 到 title；中文页：保持 title
 const displayTitle = locale === 'en' ? (prompt.titleEn || prompt.title) : prompt.title;
+// 英文页面描述不能直接显示中文 tagline；优先 taglineEn，
+// 若历史数据的 taglineEn 仍含中文，则用稳定的英文通用描述兜底。
+const hasCJK = (value: string) => /[一-鿿]/.test(value || '');
+const displayTagline = locale === 'en'
+  ? (prompt.taglineEn && !hasCJK(prompt.taglineEn)
+      ? prompt.taglineEn
+      : `AI ${prompt.category.replace(/-/g, ' ')} image-generation prompt.`)
+  : prompt.tagline;
 // 分类标签：locale=zh 用 labelZh，否则用 label
 const displayCategoryLabel = locale === 'zh' ? (cat?.labelZh ?? cat?.label ?? prompt.category) : (cat?.label ?? prompt.category);
 // 引擎显示名（按 locale 翻译）
@@ -65,7 +73,7 @@ const tagLabel = (key: string) => (messages.tags as Record<string, string>)[key]
       <div class="card-top">
         <h3>{displayTitle}</h3>
       </div>
-      <p class="tagline">{prompt.tagline}</p>
+      <p class="tagline">{displayTagline}</p>
       <div class="card-meta">
         <span class="pill active" style="font-size: 11px; padding: 2px 8px;">{displayCategoryLabel}</span>
         {prompt.engines.slice(0, 2).map((e) => (
