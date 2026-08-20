@@ -361,6 +361,7 @@ const itemListLd = {
     const cover = document.querySelector('[data-specials-cover]');
     if (!cover) return;
     const imgs = cover.querySelectorAll('[data-specials-img]');
+    const imageLinks = cover.querySelectorAll('[data-specials-link]');
     const dots = document.querySelectorAll('[data-specials-dot]');
     const titleEl = cover.querySelector('[data-specials-title]');
     const descEl = cover.querySelector('[data-specials-desc]');
@@ -370,6 +371,9 @@ const itemListLd = {
     let timer = null;
     function show(idx) {
       current = (idx + imgs.length) % imgs.length;
+      imageLinks.forEach((link, i) => {
+        link.style.display = i === current ? 'block' : 'none';
+      });
       imgs.forEach((img, i) => {
         const active = i === current;
         img.style.display = active ? 'block' : 'none';
