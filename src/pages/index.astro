@@ -188,24 +188,30 @@ const itemListLd = {
           </p>
           <div class="specials-cover" data-specials-cover>
             {specials.map((c, i) => (
-              <img
-                src={c.cover}
-                alt={c.titleEn}
-                data-specials-img={String(i)}
-                data-title={c.titleEn}
-                data-desc={c.descriptionEn}
-                data-href={`${base}/collections/${c.slug}`}
-                class={i === 0 ? 'active' : ''}
+              <a
+                class="specials-image-link"
+                data-specials-link={String(i)}
+                href={`${base}/collections/${c.slug}`}
                 style={i === 0 ? '' : 'display:none;'}
-                loading={i === 0 ? 'eager' : 'lazy'}
-                fetchpriority={i === 0 ? 'high' : 'auto'}
-                decoding="async"
-              />
+                aria-label={`Open collection: ${c.titleEn}`}
+              >
+                <img
+                  src={c.cover}
+                  alt={c.titleEn}
+                  data-specials-img={String(i)}
+                  data-title={c.titleEn}
+                  data-desc={c.descriptionEn}
+                  data-href={`${base}/collections/${c.slug}`}
+                  class={i === 0 ? 'active' : ''}
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                  fetchpriority={i === 0 ? 'high' : 'auto'}
+                  decoding="async"
+                />
+              </a>
             ))}
             <div class="specials-overlay">
               <h3 data-specials-title>{specials[0]?.titleEn}</h3>
               <p data-specials-desc>{specials[0]?.descriptionEn}</p>
-              <a href={`${base}/collections/${specials[0]?.slug}`}>View collection →</a>
             </div>
           </div>
           <div class="specials-dots" data-specials-dots>
@@ -363,7 +369,7 @@ const itemListLd = {
     const dots = document.querySelectorAll('[data-specials-dot]');
     const titleEl = cover.querySelector('[data-specials-title]');
     const descEl = cover.querySelector('[data-specials-desc]');
-    const linkEl = cover.querySelector('.specials-overlay a');
+    const linkEl = cover.querySelector('[data-specials-link]');
     if (imgs.length < 2) return;
     // Data captured at render time: title, desc, slug, link for each idx
     const meta = Array.from(imgs).map((img) => {

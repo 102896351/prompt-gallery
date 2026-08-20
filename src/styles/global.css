@@ -593,6 +593,15 @@ img { max-width: 100%; display: block; }
   display: block;
   transition: transform 0.4s;
 }
+.specials-image-link {
+  position: absolute;
+  inset: 0;
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+.specials-image-link[style*="display:none"] { display: none !important; }
+.specials-image-link:hover img { transform: scale(1.03); }
 .specials-cover:hover img { transform: scale(1.03); }
 .specials-overlay {
   position: absolute;
