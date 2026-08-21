@@ -204,7 +204,7 @@ const optimizedH1 = `${displayTitle} — ${engineName} ${displayCatLabel} Prompt
           <span class="copy-default">📋 Copy prompt</span>
           <span class="copy-success hidden">✓ Copied</span>
         </button>
-        <a href={prompt.source.sourceUrl} target="_blank" rel="noopener" class="btn">
+        <a href={prompt.source.sourceUrl} target="_blank" rel="noopener" class="btn source-link-hidden">
           View source on {prompt.source.platform} →
         </a>
       </div>
@@ -357,8 +357,9 @@ const optimizedH1 = `${displayTitle} — ${engineName} ${displayCatLabel} Prompt
           </>
         )}
 
-        <h2>Source</h2>
-        <div class="source-box">
+        <section class="source-section-hidden">
+          <h2>Source</h2>
+          <div class="source-box">
           <div class="source-author">
             <strong>@{prompt.source.authorName}</strong>
             {prompt.source.authorUrl && (
@@ -372,7 +373,8 @@ const optimizedH1 = `${displayTitle} — ${engineName} ${displayCatLabel} Prompt
           <a href={prompt.source.sourceUrl} target="_blank" rel="noopener" class="source-url">
             {prompt.source.sourceUrl} →
           </a>
-        </div>
+          </div>
+        </section>
       </div>
 
       <!-- 侧边栏 -->
@@ -981,6 +983,12 @@ const optimizedH1 = `${displayTitle} — ${engineName} ${displayCatLabel} Prompt
   }
 
   /* 来源框 */
+  .source-link-hidden,
+  .source-section-hidden {
+    display: none !important;
+  }
+
+  /* 来源区块（默认隐藏，保留 DOM/数据，未来移除 hidden class 即恢复） */
   .source-box {
     padding: 16px;
     background: var(--bg-soft);
