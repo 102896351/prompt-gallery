@@ -19,6 +19,8 @@ interface Props {
   // overlay 模式（首页精选 carousel 用）：只渲染图片 + 图片底部叠加标题，
   // 不渲染 body（tagline/badges/作者）。标题单行截断，样式仿专题区。
   overlay?: boolean;
+  // 首页卡片在新标签页打开，保持首页滚动位置与已加载图片。
+  newTab?: boolean;
 }
 const {
   prompt,
@@ -26,6 +28,7 @@ const {
   eager = false,
   fetchpriority = 'auto',
   overlay = false,
+  newTab = false,
 } = Astro.props;
 const cat = promptCategories.find((c) => c.id === prompt.category);
 const cover = prompt.images[0];
@@ -51,7 +54,12 @@ const engineLabel = (key: string) => (messages.engines as Record<string, string>
 const tagLabel = (key: string) => (messages.tags as Record<string, string>)[key] ?? key;
 ---
 
-<a href={promptHref} class={`card prompt-card${overlay ? ' prompt-card--overlay' : ''}`}>
+<a
+  href={promptHref}
+  class={`card prompt-card${overlay ? ' prompt-card--overlay' : ''}`}
+  target={newTab ? '_blank' : undefined}
+  rel={newTab ? 'noopener' : undefined}
+>
   {cover && (
     <div class="prompt-card-cover">
       <PromptImage

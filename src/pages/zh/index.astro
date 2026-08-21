@@ -161,6 +161,7 @@ const itemListLd = {
                     prompt={p}
                     base={base}
                     overlay={true}
+                    newTab={true}
                     eager={i < 2}
                     fetchpriority={i < 2 ? 'high' : 'auto'}
                   />
@@ -249,7 +250,7 @@ const itemListLd = {
             data-engines={p.engines.join(' ')}
             data-author={p.source.authorName.toLowerCase()}
           >
-            <PromptCard prompt={p} base={base} />
+            <PromptCard prompt={p} base={base} newTab={true} />
           </div>
         ))}
       </div>
