@@ -19496,29 +19496,8 @@ language: "en",
     reusable: false,
     language: "en",
     structuredData: null,
-  }];
-
-export function getPromptsByCategory(cat: PromptStyle): Prompt[] {
-  return prompts.filter((p) => p.category === cat);
-}
-
-export function getFeaturedPrompts(): Prompt[] {
-  // 手工精选：跨分类的代表条目（运行时按 score 排序取 top N 也可）
-  const featuredSlugs = [
-    // 在这里手动放 6-12 个最有代表性的 slug
-  ];
-  return featuredSlugs
-    .map((slug) => prompts.find((p) => p.slug === slug))
-    .filter(Boolean) as Prompt[];
-}
-
-export function getPromptBySlug(slug: string): Prompt | undefined {
-  return prompts.find((p) => p.slug === slug);
-}
-
-export function getRelatedPrompts(slug: string, limit = 3): Prompt[] {
-  const current = getPromptBySlug(slug);
-  if (!current) return [  {
+  },
+  {
     slug: "highly-stylized-3d-caricature-of-character",
     title: "A Highly Stylized 3D Caricature of [Character]",
     titleEn: "A Highly Stylized 3D Caricature of [Character]",
@@ -19548,6 +19527,28 @@ export function getRelatedPrompts(slug: string, limit = 3): Prompt[] {
     structuredData: null,
   },
 ];
+
+export function getPromptsByCategory(cat: PromptStyle): Prompt[] {
+  return prompts.filter((p) => p.category === cat);
+}
+
+export function getFeaturedPrompts(): Prompt[] {
+  // 手工精选：跨分类的代表条目（运行时按 score 排序取 top N 也可）
+  const featuredSlugs = [
+    // 在这里手动放 6-12 个最有代表性的 slug
+  ];
+  return featuredSlugs
+    .map((slug) => prompts.find((p) => p.slug === slug))
+    .filter(Boolean) as Prompt[];
+}
+
+export function getPromptBySlug(slug: string): Prompt | undefined {
+  return prompts.find((p) => p.slug === slug);
+}
+
+export function getRelatedPrompts(slug: string, limit = 3): Prompt[] {
+  const current = getPromptBySlug(slug);
+  if (!current) return [];
   return prompts
     .filter((p) => p.slug !== slug && p.category === current.category)
     .slice(0, limit);
