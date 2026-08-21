@@ -19518,7 +19518,36 @@ export function getPromptBySlug(slug: string): Prompt | undefined {
 
 export function getRelatedPrompts(slug: string, limit = 3): Prompt[] {
   const current = getPromptBySlug(slug);
-  if (!current) return [];
+  if (!current) return [  {
+    slug: "highly-stylized-3d-caricature-of-character",
+    title: "A Highly Stylized 3D Caricature of [Character]",
+    titleEn: "A Highly Stylized 3D Caricature of [Character]",
+    tagline: "A polished 3D caricature workflow with an oversized head, expressive features, playful exaggeration, and soft ambient lighting.",
+    taglineEn: "A polished 3D caricature workflow with an oversized head, expressive features, playful exaggeration, and soft ambient lighting.",
+    category: "character-design",
+    engines: ["other"],
+    difficulty: 2,
+    prompt: "A highly stylized 3D caricature of [Character], with an oversized head, expressive facial features, and playful exaggeration. Rendered in a smooth, polished style with clean materials and soft ambient lighting. Minimal background to emphasize the character's charm and presence.",
+    images: [
+      { src: "/prompts/highly-stylized-3d-caricature-of-character/01.jpg", alt: "A highly stylized 3D caricature example 1", width: 2688, isThumb: false },
+      { src: "/prompts/highly-stylized-3d-caricature-of-character/02.jpg", alt: "A highly stylized 3D caricature example 2", width: 2688, isThumb: false },
+      { src: "/prompts/highly-stylized-3d-caricature-of-character/03.jpg", alt: "A highly stylized 3D caricature example 3", width: 2688, isThumb: false },
+      { src: "/prompts/highly-stylized-3d-caricature-of-character/04.jpg", alt: "A highly stylized 3D caricature example 4", width: 2688, isThumb: false },
+    ],
+    source: {
+      platform: "X",
+      sourceUrl: "https://x.com/azed_ai/status/2061764041115320755",
+      statusId: "2061764041115320755",
+      authorName: "Amira Zairi (@azed_ai)",
+    },
+    dateAdded: "2026-08-21",
+    tags: ["3d", "caricature", "character-design", "reusable", "community"],
+    verdict: "A compact, reusable character template for turning a named subject into a polished 3D caricature.",
+    reusable: true,
+    language: "en",
+    structuredData: null,
+  },
+];
   return prompts
     .filter((p) => p.slug !== slug && p.category === current.category)
     .slice(0, limit);
