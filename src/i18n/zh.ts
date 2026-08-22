@@ -75,7 +75,7 @@ export const zh: Messages = {
   },
   // 引擎标签（产品名/平台名 — 中文翻译）
   engines: {
-    'nano-banana-pro': '纳米香蕉 Pro',
+    'nano-banana-pro': 'Nano Banana Pro',
     'gemini': 'Gemini',
     'chatgpt-image': 'ChatGPT 图像',
     'midjourney': 'Midjourney',
