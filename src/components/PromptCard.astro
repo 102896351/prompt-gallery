@@ -106,17 +106,15 @@ const tagLabel = (key: string) => (messages.tags as Record<string, string>)[key]
     overflow: hidden;
   }
   .prompt-card-cover {
+    aspect-ratio: 4 / 3;
     background: var(--bg-soft);
     overflow: hidden;
   }
   .prompt-card-cover :global(img) {
     width: 100%;
-    height: auto;
+    height: 100%;
     display: block;
-    /* object-fit: contain is set in global.css for #prompt-grid to
-       avoid cropping tall images. Carousel and detail page use
-       object-fit: cover via the same selector's cascade. */
-    object-fit: cover;
+    object-fit: contain;
     transition: transform 0.3s;
   }
   .prompt-card:hover .prompt-card-cover :global(img) {

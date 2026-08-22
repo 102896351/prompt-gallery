@@ -558,13 +558,8 @@ const optimizedH1 = `${displayTitle} — ${engineName} ${displayCatLabel} Prompt
     position: relative;
     display: block;
     width: 100%;
-    /* No aspect-ratio: tall images (vertical 9:16, square collages,
-       portrait crops) used to be force-cropped to 16:10 with
-       object-fit: cover, hiding the top/bottom of the actual
-       prompt output. The user explicitly asked for the forced
-       16:10 to go. Now image height is intrinsic; the wrapper
-       auto-sizes to the image. */
-    max-height: 85vh;
+    aspect-ratio: 4 / 3;
+    max-height: none;
     overflow: hidden;
     border-radius: var(--radius);
     background: var(--bg-soft);
@@ -576,8 +571,8 @@ const optimizedH1 = `${displayTitle} — ${engineName} ${displayCatLabel} Prompt
   .prompt-main-image:hover { border-color: var(--accent); }
   .prompt-main-image :global(img) {
     width: 100%;
-    height: auto;
-    max-height: 85vh;
+    height: 100%;
+    max-height: none;
     object-fit: contain;
     display: block;
     transition: transform 0.3s;
