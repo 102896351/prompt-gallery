@@ -295,17 +295,6 @@ const optimizedH1 = `${displayTitle} — ${engineName} ${displayCatLabel} Prompt
           <p style="margin: 0; color: var(--text);">{prompt.verdict}</p>
         </div>
 
-        <!-- FAQ 区块：用户长尾搜索 + Google 富媒体片段 -->
-        <section class="faq-block" aria-label="Frequently asked questions">
-          <h2>Frequently asked questions</h2>
-          {faqItems.map((item) => (
-            <details class="faq-item">
-              <summary>{item.q}</summary>
-              <p>{item.a}</p>
-            </details>
-          ))}
-        </section>
-
         <!-- 完整 prompt（隐藏的 copy source） -->
         <pre id="prompt-full" class="prompt-source" style="display:none;">{fullPrompt}</pre>
 
@@ -356,6 +345,17 @@ const optimizedH1 = `${displayTitle} — ${engineName} ${displayCatLabel} Prompt
             )}
           </>
         )}
+
+        <!-- FAQ 区块：用户长尾搜索 + Google 富媒体片段 -->
+        <section class="faq-block" aria-label="Frequently asked questions">
+          <h2>Frequently asked questions</h2>
+          {faqItems.map((item) => (
+            <details class="faq-item">
+              <summary>{item.q}</summary>
+              <p>{item.a}</p>
+            </details>
+          ))}
+        </section>
 
         <section class="source-section-hidden">
           <h2>Source</h2>

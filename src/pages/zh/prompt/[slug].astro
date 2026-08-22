@@ -283,17 +283,6 @@ const optimizedH1 = `${prompt.title} — ${engineName} ${displayCatLabel}提示�
           <p style="margin: 0; color: var(--text);">{prompt.verdict}</p>
         </div>
 
-        <!-- FAQ 区块：长尾搜索 + Google 富媒体片段 -->
-        <section class="faq-block" aria-label="常见问题">
-          <h2>常见问题</h2>
-          {faqItems.map((item) => (
-            <details class="faq-item">
-              <summary>{item.q}</summary>
-              <p>{item.a}</p>
-            </details>
-          ))}
-        </section>
-
         <pre id="prompt-full" class="prompt-source" style="display:none;">{fullPrompt}</pre>
 
         <h2>提示词内容</h2>
@@ -340,6 +329,17 @@ const optimizedH1 = `${prompt.title} — ${engineName} ${displayCatLabel}提示�
             )}
           </>
         )}
+
+        <!-- FAQ 区块：长尾搜索 + Google 富媒体片段 -->
+        <section class="faq-block" aria-label="常见问题">
+          <h2>常见问题</h2>
+          {faqItems.map((item) => (
+            <details class="faq-item">
+              <summary>{item.q}</summary>
+              <p>{item.a}</p>
+            </details>
+          ))}
+        </section>
 
         <section class="source-section-hidden">
           <h2>来源</h2>
