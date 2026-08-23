@@ -89,6 +89,32 @@ const taglineEnMap = {
   'hand-drawn-calendar-illustration': 'Hand-drawn calendar illustration with vintage style.',
 };
 
+function hasCJK(value) {
+  return /[\u3400-\u9fff]/.test(value || '');
+}
+
+function titleFromSlug(slug) {
+  const overrides = { ai: 'AI', api: 'API', cgi: 'CGI', gpt: 'GPT', id: 'ID', ios: 'iOS', lego: 'LEGO', pro: 'Pro', seo: 'SEO', sns: 'SNS', x: 'X', y2k: 'Y2K', '3d': '3D', '2d': '2D', '8k': '8K', '4k': '4K' };
+  const words = (slug || '').split('-');
+  const out = [];
+  for (let i = 0; i < words.length; i += 1) {
+    const word = words[i];
+    const lower = word.toLowerCase();
+    const next = (words[i + 1] || '').toLowerCase();
+    if (lower === 'nano' && (next === 'banana' || next === 'bnanana')) { out.push('Nano Banana'); i += 1; continue; }
+    if (lower === 'nanobanana') { out.push('Nano Banana'); continue; }
+    out.push(overrides[lower] || (word ? word.charAt(0).toUpperCase() + word.slice(1) : ''));
+  }
+  return out.filter(Boolean).join(' ') || 'AI Image Prompt';
+}
+
+function deriveTitleEn(candidate, mappedTitle) {
+  if (mappedTitle && !hasCJK(mappedTitle) && !mappedTitle.includes('纳米香蕉')) return mappedTitle;
+  if (candidate.titleEn && !hasCJK(candidate.titleEn) && !candidate.titleEn.includes('纳米香蕉')) return candidate.titleEn;
+  if (candidate.title && !hasCJK(candidate.title) && /^[\\x20-\\x7e]+$/.test(candidate.title)) return candidate.title;
+  return titleFromSlug(candidate.slug);
+}
+
 function esc(s) {
   return String(s == null ? '' : s)
     .replace(/\\/g, '\\\\')
@@ -130,7 +156,7 @@ function main() {
     return `  {
     slug: "${esc(slug)}",
     title: "${esc(c.title)}",
-    titleEn: "${esc(titleEnMap[slug] || c.title)}",
+    titleEn: "${esc(deriveTitleEn(c, titleEnMap[slug]))}",
     tagline: "${esc(pickTagline(c.prompt || c.rawBlock || ''))}",
     taglineEn: "${esc(taglineEnMap[slug] || 'AI image prompt.')}",
     category: "other",

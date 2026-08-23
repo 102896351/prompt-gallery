@@ -115,6 +115,7 @@ jobs:
           node scripts/validate-candidates.mjs \
             --input /tmp/curate/selected.json \
             --report /tmp/curate/candidate-validation.json
+          node scripts/validate-titles.mjs src/data/prompts.ts
 
       - name: Build to verify
         run: npm run build

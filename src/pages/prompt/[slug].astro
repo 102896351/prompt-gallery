@@ -6,6 +6,7 @@ import { prompts, promptCategories, getRelatedPrompts } from '../../data/prompts
 import { getCompatibleEngines } from '../../data/engines';
 import { getDetailSeoTitle, getDetailSeoDescription } from '../../utils/seo';
 import { en } from '../../i18n';
+import { safeEnglishTitle } from '../../utils/english-title';
 
 export function getStaticPaths() {
   return prompts.map((p) => ({
@@ -27,7 +28,7 @@ const verifiedEngineKeys = new Set(prompt.engines.filter((k: string) => k !== 'o
 // 用于模型识别：合并 prompt 原文 + rawBlock + structuredData
 const textForModelDetection = [prompt.prompt, prompt.rawBlock, fullPrompt].filter(Boolean).join('\n');
 // 英文页面：优先使用 titleEn（如果有），否则 fallback 到 title（原文）
-const displayTitle = prompt.titleEn || prompt.title;
+const displayTitle = safeEnglishTitle(prompt.titleEn, prompt.title, prompt.slug);
 // 英文页面：优先使用 taglineEn（如果有），否则 fallback 到 tagline（原文）
 const displayTagline = prompt.taglineEn || prompt.tagline;
 // 分类标签：英文页用 label

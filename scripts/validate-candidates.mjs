@@ -56,7 +56,9 @@ async function main() {
         else seen.set(entry.value, [candidate.slug]);
       }
     }
-    if (!candidate.slug || !/^\S+$/.test(candidate.slug) || /[\\/]/.test(candidate.slug)) errors.push({ slug: candidate.slug, reason: 'invalid slug' });
+    if (!candidate.slug || !/^\S+$/.test(candidate.slug) || /[\\/]/.test(candidate.slug)) {
+      errors.push({ slug: candidate.slug, reason: 'invalid slug' });
+    }
   }
   const duplicateUrls = [...seen.entries()].filter(([, slugs]) => slugs.length > 1).map(([url, slugs]) => ({ url, slugs }));
   const report = { candidates: candidates.length, invalid: errors, duplicateUrls, r2Base: PUBLIC_BASE };

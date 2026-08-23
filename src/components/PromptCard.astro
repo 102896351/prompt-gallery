@@ -9,6 +9,7 @@ import type { Prompt } from '../data/prompts';
 import { promptCategories } from '../data/prompts';
 import { getLocaleFromPath, en, zh, type Locale } from '../i18n';
 import PromptImage from './PromptImage.astro';
+import { safeEnglishTitle } from '../utils/english-title';
 
 interface Props {
   prompt: Prompt;
@@ -37,7 +38,9 @@ const locale: Locale = getLocaleFromPath(Astro.url.pathname);
 const messages = locale === 'zh' ? zh : en;
 const promptHref = locale === 'zh' ? `${base}/zh/prompt/${prompt.slug}` : `${base}/prompt/${prompt.slug}`;
 // 英文页面：优先 titleEn，fallback 到 title；中文页：保持 title
-const displayTitle = locale === 'en' ? (prompt.titleEn || prompt.title) : prompt.title;
+const displayTitle = locale === 'en'
+  ? safeEnglishTitle(prompt.titleEn, prompt.title, prompt.slug)
+  : prompt.title;
 // 英文页面描述不能直接显示中文 tagline；优先 taglineEn，
 // 若历史数据的 taglineEn 仍含中文，则用稳定的英文通用描述兜底。
 const hasCJK = (value: string) => /[一-鿿]/.test(value || '');
