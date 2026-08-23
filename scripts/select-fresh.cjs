@@ -45,12 +45,13 @@ function getExistingSlugs(promptsTsPath) {
 function main() {
   const opts = parseArgs();
   const limit = parseInt(opts.limit || '30', 10);
+  const excludedSlugs = new Set(String(opts['exclude-slugs'] || '').split(',').map(s => s.trim()).filter(Boolean));
 
   const candidates = JSON.parse(fs.readFileSync(opts.candidates, 'utf8')).candidates;
   const existingSlugs = getExistingSlugs(opts.existing);
   console.log(`[select-fresh] ${candidates.length} candidates, ${existingSlugs.size} existing slugs`);
 
-  const fresh = candidates.filter(c => !existingSlugs.has(c.slug));
+  const fresh = candidates.filter(c => !existingSlugs.has(c.slug) && !excludedSlugs.has(c.slug));
   console.log(`[select-fresh] ${fresh.length} fresh (not in existing)`);
 
   const scored = fresh

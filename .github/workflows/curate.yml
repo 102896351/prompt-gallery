@@ -1,0 +1,190 @@
+name: Curate prompts with R2
+
+on:
+  workflow_call:
+    inputs:
+      limit:
+        description: 'Minimum number of successfully migrated prompts (50-100)'
+        required: false
+        default: 50
+        type: number
+    secrets:
+      R2_ACCOUNT_ID:
+        required: true
+      R2_ACCESS_KEY_ID:
+        required: true
+      R2_SECRET_ACCESS_KEY:
+        required: true
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: 'Minimum number of successfully migrated prompts (50-100)'
+        required: false
+        default: '50'
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: prompt-curation
+  cancel-in-progress: false
+
+env:
+  R2_BUCKET: aiartspell
+  R2_PUBLIC_BASE_URL: https://media.aiartspell.art
+  R2_CONCURRENCY: '4'
+  R2_MAX_IMAGE_BYTES: '10485760'
+  R2_MAX_RETRIES: '3'
+
+jobs:
+  curate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate target
+        env:
+          REQUESTED_LIMIT: ${{ inputs.limit }}
+        run: |
+          LIMIT="$REQUESTED_LIMIT"
+          if ! [[ "$LIMIT" =~ ^[0-9]+$ ]] || [ "$LIMIT" -lt 50 ] || [ "$LIMIT" -gt 100 ]; then
+            echo "limit must be an integer between 50 and 100"
+            exit 1
+          fi
+          echo "CURATION_LIMIT=$LIMIT" >> "$GITHUB_ENV"
+
+      - name: Download latest community README
+        run: |
+          mkdir -p /tmp/curate
+          curl --fail --location --retry 3 --retry-all-errors \
+            --connect-timeout 15 --max-time 180 \
+            -A "prompt-gallery-bot/1.0" \
+            "https://raw.githubusercontent.com/Jermic/awesome-aiart-pics-prompts/master/README.md" \
+            -o /tmp/curate/readme.md
+          echo "Downloaded $(wc -c < /tmp/curate/readme.md) bytes"
+
+      - name: Extract full candidate pool
+        run: |
+          LOCAL_FILE=/tmp/curate/readme.md \
+          MAX_CANDIDATES=10000 \
+            node scripts/extract-prompts.mjs > /tmp/curate/candidates.json
+          echo "Extracted $(node -e "console.log(JSON.parse(require('fs').readFileSync('/tmp/curate/candidates.json','utf8')).candidates.length)") candidates"
+
+      - name: Select refill pool
+        run: |
+          POOL_LIMIT=$((CURATION_LIMIT * 5))
+          if [ "$POOL_LIMIT" -gt 1000 ]; then POOL_LIMIT=1000; fi
+          node scripts/select-fresh.cjs \
+            --candidates /tmp/curate/candidates.json \
+            --existing src/data/prompts.ts \
+            --exclude-slugs xiaohongshu-cover-design \
+            --output /tmp/curate/pool.json \
+            --limit "$POOL_LIMIT"
+          echo "Selected refill pool of $(node -e "console.log(require('/tmp/curate/pool.json').length)") candidates"
+
+      - name: Migrate until target is reached
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          node scripts/curate-until-target.mjs \
+            --input /tmp/curate/pool.json \
+            --output /tmp/curate/selected.json \
+            --manifest data/r2-assets.json \
+            --target "$CURATION_LIMIT" \
+            --workdir /tmp/curate/target
+          node scripts/validate-candidates.mjs \
+            --input /tmp/curate/selected.json \
+            --report /tmp/curate/candidate-validation.json
+
+      - name: Generate TypeScript fragments
+        run: |
+          node scripts/generate-fragments.cjs \
+            --input /tmp/curate/selected.json \
+            --output /tmp/curate/fragments.ts
+
+      - name: Inject fragments into prompts.ts
+        run: |
+          node scripts/inject-fragments.cjs \
+            --existing src/data/prompts.ts \
+            --fragments /tmp/curate/fragments.ts \
+            --output src/data/prompts.ts
+          node scripts/validate-titles.mjs src/data/prompts.ts
+
+      - name: Build to verify
+        run: npm run build
+
+      - name: Validate generated assets
+        run: |
+          node scripts/validate-dist-assets.mjs --dist dist --allowed-legacy 25
+          test -f dist/ads.txt
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if git diff --quiet -- src/data/prompts.ts data/r2-assets.json; then
+            echo "No changes were generated; refusing to publish less than target."
+            exit 1
+          fi
+          ADDED=$(git diff --unified=0 -- src/data/prompts.ts | grep -c '^+    slug:' || true)
+          if [ "$ADDED" -lt "$CURATION_LIMIT" ]; then
+            echo "Only $ADDED prompts appear in the diff; target was $CURATION_LIMIT."
+            exit 1
+          fi
+          echo "added=$ADDED" >> "$GITHUB_OUTPUT"
+          echo "Generated $ADDED new prompts."
+
+      - name: Generate PR body
+        run: |
+          node scripts/generate-pr-body.cjs \
+            --selected /tmp/curate/selected.json \
+            --added "${{ steps.check_changes.outputs.added }}" \
+            --cadence daily \
+            --output /tmp/pr-body.md
+          cat /tmp/curate/target.report.json >> /tmp/pr-body.md
+
+      - name: Create Pull Request
+        id: create_pr
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ github.token }}
+          commit-message: 'chore: curate ${{ steps.check_changes.outputs.added }} prompts (daily)'
+          title: 'Daily curation: ${{ steps.check_changes.outputs.added }} R2-backed prompts'
+          body-path: /tmp/pr-body.md
+          branch: curation/daily-${{ github.run_id }}
+          delete-branch: true
+          add-paths: |
+            src/data/prompts.ts
+            data/r2-assets.json
+
+      - name: Auto-merge curation PR
+        if: steps.create_pr.outputs.pull-request-number != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr merge "${{ steps.create_pr.outputs.pull-request-number }}" \
+            --auto --squash --delete-branch
+
+      - name: Upload curation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: curate-${{ github.run_id }}
+          path: /tmp/curate/
+          retention-days: 14
