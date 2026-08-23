@@ -119,7 +119,7 @@ function main() {
       src: i.src,
       alt: i.alt || c.title,
       width: i.width || 500,
-      isThumb: false
+      isThumb: Boolean(i.isThumb || i.variant === 'thumb')
     }));
     const imgsLiteral = imgs.map(i => `{"src":"${esc(i.src)}","alt":"${esc(i.alt)}","width":${i.width},"isThumb":${i.isThumb ? 'true' : 'false'}}`).join(',');
     const tagsLiteral = ['fresh', 'community'].map(t => `"${esc(t)}"`).join(',');

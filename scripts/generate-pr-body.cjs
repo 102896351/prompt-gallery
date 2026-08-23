@@ -35,7 +35,8 @@ function main() {
     byAuthor[a].push(c);
   }
 
-  let md = `## Weekly Curation: ${added} new prompts\n\n`;
+  const cadence = opts.cadence || 'weekly';
+  let md = `## ${cadence === 'daily' ? 'Daily' : 'Weekly'} Curation: ${added} new prompts\n\n`;
   md += `Auto-curated from [Jermic/awesome-aiart-pics-prompts](https://github.com/Jermic/awesome-aiart-pics-prompts).\n\n`;
   md += `### Stats\n`;
   md += `- **Added**: ${added} new prompts\n`;
@@ -53,7 +54,7 @@ function main() {
   }
 
   md += `### Review checklist\n\n`;
-  md += `- [ ] Verify image URLs load (img1.aiart.pics)\n`;
+  md += `- [ ] Verify image URLs load (media.aiartspell.art)\n`;
   md += `- [ ] Verify author attribution preserved\n`;
   md += `- [ ] Verify no NSFW / spammy content\n`;
   md += `- [ ] Verify EN titleEn + taglineEn are not Chinese\n`;

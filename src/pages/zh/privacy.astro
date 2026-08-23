@@ -30,7 +30,7 @@ import Base from '../../layouts/Base.astro';
 
         <h2>4. 嵌入资源</h2>
         <p>
-          所有图片直接从原始图床（img1.aiart.pics）加载。当你浏览 prompt 详情页时，浏览器会向该 CDN 请求图片，CDN 会按其隐私政策看到你的 IP 地址。
+          大多数提示词图片通过 Cloudflare R2 媒体域名（media.aiartspell.art）提供。少量历史条目在原图源不可用期间可能仍保留原始图床地址。浏览提示词页面时，浏览器会向相应 CDN 请求图片，该服务可能根据其隐私政策看到你的 IP 地址。
         </p>
 
         <h2>5. 你的权利</h2>

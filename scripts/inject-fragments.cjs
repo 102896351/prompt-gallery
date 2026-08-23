@@ -28,15 +28,13 @@ function main() {
   let src = fs.readFileSync(opts.existing, 'utf8');
   let fragments = fs.readFileSync(opts.fragments, 'utf8');
 
-  // fragments 应该以 ",\n" 开头（确保前一个对象后有逗号）
-  if (!fragments.startsWith(',')) {
-    fragments = ',\n' + fragments;
-  }
+  // Normalize the fragment boundary so an existing trailing comma is not doubled.
+  fragments = fragments.replace(/^\s*,\s*/, '').replace(/\s+$/, '');
 
-  // 找最后一个 ];
-  const lastSemi = src.lastIndexOf('];');
+  const markers = [...src.matchAll(/^\];\s*$/gm)];
+  const lastSemi = markers.length ? markers[markers.length - 1].index : -1;
   if (lastSemi === -1) {
-    throw new Error('Could not find ]; array end marker in prompts.ts');
+    throw new Error('Could not find prompts array end marker in prompts.ts');
   }
 
   // 在 ] 前插入 fragments。修复之前的"双 }" bug：
@@ -44,13 +42,11 @@ function main() {
   const before = src.slice(0, lastSemi);
   const after = src.slice(lastSemi);
 
-  // 确保 ] 前的最后一个 } 后面有逗号
+  // Add exactly one separator between the existing last object and new fragments.
   let trimmedBefore = before.replace(/\s+$/, '');
-  if (trimmedBefore.endsWith('}')) {
-    trimmedBefore += ',';
-  }
+  if (!trimmedBefore.endsWith(',')) trimmedBefore += ',';
 
-  const merged = trimmedBefore + fragments + '\n' + after;
+  const merged = trimmedBefore + '\n' + fragments + '\n' + after;
   fs.writeFileSync(opts.output, merged, 'utf8');
   console.log(`[inject-fragments] merged ${fragments.split('slug:').length - 1} entries`);
   console.log(`[inject-fragments] new file size: ${merged.length} bytes`);

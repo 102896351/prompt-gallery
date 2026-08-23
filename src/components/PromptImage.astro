@@ -12,7 +12,7 @@ interface Props {
   // 性能优化：首屏可见的图（hero / featured 头部 / 详情页主图）应传 eager + high
   eager?: boolean; // 默认 false (lazy)；首屏图传 true
   fetchpriority?: 'high' | 'low' | 'auto'; // 默认 auto；首屏关键图传 'high'
-  // 外链图（img1.aiart.pics）防防盗链参数（_nc_gid / oh / oe）污染：传 no-referrer
+  // 外链图统一通过 R2 自定义域名提供；保留 no-referrer 以避免第三方参数污染。
   referrerpolicy?: 'no-referrer' | 'origin' | 'strict-origin-when-cross-origin';
 }
 

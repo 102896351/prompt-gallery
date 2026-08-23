@@ -42,9 +42,7 @@ import Base from '../layouts/Base.astro';
 
         <h2>4. Embedded resources</h2>
         <p>
-          All images are loaded directly from the original source CDN (img1.aiart.pics).
-          When you view a prompt page, your browser requests these images from that CDN,
-          which sees your IP address per its own privacy policy.
+          Most prompt images are served from our Cloudflare R2 media domain (media.aiartspell.art). A small number of legacy entries may still reference their original source CDN while those source assets are unavailable. When you view a prompt page, your browser requests these images from the relevant CDN, which may see your IP address under its own privacy policy.
         </p>
 
         <h2>5. Your rights</h2>

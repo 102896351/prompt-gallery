@@ -11,10 +11,14 @@
     "astro": "astro",
     "extract": "node scripts/extract-prompts.mjs",
     "curate": "node scripts/curate-prompts.mjs",
-    "curate:append": "node scripts/curate-prompts.mjs --mode append"
+    "curate:append": "node scripts/curate-prompts.mjs --mode append",
+    "assets:migrate": "node scripts/migrate-assets.mjs",
+    "assets:validate": "node scripts/validate-candidates.mjs",
+    "assets:validate-dist": "node scripts/validate-dist-assets.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.2.1",
+    "@aws-sdk/client-s3": "^3.1116.0",
     "astro": "^5.0.0"
   },
   "devDependencies": {

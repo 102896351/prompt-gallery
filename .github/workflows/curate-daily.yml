@@ -6,66 +6,145 @@ on:
   schedule:
     - cron: '0 2 * * *'
   workflow_dispatch:
+    inputs:
+      limit:
+        description: 'Number of new prompts to add (max 100)'
+        required: false
+        default: '30'
 
 permissions:
   contents: write
   pull-requests: write
 
+concurrency:
+  group: prompt-curation
+  cancel-in-progress: false
+
 jobs:
   curate:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 20
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: npm
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Download latest community data
+      - name: Download latest community README
         run: |
-          # TODO: 替换为您自己的数据源
-          curl -fsSL \
+          mkdir -p /tmp/curate
+          curl --fail --location --retry 3 --retry-all-errors \
+            --connect-timeout 15 --max-time 120 \
             -A "prompt-gallery-bot/1.0" \
-            "${{ secrets.DATA_SOURCE_URL }}" \
-            -o /tmp/data.md
-          echo "Downloaded $(wc -c < /tmp/data.md) bytes"
+            "https://raw.githubusercontent.com/Jermic/awesome-aiart-pics-prompts/master/README.md" \
+            -o /tmp/curate/readme.md
+          echo "Downloaded $(wc -c < /tmp/curate/readme.md) bytes"
 
       - name: Extract candidates
         run: |
-          LOCAL_FILE=/tmp/data.md MAX_CANDIDATES=1500 \
-            node scripts/extract-prompts.mjs > src/data/prompts.candidates.json
+          LOCAL_FILE=/tmp/curate/readme.md \
+          MAX_CANDIDATES=1500 \
+            node scripts/extract-prompts.mjs > /tmp/curate/candidates.json
 
-      - name: Curate new prompts (append mode)
-        id: curate
+      - name: Select fresh prompts
+        env:
+          CURATION_LIMIT: ${{ inputs.limit || '30' }}
         run: |
-          node scripts/curate-prompts.mjs \
-            --mode append \
-            --limit 500 \
-            --input src/data/prompts.candidates.json \
-            --output src/data/prompts.ts \
-            --pr-body /tmp/pr-body.md 2>&1 | tee /tmp/curate.log
+          LIMIT="$CURATION_LIMIT"
+          if ! [[ "$LIMIT" =~ ^[0-9]+$ ]] || [ "$LIMIT" -lt 1 ] || [ "$LIMIT" -gt 100 ]; then
+            echo "limit must be an integer between 1 and 100"
+            exit 1
+          fi
+          node scripts/select-fresh.cjs \
+            --candidates /tmp/curate/candidates.json \
+            --existing src/data/prompts.ts \
+            --output /tmp/curate/selected.json \
+            --limit "$LIMIT"
+
+      - name: Upload and verify images in R2
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: aiartspell
+          R2_PUBLIC_BASE_URL: https://media.aiartspell.art
+          R2_CONCURRENCY: '4'
+          R2_MAX_IMAGE_BYTES: '10485760'
+        run: |
+          node scripts/migrate-assets.mjs \
+            --input /tmp/curate/selected.json \
+            --output /tmp/curate/selected-r2.json \
+            --manifest data/r2-assets.json \
+            --report /tmp/curate/r2-report.json
+          mv /tmp/curate/selected-r2.json /tmp/curate/selected.json
+
+      - name: Generate TypeScript fragments
+        run: |
+          : > /tmp/curate/fragments.ts
+          if [ ! -s /tmp/curate/selected.json ]; then
+            echo "No verified new prompts to add; exiting early."
+            exit 0
+          fi
+          node scripts/generate-fragments.cjs \
+            --input /tmp/curate/selected.json \
+            --output /tmp/curate/fragments.ts
+
+      - name: Inject fragments into prompts.ts
+        run: |
+          if [ ! -s /tmp/curate/fragments.ts ]; then
+            echo "No fragments to inject."
+            exit 0
+          fi
+          node scripts/inject-fragments.cjs \
+            --existing src/data/prompts.ts \
+            --fragments /tmp/curate/fragments.ts \
+            --output src/data/prompts.ts
+
+      - name: Validate candidate assets
+        run: |
+          node scripts/validate-candidates.mjs \
+            --input /tmp/curate/selected.json \
+            --report /tmp/curate/candidate-validation.json
+
+      - name: Build to verify
+        run: npm run build
+
+      - name: Validate generated assets
+        run: |
+          node scripts/validate-dist-assets.mjs --dist dist --allowed-legacy 25
+          test -f dist/ads.txt
 
       - name: Check for changes
         id: check_changes
         run: |
-          if git diff --quiet src/data/prompts.ts; then
-            echo "changed=false" >> $GITHUB_OUTPUT
-            echo "No new prompts; skipping PR creation."
+          if git diff --quiet -- src/data/prompts.ts data/r2-assets.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No new prompts to curate."
           else
-            echo "changed=true" >> $GITHUB_OUTPUT
-            NEW_COUNT=$(grep -c '^  {' src/data/prompts.ts || echo "0")
-            EXISTING_COUNT=$(git show HEAD:src/data/prompts.ts | grep -c '^  {' || echo "0")
-            ADDED=$((NEW_COUNT - EXISTING_COUNT))
-            echo "added=$ADDED" >> $GITHUB_OUTPUT
-            echo "Detected $ADDED new prompts."
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            NEW_COUNT=$(git diff --unified=0 -- src/data/prompts.ts | grep -c '^+    slug:' || true)
+            echo "added=$NEW_COUNT" >> "$GITHUB_OUTPUT"
+            echo "Detected $NEW_COUNT new prompts."
           fi
+
+      - name: Generate PR body
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          node scripts/generate-pr-body.cjs \
+            --selected /tmp/curate/selected.json \
+            --added "${{ steps.check_changes.outputs.added }}" \
+            --cadence daily \
+            --output /tmp/pr-body.md
 
       - name: Create Pull Request
         if: steps.check_changes.outputs.changed == 'true'
@@ -79,4 +158,12 @@ jobs:
           delete-branch: true
           add-paths: |
             src/data/prompts.ts
-            src/data/prompts.candidates.json
+            data/r2-assets.json
+
+      - name: Upload curation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: curate-logs
+          path: /tmp/curate/
+          retention-days: 7
