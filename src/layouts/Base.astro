@@ -186,7 +186,7 @@ const hreflangs: Array<{ lang: string; href: string }> = isErrorPage
           <a href={`${localePrefix}collections`}>{t.nav.collections}</a>
           <a href={`${localePrefix}#featured`}>{t.nav.featured}</a>
           <a href={`${localePrefix}tools`}>{t.nav.tools}</a>
-          <a href={`${localePrefix}tools/agnes-image/`} class="nav-image-generator">{t.nav.imageGenerator}</a>
+          <!-- AI 生图入口暂时隐藏，页面仍可通过直达 URL 访问 -->
           <a href={`${localePrefix}about`}>{t.nav.about}</a>
           <a href={otherLocaleHref} class="lang-switcher" aria-label={`Switch language to ${locale === 'zh' ? 'English' : '中文'}`}>
             {t.langSwitcher.switchTo}
