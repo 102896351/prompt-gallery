@@ -15,7 +15,8 @@
     "assets:migrate": "node scripts/migrate-assets.mjs",
     "assets:validate": "node scripts/validate-candidates.mjs",
     "assets:validate-dist": "node scripts/validate-dist-assets.mjs",
-    "assets:target": "node scripts/curate-until-target.mjs"
+    "assets:target": "node scripts/curate-until-target.mjs",
+    "agnes:local": "node scripts/agnes-local-api.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.2.1",

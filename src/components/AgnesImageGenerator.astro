@@ -1,0 +1,1304 @@
+---
+interface Props {
+  locale?: 'en' | 'zh';
+}
+
+const { locale = 'en' } = Astro.props;
+const isZh = locale === 'zh';
+const apiUrl = import.meta.env.PUBLIC_AGNES_API_URL
+  || (import.meta.env.DEV ? (import.meta.env.PUBLIC_AGNES_LOCAL_API_URL || '') : '');
+const modelOptions = [
+  { id: 'agnes-image-2.1-flash', label: 'Agnes Image 2.1 Flash' },
+];
+const defaultModel = modelOptions[0].id;
+const copy = isZh
+  ? {
+      titleSuffix: '生图工作台',
+      subtitle: '把灵感变成画面。无需登录即可使用 Agnes Image 2.1 Flash，开始你的下一次创作。',
+      badge: '无需登录',
+      modelLabel: '当前模型',
+      txt2img: '文生图',
+      img2img: '图生图',
+      create: '创建图像',
+      promptLabel: '图片描述',
+      placeholder: '例如：A cinematic editorial portrait in warm studio light, highly detailed',
+      img2imgPlaceholder: '描述你想要的修改，例如：Transform into a cyberpunk night scene',
+      promptHint: '清晰描述主体、风格、光线和构图',
+      example: '填入示例 Prompt',
+      promptCount: '0 / 4000',
+      inspiration: '灵感标签',
+      chips: ['电影感', '暖色灯光', '高细节'],
+      referenceLabel: '参考图片',
+      optional: '可选',
+      uploadTitle: '添加参考图',
+      uploadHint: '拖拽图片到这里，或点击上传',
+      uploadDragHint: '松开即可添加参考图',
+      uploadDropHint: '正在读取参考图…',
+      uploadTypes: 'JPG、PNG、WebP · 每张最多 5MB，最多 4 张',
+      imageRequired: '图生图至少需要一张参考图片。',
+      aspectLabel: '画面比例',
+      square: '正方形',
+      landscape: '横向',
+      portrait: '竖向',
+      generate: '生成图片',
+      generating: '正在生成…',
+      reset: '清空',
+      resultTitle: '生成结果',
+      empty: '生成的图片会显示在这里。',
+      download: '下载图片',
+      retry: '再次生成',
+      localDisabled: '本地 API 尚未启用，请先启动本地服务。',
+      ready: '准备就绪',
+      waitingTitle: '你的画面将在这里出现',
+      waitingDescription: '在左侧写下一个想法，开始你的下一次创作',
+      loadingTitle: '正在生成图片',
+      loadingDescription: 'Agnes AI 正在处理，请稍候…',
+      errorTitle: '图片生成失败',
+      errorDescription: '请检查提示词或稍后重试',
+      sending: '正在调用 Agnes AI…',
+      success: '生成完成',
+      failure: '生成失败',
+      generatedBy: '图片由 Agnes AI 生成。本站不建立账号，也不保存服务端用户记录。',
+      imageError: '返回的图片无法显示，请重试。',
+      fileTooLarge: '文件超过 5MB，请选择更小的图片。',
+      fileBadType: '不支持的图片类型，请选择 JPG、PNG 或 WebP。',
+      fileTooMany: '最多上传 4 张图片。',
+      fileTotalTooLarge: '参考图片总大小不能超过 12MB。',
+      promptTooLong: '提示词不能超过 4000 个字符。',
+      privacy: '上传图片和预览仅在当前浏览器中进行。点击生成后，提示词和图片会通过配置的 API 代理发送给 Agnes AI 处理；本站不建立用户账号，也不保存服务端用户记录。请勿提交私人照片、身份证、商业机密、医疗信息或其他敏感内容。',
+      canvas: '画布',
+      zoom: '放大预览',
+      closeZoom: '关闭预览',
+      historyTitle: '最近创作',
+      historyEmpty: '还没有生成记录。生成图片后会自动保存在此浏览器中。',
+      clearHistory: '清空历史',
+      more: '更多',
+      usePrompt: '重新使用提示词',
+      downloadHistory: '下载',
+      deleteHistory: '删除',
+      saved: '已保存到本地历史',
+      storageNote: '历史记录只保存在当前浏览器，不会上传到服务器。',
+    }
+  : {
+      titleSuffix: 'Image Studio',
+      subtitle: 'Turn an idea into an image. Use Agnes Image 2.1 Flash without an account and start your next creation.',
+      badge: 'NO ACCOUNT',
+      modelLabel: 'CURRENT MODEL',
+      txt2img: 'Text to Image',
+      img2img: 'Image to Image',
+      create: 'Create image',
+      promptLabel: 'Image prompt',
+      placeholder: 'Example: A cinematic editorial portrait in warm studio light, highly detailed',
+      img2imgPlaceholder: 'Describe the edit, e.g.: Transform into a cyberpunk night scene',
+      promptHint: 'Describe the subject, style, light, and composition',
+      example: 'Use example prompt',
+      promptCount: '0 / 4000',
+      inspiration: 'Inspiration tags',
+      chips: ['Cinematic', 'Warm light', 'Highly detailed'],
+      referenceLabel: 'Reference image',
+      optional: 'OPTIONAL',
+      uploadTitle: 'Add a reference',
+      uploadHint: 'Drop an image here, or click to upload',
+      uploadDragHint: 'Release to add your reference image',
+      uploadDropHint: 'Reading reference image…',
+      uploadTypes: 'JPG, PNG, WebP · Up to 5MB each, 4 images max',
+      imageRequired: 'Image-to-image needs at least one reference image.',
+      aspectLabel: 'Aspect ratio',
+      square: 'Square',
+      landscape: 'Landscape',
+      portrait: 'Portrait',
+      generate: 'Generate image',
+      generating: 'Generating…',
+      reset: 'Clear',
+      resultTitle: 'Generation result',
+      empty: 'Your generated image will appear here.',
+      download: 'Download image',
+      retry: 'Generate again',
+      localDisabled: 'The local API is not enabled. Start the local service first.',
+      ready: 'Ready',
+      waitingTitle: 'Your image will appear here',
+      waitingDescription: 'Write an idea on the left to start your next creation',
+      loadingTitle: 'Generating image',
+      loadingDescription: 'Agnes AI is processing your request…',
+      errorTitle: 'Generation failed',
+      errorDescription: 'Check the prompt or try again later',
+      sending: 'Calling Agnes AI…',
+      success: 'Generation complete',
+      failure: 'Generation failed',
+      generatedBy: 'Generated by Agnes AI. This site does not create accounts or store server-side user records.',
+      imageError: 'The returned image could not be displayed. Try again.',
+      fileTooLarge: 'File exceeds 5MB. Please choose a smaller image.',
+      fileBadType: 'Unsupported image type. Please choose JPG, PNG, or WebP.',
+      fileTooMany: 'Maximum 4 images allowed.',
+      fileTotalTooLarge: 'Reference images must total 12MB or less.',
+      promptTooLong: 'Prompt must be 4000 characters or fewer.',
+      privacy: 'Image selection and preview stay in this browser. When you generate, your prompt and images are sent through the configured API proxy to Agnes AI for processing. This site does not create user accounts or store server-side user records. Do not submit private photos, identity documents, trade secrets, medical information, or other sensitive content.',
+      canvas: 'Canvas',
+      zoom: 'Open enlarged preview',
+      closeZoom: 'Close preview',
+      historyTitle: 'Recent creations',
+      historyEmpty: 'No generated images yet. New results are saved in this browser.',
+      clearHistory: 'Clear history',
+      more: 'More',
+      usePrompt: 'Use prompt',
+      downloadHistory: 'Download',
+      deleteHistory: 'Delete',
+      saved: 'Saved to local history',
+      storageNote: 'History stays in this browser and is not uploaded to the server.',
+    };
+---
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<section
+  class="agnes-tool"
+  data-locale={locale}
+  data-api-url={apiUrl}
+  data-enabled={apiUrl ? 'true' : 'false'}
+  data-model-default={defaultModel}
+  data-image-error={copy.imageError}
+  data-file-too-large={copy.fileTooLarge}
+  data-file-bad-type={copy.fileBadType}
+  data-file-too-many={copy.fileTooMany}
+  data-file-total-too-large={copy.fileTotalTooLarge}
+  data-upload-hint={copy.uploadHint}
+  data-upload-drag-hint={copy.uploadDragHint}
+  data-upload-drop-hint={copy.uploadDropHint}
+  data-image-required={copy.imageRequired}
+  data-prompt-too-long={copy.promptTooLong}
+  data-waiting-title={copy.waitingTitle}
+  data-waiting-description={copy.waitingDescription}
+  data-loading-title={copy.loadingTitle}
+  data-loading-description={copy.loadingDescription}
+  data-error-title={copy.errorTitle}
+  data-error-description={copy.errorDescription}
+  data-status-ready={copy.ready}
+  data-status-sending={copy.sending}
+  data-local-disabled={copy.localDisabled}
+  data-status-success={copy.success}
+  data-status-failure={copy.failure}
+  data-history-empty-text={copy.historyEmpty}
+  data-canvas-label={copy.canvas}
+>
+  <div class="agnes-container">
+    <header class="agnes-intro">
+      <div class="agnes-intro-copy">
+        <div class="agnes-kicker">
+          <span class="agnes-badge">{copy.badge}</span>
+          <span class="agnes-kicker-label">AI IMAGE GENERATION</span>
+        </div>
+        <h1><span class="agnes-gradient">Agnes AI</span> {copy.titleSuffix}</h1>
+        <p>{copy.subtitle}</p>
+      </div>
+      <div class="agnes-model-card">
+        <span class="agnes-model-icon" aria-hidden="true">✦</span>
+        <div class="agnes-model-field">
+          <label for={`agnes-model-${locale}`}>{copy.modelLabel}</label>
+          <div class="agnes-model-select-wrap">
+            <select id={`agnes-model-${locale}`} class="agnes-model-select" data-model aria-label={copy.modelLabel}>
+              {modelOptions.map((model) => <option value={model.id}>{model.label}</option>)}
+            </select>
+            <span class="agnes-select-chevron" aria-hidden="true">⌄</span>
+          </div>
+        </div>
+        <span class="agnes-status-dot" aria-hidden="true"></span>
+      </div>
+    </header>
+
+    <div class="agnes-workspace">
+      <form class="agnes-sidebar agnes-form" data-generator-form>
+        <div class="agnes-panel-heading">
+          <h2>{copy.create}</h2>
+          <span class="agnes-ready"><i aria-hidden="true"></i>{copy.ready}</span>
+        </div>
+
+        <div class="agnes-tabs" data-tabs role="tablist" aria-label={isZh ? '生成模式' : 'Generation mode'}>
+          <button type="button" class="agnes-tab active" data-mode="txt2img" role="tab" aria-selected="true">{copy.txt2img}</button>
+          <button type="button" class="agnes-tab" data-mode="img2img" role="tab" aria-selected="false">{copy.img2img}</button>
+        </div>
+
+        <div class="agnes-form-group">
+          <div class="agnes-field-label">
+            <label for={`agnes-prompt-${locale}`}>{copy.promptLabel}</label>
+            <span data-counter>{copy.promptCount}</span>
+          </div>
+          <textarea
+            id={`agnes-prompt-${locale}`}
+            name="prompt"
+            maxlength="4000"
+            required
+            placeholder={copy.placeholder}
+            data-placeholder-txt={copy.placeholder}
+            data-placeholder-img={copy.img2imgPlaceholder}
+          ></textarea>
+          <div class="agnes-form-row">
+            <button class="agnes-example" type="button" data-example>{copy.example}</button>
+            <span class="agnes-field-hint"><span aria-hidden="true">✦</span>{copy.promptHint}</span>
+          </div>
+        </div>
+
+        <div class="agnes-chip-row" aria-label={copy.inspiration}>
+          <span class="agnes-chip-label">{copy.inspiration}</span>
+          {copy.chips.map((chip, index) => <span class:list={['agnes-chip', { 'is-highlighted': index === 0 }]}>{chip}</span>)}
+        </div>
+
+        <div class="agnes-upload-section" data-upload-section hidden>
+          <div class="agnes-field-label">
+            <label>{copy.referenceLabel}</label>
+            <span>{copy.optional}</span>
+          </div>
+          <div class="agnes-dropzone" data-dropzone>
+            <input type="file" accept="image/jpeg,image/png,image/webp" multiple data-file-input hidden />
+            <div class="agnes-dropzone-icon" aria-hidden="true">＋</div>
+            <div class="agnes-dropzone-copy">
+              <strong>{copy.uploadTitle}</strong>
+              <p class="agnes-dropzone-text">{copy.uploadHint}</p>
+              <small>{copy.uploadTypes}</small>
+            </div>
+            <span class="agnes-dropzone-count" data-file-count hidden></span>
+          </div>
+          <div class="agnes-file-preview" data-file-preview></div>
+        </div>
+
+        <fieldset class="agnes-ratio-group">
+          <legend>{copy.aspectLabel}</legend>
+          <div class="agnes-ratio-grid">
+            <label class="agnes-ratio is-selected">
+              <input type="radio" name={`aspect-${locale}`} value="1:1" checked />
+              <span class="agnes-ratio-shape ratio-square"></span>
+              <strong>1:1</strong>
+              <small>{copy.square}</small>
+            </label>
+            <label class="agnes-ratio">
+              <input type="radio" name={`aspect-${locale}`} value="16:9" />
+              <span class="agnes-ratio-shape ratio-landscape"></span>
+              <strong>16:9</strong>
+              <small>{copy.landscape}</small>
+            </label>
+            <label class="agnes-ratio">
+              <input type="radio" name={`aspect-${locale}`} value="9:16" />
+              <span class="agnes-ratio-shape ratio-portrait"></span>
+              <strong>9:16</strong>
+              <small>{copy.portrait}</small>
+            </label>
+          </div>
+        </fieldset>
+
+        <div class="agnes-sidebar-footer">
+          <div class="agnes-actions">
+            <button class="agnes-primary" type="submit" data-submit disabled={!apiUrl}><span aria-hidden="true">✦</span>{copy.generate}</button>
+            <button class="agnes-secondary" type="button" data-reset>{copy.reset}</button>
+          </div>
+          <p class="agnes-status" data-status aria-live="polite">{apiUrl ? copy.ready : copy.localDisabled}</p>
+          <p class="agnes-disclaimer">{copy.privacy}</p>
+        </div>
+      </form>
+
+      <section class="agnes-canvas" aria-labelledby={`agnes-result-${locale}`}>
+        <section class="agnes-result">
+          <div class="agnes-stage-heading">
+            <h2 id={`agnes-result-${locale}`}>{copy.resultTitle}</h2>
+            <span class="agnes-result-state" data-result-state>{copy.ready}</span>
+          </div>
+          <div class="agnes-preview" data-preview>
+            <div class="agnes-preview-canvas" data-preview-canvas data-ratio="1:1">
+              <div class="agnes-preview-grid" aria-hidden="true"></div>
+              <div class="agnes-preview-glow agnes-preview-glow-one" aria-hidden="true"></div>
+              <div class="agnes-preview-glow agnes-preview-glow-two" aria-hidden="true"></div>
+              <div class="agnes-preview-empty" data-empty>
+                <img class="agnes-preview-reference" data-reference-image alt="" hidden />
+                <div class="agnes-preview-icon" aria-hidden="true">✦</div>
+                <strong data-empty-title>{copy.waitingTitle}</strong>
+                <p data-empty-description>{copy.waitingDescription}</p>
+                <span class="agnes-canvas-ratio" data-preview-ratio>{copy.canvas} 1:1</span>
+              </div>
+              <img data-image alt={copy.resultTitle} hidden tabindex="0" role="button" aria-label={copy.zoom} />
+              <span class="agnes-canvas-corner agnes-canvas-corner-tl" aria-hidden="true"></span>
+              <span class="agnes-canvas-corner agnes-canvas-corner-tr" aria-hidden="true"></span>
+              <span class="agnes-canvas-corner agnes-canvas-corner-bl" aria-hidden="true"></span>
+              <span class="agnes-canvas-corner agnes-canvas-corner-br" aria-hidden="true"></span>
+            </div>
+          </div>
+          <div class="agnes-result-actions" data-result-actions hidden>
+            <a class="agnes-primary" data-download download="agnes-image.png" href="#"><span aria-hidden="true">↓</span>{copy.download}</a>
+            <button class="agnes-secondary" type="button" data-retry><span aria-hidden="true">↻</span>{copy.retry}</button>
+          </div>
+          <p class="agnes-generated-by">{copy.generatedBy}</p>
+        </section>
+      </section>
+    </div>
+
+    <section class="agnes-history" data-history-panel aria-labelledby={`agnes-history-${locale}`} data-history-empty-text={copy.historyEmpty} data-history-more-text={copy.more} data-history-use-text={copy.usePrompt} data-history-download-text={copy.downloadHistory} data-history-delete-text={copy.deleteHistory} data-history-clear-text={copy.clearHistory} data-history-txt-label={copy.txt2img} data-history-img-label={copy.img2img} data-history-saved={copy.saved}>
+      <div class="agnes-history-head">
+        <div>
+          <h2 id={`agnes-history-${locale}`}>{copy.historyTitle}</h2>
+          <p>{copy.storageNote}</p>
+        </div>
+        <button type="button" class="agnes-secondary" data-history-clear hidden>{copy.clearHistory}</button>
+      </div>
+      <p class="agnes-history-empty" data-history-empty>{copy.historyEmpty}</p>
+      <div class="agnes-history-grid" data-history-list></div>
+    </section>
+  </div>
+
+  <div class="agnes-lightbox" data-lightbox hidden role="dialog" aria-modal="true" aria-label={copy.zoom}>
+    <button type="button" class="agnes-lightbox-backdrop" data-lightbox-close aria-label={copy.closeZoom}></button>
+    <div class="agnes-lightbox-panel">
+      <button type="button" class="agnes-lightbox-close" data-lightbox-close aria-label={copy.closeZoom} title={copy.closeZoom}>×</button>
+      <img class="agnes-lightbox-image" data-lightbox-image alt="" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .agnes-tool { --agnes-panel-width: 370px; min-height: calc(100vh - 64px); padding: 52px 0 76px; background: radial-gradient(circle at 87% 7%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 25rem), var(--bg); }
+  .agnes-container { width: min(var(--maxw), calc(100% - 48px)); margin: 0 auto; }
+  .agnes-intro { display: flex; align-items: flex-end; justify-content: space-between; gap: 28px; margin-bottom: 34px; }
+  .agnes-kicker { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .agnes-badge, .agnes-kicker-label, .agnes-ready, .agnes-result-state { display: inline-flex; align-items: center; white-space: nowrap; font-size: 10px; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; }
+  .agnes-badge { padding: 5px 9px; border-radius: 999px; background: var(--accent-bg); color: var(--accent); }
+  .agnes-kicker-label { color: var(--text-muted); }
+  .agnes-intro h1 { margin: 0 0 10px; color: var(--text); font-size: clamp(32px, 5vw, 52px); font-weight: 800; letter-spacing: -.045em; line-height: 1.08; }
+  .agnes-gradient { background: linear-gradient(135deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .agnes-intro p { max-width: 680px; margin: 0; color: var(--text-soft); font-size: 16px; line-height: 1.65; }
+  .agnes-model-card { display: flex; flex: 0 0 auto; align-items: center; gap: 10px; min-width: 252px; padding: 10px 13px; border: 1px solid var(--border); border-radius: var(--radius); background: color-mix(in srgb, var(--bg-card) 88%, transparent); box-shadow: var(--shadow-sm); }
+  .agnes-model-icon { display: grid; width: 29px; height: 29px; place-items: center; border-radius: 9px; background: var(--accent-bg); color: var(--accent); font-size: 16px; }
+  .agnes-model-field { display: flex; flex: 1; flex-direction: column; gap: 2px; min-width: 0; }
+  .agnes-model-field label { color: var(--text-muted); font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  .agnes-model-select-wrap { position: relative; display: flex; align-items: center; min-width: 0; }
+  .agnes-model-select { width: 100%; min-width: 0; height: 25px; padding: 0 23px 0 0; border: 0; outline: 0; appearance: none; background: transparent; color: var(--text); font: inherit; font-size: 12px; font-weight: 750; cursor: pointer; }
+  .agnes-model-select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+  .agnes-model-select:disabled { cursor: default; opacity: .6; }
+  .agnes-select-chevron { position: absolute; right: 1px; color: var(--accent); font-size: 16px; line-height: 1; pointer-events: none; transform: translateY(-2px); }
+  .agnes-status-dot { width: 7px; height: 7px; flex: 0 0 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 4px color-mix(in srgb, var(--green) 14%, transparent); }
+
+  .agnes-workspace { display: grid; grid-template-columns: var(--agnes-panel-width) minmax(0, 1fr); gap: 22px; align-items: start; }
+  .agnes-sidebar, .agnes-history { border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg-card); box-shadow: var(--shadow-sm); }
+  .agnes-sidebar { display: flex; flex-direction: column; min-width: 0; padding: 22px; }
+  .agnes-panel-heading, .agnes-stage-heading, .agnes-history-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
+  .agnes-panel-heading { margin-bottom: 20px; }
+  .agnes-panel-heading h2, .agnes-stage-heading h2, .agnes-history h2 { margin: 0; color: var(--text); font-size: 20px; font-weight: 750; letter-spacing: -.025em; }
+  .agnes-ready, .agnes-result-state { gap: 7px; color: var(--text-muted); font-size: 10px; letter-spacing: .04em; }
+  .agnes-ready i { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+  .agnes-result-state[data-error="true"] { color: var(--red); }
+
+  .agnes-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 22px; padding: 4px; border-radius: var(--radius-sm); background: var(--bg-soft); }
+  .agnes-tab { min-height: 36px; padding: 0 8px; border: 0; border-radius: 6px; background: transparent; color: var(--text-muted); font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
+  .agnes-tab.active { background: var(--bg-card); color: var(--text); box-shadow: var(--shadow-sm); }
+  .agnes-tab:focus-visible, .agnes-example:focus-visible, .agnes-button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .agnes-tab:disabled { cursor: default; opacity: .55; }
+
+  .agnes-form-group { margin-bottom: 18px; }
+  .agnes-field-label { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+  .agnes-field-label label, .agnes-ratio-group legend { color: var(--text); font-size: 12px; font-weight: 750; }
+  .agnes-field-label > span { color: var(--text-muted); font-size: 10px; font-weight: 650; letter-spacing: .04em; }
+  .agnes-form textarea { display: block; width: 100%; min-height: 142px; resize: vertical; padding: 12px 13px; border: 1px solid var(--border); border-radius: var(--radius-sm); outline: 0; background: var(--bg-soft); color: var(--text); font: inherit; font-size: 12px; line-height: 1.55; }
+  .agnes-form textarea:focus { border-color: var(--accent); background: var(--bg-card); box-shadow: 0 0 0 3px var(--accent-bg); }
+  .agnes-form-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 7px; }
+  .agnes-example { padding: 0; border: 0; background: transparent; color: var(--accent); cursor: pointer; font: inherit; font-size: 11px; }
+  .agnes-example:disabled { cursor: default; opacity: .55; }
+  .agnes-field-hint { display: flex; align-items: center; gap: 5px; color: var(--text-muted); font-size: 10px; text-align: right; }
+  .agnes-field-hint span { color: var(--accent); }
+  .agnes-chip-row { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin: -2px 0 20px; }
+  .agnes-chip-label { width: 100%; margin-bottom: 1px; color: var(--text-muted); font-size: 10px; font-weight: 700; }
+  .agnes-chip { padding: 4px 8px; border: 1px solid var(--border); border-radius: 999px; color: var(--text-soft); font-size: 10px; }
+  .agnes-chip.is-highlighted { border-color: color-mix(in srgb, var(--accent) 35%, var(--border)); background: var(--accent-bg); color: var(--accent); }
+
+  .agnes-upload-section { margin-bottom: 18px; }
+  .agnes-upload-section[hidden] { display: none; }
+  .agnes-dropzone {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-height: 88px;
+    padding: 13px;
+    border: 1px dashed color-mix(in srgb, var(--accent) 38%, var(--border));
+    border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, var(--accent-bg), var(--bg-soft));
+    cursor: pointer;
+    transition: border-color .2s, background .2s, box-shadow .2s, transform .2s;
+  }
+  .agnes-dropzone:hover,
+  .agnes-dropzone.dragover {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent-bg) 75%, var(--bg-soft));
+  }
+  .agnes-dropzone.dragover {
+    border-style: solid;
+    box-shadow: 0 0 0 4px var(--accent-bg), 0 10px 24px color-mix(in srgb, var(--accent) 16%, transparent);
+    transform: translateY(-1px);
+  }
+  .agnes-dropzone.dragover .agnes-dropzone-icon {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+    transform: scale(1.06);
+  }
+  .agnes-dropzone.is-dropped {
+    border-color: var(--green);
+    background: color-mix(in srgb, var(--green) 10%, var(--bg-soft));
+  }
+  .agnes-dropzone.is-dropped .agnes-dropzone-icon {
+    border-color: var(--green);
+    color: var(--green);
+  }
+  .agnes-dropzone.is-disabled { cursor: default; opacity: .55; pointer-events: none; }
+  .agnes-dropzone-icon { display: grid; width: 39px; height: 39px; flex: 0 0 39px; place-items: center; border: 1px solid color-mix(in srgb, var(--accent) 25%, var(--border)); border-radius: 10px; background: var(--bg-card); color: var(--accent); font-size: 20px; transition: background .2s, color .2s, border-color .2s, transform .2s; }
+  .agnes-dropzone-copy { min-width: 0; }
+  .agnes-dropzone-copy strong { display: block; margin-bottom: 2px; color: var(--text); font-size: 11px; }
+  .agnes-dropzone-copy p, .agnes-dropzone-copy small { display: block; margin: 0; color: var(--text-muted); font-size: 10px; line-height: 1.5; }
+  .agnes-dropzone.dragover .agnes-dropzone-copy p { color: var(--accent); font-weight: 700; }
+  .agnes-dropzone.is-dropped .agnes-dropzone-copy p { color: var(--green); font-weight: 700; }
+  .agnes-dropzone-copy small { margin-top: 2px; font-size: 9px; }
+  .agnes-dropzone-count { margin-left: auto; color: var(--accent); font-size: 11px; font-weight: 750; white-space: nowrap; }
+  /* Upload previews are created by the client script, so selectors must be global. */
+  :global(.agnes-file-preview) { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
+  :global(.agnes-file-thumb) {
+    position: relative;
+    min-width: 0;
+    padding: 2px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-card);
+    transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+  }
+  :global(.agnes-file-thumb:hover),
+  :global(.agnes-file-thumb:focus-within) {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--accent) 38%, var(--border));
+    box-shadow: 0 10px 20px rgba(15, 23, 42, .14);
+  }
+  :global(.agnes-file-image-wrap) {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 4px;
+    background: var(--bg-soft);
+  }
+  :global(.agnes-file-thumb img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 3px;
+    box-sizing: border-box;
+    object-fit: contain;
+  }
+  :global(.agnes-file-actions) {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    z-index: 2;
+    display: flex;
+    gap: 5px;
+    opacity: 0;
+    transform: translateY(-3px);
+    pointer-events: none;
+    transition: opacity .2s ease, transform .2s ease;
+  }
+  :global(.agnes-file-thumb:hover .agnes-file-actions),
+  :global(.agnes-file-thumb:focus-within .agnes-file-actions) {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  :global(.agnes-file-action) {
+    display: grid;
+    width: 24px;
+    height: 24px;
+    place-items: center;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, .72);
+    border-radius: 5px;
+    background: rgba(255, 255, 255, .95);
+    color: #444;
+    cursor: pointer;
+    font: inherit;
+    font-size: 13px;
+    line-height: 1;
+    text-decoration: none;
+    box-shadow: 0 2px 7px rgba(0, 0, 0, .16);
+    transition: background .2s, color .2s, transform .2s;
+  }
+  :global(.agnes-file-action:hover),
+  :global(.agnes-file-action:focus-visible) { background: #fff; color: #000; transform: scale(1.06); }
+  :global(.agnes-file-action.delete:hover),
+  :global(.agnes-file-action.delete:focus-visible) { border-color: var(--red); background: var(--red); color: #fff; }
+  @media (max-width: 560px) {
+    :global(.agnes-file-preview) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  :global(.agnes-file-remove) { position: absolute; top: 2px; right: 2px; display: grid; width: 17px; height: 17px; place-items: center; padding: 0 0 1px; border: 0; border-radius: 50%; background: rgba(0,0,0,.65); color: #fff; font-size: 11px; cursor: pointer; }
+  :global(.agnes-file-remove:focus-visible) { outline: 2px solid #fff; outline-offset: 1px; }
+
+  .agnes-ratio-group { margin: 0 0 18px; padding: 0; border: 0; }
+  .agnes-ratio-group legend { margin-bottom: 8px; }
+  .agnes-ratio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .agnes-ratio { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-height: 78px; padding: 8px 4px; border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-muted); text-align: center; cursor: pointer; }
+  .agnes-ratio.is-selected { border-color: var(--accent); background: var(--accent-bg); color: var(--accent); }
+  .agnes-ratio input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+  .agnes-ratio:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .agnes-ratio input:disabled + .agnes-ratio-shape { opacity: .55; }
+  .agnes-ratio-shape { display: block; border: 1.5px solid currentColor; border-radius: 2px; }
+  .ratio-square { width: 18px; height: 18px; }
+  .ratio-landscape { width: 26px; height: 15px; }
+  .ratio-portrait { width: 15px; height: 26px; }
+  .agnes-ratio strong { font-size: 10px; line-height: 1; }
+  .agnes-ratio small { font-size: 9px; line-height: 1; }
+
+  .agnes-sidebar-footer { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border); }
+  .agnes-actions { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; }
+  .agnes-primary, .agnes-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 40px; box-sizing: border-box; padding: 0 14px; border-radius: var(--radius-sm); font: inherit; font-size: 12px; font-weight: 750; cursor: pointer; text-decoration: none; white-space: nowrap; }
+  .agnes-primary { border: 1px solid transparent; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; box-shadow: 0 5px 14px color-mix(in srgb, var(--accent) 20%, transparent); }
+  .agnes-primary:hover { color: #fff; filter: brightness(1.04); }
+  .agnes-primary:disabled, .agnes-secondary:disabled { cursor: default; opacity: .45; }
+  .agnes-secondary { border: 1px solid var(--border); background: var(--bg-card); color: var(--text-soft); }
+  .agnes-secondary:hover { border-color: var(--accent); color: var(--text); }
+  .agnes-secondary span { color: var(--accent); font-size: 15px; line-height: 1; }
+  .agnes-status { min-height: 20px; margin: 10px 0 6px; color: var(--text-muted); font-size: 11px; }
+  .agnes-status[data-error="true"] { color: var(--red); }
+  .agnes-disclaimer, .agnes-generated-by { color: var(--text-muted); font-size: 10px; line-height: 1.55; }
+  .agnes-disclaimer { margin: 0; }
+
+  .agnes-canvas { min-width: 0; }
+  .agnes-result { display: flex; flex-direction: column; min-width: 0; padding: 22px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg-card); box-shadow: var(--shadow-sm); }
+  .agnes-stage-heading { margin-bottom: 17px; }
+  .agnes-preview { display: grid; min-height: 420px; place-items: center; padding: clamp(18px, 4vw, 42px); overflow: hidden; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg-soft); box-shadow: var(--shadow-sm); }
+  .agnes-preview-canvas { position: relative; display: grid; width: min(100%, 570px); min-height: 320px; place-items: center; overflow: hidden; border: 1px solid color-mix(in srgb, var(--accent) 20%, var(--border)); border-radius: calc(var(--radius) + 2px); background: var(--bg-card); isolation: isolate; transition: border-color .2s, box-shadow .2s; }
+  .agnes-preview-canvas[data-ratio="1:1"] { width: min(100%, 570px); aspect-ratio: 1; }
+  .agnes-preview-canvas[data-ratio="16:9"] { width: min(100%, 570px); aspect-ratio: 16 / 9; }
+  .agnes-preview-canvas[data-ratio="9:16"] { width: min(100%, 360px); height: min(620px, 68vh); aspect-ratio: 9 / 16; }
+  .agnes-preview-canvas.is-image-ready { cursor: zoom-in; }
+  .agnes-preview-canvas.is-image-ready:hover { border-color: color-mix(in srgb, var(--accent) 50%, var(--border)); box-shadow: 0 8px 24px color-mix(in srgb, var(--accent) 10%, transparent); }
+  .agnes-preview-canvas.is-image-ready::after { position: absolute; top: 16px; right: 16px; z-index: 2; display: grid; width: 32px; height: 32px; place-items: center; border: 1px solid color-mix(in srgb, var(--border) 80%, transparent); border-radius: 9px; background: color-mix(in srgb, var(--bg-card) 88%, transparent); color: var(--text-soft); content: '⌕'; font-size: 20px; line-height: 1; opacity: .68; pointer-events: none; transition: color .2s, opacity .2s, transform .2s; }
+  .agnes-preview-canvas.is-image-ready:hover::after { color: var(--accent); opacity: 1; transform: scale(1.05); }
+  .agnes-preview-canvas:has([data-image]:focus-visible) { outline: 3px solid var(--accent-bg); outline-offset: 3px; }
+  .agnes-preview-grid { position: absolute; inset: 0; opacity: .65; background-image: linear-gradient(color-mix(in srgb, var(--border) 55%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--border) 55%, transparent) 1px, transparent 1px); background-size: 48px 48px; mask-image: radial-gradient(circle at center, #000 0%, transparent 75%); }
+  .agnes-preview-glow { position: absolute; border-radius: 50%; filter: blur(2px); opacity: .75; }
+  .agnes-preview-glow-one { width: 42%; aspect-ratio: 1; top: 13%; left: 14%; background: radial-gradient(circle, color-mix(in srgb, var(--accent) 15%, transparent), transparent 68%); }
+  .agnes-preview-glow-two { width: 50%; aspect-ratio: 1; right: 8%; bottom: 8%; background: radial-gradient(circle, color-mix(in srgb, var(--accent-2) 17%, transparent), transparent 68%); }
+  .agnes-preview-empty[hidden] { display: none !important; }
+  .agnes-preview-empty { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; max-width: 280px; padding: 24px; color: var(--text-muted); text-align: center; }
+  .agnes-preview-empty strong { color: var(--text); font-size: clamp(15px, 2vw, 19px); font-weight: 750; letter-spacing: -.02em; }
+  .agnes-preview-empty p { margin: 7px 0 14px; font-size: 11px; line-height: 1.55; }
+  .agnes-preview-reference { display: block; width: 120px; height: 120px; margin-bottom: 12px; border-radius: 10px; object-fit: cover; }
+  .agnes-preview-reference[hidden] { display: none; }
+  .agnes-preview-icon { display: grid; width: 58px; height: 58px; place-items: center; margin-bottom: 17px; border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border)); border-radius: 18px; background: color-mix(in srgb, var(--accent-bg) 70%, var(--bg-card)); color: var(--accent); font-size: 26px; box-shadow: 0 10px 30px color-mix(in srgb, var(--accent) 10%, transparent); }
+  .agnes-preview.is-loading .agnes-preview-icon { width: 34px; height: 34px; margin-bottom: 12px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; font-size: 0; animation: agnes-spin .8s linear infinite; }
+  .agnes-preview.is-loading .agnes-preview-empty strong { color: var(--accent); }
+  .agnes-preview.is-error .agnes-preview-icon { border-color: color-mix(in srgb, var(--red) 28%, var(--border)); background: color-mix(in srgb, var(--red) 10%, var(--bg-card)); color: var(--red); }
+  .agnes-preview-canvas > [data-image] { position: relative; z-index: 1; display: block; width: 100%; height: 100%; max-width: 100%; max-height: 100%; object-fit: contain; cursor: zoom-in; }
+  .agnes-preview-canvas > [data-image][hidden] { display: none; }
+  .agnes-canvas-ratio { padding: 4px 8px; border: 1px solid var(--border); border-radius: 999px; color: var(--text-muted); font-size: 9px; font-weight: 700; letter-spacing: .05em; }
+  .agnes-canvas-corner { position: absolute; z-index: 2; width: 17px; height: 17px; border-color: color-mix(in srgb, var(--accent) 38%, var(--border)); pointer-events: none; }
+  .agnes-canvas-corner-tl { top: 18px; left: 18px; border-top: 1px solid; border-left: 1px solid; border-radius: 4px 0 0; }
+  .agnes-canvas-corner-tr { top: 18px; right: 18px; border-top: 1px solid; border-right: 1px solid; border-radius: 0 4px 0 0; }
+  .agnes-canvas-corner-bl { bottom: 18px; left: 18px; border-bottom: 1px solid; border-left: 1px solid; border-radius: 0 0 0 4px; }
+  .agnes-canvas-corner-br { right: 18px; bottom: 18px; border-right: 1px solid; border-bottom: 1px solid; border-radius: 0 0 4px; }
+  .agnes-result-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .agnes-result-actions[hidden] { display: none; }
+  .agnes-generated-by { margin: 10px 0 0; }
+  @keyframes agnes-spin { to { transform: rotate(360deg); } }
+
+  .agnes-history { margin-top: 22px; padding: 22px; }
+  .agnes-history-head { align-items: flex-end; margin-bottom: 18px; }
+  .agnes-history-head h2 { margin-bottom: 4px; }
+  .agnes-history-head p { margin: 5px 0 0; color: var(--text-muted); font-size: 11px; }
+  .agnes-history-head .agnes-secondary { min-height: 34px; font-size: 11px; }
+  .agnes-history-empty { margin: 0; padding: 34px 18px; border: 1px dashed var(--border); border-radius: var(--radius-sm); background: color-mix(in srgb, var(--bg-soft) 65%, transparent); color: var(--text-muted); text-align: center; }
+  .agnes-history-empty[hidden] { display: none; }
+
+  :global(.agnes-history-grid) { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+  :global(.agnes-history-card) { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 10px; display: flex; flex-direction: column; position: relative; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+  :global(.agnes-history-card:hover) { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08); border-color: transparent; }
+  :global(.agnes-history-image-wrap) { position: relative; width: 100%; padding-bottom: 100%; overflow: hidden; border-radius: 4px; background: var(--bg-soft); }
+  :global(.agnes-history-image) { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; cursor: pointer; }
+  :global(.agnes-history-actions-overlay) { position: absolute; top: 8px; right: 8px; display: flex; gap: 6px; opacity: 0; transition: opacity 0.2s; z-index: 2; }
+  :global(.agnes-history-card:hover .agnes-history-actions-overlay) { opacity: 1; }
+  :global(.agnes-history-action-btn) { background-color: rgba(255, 255, 255, 0.95); color: #444; border: none; width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); transition: all 0.2s; }
+  :global(.agnes-history-action-btn:hover) { background-color: #fff; color: #000; transform: scale(1.05); }
+  :global(.agnes-history-action-btn.delete:hover) { background-color: var(--red); color: #fff; }
+  :global(.agnes-history-info) { padding: 8px 4px 4px 4px; display: flex; flex-direction: column; gap: 2px; }
+  :global(.agnes-history-info .agnes-history-mode) { margin: 0; font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  :global(.agnes-history-info .agnes-history-date) { margin: 0; font-size: 11px; color: var(--text-muted); }
+
+  .agnes-lightbox[hidden] { display: none; }
+  .agnes-lightbox { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; overflow: auto; padding: 24px; }
+  .agnes-lightbox-backdrop { position: fixed; inset: 0; border: 0; background: color-mix(in srgb, #090b10 76%, transparent); cursor: zoom-out; }
+  .agnes-lightbox-panel { position: relative; z-index: 1; display: grid; width: min(900px, calc(100vw - 48px), calc(100vh - 48px)); height: min(900px, calc(100vw - 48px), calc(100vh - 48px)); place-items: center; padding: 14px; border: 1px solid color-mix(in srgb, var(--border) 75%, transparent); border-radius: var(--radius); background: var(--bg-card); box-shadow: 0 24px 80px rgba(0, 0, 0, .35); }
+  .agnes-lightbox-close { position: absolute; top: 22px; right: 22px; z-index: 2; display: grid; width: 34px; height: 34px; place-items: center; padding: 0 0 3px; border: 1px solid color-mix(in srgb, var(--border) 75%, transparent); border-radius: 50%; background: color-mix(in srgb, var(--bg-card) 92%, transparent); color: var(--text); font: inherit; font-size: 24px; line-height: 1; cursor: pointer; }
+  .agnes-lightbox-close:hover { border-color: var(--accent); color: var(--accent); }
+  .agnes-lightbox-close:focus-visible, .agnes-lightbox-backdrop:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+  .agnes-lightbox-image { display: block; width: 100%; height: 100%; max-width: 100%; max-height: 100%; object-fit: contain; }
+
+  @media (max-width: 1000px) {
+    .agnes-history-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (max-width: 920px) {
+    .agnes-intro { align-items: flex-start; flex-direction: column; }
+    .agnes-model-card { min-width: 250px; }
+  }
+  @media (max-width: 800px) {
+    .agnes-tool { padding-top: 36px; }
+    .agnes-container { width: min(var(--maxw), calc(100% - 32px)); }
+    .agnes-workspace { display: block; }
+    .agnes-canvas { margin-top: 16px; }
+    .agnes-history { margin-top: 16px; }
+  }
+  @media (max-width: 680px) {
+    .agnes-history-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  }
+  @media (max-width: 560px) {
+    .agnes-intro h1 { font-size: 34px; }
+    .agnes-intro p { font-size: 14px; }
+    .agnes-sidebar, .agnes-result, .agnes-history { padding: 16px; }
+    .agnes-preview { min-height: 360px; padding: 16px; }
+    .agnes-preview-canvas[data-ratio="9:16"] { height: min(560px, 68vh); }
+    .agnes-history-grid { grid-template-columns: 1fr; }
+    .agnes-result-actions { justify-content: stretch; }
+    .agnes-result-actions .agnes-primary, .agnes-result-actions .agnes-secondary { flex: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .agnes-preview-glow { filter: none; }
+    .agnes-preview.is-loading .agnes-preview-icon { animation: none; }
+    .agnes-history-card, .agnes-preview-canvas, .agnes-preview-canvas::after { transition: none; }
+  }
+</style>
+
+<script is:inline>
+  (() => {
+    const tool = document.querySelector('[data-api-url]');
+    if (!tool) return;
+    const form = tool.querySelector('[data-generator-form]');
+    const prompt = form?.querySelector('textarea[name="prompt"]');
+    const submit = form?.querySelector('[data-submit]');
+    const reset = form?.querySelector('[data-reset]');
+    const example = form?.querySelector('[data-example]');
+    const counter = form?.querySelector('[data-counter]');
+    const status = tool.querySelector('[data-status]');
+    const tabs = tool.querySelector('[data-tabs]');
+    const modelSelect = tool.querySelector('[data-model]');
+    const uploadSection = tool.querySelector('[data-upload-section]');
+    const dropzone = tool.querySelector('[data-dropzone]');
+    const dropzoneText = tool.querySelector('.agnes-dropzone-text');
+    const fileInput = tool.querySelector('[data-file-input]');
+    const filePreview = tool.querySelector('[data-file-preview]');
+    const fileCount = tool.querySelector('[data-file-count]');
+    const preview = tool.querySelector('[data-preview]');
+    const previewCanvas = tool.querySelector('[data-preview-canvas]');
+    const previewRatio = tool.querySelector('[data-preview-ratio]');
+    const image = tool.querySelector('[data-image]');
+    const empty = tool.querySelector('[data-empty]');
+    const emptyTitle = tool.querySelector('[data-empty-title]');
+    const emptyDescription = tool.querySelector('[data-empty-description]');
+    const resultState = tool.querySelector('[data-result-state]');
+    const resultActions = tool.querySelector('[data-result-actions]');
+    const download = tool.querySelector('[data-download]');
+    const retry = tool.querySelector('[data-retry]');
+    const referenceImage = tool.querySelector('[data-reference-image]');
+    const historyPanel = tool.querySelector('[data-history-panel]');
+    const historyList = historyPanel?.querySelector('[data-history-list]');
+    const historyEmpty = historyPanel?.querySelector('[data-history-empty]');
+    const historyClear = historyPanel?.querySelector('[data-history-clear]');
+    const lightbox = tool.querySelector('[data-lightbox]');
+    const lightboxImage = tool.querySelector('[data-lightbox-image]');
+    const lightboxCloseButtons = lightbox?.querySelectorAll('[data-lightbox-close]');
+    const lightboxClose = lightbox?.querySelector('.agnes-lightbox-close');
+    const apiUrl = tool.dataset.apiUrl || '';
+    const MAX_PROMPT_LENGTH = 4000;
+    const MAX_FILE_SIZE = 5 * 1024 * 1024;
+    const MAX_TOTAL_IMAGE_BYTES = 12 * 1024 * 1024;
+    const MAX_FILES = 4;
+    const ALLOWED_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp']);
+    const text = {
+      ready: tool.dataset.statusReady || 'Ready',
+      disabled: tool.dataset.enabled === 'true' ? (tool.dataset.statusReady || 'Ready') : (tool.dataset.localDisabled || 'Local API is not enabled'),
+      sending: tool.dataset.statusSending || 'Generating…',
+      success: tool.dataset.statusSuccess || 'Generation complete',
+      failure: tool.dataset.statusFailure || 'Generation failed',
+      waitingTitle: tool.dataset.waitingTitle || 'Your image will appear here',
+      waitingDescription: tool.dataset.waitingDescription || '',
+      loadingTitle: tool.dataset.loadingTitle || 'Generating image',
+      loadingDescription: tool.dataset.loadingDescription || 'Processing…',
+      errorTitle: tool.dataset.errorTitle || 'Generation failed',
+      errorDescription: tool.dataset.errorDescription || 'Try again later',
+      uploadHint: tool.dataset.uploadHint || 'Drop an image here, or click to upload',
+      uploadDragHint: tool.dataset.uploadDragHint || 'Release to add your reference image',
+      uploadDropHint: tool.dataset.uploadDropHint || 'Reading reference image…',
+    };
+    const exampleTxt = 'A cinematic editorial portrait in warm studio light, highly detailed, elegant composition, realistic texture';
+    const exampleImg = 'Transform the scene into a cyberpunk night with neon reflections while preserving the original composition';
+    const HISTORY_DB = 'agnes-local-history';
+    const HISTORY_STORE = 'generations';
+    const HISTORY_LIMIT = 20;
+    let mode = 'txt2img';
+    let busy = false;
+    let uploadedFiles = [];
+    let uploadObjectUrls = [];
+    let dragDepth = 0;
+    let dropStateTimer = null;
+    let historyDb;
+    let historyObjectUrls = [];
+    let currentResultUrl = '';
+    let previousActiveElement = null;
+
+    function getModelLabel(modelId) {
+      const option = modelSelect?.querySelector(`option[value="${CSS.escape(modelId)}"]`);
+      return option?.textContent || modelId || 'Agnes Image 2.1 Flash';
+    }
+
+    function openHistoryDb() {
+      if (!('indexedDB' in window)) return Promise.resolve(null);
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open(HISTORY_DB, 2);
+        request.onupgradeneeded = () => {
+          const db = request.result;
+          if (!db.objectStoreNames.contains(HISTORY_STORE)) db.createObjectStore(HISTORY_STORE, { keyPath: 'id', autoIncrement: true });
+        };
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    function historyTransaction(modeName, callback) {
+      if (!historyDb) return Promise.resolve(null);
+      return new Promise((resolve, reject) => {
+        const transaction = historyDb.transaction(HISTORY_STORE, modeName);
+        const store = transaction.objectStore(HISTORY_STORE);
+        let result;
+        try { result = callback(store); } catch (error) { reject(error); return; }
+        transaction.oncomplete = () => resolve(result);
+        transaction.onerror = () => reject(transaction.error);
+      });
+    }
+
+    function getHistoryRecords() {
+      if (!historyDb) return Promise.resolve([]);
+      return new Promise((resolve, reject) => {
+        const request = historyDb.transaction(HISTORY_STORE, 'readonly').objectStore(HISTORY_STORE).getAll();
+        request.onsuccess = () => resolve(request.result.sort((a, b) => b.createdAt - a.createdAt));
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    function dataUriToBlob(value) {
+      if (!value.startsWith('data:')) return fetch(value).then(response => {
+        if (!response.ok) throw new Error('history image fetch failed');
+        return response.blob();
+      });
+      const match = value.match(/^data:([^;]+);base64,(.*)$/);
+      if (!match) throw new Error('invalid data URI');
+      const binary = atob(match[2]);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
+      return Promise.resolve(new Blob([bytes], { type: match[1] }));
+    }
+
+    function extensionForMime(mime) {
+      if (mime === 'image/jpeg') return 'jpg';
+      if (mime === 'image/webp') return 'webp';
+      if (mime === 'image/gif') return 'gif';
+      return 'png';
+    }
+
+    async function saveHistory(src, promptText, generationMode, ratio, modelId) {
+      if (!historyDb) return false;
+      try {
+        await historyTransaction('readwrite', store => store.add({
+          imageUrl: src,
+          prompt: promptText,
+          mode: generationMode,
+          ratio,
+          model: modelId,
+          createdAt: Date.now(),
+        }));
+        const records = await getHistoryRecords();
+        if (records.length > HISTORY_LIMIT) {
+          await historyTransaction('readwrite', store => records.slice(HISTORY_LIMIT).forEach(record => store.delete(record.id)));
+        }
+        await renderHistory();
+        return true;
+      } catch (error) {
+        console.warn('[agnes-local] history save skipped', error);
+        return false;
+      }
+    }
+
+    function clearHistoryObjectUrls() {
+      historyObjectUrls.forEach(url => URL.revokeObjectURL(url));
+      historyObjectUrls = [];
+    }
+
+    function clearCurrentResultUrl() {
+      if (currentResultUrl.startsWith('blob:')) URL.revokeObjectURL(currentResultUrl);
+      currentResultUrl = '';
+    }
+
+    function setCurrentResult(src) {
+      clearCurrentResultUrl();
+      currentResultUrl = src;
+      image.src = src;
+      image.hidden = false;
+      download.href = src;
+    }
+
+    function selectRatio(ratio) {
+      const input = form?.querySelector(`input[name^="aspect-"][value="${CSS.escape(ratio)}"]`);
+      if (input) input.checked = true;
+      form?.querySelectorAll('.agnes-ratio').forEach(label => {
+        const labelInput = label.querySelector('input');
+        label.classList.toggle('is-selected', labelInput?.value === ratio);
+      });
+      if (previewCanvas) {
+        previewCanvas.dataset.ratio = ratio;
+        previewRatio.textContent = `${tool.dataset.canvasLabel || 'Canvas'} ${ratio}`;
+      }
+    }
+
+    function restoreHistoryRecord(record) {
+      setCurrentResult(URL.createObjectURL(record.imageBlob));
+      if (record.mode !== mode) switchMode(record.mode);
+      if (prompt) { prompt.value = record.prompt || ''; updateCounter(); }
+      selectRatio(record.ratio || '1:1');
+      if (modelSelect && record.model && modelSelect.querySelector(`option[value="${CSS.escape(record.model)}"]`)) modelSelect.value = record.model;
+      setPreviewState('success');
+      setState(historyPanel?.dataset.historySaved || text.success);
+    }
+
+    async function renderHistory() {
+      if (!historyList || !historyEmpty) return;
+      historyObjectUrls.forEach(url => URL.revokeObjectURL(url));
+      historyObjectUrls = [];
+      historyList.innerHTML = '';
+      const records = await getHistoryRecords();
+      historyEmpty.hidden = records.length > 0;
+      if (historyClear) historyClear.hidden = records.length === 0;
+      const moreText = historyPanel.dataset.historyMoreText || 'More';
+      const useText = historyPanel.dataset.historyUseText || 'Use prompt';
+      const downloadText = historyPanel.dataset.historyDownloadText || 'Download';
+      const deleteText = historyPanel.dataset.historyDeleteText || 'Delete';
+      const txtLabel = historyPanel.dataset.historyTxtLabel || 'Text to Image';
+      const imgLabel = historyPanel.dataset.historyImgLabel || 'Image to Image';
+      records.forEach(record => {
+        const src = record.imageUrl || '';
+        const card = document.createElement('div');
+        card.className = 'agnes-history-card';
+        const imageWrap = document.createElement('div');
+        imageWrap.className = 'agnes-history-image-wrap';
+        const thumb = document.createElement('img');
+        thumb.className = 'agnes-history-image';
+        thumb.src = src;
+        thumb.alt = record.prompt || '';
+        thumb.addEventListener('click', () => {
+          if (prompt) { prompt.value = record.prompt || ''; updateCounter(); }
+          image.src = src;
+          image.hidden = false;
+          empty.hidden = true;
+          download.href = src;
+          resultActions.hidden = false;
+          setPreviewState('success');
+          setState(text.success);
+        });
+        const actionsOverlay = document.createElement('div');
+        actionsOverlay.className = 'agnes-history-actions-overlay';
+        const dlBtn = document.createElement('button');
+        dlBtn.type = 'button';
+        dlBtn.className = 'agnes-history-action-btn';
+        dlBtn.innerHTML = '<i class="fas fa-download"></i>';
+        dlBtn.addEventListener('click', (e) => { e.stopPropagation(); window.open(src, '_blank'); });
+        const delBtn = document.createElement('button');
+        delBtn.type = 'button';
+        delBtn.className = 'agnes-history-action-btn delete';
+        delBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+        delBtn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          await historyTransaction('readwrite', store => store.delete(record.id));
+          await renderHistory();
+        });
+        actionsOverlay.append(dlBtn, delBtn);
+        imageWrap.append(thumb, actionsOverlay);
+        const info = document.createElement('div');
+        info.className = 'agnes-history-info';
+        const modeLabel = document.createElement('h3');
+        modeLabel.className = 'agnes-history-mode';
+        modeLabel.textContent = record.mode === 'img2img' ? imgLabel : txtLabel;
+        const dateLabel = document.createElement('p');
+        dateLabel.className = 'agnes-history-date';
+        dateLabel.textContent = new Intl.DateTimeFormat(undefined, { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }).format(record.createdAt);
+        info.append(modeLabel, dateLabel);
+        card.append(imageWrap, info);
+        historyList.appendChild(card);
+      });
+    }
+
+    async function initHistory() {
+      try {
+        historyDb = await openHistoryDb();
+        await renderHistory();
+      } catch (error) {
+        console.warn('[agnes-local] history unavailable', error);
+      }
+    }
+
+    function updateCounter() {
+      if (counter && prompt) counter.textContent = `${prompt.value.length} / ${MAX_PROMPT_LENGTH}`;
+      updateSubmitAvailability();
+    }
+
+    function setState(message, failed = false) {
+      if (status) {
+        status.textContent = message;
+        if (failed) status.setAttribute('data-error', 'true');
+        else status.removeAttribute('data-error');
+      }
+      if (resultState) {
+        resultState.textContent = message;
+        if (failed) resultState.setAttribute('data-error', 'true');
+        else resultState.removeAttribute('data-error');
+      }
+    }
+
+    function setPreviewState(state) {
+      preview?.classList.remove('is-loading', 'is-error', 'is-ready', 'is-success');
+      previewCanvas?.classList.remove('is-image-ready');
+      if (state) preview?.classList.add(`is-${state}`);
+      if (state === 'loading') {
+        emptyTitle.textContent = text.loadingTitle;
+        emptyDescription.textContent = text.loadingDescription;
+        referenceImage.hidden = true;
+        empty.hidden = false;
+        image.hidden = true;
+        resultActions.hidden = true;
+      } else if (state === 'error') {
+        emptyTitle.textContent = text.errorTitle;
+        emptyDescription.textContent = text.errorDescription;
+        referenceImage.hidden = true;
+        empty.hidden = false;
+        image.hidden = true;
+        resultActions.hidden = true;
+      } else if (state === 'success') {
+        empty.hidden = true;
+        image.hidden = false;
+        resultActions.hidden = false;
+        previewCanvas?.classList.add('is-image-ready');
+        preview?.classList.remove('is-loading');
+      } else {
+        emptyTitle.textContent = text.waitingTitle;
+        emptyDescription.textContent = text.waitingDescription;
+        referenceImage.hidden = true;
+        empty.hidden = false;
+        image.hidden = true;
+        resultActions.hidden = true;
+      }
+    }
+
+    function updateSubmitAvailability() {
+      if (submit) submit.disabled = busy || !apiUrl || !prompt?.value.trim() || prompt.value.length > MAX_PROMPT_LENGTH;
+    }
+
+    function setBusy(value) {
+      busy = value;
+      const controls = [
+        ...(tabs ? tabs.querySelectorAll('button') : []),
+        modelSelect,
+        ...(form ? form.querySelectorAll('input[type="radio"]') : []),
+        fileInput,
+        example,
+        reset,
+      ].filter(Boolean);
+      controls.forEach(control => { control.disabled = value; });
+      dropzone?.classList.toggle('is-disabled', value);
+      updateSubmitAvailability();
+    }
+
+    function switchMode(newMode) {
+      if (busy) return;
+      mode = newMode === 'img2img' ? 'img2img' : 'txt2img';
+      tabs?.querySelectorAll('.agnes-tab').forEach(tab => {
+        const active = tab.dataset.mode === mode;
+        tab.classList.toggle('active', active);
+        tab.setAttribute('aria-selected', String(active));
+      });
+      if (uploadSection) uploadSection.hidden = mode === 'txt2img';
+      if (mode === 'txt2img') clearFiles();
+      if (prompt) prompt.placeholder = mode === 'img2img' ? (prompt.dataset.placeholderImg || '') : (prompt.dataset.placeholderTxt || '');
+    }
+
+    function applyInitialInput() {
+      const params = new URLSearchParams(window.location.search);
+      const initialPrompt = params.get('prompt') || '';
+      if (initialPrompt && prompt) {
+        prompt.value = initialPrompt;
+        if (initialPrompt.length > MAX_PROMPT_LENGTH) setState(tool.dataset.promptTooLong || 'Prompt is too long', true);
+      }
+      updateCounter();
+    }
+
+    function renderUploadedFiles() {
+      uploadObjectUrls.forEach(url => URL.revokeObjectURL(url));
+      uploadObjectUrls = [];
+      if (!filePreview) return;
+      filePreview.innerHTML = '';
+      uploadedFiles.forEach((file, index) => {
+        const thumb = document.createElement('div');
+        thumb.className = 'agnes-file-thumb';
+        const imageWrap = document.createElement('div');
+        imageWrap.className = 'agnes-file-image-wrap';
+        const img = document.createElement('img');
+        const objectUrl = URL.createObjectURL(file);
+        uploadObjectUrls.push(objectUrl);
+        img.src = objectUrl;
+        img.alt = file.name;
+        const actions = document.createElement('div');
+        actions.className = 'agnes-file-actions';
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'agnes-file-action delete';
+        removeBtn.type = 'button';
+        removeBtn.setAttribute('aria-label', `Remove ${file.name}`);
+        removeBtn.title = 'Remove';
+        removeBtn.textContent = '×';
+        removeBtn.addEventListener('click', () => {
+          uploadedFiles.splice(index, 1);
+          renderUploadedFiles();
+          updateFileCount();
+        });
+        actions.append(removeBtn);
+        imageWrap.append(img, actions);
+        thumb.append(imageWrap);
+        filePreview.appendChild(thumb);
+      });
+    }
+
+    function updateFileCount() {
+      if (!fileCount) return;
+      if (uploadedFiles.length > 0) {
+        fileCount.hidden = false;
+        fileCount.textContent = `${uploadedFiles.length} / ${MAX_FILES}`;
+      } else {
+        fileCount.hidden = true;
+        fileCount.textContent = '';
+      }
+    }
+
+    function clearFiles() {
+      uploadedFiles = [];
+      renderUploadedFiles();
+      updateFileCount();
+    }
+
+    function addFiles(files) {
+      for (const file of files) {
+        if (uploadedFiles.length >= MAX_FILES) { setState(tool.dataset.fileTooMany || 'Maximum 4 images allowed', true); break; }
+        if (file.size > MAX_FILE_SIZE) { setState(tool.dataset.fileTooLarge || 'File too large', true); continue; }
+        if (!ALLOWED_TYPES.has(file.type)) { setState(tool.dataset.fileBadType || 'Unsupported type', true); continue; }
+        const totalBytes = uploadedFiles.reduce((sum, item) => sum + item.size, 0) + file.size;
+        if (totalBytes > MAX_TOTAL_IMAGE_BYTES) { setState(tool.dataset.fileTotalTooLarge || 'Reference images are too large', true); continue; }
+        uploadedFiles.push(file);
+      }
+      renderUploadedFiles();
+      updateFileCount();
+      if (!busy && uploadedFiles.length > 0) setState(text.ready);
+    }
+
+    function fileToDataUri(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(new Error('Failed to read file'));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function imageFromPayload(payload) {
+      const result = payload?.result ?? payload;
+      const candidates = [
+        ...(Array.isArray(result?.data) ? result.data : []),
+        ...(result?.data && !Array.isArray(result.data) ? [result.data] : []),
+        ...(Array.isArray(result?.images) ? result.images : []),
+        ...(Array.isArray(result?.output) ? result.output : []),
+        result?.image,
+        result,
+      ].filter(Boolean);
+      for (const item of candidates) {
+        const value = typeof item === 'string' ? item : item.b64_json || item.base64 || item.image || item.url || item.image_url;
+        if (typeof value !== 'string' || !value.trim()) continue;
+        const trimmed = value.trim();
+        if (/^data:image\/[a-z0-9.+-]+;base64,/i.test(trimmed)) return trimmed;
+        if (/^https?:\/\//i.test(trimmed)) return trimmed;
+        if (/^[A-Za-z0-9+/=\r\n]+$/.test(trimmed) && trimmed.length > 128) {
+          const clean = trimmed.replace(/\s+/g, '');
+          let mime = typeof item === 'object' && item.mime_type ? item.mime_type : 'image/png';
+          try {
+            const head = atob(clean.slice(0, 32));
+            if (head.startsWith('\xFF\xD8\xFF')) mime = 'image/jpeg';
+            else if (head.startsWith('\x89PNG\r\n\x1A\n')) mime = 'image/png';
+            else if (head.startsWith('RIFF') && head.slice(8, 12) === 'WEBP') mime = 'image/webp';
+            else if (head.startsWith('GIF8')) mime = 'image/gif';
+          } catch {}
+          return `data:${mime};base64,${clean}`;
+        }
+      }
+      return '';
+    }
+
+    async function generate() {
+      if (!apiUrl || !prompt?.value.trim() || busy || prompt.value.length > MAX_PROMPT_LENGTH) return;
+      const lastPrompt = prompt.value.trim();
+      const ratio = form?.querySelector('input[name^="aspect-"]:checked')?.value || '1:1';
+      const modelId = modelSelect?.value || tool.dataset.modelDefault || 'agnes-image-2.1-flash';
+      setBusy(true);
+      selectRatio(ratio);
+      setState(text.sending);
+      setPreviewState('loading');
+      try {
+        const body = { model: modelId, prompt: lastPrompt, ratio };
+        if (mode === 'img2img') {
+          body.image = [];
+          for (const file of uploadedFiles) body.image.push(await fileToDataUri(file));
+          if (body.image.length === 0) throw new Error(tool.dataset.imageRequired || 'Image-to-image needs a reference image');
+        }
+        const response = await fetch(apiUrl, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(payload?.error?.message || text.failure);
+        const src = imageFromPayload(payload);
+        if (!src) throw new Error(text.failure);
+        setCurrentResult(src);
+        setPreviewState('success');
+        setState(text.success);
+        if (await saveHistory(src, lastPrompt, mode, ratio, modelId)) setState(historyPanel?.dataset.historySaved || text.success);
+      } catch (error) {
+        setPreviewState('error');
+        setState(error instanceof Error ? error.message : text.failure, true);
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    function resetForm() {
+      if (busy) return;
+      if (prompt) prompt.value = '';
+      clearFiles();
+      switchMode('txt2img');
+      selectRatio('1:1');
+      clearCurrentResultUrl();
+      image.src = '';
+      download.href = '#';
+      setPreviewState('ready');
+      setState(apiUrl ? text.ready : text.disabled, !apiUrl);
+      updateCounter();
+    }
+
+    function openLightbox() {
+      if (!lightbox || !lightboxImage || image.hidden || !image.src) return;
+      previousActiveElement = document.activeElement;
+      lightboxImage.src = image.currentSrc || image.src;
+      lightboxImage.alt = image.alt;
+      lightbox.hidden = false;
+      document.body.style.overflow = 'hidden';
+      lightboxClose?.focus();
+    }
+
+    function closeLightbox() {
+      if (!lightbox) return;
+      lightbox.hidden = true;
+      lightboxImage.src = '';
+      document.body.style.overflow = '';
+      if (previousActiveElement instanceof HTMLElement) previousActiveElement.focus();
+    }
+
+    tabs?.querySelectorAll('.agnes-tab').forEach(tab => tab.addEventListener('click', () => switchMode(tab.dataset.mode)));
+    form?.querySelectorAll('input[name^="aspect-"]').forEach(input => input.addEventListener('change', () => selectRatio(input.value)));
+    function resetDropzoneVisual() {
+      if (!dropzone) return;
+      dragDepth = 0;
+      dropzone.classList.remove('dragover', 'is-dropped');
+      if (dropzoneText) dropzoneText.textContent = text.uploadHint;
+    }
+
+    function showDroppedState() {
+      if (!dropzone) return;
+      if (dropStateTimer) window.clearTimeout(dropStateTimer);
+      dropzone.classList.remove('dragover');
+      dropzone.classList.add('is-dropped');
+      if (dropzoneText) dropzoneText.textContent = text.uploadDropHint;
+      dropStateTimer = window.setTimeout(resetDropzoneVisual, 900);
+    }
+
+    dropzone?.addEventListener('click', () => { if (!busy) fileInput?.click(); });
+    dropzone?.addEventListener('dragenter', event => {
+      if (busy) return;
+      event.preventDefault();
+      dragDepth += 1;
+      dropzone.classList.remove('is-dropped');
+      dropzone.classList.add('dragover');
+      if (dropzoneText) dropzoneText.textContent = text.uploadDragHint;
+    });
+    dropzone?.addEventListener('dragover', event => {
+      if (busy) return;
+      event.preventDefault();
+      event.dataTransfer.dropEffect = 'copy';
+      dropzone.classList.add('dragover');
+      if (dropzoneText) dropzoneText.textContent = text.uploadDragHint;
+    });
+    dropzone?.addEventListener('dragleave', event => {
+      if (busy) return;
+      event.preventDefault();
+      dragDepth = Math.max(0, dragDepth - 1);
+      if (dragDepth === 0) resetDropzoneVisual();
+    });
+    dropzone?.addEventListener('drop', event => {
+      event.preventDefault();
+      if (busy) {
+        resetDropzoneVisual();
+        return;
+      }
+      const files = event.dataTransfer?.files;
+      showDroppedState();
+      if (files?.length) addFiles(files);
+    });
+    fileInput?.addEventListener('change', () => { if (fileInput.files) addFiles(fileInput.files); fileInput.value = ''; });
+    // Prevent the programmatic click from bubbling back to the dropzone, which
+    // would re-trigger fileInput.click() and cause infinite recursion / no dialog.
+    fileInput?.addEventListener('click', event => event.stopPropagation());
+    prompt?.addEventListener('input', updateCounter);
+    form?.addEventListener('submit', event => { event.preventDefault(); generate(); });
+    example?.addEventListener('click', () => { if (prompt && !busy) { prompt.value = mode === 'img2img' ? exampleImg : exampleTxt; updateCounter(); prompt.focus(); } });
+    reset?.addEventListener('click', resetForm);
+    retry?.addEventListener('click', generate);
+    image?.addEventListener('error', () => {
+      if (!image.src) return;
+      image.hidden = true;
+      resultActions.hidden = true;
+      setPreviewState('error');
+      setState(tool.dataset.imageError || text.failure, true);
+    });
+    image?.addEventListener('click', openLightbox);
+    image?.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openLightbox(); }
+    });
+    lightboxCloseButtons?.forEach(button => button.addEventListener('click', closeLightbox));
+    document.addEventListener('keydown', event => { if (event.key === 'Escape' && lightbox && !lightbox.hidden) closeLightbox(); });
+    document.addEventListener('click', event => {
+      if (!event.target.closest('.agnes-history-card')) {
+        historyList?.querySelectorAll('.agnes-history-menu').forEach(menu => { menu.hidden = true; });
+        historyList?.querySelectorAll('.agnes-history-more').forEach(button => button.setAttribute('aria-expanded', 'false'));
+      }
+    });
+    historyClear?.addEventListener('click', async () => {
+      if (!historyDb || busy) return;
+      await historyTransaction('readwrite', store => store.clear());
+      await renderHistory();
+    });
+    window.addEventListener('beforeunload', () => {
+      uploadObjectUrls.forEach(url => URL.revokeObjectURL(url));
+      clearHistoryObjectUrls();
+      clearCurrentResultUrl();
+    });
+
+    selectRatio('1:1');
+    applyInitialInput();
+    setPreviewState('ready');
+    if (!apiUrl) setState(text.disabled, true);
+    initHistory();
+  })();
+</script>

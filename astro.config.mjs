@@ -6,6 +6,9 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://aiartspell.art',
   base: '/',
+  devToolbar: {
+    enabled: false,
+  },
   // 强制所有内部 URL 输出带尾斜杠（消除 GitHub Pages 的 301 slash 补全）
   // 物理文件仍是 /foo/index.html，但 Astro router 不会再生成无尾斜杠的链接
   trailingSlash: 'always',
@@ -27,8 +30,8 @@ export default defineConfig({
       // 把所有静态页面（首页、4 个信息页、所有 prompt 详情页的中英版本）都加入 sitemap
       changefreq: 'weekly',
       lastmod: new Date(),
-      // 排除 404 页面（如果有的话）
-      filter: (page) => !page.includes('/404'),
+      // 排除 404 和仅供本地/内部使用的 Agnes 页面
+      filter: (page) => !page.includes('/404') && !page.includes('/tools/agnes-image'),
       // 按 URL 类型分级 priority
       serialize(item) {
         const url = item.url;

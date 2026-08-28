@@ -2,12 +2,14 @@
 import '../styles/global.css';
 import { getLocaleFromPath, swapLocale, en, zh, type Locale } from '../i18n';
 
-const { title, description, noAds = false, ogImage } = Astro.props as {
-  title?: string;
-  description?: string;
-  noAds?: boolean; // 404 / error pages: skip AdSense
-  ogImage?: string; // 页面级 OG 图（如详情页用 prompt 首图）
-};
+  const { title, description, noAds = false, noindex = false, ogImage, hideFooter = false } = Astro.props as {
+    title?: string;
+    description?: string;
+    noAds?: boolean; // 404 / error pages: skip AdSense
+    noindex?: boolean; // local-only or internal pages: keep out of search indexes
+    ogImage?: string; // 页面级 OG 图（如详情页用 prompt 首图）
+    hideFooter?: boolean;
+  };
 
 // 从 URL 自动判断 locale，避免 prop drilling
 const locale: Locale = getLocaleFromPath(Astro.url.pathname);
@@ -22,14 +24,19 @@ const canonical = new URL(Astro.url.pathname, siteBase).toString();
 const defaultOgImage = new URL('og-default.jpg', siteBase).toString();
 const resolvedOgImage = ogImage || defaultOgImage;
 
-// 语言切换：切到对端首页（而不是保持当前页面），避免 404 页切到对端也 404
+// 语言切换：工具页保持当前上下文，其余页面切到对端首页
 // 用相对路径而非绝对 URL，否则 dev 环境会跳到生产域名
 const B_switcher = import.meta.env.BASE_URL.replace(/\/$/, '');
-const otherLocaleHref = locale === 'zh' ? `${B_switcher}/` : `${B_switcher}/zh/`;
 // 动态读取 base 路径，避免硬编码（适配自定义域名 vs github.io/仓库名）
 const B = import.meta.env.BASE_URL; // 末尾带 /，如 '/' 或 '/prompt-gallery/'
 // ZH 页面需要在链接前加 /zh，EN 页面用 base 即可
 const localePrefix = locale === 'zh' ? `${B}zh/` : B;
+const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const isAgnesImagePage = currentPath === '/tools/agnes-image' || currentPath === '/zh/tools/agnes-image';
+const localeQuery = isAgnesImagePage ? Astro.url.search : '';
+const otherLocaleHref = isAgnesImagePage
+  ? (locale === 'zh' ? `${B}tools/agnes-image/${localeQuery}` : `${B}zh/tools/agnes-image/${localeQuery}`)
+  : (locale === 'zh' ? `${B_switcher}/` : `${B_switcher}/zh/`);
 
 // 双语 hreflang：x-default 指向英文版（默认），并声明真实的两个语言版本
 // 404 / 错误页的 hreflang 指向各自首页（而不是当前错误 URL）
@@ -100,8 +107,8 @@ const hreflangs: Array<{ lang: string; href: string }> = isErrorPage
     ))}
 
     <!-- SEO: explicit indexing directives -->
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
-    <meta name="googlebot" content="index, follow" />
+    <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1'} />
+    <meta name="googlebot" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
     <meta name="author" content={siteName} />
     <meta name="generator" content={Astro.generator} />
 
@@ -179,6 +186,7 @@ const hreflangs: Array<{ lang: string; href: string }> = isErrorPage
           <a href={`${localePrefix}collections`}>{t.nav.collections}</a>
           <a href={`${localePrefix}#featured`}>{t.nav.featured}</a>
           <a href={`${localePrefix}tools`}>{t.nav.tools}</a>
+          <a href={`${localePrefix}tools/agnes-image/`} class="nav-image-generator">{t.nav.imageGenerator}</a>
           <a href={`${localePrefix}about`}>{t.nav.about}</a>
           <a href={otherLocaleHref} class="lang-switcher" aria-label={`Switch language to ${locale === 'zh' ? 'English' : '中文'}`}>
             {t.langSwitcher.switchTo}
@@ -195,22 +203,24 @@ const hreflangs: Array<{ lang: string; href: string }> = isErrorPage
       <slot />
     </main>
 
-    <footer class="site-footer">
-      <div class="container">
-        <div class="footer-brand">
-          <a href={B} class="footer-brand-link">{siteName}</a>
-          <span class="footer-brand-sep">·</span>
-          <span>{t.footer.copyright}</span>
+    {hideFooter ? null : (
+      <footer class="site-footer">
+        <div class="container">
+          <div class="footer-brand">
+            <a href={localePrefix} class="footer-brand-link">{siteName}</a>
+            <span class="footer-brand-sep">·</span>
+            <span>{t.footer.copyright}</span>
+          </div>
+          <nav class="footer-nav" aria-label="Site legal and info">
+            <a href={`${localePrefix}disclaimer`}>Disclaimer</a>
+            <a href={`${localePrefix}privacy`}>Privacy</a>
+            <a href={`${localePrefix}about`}>About</a>
+            <a href={`${localePrefix}contact`}>Contact</a>
+          </nav>
+          <p class="footer-tagline">{t.footer.legalNote}</p>
         </div>
-        <nav class="footer-nav" aria-label="Site legal and info">
-          <a href={`${localePrefix}disclaimer`}>Disclaimer</a>
-          <a href={`${localePrefix}privacy`}>Privacy</a>
-          <a href={`${localePrefix}about`}>About</a>
-          <a href={`${localePrefix}contact`}>Contact</a>
-        </nav>
-        <p class="footer-tagline">{t.footer.legalNote}</p>
-      </div>
-    </footer>
+      </footer>
+    )}
 
     <!-- Cookie consent banner: GDPR / PIPL 合规。用户接受前不发送 GA 数据。 -->
     <div id="cookie-banner" class="cookie-banner" hidden>

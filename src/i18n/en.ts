@@ -7,6 +7,7 @@ export const en = {
     collections: 'Collections',
     featured: 'Featured',
     tools: 'AI Tools',
+    imageGenerator: 'AI Image',
     about: 'About',
   },
   hero: {

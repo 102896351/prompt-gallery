@@ -32,6 +32,8 @@ jobs:
         run: npm ci
 
       - name: Build
+        env:
+          PUBLIC_AGNES_API_URL: /api/agnes/v1/generate-image
         run: npm run build
 
       # ⚠️ 硬守卫：确保 ads.txt 还在（防部署退化）
