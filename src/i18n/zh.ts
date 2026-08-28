@@ -9,6 +9,7 @@ export const zh: Messages = {
     collections: '专题',
     featured: '精选',
     tools: 'AI 工具',
+    imageGenerator: 'AI 生图',
     about: '关于',
   },
   hero: {

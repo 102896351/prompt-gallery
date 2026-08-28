@@ -1,0 +1,18 @@
+name = "aiartspell-agnes-api"
+main = "src/index.ts"
+compatibility_date = "2026-08-28"
+
+# Worker route is configured after verifying the zone and existing DNS setup.
+# The public prompt-gallery R2 bucket is intentionally not bound here:
+# anonymous uploads and generated images are not persisted.
+
+routes = [
+  { pattern = "aiartspell.art/api/agnes/*", zone_name = "aiartspell.art" },
+  { pattern = "www.aiartspell.art/api/agnes/*", zone_name = "aiartspell.art" }
+]
+
+[vars]
+AGNES_API_BASE_URL = "https://apihub.agnes-ai.com/v1"
+AGNES_IMAGE_MODEL = "agnes-image-2.1-flash"
+AGNES_REQUEST_TIMEOUT_MS = "90000"
+ALLOWED_ORIGINS = "https://aiartspell.art,https://www.aiartspell.art,http://localhost:4321,http://127.0.0.1:4321"
