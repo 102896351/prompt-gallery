@@ -37,23 +37,23 @@ const historyArtworks = [
 ];
 const historyItems = isZh
   ? [
-      { artwork: historyArtworks[0], mode: '文生图', ratio: '1:1', model: 'Agnes Image 2.1 Flash', date: '2 分钟前', prompt: 'A cinematic editorial portrait in warm studio light' },
-      { artwork: historyArtworks[1], mode: '文生图', ratio: '16:9', model: 'Agnes Image 2.1 Flash', date: '10 分钟前', prompt: 'A futuristic city street with neon reflections' },
-      { artwork: historyArtworks[2], mode: '文生图', ratio: '9:16', model: 'Agnes Image 2.1 Flash', date: '昨天 19:24', prompt: 'A soft portrait with natural window light' },
+      { artwork: historyArtworks[0], mode: '文生图', ratio: '1:1', model: 'Image Model 2.1 Flash', date: '2 分钟前', prompt: 'A cinematic editorial portrait in warm studio light' },
+      { artwork: historyArtworks[1], mode: '文生图', ratio: '16:9', model: 'Image Model 2.1 Flash', date: '10 分钟前', prompt: 'A futuristic city street with neon reflections' },
+      { artwork: historyArtworks[2], mode: '文生图', ratio: '9:16', model: 'Image Model 2.1 Flash', date: '昨天 19:24', prompt: 'A soft portrait with natural window light' },
     ]
   : [
-      { artwork: historyArtworks[0], mode: 'Text to Image', ratio: '1:1', model: 'Agnes Image 2.1 Flash', date: '2 min ago', prompt: 'A cinematic editorial portrait in warm studio light' },
-      { artwork: historyArtworks[1], mode: 'Text to Image', ratio: '16:9', model: 'Agnes Image 2.1 Flash', date: '10 min ago', prompt: 'A futuristic city street with neon reflections' },
-      { artwork: historyArtworks[2], mode: 'Text to Image', ratio: '9:16', model: 'Agnes Image 2.1 Flash', date: 'Yesterday 19:24', prompt: 'A soft portrait with natural window light' },
+      { artwork: historyArtworks[0], mode: 'Text to Image', ratio: '1:1', model: 'Image Model 2.1 Flash', date: '2 min ago', prompt: 'A cinematic editorial portrait in warm studio light' },
+      { artwork: historyArtworks[1], mode: 'Text to Image', ratio: '16:9', model: 'Image Model 2.1 Flash', date: '10 min ago', prompt: 'A futuristic city street with neon reflections' },
+      { artwork: historyArtworks[2], mode: 'Text to Image', ratio: '9:16', model: 'Image Model 2.1 Flash', date: 'Yesterday 19:24', prompt: 'A soft portrait with natural window light' },
     ];
 
 const copy = isZh
   ? {
       prototype: '视觉原型',
       localOnly: '仅本地测试',
-      title: 'Agnes AI 生图工作台',
-      subtitle: '把灵感变成画面。先在本机测试 Agnes Image 2.1 Flash，再发布你的创作。',
-      model: 'Agnes Image 2.1 Flash',
+      title: 'AI 生图工作台',
+      subtitle: '把灵感变成画面。先在本机测试 Image Model 2.1 Flash，再发布你的创作。',
+      model: 'Image Model 2.1 Flash',
       modelLabel: '当前模型',
       ready: '生成完成',
       modeLabel: '文生图',
@@ -103,9 +103,9 @@ const copy = isZh
   : {
       prototype: 'VISUAL PROTOTYPE',
       localOnly: 'LOCAL ONLY',
-      title: 'Agnes AI Image Studio',
-      subtitle: 'Turn an idea into an image. Test Agnes Image 2.1 Flash locally before publishing your creation.',
-      model: 'Agnes Image 2.1 Flash',
+      title: 'AI Image Studio',
+      subtitle: 'Turn an idea into an image. Test Image Model 2.1 Flash locally before publishing your creation.',
+      model: 'Image Model 2.1 Flash',
       modelLabel: 'Model',
       ready: 'Generation complete',
       modeLabel: 'Text to Image',
@@ -162,7 +162,7 @@ const copy = isZh
           <span class="prototype-badge">{copy.localOnly}</span>
           <span class="prototype-label">{copy.prototype}</span>
         </div>
-        <h1 id={`agnes-prototype-title-${locale}`}><span class="prototype-gradient">Agnes AI</span> {isZh ? '生图工作台' : 'Image Studio'}</h1>
+        <h1 id={`agnes-prototype-title-${locale}`}><span class="prototype-gradient">AI</span> {isZh ? '生图工作台' : 'Image Studio'}</h1>
         <p>{copy.subtitle}</p>
       </div>
       <div class="prototype-model-card">

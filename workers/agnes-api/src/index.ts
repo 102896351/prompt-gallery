@@ -210,6 +210,14 @@ export default {
     if (url.pathname !== '/api/agnes/v1/generate-image') {
       return respond(request, env, 404, errorPayload(404, 'not_found', 'Agnes endpoint not found'));
     }
+    if (request.method === 'GET') {
+      return respond(request, env, 200, {
+        ok: true,
+        endpoint: 'image-generation',
+        method: 'POST',
+        message: 'Send a POST request with a JSON prompt to generate an image',
+      });
+    }
     if (request.method !== 'POST') return respond(request, env, 405, errorPayload(405, 'method_not_allowed', 'Use POST for image generation'));
     try {
       return await generate(request, env);
