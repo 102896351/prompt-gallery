@@ -16,7 +16,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 <Base title={collection.title} description={collection.description}>
   <section class="collection-hero">
     <div class="container">
-      <a href={`${base}/zh/collections`} class="back-link">← 全部专题</a>
+      <a href={`${base}/zh/collections/`} class="back-link">← 全部专题</a>
       <h1>{collection.title}</h1>
       <p class="collection-desc">{collection.description}</p>
       <span class="collection-count">{collection.count} 个提示词 · 显示 {collection.prompts.length} 个样本</span>

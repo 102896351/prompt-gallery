@@ -64,7 +64,7 @@ const tagLabel = (key: string) => (messages.tags as Record<string, string>)[key]
 
 // 站点基础 URL（上线时只需改 astro.config.mjs 的 site，无需改这里）
 const siteBase = Astro.site ?? new URL('https://prompt-gallery.example.com');
-const pageUrl = new URL(`/prompt/${prompt.slug}`, siteBase).toString();
+const pageUrl = new URL(`/prompt/${prompt.slug}/`, siteBase).toString();
 const homeUrl = new URL('/', siteBase).toString();
 const catUrl = new URL(`/#${prompt.category}`, siteBase).toString();
 
@@ -187,7 +187,7 @@ const optimizedH1 = `${displayTitle} — ${engineName} ${displayCatLabel} Prompt
 
     <div class="detail-head">
       <p style="margin: 0 0 12px; font-size: 13px;">
-        <a href="/" style="color: var(--text-soft); text-decoration: none;">← 返回首页</a>
+        <a href={`${base}/`} style="color: var(--text-soft); text-decoration: none;">← 返回首页</a>
       </p>
       <div class="detail-pills">
         <span class="pill active">{displayCatLabel}</span>

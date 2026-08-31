@@ -97,7 +97,7 @@ const itemListLd = {
     '@type': 'ListItem',
     position: i + 1,
     name: p.title,
-    url: new URL(`/zh/prompt/${p.slug}`, siteBase).toString(),
+    url: new URL(`/zh/prompt/${p.slug}/`, siteBase).toString(),
     description: p.tagline,
   })),
 };
@@ -178,7 +178,7 @@ const itemListLd = {
         <div class="fs-col">
           <div class="fs-col-head">
             <h2>{t.section.specials}</h2>
-            <a href={`${base}/collections`}>{t.section.specialsBrowse}</a>
+            <a href={`${base}/zh/collections/`}>{t.section.specialsBrowse}</a>
           </div>
           <p class="editorial-meta" style="font-size: 12px; margin: 0 0 12px;">
             编辑精选的主题提示词合集
@@ -188,7 +188,7 @@ const itemListLd = {
               <a
                 class="specials-image-link"
                 data-specials-link={String(i)}
-                href={`${base}/collections/${c.slug}`}
+                href={`${base}/zh/collections/${c.slug}/`}
                 style={i === 0 ? '' : 'display:none;'}
                 aria-label={`打开专题：${c.title}`}
               >
@@ -198,7 +198,7 @@ const itemListLd = {
                   data-specials-img={String(i)}
                   data-title={c.title}
                   data-desc={c.description}
-                  data-href={`${base}/collections/${c.slug}`}
+                  data-href={`${base}/zh/collections/${c.slug}/`}
                   class={i === 0 ? 'active' : ''}
                   loading={i === 0 ? 'eager' : 'lazy'}
                   fetchpriority={i === 0 ? 'high' : 'auto'}

@@ -100,7 +100,7 @@ const itemListLd = {
     '@type': 'ListItem',
     position: i + 1,
     name: p.title,
-    url: new URL(`/prompt/${p.slug}`, siteBase).toString(),
+    url: new URL(`/prompt/${p.slug}/`, siteBase).toString(),
     description: p.tagline,
   })),
 };
@@ -182,7 +182,7 @@ const itemListLd = {
         <div class="fs-col">
           <div class="fs-col-head">
             <h2>{t.section.specials}</h2>
-            <a href={`${base}/collections`}>{t.section.specialsBrowse}</a>
+            <a href={`${base}/collections/`}>{t.section.specialsBrowse}</a>
           </div>
           <p class="editorial-meta" style="font-size: 12px; margin: 0 0 12px;">
             Editor's picks of the season — themed prompt sets
@@ -192,7 +192,7 @@ const itemListLd = {
               <a
                 class="specials-image-link"
                 data-specials-link={String(i)}
-                href={`${base}/collections/${c.slug}`}
+                href={`${base}/collections/${c.slug}/`}
                 style={i === 0 ? '' : 'display:none;'}
                 aria-label={`Open collection: ${c.titleEn}`}
               >
@@ -202,7 +202,7 @@ const itemListLd = {
                   data-specials-img={String(i)}
                   data-title={c.titleEn}
                   data-desc={c.descriptionEn}
-                  data-href={`${base}/collections/${c.slug}`}
+                  data-href={`${base}/collections/${c.slug}/`}
                   class={i === 0 ? 'active' : ''}
                   loading={i === 0 ? 'eager' : 'lazy'}
                   fetchpriority={i === 0 ? 'high' : 'auto'}

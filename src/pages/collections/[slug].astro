@@ -16,7 +16,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 <Base title={collection.titleEn} description={collection.descriptionEn}>
   <section class="collection-hero">
     <div class="container">
-      <a href={`${base}/collections`} class="back-link">← All collections</a>
+      <a href={`${base}/collections/`} class="back-link">← All collections</a>
       <h1>{collection.titleEn}</h1>
       <p class="collection-desc">{collection.descriptionEn}</p>
       <span class="collection-count">{collection.count} prompts · showing {collection.prompts.length} samples</span>
