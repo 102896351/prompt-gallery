@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 import { createHash } from 'node:crypto';
-import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { extname, join } from 'node:path';
+import { spawn } from 'node:child_process';
 import {
   HeadObjectCommand,
   PutObjectCommand,
@@ -126,23 +127,84 @@ function detectType(buffer) {
   return null;
 }
 
+async function downloadWithCurl(url, target) {
+  return new Promise((resolve, reject) => {
+    const child = spawn('curl', [
+      '--fail', '--silent', '--show-error', '--location',
+      '--retry', String(MAX_RETRIES),
+      '--connect-timeout', '15', '--max-time', String(Math.ceil(REQUEST_TIMEOUT_MS / 1000)),
+      '-A', 'prompt-gallery-r2-migrator/1.0',
+      '--output', target,
+      '--write-out', '\\n%{content_type}\\n%{size_download}',
+      url,
+    ], { stdio: ['ignore', 'pipe', 'pipe'] });
+    let stdout = '';
+    let stderr = '';
+    const timer = setTimeout(() => {
+      child.kill('SIGTERM');
+      reject(new Error(`curl download timed out after ${REQUEST_TIMEOUT_MS}ms for ${url}`));
+    }, REQUEST_TIMEOUT_MS + 1_000);
+    child.stdout.on('data', (data) => { stdout += data; });
+    child.stderr.on('data', (data) => { stderr += data; });
+    child.on('error', (error) => {
+      clearTimeout(timer);
+      reject(error);
+    });
+    child.on('close', async (code) => {
+      clearTimeout(timer);
+      if (code !== 0) {
+        reject(new Error(stderr.trim() || `curl exited ${code} for ${url}`));
+        return;
+      }
+      try {
+        const lines = stdout.trim().split(/\r?\n/);
+        const reportedType = (lines.at(-2) || '').split(';')[0].trim().toLowerCase();
+        const reportedBytes = Number(lines.at(-1) || 0);
+        const file = await readFile(target);
+        const bytes = file.length;
+        if (!bytes || bytes > MAX_BYTES || (reportedBytes && reportedBytes !== bytes)) {
+          throw new Error(`Invalid source size ${bytes} for ${url}`);
+        }
+        const type = detectType(file);
+        if (!type || !ALLOWED_TYPES.has(type)) throw new Error(`Unsupported or invalid image data for ${url}`);
+        if (reportedType && ALLOWED_TYPES.has(reportedType) && reportedType !== type) {
+          throw new Error(`Image signature/type mismatch ${type}/${reportedType} for ${url}`);
+        }
+        await writeFile(target, file);
+        resolve({ type, bytes, sha256: createHash('sha256').update(file).digest('hex') });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  });
+}
+
+async function downloadWithFetch(url, target) {
+  const response = await withTimeout((signal) => fetch(url, {
+    signal,
+    headers: { 'user-agent': 'prompt-gallery-r2-migrator/1.0' },
+  }));
+  if (!response.ok) throw new Error(`Source returned ${response.status} for ${url}`);
+  const type = (response.headers.get('content-type') || '').split(';')[0].toLowerCase();
+  if (!ALLOWED_TYPES.has(type)) throw new Error(`Unsupported source content type ${type} for ${url}`);
+  const length = Number(response.headers.get('content-length') || 0);
+  if (length > MAX_BYTES) throw new Error(`Source image exceeds ${MAX_BYTES} bytes: ${url}`);
+  const data = Buffer.from(await response.arrayBuffer());
+  if (!data.length || data.length > MAX_BYTES) throw new Error(`Invalid source size ${data.length} for ${url}`);
+  const detected = detectType(data);
+  if (!detected || detected !== type) throw new Error(`Image signature/type mismatch ${detected}/${type} for ${url}`);
+  await writeFile(target, data);
+  return { type, bytes: data.length, sha256: createHash('sha256').update(data).digest('hex') };
+}
+
 async function download(url, target) {
   return retry(async () => {
-    const response = await withTimeout((signal) => fetch(url, {
-      signal,
-      headers: { 'user-agent': 'prompt-gallery-r2-migrator/1.0' },
-    }));
-    if (!response.ok) throw new Error(`Source returned ${response.status} for ${url}`);
-    const type = (response.headers.get('content-type') || '').split(';')[0].toLowerCase();
-    if (!ALLOWED_TYPES.has(type)) throw new Error(`Unsupported source content type ${type} for ${url}`);
-    const length = Number(response.headers.get('content-length') || 0);
-    if (length > MAX_BYTES) throw new Error(`Source image exceeds ${MAX_BYTES} bytes: ${url}`);
-    const data = Buffer.from(await response.arrayBuffer());
-    if (!data.length || data.length > MAX_BYTES) throw new Error(`Invalid source size ${data.length} for ${url}`);
-    const detected = detectType(data);
-    if (!detected || detected !== type) throw new Error(`Image signature/type mismatch ${detected}/${type} for ${url}`);
-    await writeFile(target, data);
-    return { type, bytes: data.length, sha256: createHash('sha256').update(data).digest('hex') };
+    try {
+      return await downloadWithCurl(url, target);
+    } catch (error) {
+      if (error?.code !== 'ENOENT') throw error;
+      return downloadWithFetch(url, target);
+    }
   }, `download ${url}`);
 }
 
