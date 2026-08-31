@@ -17,7 +17,7 @@ const MAX_BYTES = Number(process.env.R2_MAX_IMAGE_BYTES || 10 * 1024 * 1024);
 const REQUEST_TIMEOUT_MS = Number(process.env.R2_REQUEST_TIMEOUT_MS || 30_000);
 const MAX_RETRIES = Number(process.env.R2_MAX_RETRIES || 3);
 const CONCURRENCY = Math.max(1, Math.min(Number(process.env.R2_CONCURRENCY || 4), 8));
-const CACHE_CONTROL = 'public, max-age=31536000, immutable';
+const CURL_BIN = process.env.R2_CURL_BIN || (process.platform === 'win32' ? 'curl.exe' : '/usr/bin/curl');
 const TEMP_ROOT = process.env.R2_TEMP_DIR || join(process.env.RUNNER_TEMP || process.env.TMPDIR || '/tmp', 'prompt-gallery-r2');
 
 function parseArgs(argv) {
@@ -129,8 +129,8 @@ function detectType(buffer) {
 
 async function downloadWithCurl(url, target) {
   return new Promise((resolve, reject) => {
-    const child = spawn('curl', [
-      '--fail', '--silent', '--show-error', '--location',
+    const child = spawn(CURL_BIN, [
+      '--http1.1', '--fail', '--silent', '--show-error', '--location',
       '--retry', String(MAX_RETRIES),
       '--connect-timeout', '15', '--max-time', String(Math.ceil(REQUEST_TIMEOUT_MS / 1000)),
       '-A', 'prompt-gallery-r2-migrator/1.0',
@@ -198,14 +198,7 @@ async function downloadWithFetch(url, target) {
 }
 
 async function download(url, target) {
-  return retry(async () => {
-    try {
-      return await downloadWithCurl(url, target);
-    } catch (error) {
-      if (error?.code !== 'ENOENT') throw error;
-      return downloadWithFetch(url, target);
-    }
-  }, `download ${url}`);
+  return retry(() => downloadWithCurl(url, target), `download ${url}`);
 }
 
 function createClient() {
