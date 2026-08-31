@@ -21,6 +21,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const cat = promptCategories.find((c) => c.id === prompt.category);
 const related = getRelatedPrompts(prompt.slug, 8);
 const fullPrompt = prompt.structuredData ? JSON.stringify(prompt.structuredData, null, 2) : prompt.prompt;
+const imageToolUrl = `${base}/zh/tools/agnes-image/?prompt=${encodeURIComponent(fullPrompt)}`;
 // 适用引擎列表（详情页底部"适用于"区块用）
 const compatibleEngines = getCompatibleEngines(prompt.engines);
 const verifiedEngineKeys = new Set(prompt.engines.filter((k: string) => k !== 'other'));
@@ -62,7 +63,7 @@ const tagLabel = (key: string) => (messages.tags as Record<string, string>)[key]
 
 // 站点基础 URL（上线时只需改 astro.config.mjs 的 site，无需改这里）
 const siteBase = Astro.site ?? new URL('https://prompt-gallery.example.com');
-const pageUrl = new URL(`/zh/prompt/${prompt.slug}`, siteBase).toString();
+const pageUrl = new URL(`/zh/prompt/${prompt.slug}/`, siteBase).toString();
 const homeUrl = new URL('/zh/', siteBase).toString();
 const catUrl = new URL(`/zh/#${prompt.category}`, siteBase).toString();
 
@@ -179,7 +180,7 @@ const optimizedH1 = `${prompt.title} — ${engineName} ${displayCatLabel}提示�
 
     <div class="detail-head">
       <p style="margin: 0 0 12px; font-size: 13px;">
-        <a href="/" style="color: var(--text-soft); text-decoration: none;">← 返回首页</a>
+        <a href={`${base}/zh/`} style="color: var(--text-soft); text-decoration: none;">← 返回首页</a>
       </p>
       <div class="detail-pills">
         <span class="pill active">{displayCatLabel}</span>
@@ -198,6 +199,7 @@ const optimizedH1 = `${prompt.title} — ${engineName} ${displayCatLabel}提示�
           <span class="copy-default">📋 复制提示词</span>
           <span class="copy-success hidden">✓ 已复制</span>
         </button>
+        <a href={imageToolUrl} class="btn primary">🎨 使用此提示词生图</a>
         <a href={prompt.source.sourceUrl} target="_blank" rel="noopener" class="btn source-link-hidden">
           在 {prompt.source.platform} 查看原文 →
         </a>

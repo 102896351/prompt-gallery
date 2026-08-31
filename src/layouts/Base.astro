@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { getLocaleFromPath, swapLocale, en, zh, type Locale } from '../i18n';
+import { getLocaleFromPath, normalizePathname, swapLocale, en, zh, type Locale } from '../i18n';
 
   const { title, description, noAds = false, noindex = false, ogImage, hideFooter = false } = Astro.props as {
     title?: string;
@@ -19,7 +19,8 @@ const siteName = t.siteName;
 const finalTitle = title ? `${title} · ${siteName}` : `${siteName} — ${t.siteTagline}`;
 const finalDesc = description || t.siteTagline;
 const siteBase = Astro.site ?? new URL('https://prompt-gallery.example.com');
-const canonical = new URL(Astro.url.pathname, siteBase).toString();
+const canonicalPathname = normalizePathname(Astro.url.pathname);
+const canonical = new URL(canonicalPathname, siteBase).toString();
 // OG 图：页面级优先，否则用默认图（JPG 格式，社交平台对 SVG 抓取常常失败）
 const defaultOgImage = new URL('og-default.jpg', siteBase).toString();
 const resolvedOgImage = ogImage || defaultOgImage;
@@ -40,7 +41,7 @@ const otherLocaleHref = isAgnesImagePage
 
 // 双语 hreflang：x-default 指向英文版（默认），并声明真实的两个语言版本
 // 404 / 错误页的 hreflang 指向各自首页（而不是当前错误 URL）
-const isErrorPage = Astro.url.pathname.startsWith('/404') || Astro.url.pathname === '/404.html';
+const isErrorPage = /^(?:\/zh\/)?404(?:\/|\.html$)/.test(Astro.url.pathname);
 const hreflangs: Array<{ lang: string; href: string }> = isErrorPage
   ? [
       { lang: 'x-default', href: new URL('/', siteBase).toString() },
@@ -49,9 +50,9 @@ const hreflangs: Array<{ lang: string; href: string }> = isErrorPage
     ]
   : [
       // x-default 始终指向英文版（默认语言）；en 指向当前英文对端；zh-Hans 指向当前中文对端
-      { lang: 'x-default', href: locale === 'en' ? canonical : new URL(swapLocale(Astro.url.pathname, 'zh'), siteBase).toString() },
-      { lang: 'en', href: locale === 'en' ? canonical : new URL(swapLocale(Astro.url.pathname, 'zh'), siteBase).toString() },
-      { lang: 'zh-Hans', href: locale === 'zh' ? canonical : new URL(swapLocale(Astro.url.pathname, 'en'), siteBase).toString() },
+      { lang: 'x-default', href: locale === 'en' ? canonical : new URL(swapLocale(canonicalPathname, 'zh'), siteBase).toString() },
+      { lang: 'en', href: locale === 'en' ? canonical : new URL(swapLocale(canonicalPathname, 'zh'), siteBase).toString() },
+      { lang: 'zh-Hans', href: locale === 'zh' ? canonical : new URL(swapLocale(canonicalPathname, 'en'), siteBase).toString() },
     ];
 ---
 
@@ -183,11 +184,11 @@ const hreflangs: Array<{ lang: string; href: string }> = isErrorPage
         </a>
         <nav class="nav" aria-label="Primary">
           <a href={`${localePrefix}#all`}>{t.nav.categories}</a>
-          <a href={`${localePrefix}collections`}>{t.nav.collections}</a>
+          <a href={`${localePrefix}collections/`}>{t.nav.collections}</a>
           <a href={`${localePrefix}#featured`}>{t.nav.featured}</a>
-          <a href={`${localePrefix}tools`}>{t.nav.tools}</a>
-          <!-- AI 生图入口暂时隐藏，页面仍可通过直达 URL 访问 -->
-          <a href={`${localePrefix}about`}>{t.nav.about}</a>
+          <a href={`${localePrefix}tools/`}>{t.nav.tools}</a>
+          <a href={`${localePrefix}tools/agnes-image/`} class="nav-image-generator">{t.nav.imageGenerator}</a>
+          <a href={`${localePrefix}about/`}>{t.nav.about}</a>
           <a href={otherLocaleHref} class="lang-switcher" aria-label={`Switch language to ${locale === 'zh' ? 'English' : '中文'}`}>
             {t.langSwitcher.switchTo}
           </a>
@@ -212,10 +213,10 @@ const hreflangs: Array<{ lang: string; href: string }> = isErrorPage
             <span>{t.footer.copyright}</span>
           </div>
           <nav class="footer-nav" aria-label="Site legal and info">
-            <a href={`${localePrefix}disclaimer`}>Disclaimer</a>
-            <a href={`${localePrefix}privacy`}>Privacy</a>
-            <a href={`${localePrefix}about`}>About</a>
-            <a href={`${localePrefix}contact`}>Contact</a>
+            <a href={`${localePrefix}disclaimer/`}>Disclaimer</a>
+            <a href={`${localePrefix}privacy/`}>Privacy</a>
+            <a href={`${localePrefix}about/`}>About</a>
+            <a href={`${localePrefix}contact/`}>Contact</a>
           </nav>
           <p class="footer-tagline">{t.footer.legalNote}</p>
         </div>
@@ -227,7 +228,7 @@ const hreflangs: Array<{ lang: string; href: string }> = isErrorPage
       <div class="cookie-banner-inner">
         <p class="cookie-banner-text">{locale === 'zh' ? '我们使用 Google Analytics 收集匿名访问数据以改进网站。继续浏览即视为接受。' : 'We use Google Analytics to collect anonymous usage data. Continuing to browse implies consent.'}</p>
         <div class="cookie-banner-actions">
-          <a href={`${localePrefix}privacy`} class="cookie-banner-link">{locale === 'zh' ? '隐私政策' : 'Privacy'}</a>
+          <a href={`${localePrefix}privacy/`} class="cookie-banner-link">{locale === 'zh' ? '隐私政策' : 'Privacy'}</a>
           <button type="button" class="cookie-banner-btn" data-cookie-accept>{locale === 'zh' ? '接受' : 'Accept'}</button>
         </div>
       </div>

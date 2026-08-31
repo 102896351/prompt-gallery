@@ -17,7 +17,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <div class="container">
       <div class="collections-grid">
         {collections.map((c) => (
-          <a href={`${base}/zh/collections/${c.slug}`} class="card collection-card">
+          <a href={`${base}/zh/collections/${c.slug}/`} class="card collection-card">
             <div class="collection-cover">
               <img
                 src={c.cover.startsWith('http') ? c.cover : `${base}${c.cover}`}
