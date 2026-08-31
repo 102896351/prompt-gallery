@@ -22,6 +22,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const cat = promptCategories.find((c) => c.id === prompt.category);
 const related = getRelatedPrompts(prompt.slug, 8);
 const fullPrompt = prompt.structuredData ? JSON.stringify(prompt.structuredData, null, 2) : prompt.prompt;
+const imageToolUrl = `${base}/tools/agnes-image/?prompt=${encodeURIComponent(fullPrompt)}`;
 // 适用引擎列表（详情页底部"适用于"区块用）
 const compatibleEngines = getCompatibleEngines(prompt.engines);
 const verifiedEngineKeys = new Set(prompt.engines.filter((k: string) => k !== 'other'));
@@ -205,6 +206,7 @@ const optimizedH1 = `${displayTitle} — ${engineName} ${displayCatLabel} Prompt
           <span class="copy-default">📋 Copy prompt</span>
           <span class="copy-success hidden">✓ Copied</span>
         </button>
+        <a href={imageToolUrl} class="btn primary">🎨 Generate with image service</a>
         <a href={prompt.source.sourceUrl} target="_blank" rel="noopener" class="btn source-link-hidden">
           View source on {prompt.source.platform} →
         </a>
