@@ -182,7 +182,10 @@ const hreflangs: Array<{ lang: string; href: string }> = isErrorPage
           <img src={`${B}favicon.jpg`} alt="" class="brand-logo" />
           {siteName}
         </a>
-        <nav class="nav" aria-label="Primary">
+        <button type="button" class="mobile-nav-toggle" data-mobile-nav-toggle aria-controls="primary-nav" aria-expanded="false" aria-label={locale === 'zh' ? '打开菜单' : 'Open menu'}>
+          <span aria-hidden="true">☰</span>
+        </button>
+        <nav class="nav" id="primary-nav" aria-label="Primary">
           <a href={`${localePrefix}#all`}>{t.nav.categories}</a>
           <a href={`${localePrefix}collections/`}>{t.nav.collections}</a>
           <a href={`${localePrefix}#featured`}>{t.nav.featured}</a>
@@ -325,6 +328,38 @@ const hreflangs: Array<{ lang: string; href: string }> = isErrorPage
       })();
     </script>
 
+    <!-- 移动端导航菜单逻辑 -->
+    <script is:inline>
+      (function () {
+        var toggle = document.querySelector('[data-mobile-nav-toggle]');
+        var nav = document.getElementById('primary-nav');
+        if (!toggle || !nav) return;
+        function closeMenu() {
+          nav.classList.remove('is-open');
+          toggle.setAttribute('aria-expanded', 'false');
+          toggle.setAttribute('aria-label', document.documentElement.lang === 'zh-Hans' ? '打开菜单' : 'Open menu');
+        }
+        toggle.addEventListener('click', function (event) {
+          event.stopPropagation();
+          var open = nav.classList.toggle('is-open');
+          toggle.setAttribute('aria-expanded', String(open));
+          toggle.setAttribute('aria-label', open ? (document.documentElement.lang === 'zh-Hans' ? '关闭菜单' : 'Close menu') : (document.documentElement.lang === 'zh-Hans' ? '打开菜单' : 'Open menu'));
+        });
+        nav.addEventListener('click', function (event) {
+          if (event.target.closest('a')) closeMenu();
+        });
+        document.addEventListener('click', function (event) {
+          if (!nav.contains(event.target) && !toggle.contains(event.target)) closeMenu();
+        });
+        document.addEventListener('keydown', function (event) {
+          if (event.key === 'Escape') closeMenu();
+        });
+        window.addEventListener('resize', function () {
+          if (window.innerWidth > 760) closeMenu();
+        });
+      })();
+    </script>
+
     <!-- 主题切换按钮逻辑 -->
     <script is:inline>
       (function () {
@@ -408,7 +443,7 @@ const hreflangs: Array<{ lang: string; href: string }> = isErrorPage
           width: 42px;
           height: 42px;
           right: 14px;
-          bottom: 14px;
+          bottom: calc(72px + env(safe-area-inset-bottom));
         }
         .back-to-top svg {
           width: 20px;
