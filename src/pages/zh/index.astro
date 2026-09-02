@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import PromptCard from '../../components/PromptCard.astro';
+import AgnesHomeComposer from '../../components/AgnesHomeComposer.astro';
 import { prompts, promptCategories, type Prompt } from '../../data/prompts';
 import { collections } from '../../data/collections';
 import { zh } from '../../i18n';
@@ -59,7 +60,7 @@ const featuredSlugs = [
   'a-mesmerizing-passage-of-time-at-shanghai-bund',
   'y2k-aesthetic-city-impression-collage-poster',
   'nano-banana-pro-t0r7mf',
-  'ultra-cute-isometric-3d-miniature-chengdu-city-diorama-with-panda-theme',
+  'ultra-cute-isometric-3d-minature-chengdu-city-diorama-with-panda-theme',
   'eternal-cycle-of-architecture-of-mortality',
   'perfect-miniature-banknote',
   'floating-product-photography',
@@ -68,11 +69,8 @@ const featured = featuredSlugs
   .map((s) => prompts.find((p) => p.slug === s))
   .filter(Boolean) as Prompt[];
 
-// Hero banner：取前 5 条精选的首图作为轮播背景（与 i18n hero.slides 数量一致）
-const bannerImages = featured
-  .slice(0, 5)
-  .map((p) => p.images[0]?.src)
-  .filter((src): src is string => Boolean(src));
+// Hero banner：使用统一的本地横幅背景，避免首页首屏加载多张远程图片
+const bannerImage = `${base}/banner_bg.jpg`;
 
 // 按 dateAdded 倒序排序（最新添加的排前）；同日期内用 quality score 兜底
 const sorted = [...prompts].sort((a, b) => {
@@ -105,21 +103,21 @@ const itemListLd = {
 
 <Base>
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(itemListLd)} />
-  {/* Preload hero banner 第一张图：CSS background-image 也能借此机会提前下载（救 LCP） */}
-  {bannerImages[0] && (
-    <link slot="head" rel="preload" as="image" href={bannerImages[0]} fetchpriority="high" />
-  )}
+  {/* 预加载唯一的本地横幅图，保持首屏稳定 */}
+  <link slot="head" rel="preload" as="image" href={bannerImage} fetchpriority="high" />
 
   <section class="hero">
-    <!-- Banner 轮播背景（淡入淡出） -->
     <div class="hero-banner" data-hero-banner aria-hidden="true">
-      {bannerImages.map((src, i) => (
-        <div
-          class={`hero-banner-slide${i === 0 ? ' active' : ''}`}
-          data-hero-slide={String(i)}
-          style={`background-image: url(${src})`}
-        />
-      ))}
+      <img
+        class="hero-banner-slide active"
+        src={bannerImage}
+        alt=""
+        aria-hidden="true"
+        width="2017"
+        height="346"
+        fetchpriority="high"
+        decoding="async"
+      />
       <div class="hero-banner-overlay" />
     </div>
 
@@ -140,6 +138,8 @@ const itemListLd = {
       </div>
     </div>
   </section>
+
+  <AgnesHomeComposer locale="zh" />
 
   <section class="section">
     <div class="container">
@@ -203,6 +203,8 @@ const itemListLd = {
                   loading={i === 0 ? 'eager' : 'lazy'}
                   fetchpriority={i === 0 ? 'high' : 'auto'}
                   decoding="async"
+                  width="1200"
+                  height="750"
                 />
               </a>
             ))}
@@ -469,34 +471,6 @@ const itemListLd = {
     window.addEventListener('resize', updateArrows);
 
     updateArrows();
-    startAuto();
-  })();
-
-  // ===== Hero banner 轮播（背景图；文字与圆点已按需求移除）=====
-  (function () {
-    const banner = document.querySelector('[data-hero-banner]');
-    if (!banner) return;
-    const slides = banner.querySelectorAll('[data-hero-slide]');
-    const total = slides.length;
-    if (total === 0) return;
-    let current = 0;
-    let timer = null;
-
-    function show(idx) {
-      current = (idx + total) % total;
-      slides.forEach((s, i) => s.classList.toggle('active', i === current));
-    }
-    function next() { show(current + 1); }
-    function startAuto() { stopAuto(); timer = setInterval(next, 5000); }
-    function stopAuto() { if (timer) { clearInterval(timer); timer = null; } }
-
-    banner.addEventListener('mouseenter', stopAuto);
-    banner.addEventListener('mouseleave', startAuto);
-
-    document.addEventListener('visibilitychange', () => {
-      document.hidden ? stopAuto() : startAuto();
-    });
-
     startAuto();
   })();
 

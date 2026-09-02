@@ -1,9 +1,12 @@
 ---
 interface Props {
   locale?: 'en' | 'zh';
+  initialPrompt?: string;
+  initialRatio?: '1:1' | '16:9' | '9:16';
+  embedded?: boolean;
 }
 
-const { locale = 'en' } = Astro.props;
+const { locale = 'en', initialPrompt = '', initialRatio = '1:1', embedded = false } = Astro.props;
 const isZh = locale === 'zh';
 const apiUrl = import.meta.env.PUBLIC_AGNES_API_URL
   || (import.meta.env.DEV ? (import.meta.env.PUBLIC_AGNES_LOCAL_API_URL || '') : '');
@@ -151,9 +154,11 @@ const copy = isZh
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 <section
-  class="agnes-tool"
+  class:list={['agnes-tool', { 'agnes-tool-embedded': embedded }]}
   data-locale={locale}
   data-api-url={apiUrl}
+  data-initial-prompt={initialPrompt}
+  data-initial-ratio={initialRatio}
   data-enabled={apiUrl ? 'true' : 'false'}
   data-model-default={defaultModel}
   data-image-error={copy.imageError}
@@ -352,6 +357,10 @@ const copy = isZh
 
 <style>
   .agnes-tool { --agnes-panel-width: 370px; min-height: calc(100vh - 64px); padding: 52px 0 76px; background: radial-gradient(circle at 87% 7%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 25rem), var(--bg); }
+  .agnes-tool-embedded { min-height: 0; padding: 0; background: transparent; }
+  .agnes-tool-embedded .agnes-intro { margin-bottom: 20px; }
+  .agnes-tool-embedded .agnes-intro h1 { font-size: clamp(28px, 4vw, 42px); }
+  .agnes-tool-embedded .agnes-history { margin-bottom: 0; }
   .agnes-container { width: min(var(--maxw), calc(100% - 48px)); margin: 0 auto; }
   .agnes-intro { display: flex; align-items: flex-end; justify-content: space-between; gap: 28px; margin-bottom: 34px; }
   .agnes-kicker { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
@@ -1026,12 +1035,32 @@ const copy = isZh
 
     function applyInitialInput() {
       const params = new URLSearchParams(window.location.search);
-      const initialPrompt = params.get('prompt') || '';
+      let autoStart = false;
+      let sessionPrompt = '';
+      let sessionRatio = '';
+      try {
+        const rawTask = sessionStorage.getItem('agnes-image-task');
+        if (rawTask) {
+          const task = JSON.parse(rawTask);
+          if (task && task.autoStart === true && typeof task.prompt === 'string' && task.prompt.trim()) {
+            sessionPrompt = task.prompt.trim();
+            sessionRatio = typeof task.ratio === 'string' ? task.ratio : '';
+            autoStart = sessionPrompt.length <= MAX_PROMPT_LENGTH;
+          }
+          sessionStorage.removeItem('agnes-image-task');
+        }
+      } catch (error) {
+        console.warn('[agnes-local] session task unavailable', error);
+      }
+      const initialPrompt = sessionPrompt || tool.dataset.initialPrompt || params.get('prompt') || '';
+      const initialRatio = sessionRatio || tool.dataset.initialRatio || '1:1';
       if (initialPrompt && prompt) {
         prompt.value = initialPrompt;
         if (initialPrompt.length > MAX_PROMPT_LENGTH) setState(tool.dataset.promptTooLong || 'Prompt is too long', true);
       }
+      if (['1:1', '16:9', '9:16'].includes(initialRatio)) selectRatio(initialRatio);
       updateCounter();
+      return autoStart;
     }
 
     function renderUploadedFiles() {
@@ -1296,9 +1325,12 @@ const copy = isZh
     });
 
     selectRatio('1:1');
-    applyInitialInput();
+    const shouldAutoStart = applyInitialInput();
     setPreviewState('ready');
     if (!apiUrl) setState(text.disabled, true);
     initHistory();
+    if (shouldAutoStart && apiUrl) {
+      window.setTimeout(() => generate(), 0);
+    }
   })();
 </script>

@@ -1,0 +1,239 @@
+---
+interface Props {
+  locale?: 'en' | 'zh';
+}
+
+const { locale = 'en' } = Astro.props;
+const isZh = locale === 'zh';
+const base = import.meta.env.BASE_URL;
+const generatorUrl = `${base}${isZh ? 'zh/' : ''}tools/agnes-image/`;
+const copy = isZh
+  ? {
+      eyebrow: 'AI 生图入口',
+      title: '把提示词变成图片',
+      description: '输入你的想法，进入 AI 生图工作台直接开始创作。',
+      placeholder: '例如：雨夜霓虹灯下的未来城市，电影感，高细节…',
+      compactPlaceholder: '输入提示词，开始 AI 生图…',
+      ratio: '画面比例',
+      square: '正方形',
+      landscape: '横向',
+      portrait: '竖向',
+      submit: '生成图片',
+      compactSubmit: '开始创作',
+      hint: '提交后将进入 AI 生图工作台，并自动开始生成',
+      tooLong: '提示词不能超过 4000 个字符。',
+      empty: '请先输入提示词。',
+      count: '0 / 4000',
+      collapse: '收起生图入口',
+      expand: '展开生图入口',
+    }
+  : {
+      eyebrow: 'AI IMAGE CREATOR',
+      title: 'Turn a prompt into an image',
+      description: 'Describe an idea, then open AI Image Studio and start creating.',
+      placeholder: 'Example: A futuristic city under neon rain, cinematic, highly detailed…',
+      compactPlaceholder: 'Enter a prompt to start creating…',
+      ratio: 'Aspect ratio',
+      square: 'Square',
+      landscape: 'Landscape',
+      portrait: 'Portrait',
+      submit: 'Generate image',
+      compactSubmit: 'Start creating',
+      hint: 'You will enter AI Image Studio and generation will start automatically',
+      tooLong: 'Prompt must be 4000 characters or fewer.',
+      empty: 'Enter a prompt first.',
+      count: '0 / 4000',
+      collapse: 'Collapse creator',
+      expand: 'Expand creator',
+    };
+---
+
+<section class="agnes-home-composer" data-home-composer data-locale={locale} data-generator-url={generatorUrl} data-too-long={copy.tooLong} data-empty={copy.empty}>
+  <div class="agnes-composer-panel">
+    <form class="agnes-composer-form" data-composer-form>
+      <div class="agnes-composer-input-wrap">
+        <label class="sr-only" for={`home-composer-prompt-${locale}`}>Prompt</label>
+        <textarea id={`home-composer-prompt-${locale}`} data-composer-prompt maxlength="4000" rows="5" placeholder={copy.placeholder}></textarea>
+      </div>
+
+      <div class="agnes-composer-controls">
+        <fieldset class="agnes-composer-options">
+          <legend class="sr-only">{copy.ratio}</legend>
+          <label><input type="radio" name={`home-composer-ratio-${locale}`} value="1:1" checked /> <span>1:1</span><small>{copy.square}</small></label>
+          <label><input type="radio" name={`home-composer-ratio-${locale}`} value="16:9" /> <span>16:9</span><small>{copy.landscape}</small></label>
+          <label><input type="radio" name={`home-composer-ratio-${locale}`} value="9:16" /> <span>9:16</span><small>{copy.portrait}</small></label>
+        </fieldset>
+        <button type="submit" class="agnes-composer-submit" data-composer-submit aria-label={copy.submit} title={copy.submit}>
+          <span aria-hidden="true">✦</span>
+          <span class="sr-only">{copy.submit}</span>
+        </button>
+      </div>
+      <span class="sr-only" data-composer-counter>{copy.count}</span>
+    </form>
+    <p class="agnes-composer-status" data-composer-status aria-live="polite"></p>
+  </div>
+</section>
+
+<style>
+  .agnes-home-composer {
+    position: relative;
+    z-index: 20;
+    margin-top: -30px;
+  }
+  .agnes-composer-panel {
+    width: min(1250px, calc(100% - 48px));
+    min-height: 205px;
+    margin: 0 auto;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #e5e7eb;
+    border-radius: 11px;
+    background: #fff;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, .08);
+  }
+  .agnes-composer-form { display: flex; min-height: 185px; flex-direction: column; }
+  .agnes-composer-input-wrap { flex: 1; min-height: 0; }
+  .agnes-composer-input-wrap textarea {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 145px;
+    box-sizing: border-box;
+    resize: none;
+    padding: 17px 18px;
+    border: 1px solid #e5e7eb;
+    border-radius: 9px;
+    outline: 0;
+    background: #fff;
+    color: #111827;
+    font: inherit;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  .agnes-composer-input-wrap textarea::placeholder { color: #9ca3af; }
+  .agnes-composer-input-wrap textarea:focus { border-color: #fa5151; box-shadow: 0 0 0 3px rgba(250, 81, 81, .12); }
+  .agnes-composer-controls { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 8px; }
+  .agnes-composer-options { display: flex; align-items: center; gap: 9px; margin: 0; padding: 0; border: 0; }
+  .agnes-composer-options label { display: inline-flex; min-width: 70px; min-height: 36px; box-sizing: border-box; align-items: center; justify-content: center; gap: 5px; padding: 0 10px; border: 1px solid #e5e7eb; border-radius: 7px; background: #fff; color: #8b95a5; font-size: 11px; cursor: pointer; }
+  .agnes-composer-options label:hover { border-color: #f5b0c9; background: #fff7fa; color: #c2185b; }
+  .agnes-composer-options label:has(input:checked) { border-color: #e11d74; background: #fce8f1; color: #e11d74; }
+  .agnes-composer-options input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+  .agnes-composer-options label span { font-size: 11px; font-weight: 750; }
+  .agnes-composer-options label small { display: none; }
+  .agnes-composer-submit { display: grid; width: 36px; height: 36px; flex: 0 0 36px; place-items: center; padding: 0; border: 0; border-radius: 6px; background: #f06445; color: #fff; font: inherit; font-size: 17px; line-height: 1; cursor: pointer; box-shadow: 0 4px 10px rgba(240, 100, 69, .22); }
+  .agnes-composer-submit:hover { background: #e65335; transform: translateY(-1px); }
+  .agnes-composer-status { min-height: 16px; margin: 7px 4px 0; color: #dc2626; font-size: 11px; }
+  .agnes-composer-status:empty { display: none; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+  /* Floating state: a separate compact capsule style for scrolling */
+  .agnes-home-composer.is-floating { min-height: 72px; margin-top: 0; padding-bottom: 0; }
+  .agnes-home-composer.is-floating .agnes-composer-panel {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    left: 16px;
+    z-index: 800;
+    width: min(760px, calc(100% - 32px));
+    min-height: 0;
+    padding: 7px 9px;
+    margin: 0 auto;
+    border: none;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--bg-card) 96%, transparent);
+    box-shadow: 0 12px 34px rgba(15, 23, 42, .22);
+  }
+  .agnes-home-composer.is-floating .agnes-composer-form { display: grid; min-height: 0; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; }
+  .agnes-home-composer.is-floating .agnes-composer-input-wrap textarea { min-height: 40px; height: 40px; padding: 10px 12px; border-color: transparent; border-radius: 999px; background: var(--bg-soft); color: var(--text); font-size: 12px; resize: none; overflow: hidden; scrollbar-width: none; -ms-overflow-style: none; }
+  .agnes-home-composer.is-floating .agnes-composer-input-wrap textarea::-webkit-scrollbar { display: none; }
+  .agnes-home-composer.is-floating .agnes-composer-controls { margin-top: 0; }
+  .agnes-home-composer.is-floating .agnes-composer-options { display: none; }
+  .agnes-home-composer.is-floating .agnes-composer-submit { width: auto; height: 40px; min-height: 40px; flex: 0 0 auto; padding: 0 15px; border-radius: 999px; background: #f06445; font-size: 12px; }
+  .agnes-home-composer.is-floating .agnes-composer-submit .sr-only { position: static; width: auto; height: auto; margin: 0; overflow: visible; clip: auto; white-space: nowrap; }
+  .agnes-home-composer.is-floating .agnes-composer-submit > span:first-child { display: none; }
+
+  @media (max-width: 760px) {
+    .agnes-composer-panel { width: calc(100% - 32px); }
+  }
+  @media (max-width: 560px) {
+    .agnes-composer-panel { width: calc(100% - 24px); min-height: 178px; padding: 7px; border-width: 3px; }
+    .agnes-composer-form { min-height: 158px; }
+    .agnes-composer-input-wrap textarea { min-height: 120px; padding: 14px; font-size: 14px; }
+    .agnes-composer-options { gap: 5px; }
+    .agnes-composer-options label { min-width: 58px; min-height: 36px; padding: 0 7px; }
+    .agnes-home-composer.is-floating .agnes-composer-panel {
+      right: 10px;
+      bottom: calc(10px + env(safe-area-inset-bottom));
+      left: 10px;
+      z-index: 800;
+      width: calc(100% - 20px);
+    }
+  }
+</style>
+
+<script is:inline>
+  (() => {
+    const root = document.querySelector('[data-home-composer]');
+    if (!root) return;
+    const form = root.querySelector('[data-composer-form]');
+    const prompt = root.querySelector('[data-composer-prompt]');
+    const counter = root.querySelector('[data-composer-counter]');
+    const status = root.querySelector('[data-composer-status]');
+    const toggle = root.querySelector('[data-composer-toggle]');
+    const MAX_PROMPT_LENGTH = 4000;
+    const TASK_KEY = 'agnes-image-task';
+    const locale = root.dataset.locale === 'zh' ? 'zh' : 'en';
+    let expanded = true;
+    let ticking = false;
+
+    const track = (name) => {
+      if (typeof window.gtag === 'function') window.gtag('event', name, { event_category: 'image_creator', language: locale });
+    };
+    const updateCounter = () => {
+      if (counter && prompt) counter.textContent = `${prompt.value.length} / ${MAX_PROMPT_LENGTH}`;
+    };
+    const setExpanded = (value) => {
+      expanded = value;
+      root.classList.toggle('is-expanded', expanded);
+      toggle?.setAttribute('aria-expanded', String(expanded));
+      if (toggle) toggle.setAttribute('aria-label', expanded ? (root.dataset.locale === 'zh' ? '收起生图入口' : 'Collapse creator') : (root.dataset.locale === 'zh' ? '展开生图入口' : 'Expand creator'));
+      if (expanded) track('composer_expand');
+    };
+    const updateFloating = () => {
+      const hero = document.querySelector('.hero');
+      const threshold = hero ? Math.max(120, hero.getBoundingClientRect().bottom + window.scrollY - 90) : 180;
+      const floating = window.scrollY > threshold;
+      root.classList.toggle('is-floating', floating);
+      if (!floating && !expanded) setExpanded(true);
+      ticking = false;
+    };
+    const onScroll = () => {
+      if (!ticking) { window.requestAnimationFrame(updateFloating); ticking = true; }
+    };
+
+    root.addEventListener('pointerdown', () => {
+      if (root.classList.contains('is-floating') && !expanded) setExpanded(true);
+    });
+    prompt?.addEventListener('focus', () => {
+      if (root.classList.contains('is-floating') && !expanded) setExpanded(true);
+    });
+    prompt?.addEventListener('input', updateCounter);
+    toggle?.addEventListener('click', (event) => { event.stopPropagation(); setExpanded(!expanded); });
+    form?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const value = prompt?.value.trim() || '';
+      if (!value) { if (status) status.textContent = root.dataset.empty || 'Enter a prompt first.'; prompt?.focus(); return; }
+      if (value.length > MAX_PROMPT_LENGTH) { if (status) status.textContent = root.dataset.tooLong || 'Prompt is too long.'; prompt?.focus(); return; }
+      const ratio = form.querySelector('input[type="radio"]:checked')?.value || '1:1';
+      const task = { prompt: value, ratio, autoStart: true, nonce: `${Date.now()}-${Math.random().toString(36).slice(2)}` };
+      try { sessionStorage.setItem(TASK_KEY, JSON.stringify(task)); } catch { if (status) status.textContent = 'Session storage is unavailable. Please try again.'; return; }
+      track('composer_submit');
+      track('composer_redirect_to_generator');
+      window.location.assign(root.dataset.generatorUrl || (locale === 'zh' ? '/zh/tools/agnes-image/' : '/tools/agnes-image/'));
+    });
+    window.addEventListener('scroll', onScroll, { passive: true });
+    updateCounter();
+    updateFloating();
+    track('composer_view');
+  })();
+</script>
