@@ -2,6 +2,7 @@
 import Base from '../../../layouts/Base.astro';
 import PromptImage from '../../../components/PromptImage.astro';
 import PromptCard from '../../../components/PromptCard.astro';
+import AgnesHomeComposer from '../../../components/AgnesHomeComposer.astro';
 import { prompts, promptCategories, getRelatedPrompts } from '../../../data/prompts';
 import { getCompatibleEngines } from '../../../data/engines';
 import { getDetailSeoTitle, getDetailSeoDescription } from '../../../utils/seo';
@@ -22,6 +23,11 @@ const cat = promptCategories.find((c) => c.id === prompt.category);
 const related = getRelatedPrompts(prompt.slug, 8);
 const fullPrompt = prompt.structuredData ? JSON.stringify(prompt.structuredData, null, 2) : prompt.prompt;
 const imageToolUrl = `${base}/zh/tools/agnes-image/?prompt=${encodeURIComponent(fullPrompt)}`;
+const normalizedRatio = prompt.aspectRatio === '16:9'
+  ? '16:9'
+  : prompt.aspectRatio === '9:16' || /^(2:3|3:4)$/.test(prompt.aspectRatio || '')
+    ? '9:16'
+    : '1:1';
 // 适用引擎列表（详情页底部"适用于"区块用）
 const compatibleEngines = getCompatibleEngines(prompt.engines);
 const verifiedEngineKeys = new Set(prompt.engines.filter((k: string) => k !== 'other'));
@@ -205,6 +211,13 @@ const optimizedH1 = `${prompt.title} — ${engineName} ${displayCatLabel}提示�
         </a>
       </div>
     </div>
+
+    <AgnesHomeComposer
+      locale="zh"
+      initialPrompt={prompt.prompt}
+      initialRatio={normalizedRatio}
+      floatingMode="detail"
+    />
 
     <div class="detail-grid">
       <div class="prose">
