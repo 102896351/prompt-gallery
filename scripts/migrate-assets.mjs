@@ -131,7 +131,7 @@ function detectType(buffer) {
 async function downloadWithCurl(url, target) {
   return new Promise((resolve, reject) => {
     const child = spawn(CURL_BIN, [
-      '--http1.1', '--fail', '--silent', '--show-error', '--location',
+      '--http1.1', '--ipv4', '--tlsv1.2', '--fail', '--silent', '--show-error', '--location',
       '--retry', String(MAX_RETRIES),
       '--connect-timeout', '15', '--max-time', String(Math.ceil(REQUEST_TIMEOUT_MS / 1000)),
       '-A', 'prompt-gallery-r2-migrator/1.0',
