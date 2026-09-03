@@ -17,6 +17,7 @@ const MAX_BYTES = Number(process.env.R2_MAX_IMAGE_BYTES || 10 * 1024 * 1024);
 const REQUEST_TIMEOUT_MS = Number(process.env.R2_REQUEST_TIMEOUT_MS || 30_000);
 const MAX_RETRIES = Number(process.env.R2_MAX_RETRIES || 3);
 const CONCURRENCY = Math.max(1, Math.min(Number(process.env.R2_CONCURRENCY || 4), 8));
+const CACHE_CONTROL = 'public, max-age=31536000, immutable';
 const CURL_BIN = process.env.R2_CURL_BIN || (process.platform === 'win32' ? 'curl.exe' : '/usr/bin/curl');
 const TEMP_ROOT = process.env.R2_TEMP_DIR || join(process.env.RUNNER_TEMP || process.env.TMPDIR || '/tmp', 'prompt-gallery-r2');
 
