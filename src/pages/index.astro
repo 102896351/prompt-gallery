@@ -90,8 +90,8 @@ const sortedExcludingFeatured = sorted.filter((p) => !featuredSet.has(p.slug));
 const itemListLd = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
-  name: 'Ai Art Spell - A curated bilingual gallery of AI image-generation prompts',
-  description: t.siteTagline,
+  name: 'Ai Art Spell - AI Image Prompts and Online Image Generator',
+  description: 'AI image prompts, AI art prompts, visual examples, and an online image generator.',
   url: new URL('/', siteBase).toString(),
   numberOfItems: prompts.length,
   itemListElement: prompts.slice(0, 50).map((p, i) => ({
@@ -104,7 +104,7 @@ const itemListLd = {
 };
 ---
 
-<Base>
+<Base title="Free AI Image Generator & AI Image Prompts" description="Use a free AI image generator online and explore AI image prompts, AI art prompts, examples, and curated collections.">
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(itemListLd)} />
   {/* Preload the single local banner image for a fast, stable hero */}
   <link slot="head" rel="preload" as="image" href={bannerImage} fetchpriority="high" />
@@ -126,8 +126,8 @@ const itemListLd = {
 
     <div class="container hero-content">
       <h1>
-        <span class="grad">{t.hero.titlePrefix}</span><br />
-        {t.hero.titleSuffix}
+        <span class="grad">AI image prompts</span><br />
+        and online image creation.
       </h1>
       <div class="search-wrap">
         <input
@@ -143,6 +143,12 @@ const itemListLd = {
   </section>
 
   <AgnesHomeComposer locale="en" />
+
+  <section class="homepage-intro" aria-label="About the AI image prompt library">
+    <div class="container">
+      <p><strong>AI image prompts and AI art prompts</strong> with visual examples, reusable ideas, and curated collections for your next image.</p>
+    </div>
+  </section>
 
   <!-- Featured + Specials: two-column row -->
   <section class="section">
@@ -516,7 +522,8 @@ const itemListLd = {
     if (!grid || !search) return;
 
     let activeCat = 'all';
-    let activeQuery = '';
+    let activeQuery = new URLSearchParams(window.location.search).get('q')?.trim() || '';
+    if (activeQuery) search.value = activeQuery;
 
     function apply() {
       let visible = 0;

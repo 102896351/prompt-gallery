@@ -101,7 +101,7 @@ const itemListLd = {
 };
 ---
 
-<Base>
+<Base title="免费AI生图与AI生图提示词" description="在线使用免费AI生图工具，浏览 AI生图提示词、AI绘画提示词、示例图片和精选合集。">
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(itemListLd)} />
   {/* 预加载唯一的本地横幅图，保持首屏稳定 */}
   <link slot="head" rel="preload" as="image" href={bannerImage} fetchpriority="high" />
@@ -123,8 +123,8 @@ const itemListLd = {
 
     <div class="container hero-content">
       <h1>
-        <span class="grad">{t.hero.titlePrefix}</span><br />
-        {t.hero.titleSuffix}
+        <span class="grad">AI生图提示词</span><br />
+        与在线图片生成。
       </h1>
       <div class="search-wrap">
         <input
@@ -140,6 +140,12 @@ const itemListLd = {
   </section>
 
   <AgnesHomeComposer locale="zh" />
+
+  <section class="homepage-intro" aria-label="关于 AI 生图提示词库">
+    <div class="container">
+      <p><strong>AI生图提示词与 AI绘画提示词</strong>，配有示例图片、可复用创意和主题合集，帮助你快速开始下一次创作。</p>
+    </div>
+  </section>
 
   <section class="section">
     <div class="container">
@@ -485,7 +491,8 @@ const itemListLd = {
     if (!grid || !search) return;
 
     let activeCat = 'all';
-    let activeQuery = '';
+    let activeQuery = new URLSearchParams(window.location.search).get('q')?.trim() || '';
+    if (activeQuery) search.value = activeQuery;
 
     function apply() {
       let visible = 0;

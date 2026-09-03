@@ -3,13 +3,31 @@ import Base from '../../layouts/Base.astro';
 import { collections } from '../../data/collections';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const collectionListLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'AI生图提示词合集',
+  description: '按主题整理的 AI生图提示词和 AI绘画提示词合集。',
+  url: new URL('/zh/collections/', Astro.site ?? 'https://aiartspell.art').toString(),
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: collections.length,
+    itemListElement: collections.map((c, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: c.title,
+      url: new URL(`/zh/collections/${c.slug}/`, Astro.site ?? 'https://aiartspell.art').toString(),
+    })),
+  },
+};
 ---
 
-<Base title="精选专题" description="按主题精选的 AI 图像生成提示词合集。">
+<Base title="AI生图提示词与绘画提示词合集" description="按主题浏览精选 AI生图提示词和 AI绘画提示词，包含人像、产品摄影、海报、插画和 3D 等示例。">
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(collectionListLd)} />
   <section class="hero collections-hero">
     <div class="container">
-      <h1><span class="grad">精选专题</span></h1>
-      <p>探索精心策划的提示词合集——人像、科幻、插画、3D 等多种主题。</p>
+      <h1><span class="grad">AI生图提示词合集</span></h1>
+      <p>按主题探索精选 AI生图提示词和 AI绘画提示词——人像、产品摄影、海报、插画、3D 等。</p>
     </div>
   </section>
 

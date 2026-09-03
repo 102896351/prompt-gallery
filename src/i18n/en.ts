@@ -1,7 +1,7 @@
 // 英文 UI 文案
 export const en = {
   siteName: 'Ai Art Spell',
-  siteTagline: 'A curated bilingual gallery of AI image-generation prompts.',
+  siteTagline: 'AI image prompts and a curated bilingual gallery for image generation.',
   nav: {
     categories: 'Categories',
     collections: 'Collections',

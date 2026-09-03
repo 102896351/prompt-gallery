@@ -3,13 +3,31 @@ import Base from '../layouts/Base.astro';
 import { collections } from '../data/collections';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const collectionListLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'AI Image Prompt Collections',
+  description: 'Curated AI image prompts and AI art prompts organized by visual theme and use case.',
+  url: new URL('/collections/', Astro.site ?? 'https://aiartspell.art').toString(),
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: collections.length,
+    itemListElement: collections.map((c, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: c.titleEn,
+      url: new URL(`/collections/${c.slug}/`, Astro.site ?? 'https://aiartspell.art').toString(),
+    })),
+  },
+};
 ---
 
-<Base title="Collections" description="Curated collections of AI image-generation prompts by theme.">
+<Base title="AI Image Prompts & Art Prompt Collections" description="Browse curated AI image prompts and AI art prompt collections with visual examples for portraits, products, posters, illustration, and 3D art.">
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(collectionListLd)} />
   <section class="hero collections-hero">
     <div class="container">
-      <h1><span class="grad">Collections</span></h1>
-      <p>Explore curated prompt collections by theme — portraits, sci-fi, illustration, 3D, and more.</p>
+      <h1><span class="grad">AI Image Prompt Collections</span></h1>
+      <p>Explore curated AI image prompts and AI art prompts by theme — portraits, product photography, posters, illustration, 3D, and more.</p>
     </div>
   </section>
 
