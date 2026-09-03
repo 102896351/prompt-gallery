@@ -199,13 +199,14 @@ async function downloadWithFetch(url, target) {
 }
 
 async function download(url, target) {
+  const source = new URL(url);
   const urls = [];
-  if (url.hostname === SOURCE_HOST) {
-    const httpUrl = new URL(url);
+  if (source.hostname === SOURCE_HOST) {
+    const httpUrl = new URL(source);
     httpUrl.protocol = 'http:';
     urls.push(httpUrl);
   }
-  urls.push(url);
+  urls.push(source);
   let lastError;
   for (const candidateUrl of urls) {
     try {
