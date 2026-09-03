@@ -199,7 +199,36 @@ async function downloadWithFetch(url, target) {
 }
 
 async function download(url, target) {
-  return retry(() => downloadWithFetch(url, target), `download ${url}`);
+  const urls = [url];
+  if (url.hostname === SOURCE_HOST) {
+    const httpUrl = new URL(url);
+    httpUrl.protocol = 'http:';
+    urls.push(httpUrl);
+  }
+  let lastError;
+  for (const candidateUrl of urls) {
+    try {
+      return await retry(async () => {
+        let curlError;
+        try {
+          return await downloadWithCurl(candidateUrl, target);
+        } catch (error) {
+          curlError = error;
+          console.warn(`[r2] curl download failed for ${candidateUrl}: ${error?.message || error}; trying fetch`);
+        }
+        try {
+          return await downloadWithFetch(candidateUrl, target);
+        } catch (fetchError) {
+          throw new Error(`curl: ${curlError?.message || curlError}; fetch: ${fetchError?.message || fetchError}`, { cause: fetchError });
+        }
+      }, `download ${candidateUrl}`);
+    } catch (error) {
+      lastError = error;
+      if (candidateUrl.protocol === 'http:') break;
+      console.warn(`[r2] HTTPS source unavailable for ${url}; trying HTTP fallback`);
+    }
+  }
+  throw lastError;
 }
 
 function createClient() {
