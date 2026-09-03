@@ -258,6 +258,18 @@ async function headPublic(url) {
   throw lastError;
 }
 
+async function headR2(client, bucket, key) {
+  return retry(async () => {
+    const response = await client.send(new HeadObjectCommand({ Bucket: bucket, Key: key }));
+    return {
+      ok: true,
+      status: response.$metadata?.httpStatusCode || 200,
+      contentType: (response.ContentType || '').split(';')[0].toLowerCase(),
+      bytes: Number(response.ContentLength || 0),
+    };
+  }, `verify R2 object ${key}`);
+}
+
 async function uploadOne(client, bucket, key, data, metadata) {
   if (client) {
     try {
@@ -338,8 +350,12 @@ async function main() {
         const key = keyFor(value, metadata.type);
         const r2Url = publicUrlFor(key, base);
         const uploadStatus = await uploadOne(client, bucket, key, await readFile(target), metadata);
-        const publicCheck = dryRun ? { ok: true, status: 200, contentType: metadata.type, bytes: metadata.bytes } : await headPublic(r2Url);
-        if (!publicCheck.ok || publicCheck.contentType !== metadata.type || (publicCheck.bytes && publicCheck.bytes !== metadata.bytes)) throw new Error(`R2 public check failed for ${r2Url}`);
+        const r2Check = dryRun
+          ? { ok: true, status: 200, contentType: metadata.type, bytes: metadata.bytes }
+          : await headR2(client, bucket, key);
+        if (!r2Check.ok || r2Check.contentType !== metadata.type || (r2Check.bytes && r2Check.bytes !== metadata.bytes)) {
+          throw new Error(`R2 object verification failed for ${key}`);
+        }
         const record = { sourceUrl: value, r2Url, key, sha256: metadata.sha256, bytes: metadata.bytes, contentType: metadata.type, status: 'verified', checkedAt: new Date().toISOString(), uploadStatus };
         records.set(value, record);
         manifest.assets[value] = record;
