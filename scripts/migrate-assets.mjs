@@ -232,15 +232,30 @@ function createClient() {
 }
 
 async function headPublic(url) {
-  return retry(async () => {
-    const response = await withTimeout((signal) => fetch(url, { method: 'HEAD', signal, headers: { 'user-agent': 'prompt-gallery-r2-migrator/1.0' } }));
-    return {
-      ok: response.ok,
-      status: response.status,
-      contentType: (response.headers.get('content-type') || '').split(';')[0].toLowerCase(),
-      bytes: Number(response.headers.get('content-length') || 0),
-    };
-  }, `verify ${url}`);
+  const urls = [url];
+  const parsed = new URL(url);
+  if (parsed.protocol === 'https:') {
+    parsed.protocol = 'http:';
+    urls.push(parsed);
+  }
+  let lastError;
+  for (const candidateUrl of urls) {
+    try {
+      return await retry(async () => {
+        const response = await withTimeout((signal) => fetch(candidateUrl, { method: 'HEAD', signal, headers: { 'user-agent': 'prompt-gallery-r2-migrator/1.0' } }));
+        return {
+          ok: response.ok,
+          status: response.status,
+          contentType: (response.headers.get('content-type') || '').split(';')[0].toLowerCase(),
+          bytes: Number(response.headers.get('content-length') || 0),
+        };
+      }, `verify ${candidateUrl}`);
+    } catch (error) {
+      lastError = error;
+      console.warn(`[r2] public HEAD failed for ${candidateUrl}: ${error?.message || error}`);
+    }
+  }
+  throw lastError;
 }
 
 async function uploadOne(client, bucket, key, data, metadata) {
