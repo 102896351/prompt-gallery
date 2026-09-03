@@ -199,7 +199,14 @@ async function downloadWithFetch(url, target) {
 }
 
 async function download(url, target) {
-  return retry(() => downloadWithCurl(url, target), `download ${url}`);
+  return retry(async () => {
+    try {
+      return await downloadWithCurl(url, target);
+    } catch (error) {
+      if (error?.code !== 'ENOENT') throw error;
+      return downloadWithFetch(url, target);
+    }
+  }, `download ${url}`);
 }
 
 function createClient() {
