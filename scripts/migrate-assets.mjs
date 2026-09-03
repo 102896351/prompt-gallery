@@ -200,11 +200,19 @@ async function downloadWithFetch(url, target) {
 
 async function download(url, target) {
   return retry(async () => {
+    let curlError;
     try {
       return await downloadWithCurl(url, target);
     } catch (error) {
-      if (error?.code !== 'ENOENT') throw error;
-      return downloadWithFetch(url, target);
+      curlError = error;
+      console.warn(`[r2] curl download failed for ${url}: ${error?.message || error}; trying fetch`);
+    }
+    try {
+      return await downloadWithFetch(url, target);
+    } catch (fetchError) {
+      const combined = new Error(`curl: ${curlError?.message || curlError}; fetch: ${fetchError?.message || fetchError}`);
+      combined.cause = fetchError;
+      throw combined;
     }
   }, `download ${url}`);
 }
