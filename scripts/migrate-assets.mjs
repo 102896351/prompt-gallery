@@ -328,7 +328,9 @@ async function main() {
         records.set(value, record);
         manifest.assets[value] = record;
       } catch (error) {
-        failures.push({ value, error: String(error?.message || error), path: task.path });
+        const message = String(error?.message || error);
+        failures.push({ value, error: message, path: task.path });
+        console.error(`[r2] failed ${value}: ${message}`);
       }
     }
   }
