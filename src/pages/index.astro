@@ -4,6 +4,7 @@ import PromptCard from '../components/PromptCard.astro';
 import AgnesHomeComposer from '../components/AgnesHomeComposer.astro';
 import { prompts, promptCategories, type Prompt } from '../data/prompts';
 import { collections } from '../data/collections';
+import { engines } from '../data/engines';
 import { en } from '../i18n';
 
 const t = en;
@@ -86,6 +87,39 @@ const sorted = [...prompts].sort((a, b) => {
 const featuredSet = new Set(featuredSlugs);
 const sortedExcludingFeatured = sorted.filter((p) => !featuredSet.has(p.slug));
 
+const categoryCards = promptCategories.map((category) => {
+  const matches = prompts.filter((prompt) => prompt.category === category.id);
+  return {
+    ...category,
+    count: matches.length,
+    image: matches.find((prompt) => prompt.images[0]?.src)?.images[0],
+  };
+}).filter((category) => category.count > 0);
+
+const modelCards = Object.values(engines)
+  .map((engine) => ({
+    ...engine,
+    count: prompts.filter((prompt) => prompt.engines.includes(engine.key as Prompt['engines'][number])).length,
+  }))
+  .filter((engine) => engine.count > 0 && engine.key !== 'other')
+  .sort((a, b) => b.count - a.count)
+  .slice(0, 8);
+
+const homepageKeywords = [
+  'free AI image generator',
+  'AI image generator online',
+  'text to image AI generator',
+  'AI image prompts',
+  'AI art prompts',
+  'AI portrait prompts',
+  'AI product photography prompts',
+  'AI poster prompts',
+  'AI 3D prompts',
+  'AI illustration prompts',
+  'cinematic AI prompts',
+  'copy-ready image prompts',
+].join(', ');
+
 // JSON-LD ItemList
 const itemListLd = {
   '@context': 'https://schema.org',
@@ -94,7 +128,7 @@ const itemListLd = {
   description: 'AI image prompts, AI art prompts, visual examples, and an online image generator.',
   url: new URL('/', siteBase).toString(),
   numberOfItems: prompts.length,
-  itemListElement: prompts.slice(0, 50).map((p, i) => ({
+  itemListElement: [...featured, ...sorted.filter((p) => !featuredSet.has(p.slug))].slice(0, 50).map((p, i) => ({
     '@type': 'ListItem',
     position: i + 1,
     name: p.title,
@@ -104,8 +138,8 @@ const itemListLd = {
 };
 ---
 
-<Base title="Free AI Image Generator & AI Image Prompts" description="Use a free AI image generator online and explore AI image prompts, AI art prompts, examples, and curated collections.">
-  <script slot="head" type="application/ld+json" set:html={JSON.stringify(itemListLd)} />
+<Base title="Free AI Image Generator & AI Image Prompts" description="Explore free AI image prompts, AI art prompts, portrait, product, poster, 3D, illustration, and cinematic examples, then create images online in AI Image Studio.">
+  <Fragment slot="head"><meta name="keywords" content={homepageKeywords} /></Fragment>  <script slot="head" type="application/ld+json" set:html={JSON.stringify(itemListLd)} />
   {/* Preload the single local banner image for a fast, stable hero */}
   <link slot="head" rel="preload" as="image" href={bannerImage} fetchpriority="high" />
 
@@ -129,6 +163,8 @@ const itemListLd = {
         <span class="grad">AI image prompts</span><br />
         and online image creation.
       </h1>
+      <p class="hero-subtitle">Browse copy-ready AI image prompts and AI art prompts with real examples, then send any idea to our online AI Image Studio.</p>
+      <p class="hero-keywords">Portrait prompts · product photography prompts · poster prompts · 3D prompts · illustration prompts · cinematic prompts</p>
       <div class="search-wrap">
         <input
           type="text"
@@ -146,14 +182,58 @@ const itemListLd = {
 
   <section class="homepage-intro" aria-label="About the AI image prompt library">
     <div class="container">
-      <p><strong>AI image prompts and AI art prompts</strong> with visual examples, reusable ideas, and curated collections for your next image.</p>
+      <p><strong>AI image prompts and AI art prompts</strong> with visual examples, reusable ideas, and curated collections for portraits, product photography, posters, 3D art, illustration, and cinematic image creation.</p>
+      <p class="homepage-intro-detail">Every prompt includes a real example image, source attribution, and a copy-ready prompt. Start with a category below or open AI Image Studio to generate your own version online.</p>
+    </div>
+  </section>
+
+  <section class="homepage-discovery section" aria-labelledby="browse-categories-title">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2 id="browse-categories-title">Browse AI Image Prompts by Category</h2>
+          <p class="section-lead">Find prompt ideas for portraits, photography, products, posters, 3D renders, and more.</p>
+        </div>
+        <a href="#all">View all prompts →</a>
+      </div>
+      <div class="discovery-grid discovery-category-grid">
+        {categoryCards.map((category) => (
+          <a class="discovery-card" href={`#${category.id}`} data-discovery-category={category.id}>
+            {category.image ? <img src={category.image.src} alt="" loading="lazy" width={category.image.width || 500} height={Math.round((category.image.width || 500) * 0.75)} /> : <span class="discovery-card-placeholder" aria-hidden="true" />}
+            <span class="discovery-card-body">
+              <strong>AI {category.label} Prompts</strong>
+              <span>{category.description}</span>
+              <small>{category.count} prompts →</small>
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="homepage-discovery section" aria-labelledby="browse-models-title">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2 id="browse-models-title">Browse Prompts by AI Model</h2>
+          <p class="section-lead">Explore prompt examples for the image tools creators use most.</p>
+        </div>
+        <a href={`${base}/tools/`}>Explore AI tools →</a>
+      </div>
+      <div class="model-link-grid">
+        {modelCards.map((model) => (
+          <a class="model-link-card" href={`/?q=${encodeURIComponent(model.key) }#all`}>
+            <span class="model-link-icon">{model.emoji}</span>
+            <span><strong>{model.nameEn} Prompts</strong><small>{model.count} examples</small></span>
+          </a>
+        ))}
+      </div>
     </div>
   </section>
 
   <!-- Featured + Specials: two-column row -->
-  <section class="section">
+  <section class="section" id="featured">
     <div class="container">
-      <div class="fs-row">
         <!-- LEFT: Featured (8 horizontal-scroll cards) -->
         <div class="fs-col">
           <div class="fs-col-head">
@@ -274,6 +354,141 @@ const itemListLd = {
 </Base>
 
 <style>
+  .hero-subtitle,
+  .hero-keywords {
+    max-width: 760px;
+    margin: 14px auto 0;
+    color: rgba(255, 255, 255, 0.92);
+    text-align: center;
+    line-height: 1.6;
+  }
+  .hero-keywords {
+    margin-top: 8px;
+    color: rgba(255, 255, 255, 0.76);
+    font-size: 12px;
+  }
+  .homepage-intro-detail {
+    margin: 8px 0 0;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+  .homepage-discovery .section-head {
+    align-items: flex-start;
+  }
+  .section-lead {
+    margin: 6px 0 0;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+  .discovery-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .discovery-card,
+  .model-link-card {
+    color: inherit;
+    text-decoration: none;
+  }
+  .discovery-card {
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-card);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  }
+  .discovery-card:hover {
+    border-color: var(--accent);
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-2px);
+  }
+  .discovery-card img,
+  .discovery-card-placeholder {
+    display: block;
+    width: 100%;
+    height: 92px;
+    object-fit: cover;
+    background: var(--bg-soft);
+  }
+  .discovery-card-body {
+    display: flex;
+    min-height: 112px;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px;
+  }
+  .discovery-card-body strong {
+    font-size: 13px;
+    line-height: 1.3;
+  }
+  .discovery-card-body span {
+    display: -webkit-box;
+    overflow: hidden;
+    color: var(--text-muted);
+    font-size: 11px;
+    line-height: 1.4;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  .discovery-card-body small,
+  .model-link-card small {
+    margin-top: auto;
+    color: var(--accent);
+    font-size: 11px;
+  }
+  .model-link-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .model-link-card {
+    display: flex;
+    min-height: 66px;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-card);
+    transition: border-color 0.18s ease, transform 0.18s ease;
+  }
+  .model-link-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+  .model-link-icon {
+    display: grid;
+    width: 32px;
+    height: 32px;
+    flex: 0 0 32px;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--bg-soft);
+    font-size: 18px;
+  }
+  .model-link-card > span:last-child {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .model-link-card strong {
+    overflow: hidden;
+    font-size: 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  @media (max-width: 900px) {
+    .discovery-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (max-width: 600px) {
+    .hero-subtitle { font-size: 13px; }
+    .hero-keywords { font-size: 11px; }
+    .discovery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .model-link-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .discovery-card img,
+    .discovery-card-placeholder { height: 78px; }
+  }
   .editorial-meta {
     color: var(--text-muted);
     font-size: 13px;

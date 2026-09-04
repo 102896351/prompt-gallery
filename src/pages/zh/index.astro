@@ -4,6 +4,7 @@ import PromptCard from '../../components/PromptCard.astro';
 import AgnesHomeComposer from '../../components/AgnesHomeComposer.astro';
 import { prompts, promptCategories, type Prompt } from '../../data/prompts';
 import { collections } from '../../data/collections';
+import { engines } from '../../data/engines';
 import { zh } from '../../i18n';
 
 const t = zh;
@@ -84,6 +85,39 @@ const sorted = [...prompts].sort((a, b) => {
 const featuredSet = new Set(featuredSlugs);
 const sortedExcludingFeatured = sorted.filter((p) => !featuredSet.has(p.slug));
 
+const categoryCards = promptCategories.map((category) => {
+  const matches = prompts.filter((prompt) => prompt.category === category.id);
+  return {
+    ...category,
+    count: matches.length,
+    image: matches.find((prompt) => prompt.images[0]?.src)?.images[0],
+  };
+}).filter((category) => category.count > 0);
+
+const modelCards = Object.values(engines)
+  .map((engine) => ({
+    ...engine,
+    count: prompts.filter((prompt) => prompt.engines.includes(engine.key as Prompt['engines'][number])).length,
+  }))
+  .filter((engine) => engine.count > 0 && engine.key !== 'other')
+  .sort((a, b) => b.count - a.count)
+  .slice(0, 8);
+
+const homepageKeywords = [
+  '免费AI生图',
+  'AI图片生成器',
+  '在线AI生图',
+  '文生图',
+  'AI生图提示词',
+  'AI绘画提示词',
+  'AI人像提示词',
+  'AI产品摄影提示词',
+  'AI海报提示词',
+  'AI 3D提示词',
+  'AI插画提示词',
+  '电影感提示词',
+].join('，');
+
 const itemListLd = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
@@ -91,7 +125,7 @@ const itemListLd = {
   description: t.siteTagline,
   url: new URL('/zh/', siteBase).toString(),
   numberOfItems: prompts.length,
-  itemListElement: prompts.slice(0, 50).map((p, i) => ({
+  itemListElement: [...featured, ...sorted.filter((p) => !featuredSet.has(p.slug))].slice(0, 50).map((p, i) => ({
     '@type': 'ListItem',
     position: i + 1,
     name: p.title,
@@ -101,8 +135,8 @@ const itemListLd = {
 };
 ---
 
-<Base title="免费AI生图与AI生图提示词" description="在线使用免费AI生图工具，浏览 AI生图提示词、AI绘画提示词、示例图片和精选合集。">
-  <script slot="head" type="application/ld+json" set:html={JSON.stringify(itemListLd)} />
+<Base title="免费AI生图与AI生图提示词" description="浏览免费 AI 生图提示词、AI绘画提示词、AI人像、产品摄影、海报、3D、插画和电影感案例，并在线使用 AI 图片生成器创作。">
+  <Fragment slot="head"><meta name="keywords" content={homepageKeywords} /></Fragment>  <script slot="head" type="application/ld+json" set:html={JSON.stringify(itemListLd)} />
   {/* 预加载唯一的本地横幅图，保持首屏稳定 */}
   <link slot="head" rel="preload" as="image" href={bannerImage} fetchpriority="high" />
 
@@ -126,6 +160,8 @@ const itemListLd = {
         <span class="grad">AI生图提示词</span><br />
         与在线图片生成。
       </h1>
+      <p class="hero-subtitle">浏览可直接复制的 AI生图提示词和 AI绘画提示词，查看真实示例图片，再把灵感送入本站 AI 图片生成器在线创作。</p>
+      <p class="hero-keywords">AI人像提示词 · AI产品摄影提示词 · AI海报提示词 · AI 3D提示词 · AI插画提示词 · 电影感提示词</p>
       <div class="search-wrap">
         <input
           type="text"
@@ -143,11 +179,57 @@ const itemListLd = {
 
   <section class="homepage-intro" aria-label="关于 AI 生图提示词库">
     <div class="container">
-      <p><strong>AI生图提示词与 AI绘画提示词</strong>，配有示例图片、可复用创意和主题合集，帮助你快速开始下一次创作。</p>
+      <p><strong>AI生图提示词与 AI绘画提示词</strong>，配有示例图片、可复用创意和主题合集，覆盖人像、产品摄影、海报、3D、插画和电影感图片生成。</p>
+      <p class="homepage-intro-detail">每条提示词都配有真实示例、作者来源和可复制文本。你可以先按分类或 AI 模型浏览，也可以直接打开 AI 图片生成器在线生成同款灵感。</p>
     </div>
   </section>
 
-  <section class="section">
+  <section class="homepage-discovery section" aria-labelledby="browse-categories-title">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2 id="browse-categories-title">按分类浏览 AI生图提示词</h2>
+          <p class="section-lead">从人像、摄影、产品、海报、3D 渲染和插画中找到下一条灵感。</p>
+        </div>
+        <a href="#all">查看全部提示词 →</a>
+      </div>
+      <div class="discovery-grid discovery-category-grid">
+        {categoryCards.map((category) => (
+          <a class="discovery-card" href={`#${category.id}`} data-discovery-category={category.id}>
+            {category.image ? <img src={category.image.src} alt="" loading="lazy" width={category.image.width || 500} height={Math.round((category.image.width || 500) * 0.75)} /> : <span class="discovery-card-placeholder" aria-hidden="true" />}
+            <span class="discovery-card-body">
+              <strong>AI{category.labelZh}提示词</strong>
+              <span>{category.description}</span>
+              <small>{category.count} 条提示词 →</small>
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="homepage-discovery section" aria-labelledby="browse-models-title">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2 id="browse-models-title">按 AI 模型浏览提示词</h2>
+          <p class="section-lead">查看适用于主流 AI 图片生成工具的提示词案例。</p>
+        </div>
+        <a href={`${base}/tools/`}>查看 AI 工具 →</a>
+      </div>
+      <div class="model-link-grid">
+        {modelCards.map((model) => (
+          <a class="model-link-card" href={`/zh/?q=${encodeURIComponent(model.key)}#all`}>
+            <span class="model-link-icon">{model.emoji}</span>
+            <span><strong>{model.nameZh}提示词</strong><small>{model.count} 条案例</small></span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured + Specials: two-column row -->
+  <section class="section" id="featured">
     <div class="container">
       <div class="fs-row">
         <!-- LEFT: 精品 8 张小卡片横滚 -->
@@ -269,6 +351,131 @@ const itemListLd = {
 </Base>
 
 <style>
+  .hero-subtitle,
+  .hero-keywords {
+    max-width: 760px;
+    margin: 14px auto 0;
+    color: rgba(255, 255, 255, 0.92);
+    text-align: center;
+    line-height: 1.6;
+  }
+  .hero-keywords {
+    margin-top: 8px;
+    color: rgba(255, 255, 255, 0.76);
+    font-size: 12px;
+  }
+  .homepage-intro-detail {
+    margin: 8px 0 0;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+  .homepage-discovery .section-head { align-items: flex-start; }
+  .section-lead {
+    margin: 6px 0 0;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+  .discovery-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .discovery-card,
+  .model-link-card {
+    color: inherit;
+    text-decoration: none;
+  }
+  .discovery-card {
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-card);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  }
+  .discovery-card:hover {
+    border-color: var(--accent);
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-2px);
+  }
+  .discovery-card img,
+  .discovery-card-placeholder {
+    display: block;
+    width: 100%;
+    height: 92px;
+    object-fit: cover;
+    background: var(--bg-soft);
+  }
+  .discovery-card-body {
+    display: flex;
+    min-height: 112px;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px;
+  }
+  .discovery-card-body strong { font-size: 13px; line-height: 1.3; }
+  .discovery-card-body span {
+    display: -webkit-box;
+    overflow: hidden;
+    color: var(--text-muted);
+    font-size: 11px;
+    line-height: 1.4;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  .discovery-card-body small,
+  .model-link-card small {
+    margin-top: auto;
+    color: var(--accent);
+    font-size: 11px;
+  }
+  .model-link-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .model-link-card {
+    display: flex;
+    min-height: 66px;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-card);
+    transition: border-color 0.18s ease, transform 0.18s ease;
+  }
+  .model-link-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .model-link-icon {
+    display: grid;
+    width: 32px;
+    height: 32px;
+    flex: 0 0 32px;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--bg-soft);
+    font-size: 18px;
+  }
+  .model-link-card > span:last-child {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .model-link-card strong {
+    overflow: hidden;
+    font-size: 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  @media (max-width: 900px) { .discovery-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 600px) {
+    .hero-subtitle { font-size: 13px; }
+    .hero-keywords { font-size: 11px; }
+    .discovery-grid,
+    .model-link-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .discovery-card img,
+    .discovery-card-placeholder { height: 78px; }
+  }
   .editorial-meta {
     color: var(--text-muted);
     font-size: 13px;
