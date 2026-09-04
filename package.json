@@ -16,6 +16,7 @@
     "assets:validate": "node scripts/validate-candidates.mjs",
     "assets:validate-dist": "node scripts/validate-dist-assets.mjs",
     "assets:target": "node scripts/curate-until-target.mjs",
+    "curate:local": "node scripts/local-curate.mjs",
     "agnes:local": "node scripts/agnes-local-api.mjs"
   },
   "dependencies": {
