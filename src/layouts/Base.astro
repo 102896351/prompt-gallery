@@ -2,14 +2,22 @@
 import '../styles/global.css';
 import { getLocaleFromPath, normalizePathname, swapLocale, en, zh, type Locale } from '../i18n';
 
-  const { title, description, noAds = false, noindex = false, ogImage, hideFooter = false } = Astro.props as {
+  const { title, description, noAds = false, noindex = false, noindexFollow = false, ogImage, hideFooter = false } = Astro.props as {
     title?: string;
     description?: string;
     noAds?: boolean; // 404 / error pages: skip AdSense
     noindex?: boolean; // local-only or internal pages: keep out of search indexes
+    noindexFollow?: boolean; // 收缩内容时：不进索引但保留链接权重流动（noindex, follow）
     ogImage?: string; // 页面级 OG 图（如详情页用 prompt 首图）
     hideFooter?: boolean;
   };
+
+// robots 指令：
+// - noindex + nofollow  → 404 / 内部页
+// - noindex + follow    → 内容收缩（页面保留可访问，但不进索引，链接权重继续流向其他页）
+const robotsContent = noindex
+  ? (noindexFollow ? 'noindex, follow' : 'noindex, nofollow')
+  : 'index, follow, max-image-preview:large, max-snippet:-1';
 
 // 从 URL 自动判断 locale，避免 prop drilling
 const locale: Locale = getLocaleFromPath(Astro.url.pathname);
@@ -108,8 +116,8 @@ const hreflangs: Array<{ lang: string; href: string }> = isErrorPage
     ))}
 
     <!-- SEO: explicit indexing directives -->
-    <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1'} />
-    <meta name="googlebot" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
+    <meta name="robots" content={robotsContent} />
+    <meta name="googlebot" content={robotsContent} />
     <meta name="author" content={siteName} />
     <meta name="generator" content={Astro.generator} />
 
@@ -186,7 +194,9 @@ const hreflangs: Array<{ lang: string; href: string }> = isErrorPage
           <span aria-hidden="true">☰</span>
         </button>
         <nav class="nav" id="primary-nav" aria-label="Primary">
-          <a href={`${localePrefix}#all`}>{t.nav.categories}</a>
+          <!-- 英文站指向真实聚合页 /ai-image-prompts/（原先是 #all 锚点，无落地页）；
+               中文站尚未建聚合层，暂时保留锚点 -->
+          <a href={locale === 'zh' ? `${localePrefix}#all` : `${localePrefix}ai-image-prompts/`}>{t.nav.categories}</a>
           <a href={`${localePrefix}collections/`}>{t.nav.collections}</a>
           <a href={`${localePrefix}#featured`}>{t.nav.featured}</a>
           <a href={`${localePrefix}tools/`}>{t.nav.tools}</a>

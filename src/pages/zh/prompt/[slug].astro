@@ -7,6 +7,7 @@ import { prompts, promptCategories, getRelatedPrompts } from '../../../data/prom
 import { getCompatibleEngines } from '../../../data/engines';
 import { getDetailSeoTitle, getDetailSeoDescription } from '../../../utils/seo';
 import { zh } from '../../../i18n';
+import gscImpressions from '../../../data/gsc-impressions.json';
 
 export function getStaticPaths() {
   return prompts.map((p) => ({
@@ -16,6 +17,17 @@ export function getStaticPaths() {
 }
 
 const { prompt } = Astro.props;
+
+// 中文站收缩：GSC 过去 3 个月展现 < 3 的中文页不进 Google 索引。
+// 理由（三条独立依据）：
+//   1) 站点在 Cloudflare 且未备案 → 百度基本不收录，中文搜索流量事实上拿不到
+//   2) Google 中文搜索量极小：1,255 个中文页 3 个月只换回 686 次展现、6 次点击
+//   3) 站点主攻出海英文市场，中文内容与方向不一致
+// 注意：页面不删除，用户仍可正常访问；用 noindex, follow 保留链接权重流动。
+const ZH_NOINDEX_THRESHOLD = 3;
+const zhImpressions = (gscImpressions as Record<string, number>)[prompt.slug] ?? 0;
+const noindexZh = zhImpressions < ZH_NOINDEX_THRESHOLD;
+
 const t = zh;
 const messages = zh;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -164,7 +176,7 @@ const metaKeywords = [
 const optimizedH1 = `${prompt.title} — ${engineName} AI生图提示词`;
 ---
 
-<Base title={getDetailSeoTitle(prompt, prompt.title, 'zh')} description={getDetailSeoDescription(prompt, prompt.title, 'zh')} ogImage={prompt.images[0]?.src}>
+<Base title={getDetailSeoTitle(prompt, prompt.title, 'zh')} description={getDetailSeoDescription(prompt, prompt.title, 'zh')} ogImage={prompt.images[0]?.src} noindex={noindexZh} noindexFollow={true}>
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(articleLd)} />
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(faqLd)} />

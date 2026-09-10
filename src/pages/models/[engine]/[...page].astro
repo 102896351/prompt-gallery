@@ -1,0 +1,261 @@
+---
+//  /models/<engine>/  — 模型聚合页（分页）
+//  -----------------------------------------------------------
+//  这是本轮 SEO 优先级最高的一类页面：Google Trends 12 个月数据显示
+//  用户已从搜泛词 "AI image" 转向搜具体模型名 ——
+//    nano banana ai +850%（年度上升榜第 2）、nano banana +800%（第 3）
+//    gemini ai photo +500%、google flow +750%、kling ai +190%、comfyui +200%
+//  但站点此前 Kling / Flow / Whisk / ComfyUI 覆盖为 0，且没有任何模型承接页。
+
+import Base from '../../../layouts/Base.astro';
+import PromptCard from '../../../components/PromptCard.astro';
+import { prompts, type Prompt } from '../../../data/prompts';
+import { engines, type Engine } from '../../../data/engines';
+
+// 重点模型定制文案（其余走通用模板）
+const MODEL_COPY: Record<string, { h1: string; lead: string; usage: string }> = {
+  'nano-banana-pro': {
+    h1: 'Nano Banana Pro Prompts',
+    lead: 'Nano Banana Pro is Google DeepMind\'s image model, and it is unusually good at two things most models still fail at: rendering readable text inside an image, and holding fine detail at high resolution.',
+    usage: 'Nano Banana Pro responds best to plain descriptive sentences rather than Midjourney-style parameter flags. Describe the subject, then the lighting, then the camera, then any text you want rendered — in that order.',
+  },
+  gemini: {
+    h1: 'Gemini AI Image Prompts',
+    lead: 'Google Gemini handles images conversationally: you can generate, then ask for a change in the same thread instead of rewriting the whole prompt from scratch.',
+    usage: 'With Gemini, iterate instead of rewriting. Generate a first version, then ask for one change at a time — "make the light warmer", "crop tighter". It keeps context between turns.',
+  },
+  'chatgpt-image': {
+    h1: 'ChatGPT Image Prompts',
+    lead: 'ChatGPT uses the DALL-E image model inside a chat interface, which makes it the fastest option when you are still figuring out what you want.',
+    usage: 'ChatGPT works well with a short subject line plus a style line. If output drifts, ask for a variation of the previous image rather than starting a new prompt.',
+  },
+  midjourney: {
+    h1: 'Midjourney Prompts',
+    lead: 'Midjourney remains the strongest choice for stylized, painterly and cinematic output, and its parameter flags give you precise control over aspect ratio and stylization.',
+    usage: 'Midjourney is the one model here that expects parameter flags. Append --ar for aspect ratio and --s for stylization; omit them and you get the 1:1 default.',
+  },
+  flux: {
+    h1: 'Flux AI Image Prompts',
+    lead: 'Flux from Black Forest Labs is the leading open-weight image model, which means you can run it locally and keep every prompt and output on your own hardware.',
+    usage: 'Flux is literal. It follows the prompt closely and adds less stylistic interpretation than Midjourney, so be explicit about mood and lighting instead of relying on adjectives alone.',
+  },
+};
+
+export async function getStaticPaths({ paginate }: any) {
+  const list = Object.values(engines).filter((e) => e.key !== 'other');
+  return list
+    .map((engine) => ({
+      engine,
+      items: prompts
+        .filter((p) => p.engines.includes(engine.key as Prompt['engines'][number]))
+        .sort((a, b) => (b.dateAdded || '').localeCompare(a.dateAdded || '')),
+    }))
+    .filter((g) => g.items.length > 0)
+    .flatMap((g) =>
+      paginate(g.items, {
+        params: { engine: g.engine.key },
+        props: { engine: g.engine },
+        pageSize: 48,
+      })
+    );
+}
+
+const { page } = Astro.props;
+const { engine } = Astro.props as { engine: Engine };
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const isFirst = page.currentPage === 1;
+const suffix = isFirst ? '' : ` — Page ${page.currentPage}`;
+
+const copy = MODEL_COPY[engine.key] || {
+  h1: `${engine.nameEn} Prompts`,
+  lead: engine.descEn,
+  usage: `These prompts were tested against ${engine.nameEn}. Copy one verbatim first, then change a single variable at a time to see what the model responds to.`,
+};
+
+const total = prompts.filter((p) => p.engines.includes(engine.key as Prompt['engines'][number])).length;
+const title = `${copy.h1}${suffix}`;
+const description = isFirst
+  ? `${total} copy-ready ${engine.nameEn} prompts with real example images and tested parameters. ${engine.descEn}`
+  : `${copy.h1} — page ${page.currentPage} of ${page.lastPage}.`;
+
+const siteBase = Astro.site ?? new URL('https://aiartspell.art');
+
+function pageHref(key: string, n: number) {
+  return n === 1 ? `${base}/models/${key}/` : `${base}/models/${key}/page/${n}/`;
+}
+const pageNumbers = Array.from({ length: page.lastPage }, (_, i) => i + 1).filter(
+  (n) => n === 1 || n === page.lastPage || n % 5 === 0 || Math.abs(n - page.currentPage) <= 2
+);
+
+// FAQ 随模型名变化（每个模型页内容不同，不是全站同一组）
+const faqList = [
+  {
+    q: `What is ${engine.nameEn}?`,
+    a: engine.descEn + ` It is available at ${engine.url.replace(/^https?:\/\//, '')}.`,
+  },
+  {
+    q: `How do I write a good ${engine.nameEn} prompt?`,
+    a: copy.usage,
+  },
+  {
+    q: `Are these ${engine.nameEn} prompts free to use?`,
+    a: `Yes. Every prompt on this page is free to copy and adapt. Each entry lists its source author, so credit the original creator when you publish results publicly.`,
+  },
+  {
+    q: `How many ${engine.nameEn} prompts are here?`,
+    a: `There are ${total} ${engine.nameEn} prompts in this library, each with a real example image and the tested wording. Use the pagination below to browse them all.`,
+  },
+];
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: new URL('/', siteBase).toString() },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'AI Image Prompts',
+      item: new URL('/ai-image-prompts/', siteBase).toString(),
+    },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: copy.h1,
+      item: new URL(`/models/${engine.key}/`, siteBase).toString(),
+    },
+  ],
+};
+
+const itemListLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: `${copy.h1}${suffix}`,
+  numberOfItems: page.data.length,
+  itemListElement: page.data.map((p: Prompt, i: number) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: p.titleEn || p.title,
+    url: new URL(`/prompt/${p.slug}/`, siteBase).toString(),
+  })),
+};
+
+const faqLd = isFirst
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faqList.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    }
+  : null;
+---
+
+<Base title={title} description={description}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(itemListLd)} />
+  {faqLd && <script slot="head" type="application/ld+json" set:html={JSON.stringify(faqLd)} />}
+
+  <section class="section">
+    <div class="container">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href={`${base}/`}>Home</a>
+        <span aria-hidden="true">/</span>
+        <a href={`${base}/ai-image-prompts/`}>AI Image Prompts</a>
+        <span aria-hidden="true">/</span>
+        <span>{engine.nameEn}</span>
+      </nav>
+
+      <h1>{copy.h1}{suffix}</h1>
+      <p class="page-count">{total} prompts · page {page.currentPage} of {page.lastPage}</p>
+
+      {
+        isFirst && (
+          <>
+            <p class="lead">
+              <strong>{total} copy-ready {engine.nameEn} prompts</strong> with real example images and
+              tested parameters. {copy.lead}
+            </p>
+            <p class="usage">{copy.usage}</p>
+            <p class="official">
+              Official site: <a href={engine.url} rel="noopener nofollow" target="_blank">{engine.url.replace(/^https?:\/\//, '')}</a>
+            </p>
+          </>
+        )
+      }
+
+      <div class="grid">
+        {
+          page.data.map((p: Prompt) => (
+            <div class="card-wrap">
+              <PromptCard prompt={p} base={base} />
+            </div>
+          ))
+        }
+      </div>
+
+      <nav class="pager" aria-label="Pagination">
+        {page.url.prev ? <a href={page.url.prev}>← Previous</a> : <span class="pager-off">← Previous</span>}
+        <div class="pager-nums">
+          {
+            pageNumbers.map((n: number) =>
+              n === page.currentPage ? (
+                <span class="pager-cur">{n}</span>
+              ) : (
+                <a href={pageHref(engine.key, n)}>{n}</a>
+              )
+            )
+          }
+        </div>
+        {page.url.next ? <a href={page.url.next}>Next →</a> : <span class="pager-off">Next →</span>}
+      </nav>
+
+      {
+        isFirst && (
+          <section class="faq" aria-labelledby="faq-title">
+            <h2 id="faq-title" class="sub">{engine.nameEn} prompts FAQ</h2>
+            {faqList.map((f) => (
+              <details>
+                <summary>{f.q}</summary>
+                <p>{f.a}</p>
+              </details>
+            ))}
+          </section>
+        )
+      }
+    </div>
+  </section>
+</Base>
+
+<style>
+  .crumbs { margin-bottom: 12px; color: var(--text-muted); font-size: 13px; }
+  .crumbs a { color: var(--accent); text-decoration: none; }
+  .crumbs a:hover { text-decoration: underline; }
+  .page-count { margin: 6px 0 18px; color: var(--text-muted); font-size: 13px; }
+  .lead { max-width: 780px; margin: 0 0 16px; line-height: 1.75; }
+  .usage { max-width: 780px; margin: 0 0 12px; color: var(--text-muted); line-height: 1.75; font-size: 14px; }
+  .official { margin: 0 0 26px; font-size: 13px; color: var(--text-muted); }
+  .official a { color: var(--accent); }
+  .sub { margin: 32px 0 14px; font-size: 19px; }
+  .pager {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+    gap: 8px; margin: 32px 0 8px;
+  }
+  .pager a, .pager span {
+    min-width: 36px; padding: 7px 11px; border: 1px solid var(--border);
+    border-radius: 8px; background: var(--bg-card); color: var(--text);
+    font-size: 13px; text-align: center; text-decoration: none;
+  }
+  .pager a:hover { border-color: var(--accent); color: var(--accent); }
+  .pager .pager-cur { border-color: var(--accent); background: var(--accent); color: #fff; font-weight: 600; }
+  .pager .pager-off { opacity: 0.4; }
+  .pager-nums { display: flex; flex-wrap: wrap; gap: 6px; }
+  .faq details {
+    margin-bottom: 10px; padding: 12px 16px; border: 1px solid var(--border);
+    border-radius: var(--radius); background: var(--bg-card);
+  }
+  .faq summary { cursor: pointer; font-weight: 600; font-size: 14px; }
+  .faq details p { margin: 10px 0 0; color: var(--text-muted); font-size: 14px; line-height: 1.7; }
+</style>
