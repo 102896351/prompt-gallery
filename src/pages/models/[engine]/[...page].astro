@@ -81,7 +81,7 @@ const description = isFirst
 const siteBase = Astro.site ?? new URL('https://aiartspell.art');
 
 function pageHref(key: string, n: number) {
-  return n === 1 ? `${base}/models/${key}/` : `${base}/models/${key}/page/${n}/`;
+  return n === 1 ? `${base}/models/${key}/` : `${base}/models/${key}/${n}/`;
 }
 const pageNumbers = Array.from({ length: page.lastPage }, (_, i) => i + 1).filter(
   (n) => n === 1 || n === page.lastPage || n % 5 === 0 || Math.abs(n - page.currentPage) <= 2

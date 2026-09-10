@@ -53,8 +53,9 @@ const modelCards = Object.values(engines)
   .sort((a, b) => b.count - a.count);
 
 // 跳页导航：1、末页、每 5 页、当前页 ±2
+// Astro paginate() 默认生成路径是 /ai-image-prompts/<n>/，不是 /page/<n>/
 function pageHref(n: number) {
-  return n === 1 ? `${base}/ai-image-prompts/` : `${base}/ai-image-prompts/page/${n}/`;
+  return n === 1 ? `${base}/ai-image-prompts/` : `${base}/ai-image-prompts/${n}/`;
 }
 const pageNumbers = Array.from({ length: page.lastPage }, (_, i) => i + 1).filter(
   (n) => n === 1 || n === page.lastPage || n % 5 === 0 || Math.abs(n - page.currentPage) <= 2

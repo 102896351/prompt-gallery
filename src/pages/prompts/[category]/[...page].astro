@@ -40,7 +40,7 @@ const total = prompts.filter((p) => p.category === cat.id).length;
 const siteBase = Astro.site ?? new URL('https://aiartspell.art');
 
 function pageHref(catId: string, n: number) {
-  return n === 1 ? `${base}/prompts/${catId}/` : `${base}/prompts/${catId}/page/${n}/`;
+  return n === 1 ? `${base}/prompts/${catId}/` : `${base}/prompts/${catId}/${n}/`;
 }
 const pageNumbers = Array.from({ length: page.lastPage }, (_, i) => i + 1).filter(
   (n) => n === 1 || n === page.lastPage || n % 5 === 0 || Math.abs(n - page.currentPage) <= 2
