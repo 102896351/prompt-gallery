@@ -157,15 +157,25 @@ const urlset =
 
 fs.writeFileSync(path.join(DIST, 'sitemap-0.xml'), urlset, 'utf8');
 
-// sitemap-index：lastmod 用全站最新内容日期
-const dates = submitted
+// sitemap-index：lastmod = max(全站最新内容日期, 本次构建日期)
+// 为什么不只用内容日期：全站 prompt 的 datePublished 集中在同一天（2026-09-04），
+// 会让索引 lastmod 长期冻结。Google 会据此判定该 sitemap 未更新而降低重抓频率，
+// 导致新页面（尤其新聚合层）被发现得很慢。
+// 为什么不用"内容哈希对比"：astro build 会清空 dist，CI 每次都读不到旧文件，
+// 判断结果在本地/CI 之间不一致；维护跨构建状态文件又会在 GitHub Actions 的全新
+// 工作区里失效。sitemap-index 的 lastmod 语义是「该 sitemap 文件最后修改时间」，
+// 而它每次构建确实被重新生成，故取构建日期是准确的。
+// 注意：URL 级的 lastmod 仍严格取 JSON-LD datePublished，不受此影响。
+const contentDates = submitted
   .map((p) => p.lastmod)
   .filter(Boolean)
   .map((d) => new Date(d).getTime())
   .filter((t) => !Number.isNaN(t));
-const idxLastmod = dates.length
-  ? new Date(Math.max(...dates)).toISOString()
-  : new Date().toISOString();
+const latestContent = contentDates.length ? Math.max(...contentDates) : 0;
+
+const buildDay = new Date();
+buildDay.setUTCHours(0, 0, 0, 0);
+const idxLastmod = new Date(Math.max(latestContent, buildDay.getTime())).toISOString();
 
 const sitemapIndex =
   `<?xml version="1.0" encoding="UTF-8"?>` +
