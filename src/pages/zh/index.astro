@@ -182,11 +182,11 @@ const itemListLd = {
           <h2 id="browse-categories-title">按分类浏览 AI生图提示词</h2>
           <p class="section-lead">从人像、摄影、产品、海报、3D 渲染和插画中找到下一条灵感。</p>
         </div>
-        <a href="/ai-image-prompts/">查看全部提示词 →</a>
+        <a href="/zh/ai-image-prompts/">查看全部提示词 →</a>
       </div>
       <div class="discovery-grid discovery-category-grid">
         {categoryCards.map((category) => (
-          <a class="discovery-card" href={`/prompts/${category.id}/`} data-discovery-category={category.id}>
+          <a class="discovery-card" href={`/zh/prompts/${category.id}/`} data-discovery-category={category.id}>
             {category.image ? <img src={category.image.src} alt="" loading="lazy" width={category.image.width || 500} height={Math.round((category.image.width || 500) * 0.75)} /> : <span class="discovery-card-placeholder" aria-hidden="true" />}
             <span class="discovery-card-body">
               <strong>AI{category.labelZh}提示词</strong>
@@ -210,7 +210,7 @@ const itemListLd = {
       </div>
       <div class="model-link-grid">
         {modelCards.map((model) => (
-          <a class="model-link-card" href={`/models/${model.key}/`}>
+          <a class="model-link-card" href={`/zh/models/${model.key}/`}>
             <span class="model-link-icon">{model.emoji}</span>
             <span><strong>{model.nameZh}提示词</strong><small>{model.count} 条案例</small></span>
           </a>
@@ -265,9 +265,9 @@ const itemListLd = {
 
       <!-- 分类 pill 改为真实聚合页链接（原先是 #anchor，无落地页） -->
       <div class="pills" id="filter-pills">
-        <a class="pill active" href="/ai-image-prompts/">{t.filter.all}</a>
+        <a class="pill active" href="/zh/ai-image-prompts/">{t.filter.all}</a>
         {promptCategories.map((c) => (
-          <a class="pill" href={`/prompts/${c.id}/`}>{c.labelZh}</a>
+          <a class="pill" href={`/zh/prompts/${c.id}/`}>{c.labelZh}</a>
         ))}
       </div>
 
@@ -287,7 +287,7 @@ const itemListLd = {
       </div>
 
       <div class="view-all-wrap">
-        <a class="view-all-btn" href="/ai-image-prompts/">
+        <a class="view-all-btn" href="/zh/ai-image-prompts/">
           浏览全部 {prompts.length} 条提示词 →
         </a>
       </div>

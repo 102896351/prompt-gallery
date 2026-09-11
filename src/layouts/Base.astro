@@ -194,9 +194,8 @@ const hreflangs: Array<{ lang: string; href: string }> = isErrorPage
           <span aria-hidden="true">☰</span>
         </button>
         <nav class="nav" id="primary-nav" aria-label="Primary">
-          <!-- 英文站指向真实聚合页 /ai-image-prompts/（原先是 #all 锚点，无落地页）；
-               中文站尚未建聚合层，暂时保留锚点 -->
-          <a href={locale === 'zh' ? `${localePrefix}#all` : `${localePrefix}ai-image-prompts/`}>{t.nav.categories}</a>
+          <!-- 英文站与中文站均指向各自的聚合页 /ai-image-prompts/（原先是 #all 锚点，无落地页） -->
+          <a href={`${localePrefix}ai-image-prompts/`}>{t.nav.categories}</a>
           <a href={`${localePrefix}collections/`}>{t.nav.collections}</a>
           <a href={`${localePrefix}#featured`}>{t.nav.featured}</a>
           <a href={`${localePrefix}tools/`}>{t.nav.tools}</a>
