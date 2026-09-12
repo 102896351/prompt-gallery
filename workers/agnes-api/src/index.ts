@@ -155,10 +155,14 @@ async function generate(request: Request, env: Env): Promise<Response> {
   if (model !== (env.AGNES_IMAGE_MODEL || DEFAULT_MODEL)) fail(400, 'unsupported_model', 'The selected image model is not available');
 
   const apiBase = (env.AGNES_API_BASE_URL || DEFAULT_API_BASE).replace(/\/$/, '');
+  // Use the local Tencent Cloud proxy when configured; it exposes /v1/generate-image
+  // and already wraps the upstream Agnes response in the same {ok, provider, model, result} shape.
+  const isDirectAgnes = /^https?:\/\/[^/]*agnes-ai\.com\b/i.test(apiBase);
+  const upstreamUrl = isDirectAgnes ? `${apiBase}/images/generations` : `${apiBase}/generate-image`;
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs(env));
   try {
-    const upstream = await fetch(`${apiBase}/images/generations`, {
+    const upstream = await fetch(upstreamUrl, {
       method: 'POST',
       headers: {
         authorization: `Bearer ${env.AGNES_API_KEY}`,
@@ -181,6 +185,11 @@ async function generate(request: Request, env: Env): Promise<Response> {
       const code = upstream.status === 401 ? 'provider_auth_error' : upstream.status === 429 ? 'provider_rate_limited' : 'provider_error';
       console.warn(`[agnes-worker] provider status=${upstream.status}`);
       return respond(request, env, status, errorPayload(status, code, status === 429 ? 'Agnes is rate-limited; try again later' : 'Agnes image generation failed'));
+    }
+    if (!isDirectAgnes) {
+      // The local proxy already returns the same envelope shape.
+      const proxyResult = await readUpstreamJson(upstream, controller.signal);
+      return respond(request, env, 200, proxyResult);
     }
     const result = await readUpstreamJson(upstream, controller.signal);
     return respond(request, env, 200, { ok: true, provider: 'agnes', model, result });

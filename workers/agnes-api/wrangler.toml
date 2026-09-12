@@ -12,7 +12,7 @@ routes = [
 ]
 
 [vars]
-AGNES_API_BASE_URL = "https://apihub.agnes-ai.com/v1"
+AGNES_API_BASE_URL = "https://api.aiartspell.art/v1"
 AGNES_IMAGE_MODEL = "agnes-image-2.1-flash"
 AGNES_REQUEST_TIMEOUT_MS = "90000"
 ALLOWED_ORIGINS = "https://aiartspell.art,https://www.aiartspell.art,http://localhost:4321,http://127.0.0.1:4321"
