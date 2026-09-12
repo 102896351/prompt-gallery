@@ -3,7 +3,7 @@ import type { Messages } from './en';
 
 export const zh: Messages = {
   siteName: 'Ai Art Spell',
-  siteTagline: 'AI生图提示词与中英双语 AI 绘画提示词库。',
+  siteTagline: '一个精选的中英双语 AI 图像生成提示词画廊。',
   nav: {
     categories: '分类',
     collections: '专题',

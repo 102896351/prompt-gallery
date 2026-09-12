@@ -2,12 +2,10 @@
 import Base from '../../../layouts/Base.astro';
 import PromptImage from '../../../components/PromptImage.astro';
 import PromptCard from '../../../components/PromptCard.astro';
-import AgnesHomeComposer from '../../../components/AgnesHomeComposer.astro';
 import { prompts, promptCategories, getRelatedPrompts } from '../../../data/prompts';
 import { getCompatibleEngines } from '../../../data/engines';
 import { getDetailSeoTitle, getDetailSeoDescription } from '../../../utils/seo';
 import { zh } from '../../../i18n';
-import gscImpressions from '../../../data/gsc-impressions.json';
 
 export function getStaticPaths() {
   return prompts.map((p) => ({
@@ -17,29 +15,12 @@ export function getStaticPaths() {
 }
 
 const { prompt } = Astro.props;
-
-// 中文站收缩：GSC 过去 3 个月展现 < 3 的中文页不进 Google 索引。
-// 理由（三条独立依据）：
-//   1) 站点在 Cloudflare 且未备案 → 百度基本不收录，中文搜索流量事实上拿不到
-//   2) Google 中文搜索量极小：1,255 个中文页 3 个月只换回 686 次展现、6 次点击
-//   3) 站点主攻出海英文市场，中文内容与方向不一致
-// 注意：页面不删除，用户仍可正常访问；用 noindex, follow 保留链接权重流动。
-const ZH_NOINDEX_THRESHOLD = 3;
-const zhImpressions = (gscImpressions as Record<string, number>)[prompt.slug] ?? 0;
-const noindexZh = zhImpressions < ZH_NOINDEX_THRESHOLD;
-
 const t = zh;
 const messages = zh;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const cat = promptCategories.find((c) => c.id === prompt.category);
 const related = getRelatedPrompts(prompt.slug, 8);
 const fullPrompt = prompt.structuredData ? JSON.stringify(prompt.structuredData, null, 2) : prompt.prompt;
-const imageToolUrl = `${base}/zh/tools/agnes-image/?prompt=${encodeURIComponent(fullPrompt)}`;
-const normalizedRatio = prompt.aspectRatio === '16:9'
-  ? '16:9'
-  : prompt.aspectRatio === '9:16' || /^(2:3|3:4)$/.test(prompt.aspectRatio || '')
-    ? '9:16'
-    : '1:1';
 // 适用引擎列表（详情页底部"适用于"区块用）
 const compatibleEngines = getCompatibleEngines(prompt.engines);
 const verifiedEngineKeys = new Set(prompt.engines.filter((k: string) => k !== 'other'));
@@ -81,7 +62,7 @@ const tagLabel = (key: string) => (messages.tags as Record<string, string>)[key]
 
 // 站点基础 URL（上线时只需改 astro.config.mjs 的 site，无需改这里）
 const siteBase = Astro.site ?? new URL('https://prompt-gallery.example.com');
-const pageUrl = new URL(`/zh/prompt/${prompt.slug}/`, siteBase).toString();
+const pageUrl = new URL(`/zh/prompt/${prompt.slug}`, siteBase).toString();
 const homeUrl = new URL('/zh/', siteBase).toString();
 const catUrl = new URL(`/zh/#${prompt.category}`, siteBase).toString();
 
@@ -173,10 +154,10 @@ const metaKeywords = [
 ].join('，');
 
 // 优化 <h1>：包含引擎 + use case 长尾词
-const optimizedH1 = `${prompt.title} — ${engineName} AI生图提示词`;
+const optimizedH1 = `${prompt.title} — ${engineName} ${displayCatLabel}提示词`;
 ---
 
-<Base title={getDetailSeoTitle(prompt, prompt.title, 'zh')} description={getDetailSeoDescription(prompt, prompt.title, 'zh')} ogImage={prompt.images[0]?.src} noindex={noindexZh} noindexFollow={true}>
+<Base title={getDetailSeoTitle(prompt, prompt.title, 'zh')} description={getDetailSeoDescription(prompt, prompt.title, 'zh')} ogImage={prompt.images[0]?.src}>
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(articleLd)} />
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(faqLd)} />
@@ -198,7 +179,7 @@ const optimizedH1 = `${prompt.title} — ${engineName} AI生图提示词`;
 
     <div class="detail-head">
       <p style="margin: 0 0 12px; font-size: 13px;">
-        <a href={`${base}/zh/`} style="color: var(--text-soft); text-decoration: none;">← 返回首页</a>
+        <a href="/" style="color: var(--text-soft); text-decoration: none;">← 返回首页</a>
       </p>
       <div class="detail-pills">
         <span class="pill active">{displayCatLabel}</span>
@@ -217,19 +198,11 @@ const optimizedH1 = `${prompt.title} — ${engineName} AI生图提示词`;
           <span class="copy-default">📋 复制提示词</span>
           <span class="copy-success hidden">✓ 已复制</span>
         </button>
-        <a href={imageToolUrl} class="btn primary">🎨 生成同款图片</a>
         <a href={prompt.source.sourceUrl} target="_blank" rel="noopener" class="btn source-link-hidden">
           在 {prompt.source.platform} 查看原文 →
         </a>
       </div>
     </div>
-
-    <AgnesHomeComposer
-      locale="zh"
-      initialPrompt={prompt.prompt}
-      initialRatio={normalizedRatio}
-      floatingMode="detail"
-    />
 
     <div class="detail-grid">
       <div class="prose">

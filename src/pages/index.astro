@@ -1,14 +1,27 @@
 ---
 import Base from '../layouts/Base.astro';
 import PromptCard from '../components/PromptCard.astro';
-import AgnesHomeComposer from '../components/AgnesHomeComposer.astro';
 import { prompts, promptCategories, type Prompt } from '../data/prompts';
-import { engines } from '../data/engines';
+import { collections } from '../data/collections';
 import { en } from '../i18n';
 
 const t = en;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const siteBase = Astro.site ?? new URL('https://prompt-gallery.example.com');
+
+// Specials (right column): 5 random collections for the rotating
+// hero. Re-derived from collections.ts to keep the data path single-
+// sourced; only the visible 5 are picked at build time.
+const specialSlugs = [
+  'collection-18',
+  'collection-16',
+  'collection-20',
+  'collection-14',
+  'collection-09',
+];
+const specials = specialSlugs
+  .map((s) => collections.find((c) => c.slug === s))
+  .filter((c): c is NonNullable<typeof c> => Boolean(c));
 
 // Featured：精选 40 条（8 条/页 × 5 页 = 40 条），按分类选 top-N，去重
 const featuredSlugs = [
@@ -48,7 +61,7 @@ const featuredSlugs = [
   'a-mesmerizing-passage-of-time-at-shanghai-bund',
   'y2k-aesthetic-city-impression-collage-poster',
   'nano-banana-pro-t0r7mf',
-  'ultra-cute-isometric-3d-minature-chengdu-city-diorama-with-panda-theme',
+  'ultra-cute-isometric-3d-miniature-chengdu-city-diorama-with-panda-theme',
   'eternal-cycle-of-architecture-of-mortality',
   'perfect-miniature-banknote',
   'floating-product-photography',
@@ -57,8 +70,11 @@ const featured = featuredSlugs
   .map((s) => prompts.find((p) => p.slug === s))
   .filter(Boolean) as Prompt[];
 
-// Hero banner：使用统一的本地横幅背景，避免首页首屏加载多张远程图片
-const bannerImage = `${base}/banner_bg.jpg`;
+// Hero banner：取前 5 条精选的首图作为轮播背景（与 i18n hero.slides 数量一致）
+const bannerImages = featured
+  .slice(0, 5)
+  .map((p) => p.images[0]?.src)
+  .filter((src): src is string => Boolean(src));
 
 // 按 dateAdded 倒序排序（最新添加的排前）；同日期内用 quality score 兜底
 const sorted = [...prompts].sort((a, b) => {
@@ -72,89 +88,49 @@ const sorted = [...prompts].sort((a, b) => {
 const featuredSet = new Set(featuredSlugs);
 const sortedExcludingFeatured = sorted.filter((p) => !featuredSet.has(p.slug));
 
-// 首页只渲染「最新 48 条」；全量交由 /ai-image-prompts/ 分页承载。
-// 原先首页渲染全部 1,188 条 → HTML 达 2MB、1,227 条内链，权重被严重稀释。
-const HOME_LATEST_COUNT = 48;
-const latest = sortedExcludingFeatured.slice(0, HOME_LATEST_COUNT);
-
-const categoryCards = promptCategories.map((category) => {
-  const matches = prompts.filter((prompt) => prompt.category === category.id);
-  return {
-    ...category,
-    count: matches.length,
-    image: matches.find((prompt) => prompt.images[0]?.src)?.images[0],
-  };
-}).filter((category) => category.count > 0);
-
-const modelCards = Object.values(engines)
-  .map((engine) => ({
-    ...engine,
-    count: prompts.filter((prompt) => prompt.engines.includes(engine.key as Prompt['engines'][number])).length,
-  }))
-  .filter((engine) => engine.count > 0 && engine.key !== 'other')
-  .sort((a, b) => b.count - a.count)
-  .slice(0, 8);
-
-const homepageKeywords = [
-  'free AI image generator',
-  'AI image generator online',
-  'text to image AI generator',
-  'AI image prompts',
-  'AI art prompts',
-  'AI portrait prompts',
-  'AI product photography prompts',
-  'AI poster prompts',
-  'AI 3D prompts',
-  'AI illustration prompts',
-  'cinematic AI prompts',
-  'copy-ready image prompts',
-].join(', ');
-
 // JSON-LD ItemList
 const itemListLd = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
-  name: 'Ai Art Spell - AI Image Prompts and Online Image Generator',
-  description: 'AI image prompts, AI art prompts, visual examples, and an online image generator.',
+  name: 'Ai Art Spell - A curated bilingual gallery of AI image-generation prompts',
+  description: t.siteTagline,
   url: new URL('/', siteBase).toString(),
   numberOfItems: prompts.length,
-  itemListElement: [...featured, ...sorted.filter((p) => !featuredSet.has(p.slug))].slice(0, 50).map((p, i) => ({
+  itemListElement: prompts.slice(0, 50).map((p, i) => ({
     '@type': 'ListItem',
     position: i + 1,
     name: p.title,
-    url: new URL(`/prompt/${p.slug}/`, siteBase).toString(),
+    url: new URL(`/prompt/${p.slug}`, siteBase).toString(),
     description: p.tagline,
   })),
 };
 ---
 
-<Base title="AI Image Prompts — ChatGPT, Gemini & Nano Banana Pro" description={`Browse ${prompts.length} copy-ready AI image prompts for Nano Banana Pro, ChatGPT, Gemini and Midjourney. Real example images, parameters and results — free to copy.`}>
-  <Fragment slot="head"><meta name="keywords" content={homepageKeywords} /></Fragment>  <script slot="head" type="application/ld+json" set:html={JSON.stringify(itemListLd)} />
-  {/* Preload the single local banner image for a fast, stable hero */}
-  <link slot="head" rel="preload" as="image" href={bannerImage} fetchpriority="high" />
+<Base>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(itemListLd)} />
+  {/* Preload hero banner 第一张图：CSS background-image 也能借此机会提前下载（救 LCP） */}
+  {bannerImages[0] && (
+    <link slot="head" rel="preload" as="image" href={bannerImages[0]} fetchpriority="high" />
+  )}
 
   <section class="hero">
+    <!-- Banner 轮播背景（淡入淡出） -->
     <div class="hero-banner" data-hero-banner aria-hidden="true">
-      <img
-        class="hero-banner-slide active"
-        src={bannerImage}
-        alt=""
-        aria-hidden="true"
-        width="2017"
-        height="346"
-        fetchpriority="high"
-        decoding="async"
-      />
+      {bannerImages.map((src, i) => (
+        <div
+          class={`hero-banner-slide${i === 0 ? ' active' : ''}`}
+          data-hero-slide={String(i)}
+          style={`background-image: url(${src})`}
+        />
+      ))}
       <div class="hero-banner-overlay" />
     </div>
 
     <div class="container hero-content">
       <h1>
-        <span class="grad">AI image prompts</span><br />
-        and online image creation.
+        <span class="grad">{t.hero.titlePrefix}</span><br />
+        {t.hero.titleSuffix}
       </h1>
-      <p class="hero-subtitle">Browse copy-ready AI image prompts and AI art prompts with real examples, then send any idea to our online AI Image Studio.</p>
-      <p class="hero-keywords">Portrait prompts · product photography prompts · poster prompts · 3D prompts · illustration prompts · cinematic prompts</p>
       <div class="search-wrap">
         <input
           type="text"
@@ -168,62 +144,10 @@ const itemListLd = {
     </div>
   </section>
 
-  <AgnesHomeComposer locale="en" />
-
-  <section class="homepage-intro" aria-label="About the AI image prompt library">
-    <div class="container">
-      <p><strong>AI image prompts and AI art prompts</strong> with visual examples, reusable ideas, and curated collections for portraits, product photography, posters, 3D art, illustration, and cinematic image creation.</p>
-      <p class="homepage-intro-detail">Every prompt includes a real example image, source attribution, and a copy-ready prompt. Start with a category below or open AI Image Studio to generate your own version online.</p>
-    </div>
-  </section>
-
-  <section class="homepage-discovery section" aria-labelledby="browse-categories-title">
-    <div class="container">
-      <div class="section-head">
-        <div>
-          <h2 id="browse-categories-title">Browse AI Image Prompts by Category</h2>
-          <p class="section-lead">Find prompt ideas for portraits, photography, products, posters, 3D renders, and more.</p>
-        </div>
-        <a href={`${base}/ai-image-prompts/`}>View all {prompts.length} prompts →</a>
-      </div>
-      <div class="discovery-grid discovery-category-grid">
-        {categoryCards.map((category) => (
-          <a class="discovery-card" href={`${base}/prompts/${category.id}/`} data-discovery-category={category.id}>
-            {category.image ? <img src={category.image.src} alt="" loading="lazy" width={category.image.width || 500} height={Math.round((category.image.width || 500) * 0.75)} /> : <span class="discovery-card-placeholder" aria-hidden="true" />}
-            <span class="discovery-card-body">
-              <strong>AI {category.label} Prompts</strong>
-              <span>{category.description}</span>
-              <small>{category.count} prompts →</small>
-            </span>
-          </a>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <section class="homepage-discovery section" aria-labelledby="browse-models-title">
-    <div class="container">
-      <div class="section-head">
-        <div>
-          <h2 id="browse-models-title">Browse Prompts by AI Model</h2>
-          <p class="section-lead">Explore prompt examples for the image tools creators use most.</p>
-        </div>
-        <a href={`${base}/tools/`}>Explore AI tools →</a>
-      </div>
-      <div class="model-link-grid">
-        {modelCards.map((model) => (
-          <a class="model-link-card" href={`${base}/models/${model.key}/`}>
-            <span class="model-link-icon">{model.emoji}</span>
-            <span><strong>{model.nameEn} Prompts</strong><small>{model.count} examples</small></span>
-          </a>
-        ))}
-      </div>
-    </div>
-  </section>
-
   <!-- Featured + Specials: two-column row -->
-  <section class="section" id="featured">
+  <section class="section">
     <div class="container">
+      <div class="fs-row">
         <!-- LEFT: Featured (8 horizontal-scroll cards) -->
         <div class="fs-col">
           <div class="fs-col-head">
@@ -253,6 +177,55 @@ const itemListLd = {
             <div class="carousel-dots" data-featured-dots></div>
           </div>
         </div>
+
+        <!-- RIGHT: Specials (5 large images, auto-rotating) -->
+        <div class="fs-col">
+          <div class="fs-col-head">
+            <h2>{t.section.specials}</h2>
+            <a href={`${base}/collections`}>{t.section.specialsBrowse}</a>
+          </div>
+          <p class="editorial-meta" style="font-size: 12px; margin: 0 0 12px;">
+            Editor's picks of the season — themed prompt sets
+          </p>
+          <div class="specials-cover" data-specials-cover>
+            {specials.map((c, i) => (
+              <a
+                class="specials-image-link"
+                data-specials-link={String(i)}
+                href={`${base}/collections/${c.slug}`}
+                style={i === 0 ? '' : 'display:none;'}
+                aria-label={`Open collection: ${c.titleEn}`}
+              >
+                <img
+                  src={c.cover}
+                  alt={c.titleEn}
+                  data-specials-img={String(i)}
+                  data-title={c.titleEn}
+                  data-desc={c.descriptionEn}
+                  data-href={`${base}/collections/${c.slug}`}
+                  class={i === 0 ? 'active' : ''}
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                  fetchpriority={i === 0 ? 'high' : 'auto'}
+                  decoding="async"
+                />
+              </a>
+            ))}
+            <div class="specials-overlay">
+              <h3 data-specials-title>{specials[0]?.titleEn}</h3>
+              <p data-specials-desc>{specials[0]?.descriptionEn}</p>
+            </div>
+          </div>
+          <div class="specials-dots" data-specials-dots>
+            {specials.map((_, i) => (
+              <button
+                type="button"
+                class={`specials-dot${i === 0 ? ' active' : ''}`}
+                data-specials-dot={String(i)}
+                aria-label={`Show specials ${i + 1}`}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -262,19 +235,18 @@ const itemListLd = {
     <div class="container">
       <div class="section-head">
         <h2>{t.section.all}</h2>
-        <span class="count" id="result-count">Latest {latest.length} of {prompts.length} prompts</span>
+        <span class="count" id="result-count">{t.section.countPrompts(sorted.length)}</span>
       </div>
 
-      <!-- 分类 pill 改为真实聚合页链接（原先是 #anchor，无落地页） -->
       <div class="pills" id="filter-pills">
-        <a class="pill active" href={`${base}/ai-image-prompts/`}>{t.filter.all}</a>
+        <button class="pill active" data-cat="all">{t.filter.all}</button>
         {promptCategories.map((c) => (
-          <a class="pill" href={`${base}/prompts/${c.id}/`}>{c.label}</a>
+          <button class="pill" data-cat={c.id}>{c.label}</button>
         ))}
       </div>
 
       <div class="grid" id="prompt-grid">
-        {latest.map((p) => (
+        {sortedExcludingFeatured.map((p) => (
           <div
             class="card-wrap"
             data-name={p.title.toLowerCase()}
@@ -288,182 +260,16 @@ const itemListLd = {
         ))}
       </div>
 
-      <div class="view-all-wrap">
-        <a class="view-all-btn" href={`${base}/ai-image-prompts/`}>
-          Browse all {prompts.length} prompts →
-        </a>
-      </div>
-
       <p class="empty hidden" id="empty-state">{t.section.emptyState}</p>
     </div>
   </section>
 </Base>
 
 <style>
-  .hero-subtitle,
-  .hero-keywords {
-    max-width: 760px;
-    margin: 14px auto 0;
-    color: rgba(255, 255, 255, 0.92);
-    text-align: center;
-    line-height: 1.6;
-  }
-  .hero-keywords {
-    margin-top: 8px;
-    color: rgba(255, 255, 255, 0.76);
-    font-size: 12px;
-  }
-  .homepage-intro-detail {
-    margin: 8px 0 0;
-    color: var(--text-muted);
-    font-size: 13px;
-  }
-  .homepage-discovery .section-head {
-    align-items: flex-start;
-  }
-  .section-lead {
-    margin: 6px 0 0;
-    color: var(--text-muted);
-    font-size: 13px;
-  }
-  .discovery-grid {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 12px;
-  }
-  .discovery-card,
-  .model-link-card {
-    color: inherit;
-    text-decoration: none;
-  }
-  .discovery-card {
-    overflow: hidden;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    background: var(--bg-card);
-    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-  }
-  .discovery-card:hover {
-    border-color: var(--accent);
-    box-shadow: var(--shadow-sm);
-    transform: translateY(-2px);
-  }
-  .discovery-card img,
-  .discovery-card-placeholder {
-    display: block;
-    width: 100%;
-    height: 92px;
-    object-fit: cover;
-    background: var(--bg-soft);
-  }
-  .discovery-card-body {
-    display: flex;
-    min-height: 112px;
-    flex-direction: column;
-    gap: 5px;
-    padding: 10px;
-  }
-  .discovery-card-body strong {
-    font-size: 13px;
-    line-height: 1.3;
-  }
-  .discovery-card-body span {
-    display: -webkit-box;
-    overflow: hidden;
-    color: var(--text-muted);
-    font-size: 11px;
-    line-height: 1.4;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-  }
-  .discovery-card-body small,
-  .model-link-card small {
-    margin-top: auto;
-    color: var(--accent);
-    font-size: 11px;
-  }
-  .model-link-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 10px;
-  }
-  .model-link-card {
-    display: flex;
-    min-height: 66px;
-    align-items: center;
-    gap: 10px;
-    padding: 12px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    background: var(--bg-card);
-    transition: border-color 0.18s ease, transform 0.18s ease;
-  }
-  .model-link-card:hover {
-    border-color: var(--accent);
-    transform: translateY(-2px);
-  }
-  .model-link-icon {
-    display: grid;
-    width: 32px;
-    height: 32px;
-    flex: 0 0 32px;
-    place-items: center;
-    border-radius: 50%;
-    background: var(--bg-soft);
-    font-size: 18px;
-  }
-  .model-link-card > span:last-child {
-    display: flex;
-    min-width: 0;
-    flex-direction: column;
-    gap: 3px;
-  }
-  .model-link-card strong {
-    overflow: hidden;
-    font-size: 12px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  @media (max-width: 900px) {
-    .discovery-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  }
-  @media (max-width: 600px) {
-    .hero-subtitle { font-size: 13px; }
-    .hero-keywords { font-size: 11px; }
-    .discovery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .model-link-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .discovery-card img,
-    .discovery-card-placeholder { height: 78px; }
-  }
   .editorial-meta {
     color: var(--text-muted);
     font-size: 13px;
     margin: 0 0 24px;
-  }
-  /* 分类 pill 由 button 改为 a 链接后补齐样式 */
-  .pills .pill {
-    cursor: pointer;
-    text-decoration: none;
-  }
-  .view-all-wrap {
-    margin-top: 28px;
-    text-align: center;
-  }
-  .view-all-btn {
-    display: inline-block;
-    padding: 12px 28px;
-    border: 1px solid var(--accent);
-    border-radius: 999px;
-    background: var(--bg-card);
-    color: var(--accent);
-    font-size: 14px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: background 0.18s ease, color 0.18s ease;
-  }
-  .view-all-btn:hover {
-    background: var(--accent);
-    color: #fff;
   }
   /* 分页样式已移除（瀑布流模式） */
   /* ---- 精选轮播 (水平滚动 carousel) ---- */
@@ -556,6 +362,71 @@ const itemListLd = {
 </style>
 
 <script is:inline>
+  // ===== Specials (right column): auto-rotate 5 collection covers =====
+  (function () {
+    const cover = document.querySelector('[data-specials-cover]');
+    if (!cover) return;
+    const imgs = cover.querySelectorAll('[data-specials-img]');
+    const imageLinks = cover.querySelectorAll('[data-specials-link]');
+    const dots = document.querySelectorAll('[data-specials-dot]');
+    const titleEl = cover.querySelector('[data-specials-title]');
+    const descEl = cover.querySelector('[data-specials-desc]');
+    const linkEl = cover.querySelector('[data-specials-link]');
+    if (imgs.length < 2) return;
+    // Data captured at render time: title, desc, slug, link for each idx
+    const meta = Array.from(imgs).map((img) => {
+      const m = img.alt.match(/^.+?$/);
+      return {
+        alt: img.alt,
+        href: (img.parentElement.querySelector('a') || {}).href || '',
+      };
+    });
+    // We need more data: build meta server-side by reading from
+    // data attributes; use a hidden JSON block as the source of truth.
+    // Simpler: read from the elements themselves (title/desc/links)
+    // by re-rendering on every tick.
+    const buildMeta = (i) => {
+      const link = imgs[i];
+      return {
+        alt: link.alt,
+      };
+    };
+    let current = 0;
+    let timer = null;
+    function show(idx) {
+      current = (idx + imgs.length) % imgs.length;
+      imageLinks.forEach((link, i) => {
+        link.style.display = i === current ? 'block' : 'none';
+      });
+      imgs.forEach((img, i) => {
+        const active = i === current;
+        img.style.display = active ? 'block' : 'none';
+        img.classList.toggle('active', active);
+      });
+      dots.forEach((d, i) => d.classList.toggle('active', i === current));
+      // title/desc/links are baked into the first img via data attrs
+      const dataTitle = imgs[current].getAttribute('data-title');
+      const dataDesc = imgs[current].getAttribute('data-desc');
+      const dataHref = imgs[current].getAttribute('data-href');
+      if (titleEl && dataTitle) titleEl.textContent = dataTitle;
+      if (descEl && dataDesc) descEl.textContent = dataDesc;
+      if (linkEl && dataHref) linkEl.setAttribute('href', dataHref);
+    }
+    function next() { show(current + 1); }
+    function start() { stop(); timer = setInterval(next, 5000); }
+    function stop() { if (timer) { clearInterval(timer); timer = null; } }
+    dots.forEach((d, i) => d.addEventListener('click', () => { show(i); start(); }));
+    cover.addEventListener('mouseenter', stop);
+    cover.addEventListener('mouseleave', start);
+    document.addEventListener('visibilitychange', () => {
+      document.hidden ? stop() : start();
+    });
+    show(0);
+    start();
+  })();
+</script>
+
+<script is:inline>
   // ===== Featured carousel (水平滚动, 每次滑 1 张) =====
   (function () {
     const carousel = document.querySelector('[data-featured-carousel]');
@@ -632,6 +503,35 @@ const itemListLd = {
     startAuto();
   })();
 
+  // ===== Hero banner carousel (背景图轮播；文字与圆点已按需求移除) =====
+  (function () {
+    const banner = document.querySelector('[data-hero-banner]');
+    if (!banner) return;
+    const slides = banner.querySelectorAll('[data-hero-slide]');
+    const total = slides.length;
+    if (total === 0) return;
+    let current = 0;
+    let timer = null;
+
+    function show(idx) {
+      current = (idx + total) % total;
+      slides.forEach((s, i) => s.classList.toggle('active', i === current));
+    }
+    function next() { show(current + 1); }
+    function startAuto() { stopAuto(); timer = setInterval(next, 5000); }
+    function stopAuto() { if (timer) { clearInterval(timer); timer = null; } }
+
+    banner.addEventListener('mouseenter', stopAuto);
+    banner.addEventListener('mouseleave', startAuto);
+
+    // 当标签页隐藏时暂停（省 CPU）
+    document.addEventListener('visibilitychange', () => {
+      document.hidden ? stopAuto() : startAuto();
+    });
+
+    startAuto();
+  })();
+
   // ===== Homepage search/filter =====
   (function () {
     const search = document.getElementById('prompt-search');
@@ -643,8 +543,7 @@ const itemListLd = {
     if (!grid || !search) return;
 
     let activeCat = 'all';
-    let activeQuery = new URLSearchParams(window.location.search).get('q')?.trim() || '';
-    if (activeQuery) search.value = activeQuery;
+    let activeQuery = '';
 
     function apply() {
       let visible = 0;
@@ -702,18 +601,48 @@ const itemListLd = {
       syncClearBtn();
     }
 
-    // 分类 pill 已改为真实聚合页链接（/prompts/<cat>/），不再做客户端筛选
+    pills.forEach((p) => {
+      p.addEventListener('click', () => {
+        pills.forEach((q) => q.classList.remove('active'));
+        p.classList.add('active');
+        activeCat = p.dataset.cat;
+        apply();
+      });
+    });
 
     // 初始化：调用一次 apply 让 pager-info 显示初始状态
     apply();
 
-    // 回车 -> 跳转聚合页做全站搜索（首页只渲染最新 48 条，搜不全）
-    search.addEventListener('keydown', (e) => {
-      if (e.key !== 'Enter') return;
-      const q = search.value.trim();
-      window.location.href = q
-        ? `/ai-image-prompts/?q=${encodeURIComponent(q)}`
-        : `/ai-image-prompts/`;
+    // 同步 URL hash 到 activeCat：从详情页跳到 /#portrait 时自动筛选
+    function syncFromHash() {
+      const hash = window.location.hash.replace('#', '');
+      if (!hash || hash === 'featured') return;
+      // 找匹配分类或 all
+      let target = null;
+      pills.forEach((p) => {
+        if (p.dataset.cat === hash || (hash === 'all' && p.dataset.cat === 'all')) {
+          target = p;
+        }
+      });
+      if (target) {
+        pills.forEach((q) => q.classList.remove('active'));
+        target.classList.add('active');
+        activeCat = target.dataset.cat;
+        apply();
+        // 滚到分类区块
+        const section = document.getElementById('all');
+        if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+    // 初次 + hash 变化时同步
+    syncFromHash();
+    window.addEventListener('hashchange', syncFromHash);
+
+    // 点击 pill 时更新 hash，让 URL 可分享
+    pills.forEach((p) => {
+      p.addEventListener('click', () => {
+        history.replaceState(null, '', '#' + p.dataset.cat);
+      });
     });
   })();
 </script>

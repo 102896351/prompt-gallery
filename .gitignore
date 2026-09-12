@@ -24,10 +24,3 @@ pnpm-debug.log*
 
 # scripts 临时产物
 src/data/prompts.candidates.json
-
-# 数据备份（体积大，不随仓库同步）
-*.bak
-src/data/*.before-*.bak
-
-# 本地分析中间产物
-src/data/prompt-meta.json

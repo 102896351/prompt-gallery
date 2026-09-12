@@ -29,7 +29,7 @@ const ENGINE_SEO: Record<string, string> = {
 
 /**
  * 详情页 SEO title
- * 模板: {promptTitle} - {engine} AI Image Prompt · Ai Art Spell
+ * 模板: {promptTitle} - {engine} Prompt · Ai Art Spell
  * 引擎优先取 prompt.engines 第一个有 SEO 值的；兜底 "AI Image"
  */
 export function getDetailSeoTitle(prompt: Prompt, displayTitle: string, locale: 'en' | 'zh' = 'en'): string {
@@ -41,22 +41,11 @@ export function getDetailSeoTitle(prompt: Prompt, displayTitle: string, locale: 
       break;
     }
   }
-  // 控制动态标题长度，优先保留主题开头和核心 prompt 关键词。
-  const maxSubjectLength = locale === 'zh' ? 42 : 68;
-  const subject = displayTitle.length > maxSubjectLength
-    ? `${displayTitle.slice(0, maxSubjectLength - 1).trim()}…`
-    : displayTitle;
-  const promptKeyword = engineName === 'AI Image'
-    ? 'AI Image Prompt'
-    : `${engineName} AI Image Prompt`;
-  const zhPromptKeyword = engineName === 'AI Image'
-    ? 'AI生图提示词'
-    : `${engineName} AI生图提示词`;
-  // 注意：Base.astro 会自动追加 "· Ai Art Spell"，这里只返回主体标题
+  // 注意：Base.astro 会自动追加 "· Ai Art Spell"，这里只返回 "{title} - {engine} Prompt"
   if (locale === 'zh') {
-    return `${subject} - ${zhPromptKeyword}`;
+    return `${displayTitle} - ${engineName} 提示词`;
   }
-  return `${subject} - ${promptKeyword}`;
+  return `${displayTitle} - ${engineName} Prompt`;
 }
 
 /**
@@ -115,16 +104,12 @@ export function getDetailSeoDescription(prompt: Prompt, displayTitle: string, lo
   }
 
   if (locale === 'zh') {
-    const zhSuffix = engineName === 'AI Image' || engineName === 'AI image'
-      ? '一键复制，AI生图提示词。'
-      : `一键复制，${engineName} 提示词，适合 AI 生图。`;
-    const desc = `${body} ${zhSuffix}`;
+    const suffix = `一键复制，${engineName} 提示词。`;
+    const desc = `${body} ${suffix}`;
     return desc.slice(0, 160);
   }
 
-  const enSuffix = engineName === 'AI Image'
-    ? 'Copy-ready AI image prompt.'
-    : `Copy-ready ${engineName} AI image prompt.`;
-  const desc = `${body} ${enSuffix}`;
+  const suffix = `One-click copy, ${engineName} prompt.`;
+  const desc = `${body} ${suffix}`;
   return desc.slice(0, 160);
 }
