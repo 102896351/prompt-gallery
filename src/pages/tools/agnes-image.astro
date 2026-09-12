@@ -3,6 +3,16 @@ import Base from '../../layouts/Base.astro';
 import AgnesImageGenerator from '../../components/AgnesImageGenerator.astro';
 ---
 
-<Base title="AI Image Studio" description="Create AI images anonymously. No account required and no user records are stored.">
+<Base title="Free AI Image Generator · AI Image Studio" description="Use a free AI image generator online to create images from text prompts. No account or sign-up required to start.">
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Free AI Image Generator',
+    applicationCategory: 'MultimediaApplication',
+    operatingSystem: 'Web',
+    url: new URL('/tools/agnes-image/', Astro.site ?? 'https://aiartspell.art').toString(),
+    description: 'Use a free online AI image generator to create images from text prompts without an account.',
+    featureList: ['Free text to image generation', 'Image to image generation', 'Aspect ratio selection', 'Download generated images'],
+  })} />
   <AgnesImageGenerator locale="en" />
 </Base>

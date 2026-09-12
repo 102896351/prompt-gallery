@@ -1,0 +1,412 @@
+---
+// ============================================================
+//  /zh/ai-image-prompts/  — 中文全量 prompt 聚合页（分页）
+//  -----------------------------------------------------------
+//  与英文 /ai-image-prompts/ 对称的中文入口，避免中文首页的
+//  "浏览全部 1228 条" 按钮跳到英文站。承接中文用户的品类检索。
+//
+//  SEO 要点：
+//  - self-canonical（Base.astro 自动输出），绝不指向 page1
+//  - 每页 title 唯一（带 Page N）
+//  - page 1 承载导语 / 分类入口 / FAQ；page 2+ 只留卡片
+//  - 跳页导航保证 3 跳内可达所有中文 prompt
+//  - 详情链接指向 /zh/prompt/<slug>/，与中文详情页一致
+// ============================================================
+
+import Base from '../../../layouts/Base.astro';
+import PromptCard from '../../../components/PromptCard.astro';
+import { prompts, promptCategories } from '../../../data/prompts';
+import { engines } from '../../../data/engines';
+import type { Prompt } from '../../../data/prompts';
+
+// 按 slug 去重，确保与详情页（/zh/prompt，1228 页）和首页「共 1228 条」一致
+const allPrompts = [...new Map(prompts.map((p) => [p.slug, p])).values()];
+
+export async function getStaticPaths({ paginate }: any) {
+  // getStaticPaths 被 Astro 提取到独立模块，只能访问 import；去重在此处本地完成
+  const deduped = [...new Map(prompts.map((p) => [p.slug, p])).values()];
+  const sorted = [...deduped].sort((a, b) =>
+    (b.dateAdded || '').localeCompare(a.dateAdded || '')
+  );
+  return paginate(sorted, { pageSize: 48 });
+}
+
+const { page } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const isFirst = page.currentPage === 1;
+const suffix = isFirst ? '' : ` — 第 ${page.currentPage} 页`;
+
+const title = `AI 生图提示词${suffix}`;
+const description = isFirst
+  ? `共 ${allPrompts.length} 条可直接复制的 AI 生图提示词，涵盖 Nano Banana Pro、ChatGPT、Gemini 与 Midjourney。每条都配有真实示例图、可复用参数与生成结果，按分类或模型浏览。`
+  : `AI 生图提示词库 — 第 ${page.currentPage} / ${page.lastPage} 页。每条提示词均附示例图与参数，可直接复制使用。`;
+
+const siteBase = Astro.site ?? new URL('https://aiartspell.art');
+
+// 分类入口（用中文 label）
+const catCards = promptCategories
+  .map((c) => ({ ...c, count: allPrompts.filter((p) => p.category === c.id).length }))
+  .filter((c) => c.count > 0);
+
+// 模型入口（用中文 name）
+const modelCards = Object.values(engines)
+  .map((e) => ({
+    ...e,
+    count: allPrompts.filter((p) => p.engines.includes(e.key as Prompt['engines'][number])).length,
+  }))
+  .filter((e) => e.count > 0 && e.key !== 'other')
+  .sort((a, b) => b.count - a.count);
+
+// 跳页导航：1、末页、每 5 页、当前页 ±2
+// Astro paginate() 默认生成路径是 /zh/ai-image-prompts/<n>/，不是 /page/<n>/
+function pageHref(n: number) {
+  return n === 1 ? `${base}/zh/ai-image-prompts/` : `${base}/zh/ai-image-prompts/${n}/`;
+}
+const pageNumbers = Array.from({ length: page.lastPage }, (_, i) => i + 1).filter(
+  (n) => n === 1 || n === page.lastPage || n % 5 === 0 || Math.abs(n - page.currentPage) <= 2
+);
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: '首页', item: new URL('/zh/', siteBase).toString() },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'AI 生图提示词',
+      item: new URL('/zh/ai-image-prompts/', siteBase).toString(),
+    },
+  ],
+};
+
+const itemListLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: `AI 生图提示词${suffix}`,
+  numberOfItems: page.data.length,
+  itemListElement: page.data.map((p: Prompt, i: number) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: p.title,
+    url: new URL(`/zh/prompt/${p.slug}/`, siteBase).toString(),
+  })),
+};
+
+// FAQ 只在 page 1 输出，避免分页内容重复
+const faqList = [
+  {
+    q: '什么是 AI 生图提示词？',
+    a: 'AI 生图提示词是你发送给图像模型（如 Nano Banana Pro、ChatGPT 或 Gemini）的文字指令。一条好的提示词会描述主体、风格、光线、镜头和画面比例，所以复制经过验证的提示词通常比从零写一句更有效。',
+  },
+  {
+    q: '我该用哪个 AI 图像模型？',
+    a: 'Nano Banana Pro 在文字渲染和细节还原上最强；ChatGPT（DALL·E）适合在对话里快速迭代；Midjourney 在风格化、电影感输出上领先；Gemini 是全能型选手；Flux 是本地部署最好的开源选项。',
+  },
+  {
+    q: '这些提示词可以免费使用吗？',
+    a: '可以。本页所有提示词均可免费复制并用于个人或商业作品。每条都标注了原作者，公开发布结果时请注明原始创作者。',
+  },
+  {
+    q: '怎么从复制的提示词得到更好的效果？',
+    a: '先保持结构不变，只替换主体；然后一次只调整一个变量——光线、镜头、配色或画面比例。一次改多个变量，你就无法判断到底是哪一处起了作用。',
+  },
+  {
+    q: '这些提示词适用于 Nano Banana Pro 吗？',
+    a: '大部分适用。标注了 Nano Banana Pro 的提示词已针对该模型测试过，其他为 Midjourney、Flux 或 ChatGPT 所写，可能需要少量措辞调整，因为每个模型对参数式语法的反应不同。',
+  },
+];
+
+const faqLd = isFirst
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faqList.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    }
+  : null;
+---
+
+<Base title={title} description={description}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(itemListLd)} />
+  {faqLd && <script slot="head" type="application/ld+json" set:html={JSON.stringify(faqLd)} />}
+
+  <section class="section">
+    <div class="container">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href={`${base}/zh/`}>首页</a>
+        <span aria-hidden="true">/</span>
+        <span>AI 生图提示词</span>
+      </nav>
+
+      <h1>AI 生图提示词{suffix}</h1>
+      <p class="page-count">
+        共 {allPrompts.length} 条提示词 · 第 {page.currentPage} / {page.lastPage} 页
+      </p>
+
+      {
+        isFirst && (
+          <>
+            <p class="lead">
+              这是一个包含 <strong>{allPrompts.length} 条 AI 生图提示词</strong> 的实用库，每条都配有真实示例图、经过测试的参数与生成结果。所有条目均可直接复制用于 Nano
+              Banana Pro、ChatGPT、Gemini、Midjourney 和 Flux。可以先按分类或模型浏览，也可以按顺序查看全部。
+            </p>
+
+            <h2 class="sub">按分类浏览 AI 生图提示词</h2>
+            <div class="chip-grid">
+              {catCards.map((c) => (
+                <a class="chip" href={`${base}/zh/prompts/${c.id}/`}>
+                  <strong>{c.labelZh}</strong>
+                  <span>{c.count}</span>
+                </a>
+              ))}
+            </div>
+
+            <h2 class="sub">按 AI 模型浏览提示词</h2>
+            <div class="chip-grid">
+              {modelCards.map((m) => (
+                <a class="chip" href={`${base}/zh/models/${m.key}/`}>
+                  <strong>{m.nameZh}</strong>
+                  <span>{m.count}</span>
+                </a>
+              ))}
+            </div>
+          </>
+        )
+      }
+
+      <h2 class="sub">{isFirst ? '全部 AI 生图提示词' : `第 ${page.currentPage} 页`}</h2>
+
+      <div class="search-wrap">
+        <input
+          type="text"
+          id="prompt-search"
+          placeholder="按关键词、模型或标签搜索全部提示词..."
+          autocomplete="off"
+          aria-label="搜索提示词"
+        />
+      </div>
+
+      <div class="grid" id="prompt-grid">
+        {
+          page.data.map((p: Prompt) => (
+            <div class="card-wrap" data-name={(p.title || '').toLowerCase()} data-tags={(p.titleEn ? p.titleEn + ' ' : '') + p.tags.join(' ')}>
+              <PromptCard prompt={p} base={base} />
+            </div>
+          ))
+        }
+      </div>
+
+      <p class="empty hidden" id="empty-state">没有匹配的提示词。</p>
+
+      <nav class="pager" aria-label="Pagination">
+        {page.url.prev ? <a href={page.url.prev}>← 上一页</a> : <span class="pager-off">← 上一页</span>}
+        <div class="pager-nums">
+          {
+            pageNumbers.map((n: number) =>
+              n === page.currentPage ? (
+                <span class="pager-cur">{n}</span>
+              ) : (
+                <a href={pageHref(n)}>{n}</a>
+              )
+            )
+          }
+        </div>
+        {page.url.next ? <a href={page.url.next}>下一页 →</a> : <span class="pager-off">下一页 →</span>}
+      </nav>
+
+      {
+        isFirst && (
+          <section class="faq" aria-labelledby="faq-title">
+            <h2 id="faq-title" class="sub">AI 生图提示词常见问题</h2>
+            {faqList.map((f) => (
+              <details>
+                <summary>{f.q}</summary>
+                <p>{f.a}</p>
+              </details>
+            ))}
+          </section>
+        )
+      }
+    </div>
+  </section>
+</Base>
+
+<script is:inline>
+  // 全站搜索：加载 /zh/search-index.json（与页面解耦，不撑大 HTML）
+  (function () {
+    var input = document.getElementById('prompt-search');
+    var grid = document.getElementById('prompt-grid');
+    var empty = document.getElementById('empty-state');
+    if (!input || !grid) return;
+
+    var cards = Array.prototype.slice.call(grid.querySelectorAll('.card-wrap'));
+    var index = null;
+    var loading = false;
+
+    function render(list) {
+      var html = list.map(function (it) {
+        return (
+          '<div class="card-wrap"><a class="card" href="/zh/prompt/' + it.slug + '/">' +
+          '<img src="' + it.img + '" alt="" loading="lazy" />' +
+          '<div class="card-body"><strong>' + (it.title || it.titleEn || it.slug) + '</strong></div></a></div>'
+        );
+      }).join('');
+      grid.innerHTML = html;
+      if (empty) empty.classList.toggle('hidden', list.length > 0);
+    }
+
+    function restore() {
+      cards.forEach(function (c) { c.style.display = ''; });
+      if (empty) empty.classList.add('hidden');
+    }
+
+    function localFilter(q) {
+      var n = 0;
+      cards.forEach(function (c) {
+        var hit = (c.dataset.name || '').includes(q) || (c.dataset.tags || '').includes(q);
+        c.style.display = hit ? '' : 'none';
+        if (hit) n++;
+      });
+      if (empty) empty.classList.toggle('hidden', n > 0);
+    }
+
+    function loadIndex(cb) {
+      if (index) return cb(index);
+      if (loading) return;
+      loading = true;
+      fetch('/zh/search-index.json')
+        .then(function (r) { return r.json(); })
+        .then(function (data) { index = data; loading = false; cb(index); })
+        .catch(function () { loading = false; cb(null); });
+    }
+
+    function searchAll(q) {
+      loadIndex(function (data) {
+        if (!data) return localFilter(q);
+        var hits = data.filter(function (it) {
+          return ((it.title || '') + ' ' + (it.titleEn || '') + ' ' + (it.tags || '')).toLowerCase().includes(q);
+        }).slice(0, 48);
+        render(hits);
+      });
+    }
+
+    // 支持 /zh/ai-image-prompts/?q=xxx 直接进入
+    var initial = new URLSearchParams(window.location.search).get('q');
+    if (initial) {
+      input.value = initial;
+      searchAll(initial.trim().toLowerCase());
+    }
+
+    var timer = null;
+    input.addEventListener('input', function (e) {
+      var q = e.target.value.trim().toLowerCase();
+      if (!q) { restore(); return; }
+      clearTimeout(timer);
+      timer = setTimeout(function () { searchAll(q); }, 220);
+    });
+  })();
+</script>
+
+<style>
+  .crumbs {
+    margin-bottom: 12px;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+  .crumbs a { color: var(--accent); text-decoration: none; }
+  .crumbs a:hover { text-decoration: underline; }
+  .page-count {
+    margin: 6px 0 18px;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+  .lead {
+    max-width: 760px;
+    margin: 0 0 24px;
+    color: var(--text);
+    line-height: 1.75;
+  }
+  .sub {
+    margin: 32px 0 14px;
+    font-size: 19px;
+  }
+  .chip-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 14px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--bg-card);
+    color: var(--text);
+    font-size: 13px;
+    text-decoration: none;
+    transition: border-color 0.16s ease, transform 0.16s ease;
+  }
+  .chip:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .chip span { color: var(--text-muted); font-size: 12px; }
+  .search-wrap { margin: 0 0 18px; }
+  .search-wrap input {
+    width: 100%;
+    max-width: 460px;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--text);
+    font-size: 14px;
+  }
+  .search-wrap input:focus { outline: 2px solid var(--accent-soft); border-color: var(--accent); }
+  .pager {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 32px 0 8px;
+  }
+  .pager a,
+  .pager span {
+    min-width: 36px;
+    padding: 7px 11px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--text);
+    font-size: 13px;
+    text-align: center;
+    text-decoration: none;
+  }
+  .pager a:hover { border-color: var(--accent); color: var(--accent); }
+  .pager .pager-cur {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+  .pager .pager-off { opacity: 0.4; }
+  .pager-nums { display: flex; flex-wrap: wrap; gap: 6px; }
+  .faq details {
+    margin-bottom: 10px;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-card);
+  }
+  .faq summary { cursor: pointer; font-weight: 600; font-size: 14px; }
+  .faq details p { margin: 10px 0 0; color: var(--text-muted); font-size: 14px; line-height: 1.7; }
+  .grid .card-wrap a.card { text-decoration: none; color: inherit; display: block; }
+  .grid .card-wrap img { width: 100%; border-radius: var(--radius); display: block; }
+  .grid .card-body { padding: 8px 2px; font-size: 13px; }
+</style>

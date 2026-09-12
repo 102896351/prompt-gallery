@@ -18,20 +18,27 @@ export function getLocaleFromPath(pathname: string): Locale {
   return 'en';
 }
 
+/** 将 pathname 规范化为站内最终 URL 格式：根路径为 /，其他路径统一带尾斜杠。 */
+export function normalizePathname(pathname: string): string {
+  const withLeadingSlash = pathname.startsWith('/') ? pathname : `/${pathname}`;
+  const withoutTrailingSlashes = withLeadingSlash.replace(/\/+$/, '');
+  return withoutTrailingSlashes ? `${withoutTrailingSlashes}/` : '/';
+}
+
 /** 当前 locale 下，URL 切换到对端 locale 的等价路径 */
 export function swapLocale(pathname: string, current: Locale): string {
-  const other: Locale = current === 'en' ? 'zh' : 'en';
-  // /prompt/foo ↔ /zh/prompt/foo
-  // /about ↔ /zh/about
+  const normalized = normalizePathname(pathname);
+  // /prompt/foo/ ↔ /zh/prompt/foo/
+  // /about/ ↔ /zh/about/
   if (current === 'zh') {
     // 去掉前缀 /zh
-    const stripped = pathname.replace(/^\/zh(?=\/|$)/, '');
-    return stripped === '' ? '/' : stripped;
-  } else {
-    // 加前缀 /zh
-    if (pathname === '/' || pathname === '') return '/zh/';
-    return `/zh${pathname.startsWith('/') ? pathname : '/' + pathname}`;
+    const stripped = normalized.replace(/^\/zh(?=\/|$)/, '');
+    return normalizePathname(stripped || '/');
   }
+
+  // 加前缀 /zh
+  if (normalized === '/') return '/zh/';
+  return normalizePathname(`/zh${normalized}`);
 }
 
 export { en } from './en';

@@ -3,6 +3,16 @@ import Base from '../../../layouts/Base.astro';
 import AgnesImageGenerator from '../../../components/AgnesImageGenerator.astro';
 ---
 
-<Base title="AI 生图工作台" description="无需登录即可创建 AI 图片；本站不保存用户记录。">
+<Base title="免费AI生图 · AI图片生成器" description="免费在线 AI 生图：输入文字提示词即可生成图片，无需注册或登录即可开始文生图。">
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: '免费AI生图工具',
+    applicationCategory: 'MultimediaApplication',
+    operatingSystem: 'Web',
+    url: new URL('/zh/tools/agnes-image/', Astro.site ?? 'https://aiartspell.art').toString(),
+    description: '免费在线 AI 生图工具，输入文字提示词即可生成图片，无需注册或登录。',
+    featureList: ['免费文生图', '图生图', '画面比例选择', '下载生成图片'],
+  })} />
   <AgnesImageGenerator locale="zh" />
 </Base>

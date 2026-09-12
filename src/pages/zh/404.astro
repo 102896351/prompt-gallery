@@ -7,7 +7,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const featured = prompts.slice(0, 6);
 ---
 
-<Base title="404 · 页面未找到" description="您访问的页面不存在。可以浏览我们的提示词库或返回首页。" noAds>
+<Base title="404 · 页面未找到" description="您访问的页面不存在。可以浏览我们的提示词库或返回首页。" noAds noindex>
   <section class="hero not-found-hero">
     <div class="container">
       <div class="not-found-content">
@@ -17,7 +17,7 @@ const featured = prompts.slice(0, 6);
         <div class="not-found-actions">
           <a href={`${base}/zh/`} class="btn primary">← 返回首页</a>
           <a href={`${base}/zh/#all`} class="btn">浏览全部提示词</a>
-          <a href={`${base}/zh/tools`} class="btn">AI 工具集</a>
+          <a href={`${base}/zh/tools/`} class="btn">AI 工具集</a>
         </div>
       </div>
 
@@ -25,7 +25,7 @@ const featured = prompts.slice(0, 6);
         <h2>或者浏览精选提示词：</h2>
         <div class="not-found-grid">
           {featured.map((p, i) => (
-            <a href={`${base}/zh/prompt/${p.slug}`} class="card not-found-card">
+            <a href={`${base}/zh/prompt/${p.slug}/`} class="card not-found-card">
               <div class="not-found-card-cover">
                 <img
                   src={p.images[0]?.src}

@@ -36,7 +36,7 @@ const cover = prompt.images[0];
 // 根据当前页面 URL 推断 locale，决定卡片链接加不加 /zh 前缀
 const locale: Locale = getLocaleFromPath(Astro.url.pathname);
 const messages = locale === 'zh' ? zh : en;
-const promptHref = locale === 'zh' ? `${base}/zh/prompt/${prompt.slug}` : `${base}/prompt/${prompt.slug}`;
+const promptHref = locale === 'zh' ? `${base}/zh/prompt/${prompt.slug}/` : `${base}/prompt/${prompt.slug}/`;
 // 英文页面：优先 titleEn，fallback 到 title；中文页：保持 title
 const displayTitle = locale === 'en'
   ? safeEnglishTitle(prompt.titleEn, prompt.title, prompt.slug)

@@ -18,6 +18,7 @@ const REQUEST_TIMEOUT_MS = Number(process.env.R2_REQUEST_TIMEOUT_MS || 30_000);
 const MAX_RETRIES = Number(process.env.R2_MAX_RETRIES || 3);
 const CONCURRENCY = Math.max(1, Math.min(Number(process.env.R2_CONCURRENCY || 4), 8));
 const CACHE_CONTROL = 'public, max-age=31536000, immutable';
+const CURL_BIN = process.env.R2_CURL_BIN || (process.platform === 'win32' ? 'curl.exe' : '/usr/bin/curl');
 const TEMP_ROOT = process.env.R2_TEMP_DIR || join(process.env.RUNNER_TEMP || process.env.TMPDIR || '/tmp', 'prompt-gallery-r2');
 
 function parseArgs(argv) {
@@ -129,8 +130,8 @@ function detectType(buffer) {
 
 async function downloadWithCurl(url, target) {
   return new Promise((resolve, reject) => {
-    const child = spawn('curl', [
-      '--fail', '--silent', '--show-error', '--location',
+    const child = spawn(CURL_BIN, [
+      '--http1.1', '--ipv4', '--tlsv1.2', '--fail', '--silent', '--show-error', '--location',
       '--retry', String(MAX_RETRIES),
       '--connect-timeout', '15', '--max-time', String(Math.ceil(REQUEST_TIMEOUT_MS / 1000)),
       '-A', 'prompt-gallery-r2-migrator/1.0',
@@ -198,14 +199,24 @@ async function downloadWithFetch(url, target) {
 }
 
 async function download(url, target) {
-  return retry(async () => {
+  const source = new URL(url);
+  const urls = [];
+  if (source.hostname === SOURCE_HOST) {
+    const httpUrl = new URL(source);
+    httpUrl.protocol = 'http:';
+    urls.push(httpUrl);
+  }
+  urls.push(source);
+  let lastError;
+  for (const candidateUrl of urls) {
     try {
-      return await downloadWithCurl(url, target);
+      return await retry(() => downloadWithFetch(candidateUrl, target), `download ${candidateUrl}`);
     } catch (error) {
-      if (error?.code !== 'ENOENT') throw error;
-      return downloadWithFetch(url, target);
+      lastError = error;
+      console.warn(`[r2] source download failed for ${candidateUrl}: ${error?.message || error}`);
     }
-  }, `download ${url}`);
+  }
+  throw lastError;
 }
 
 function createClient() {
@@ -222,15 +233,42 @@ function createClient() {
 }
 
 async function headPublic(url) {
+  const urls = [url];
+  const parsed = new URL(url);
+  if (parsed.protocol === 'https:') {
+    parsed.protocol = 'http:';
+    urls.push(parsed);
+  }
+  let lastError;
+  for (const candidateUrl of urls) {
+    try {
+      return await retry(async () => {
+        const response = await withTimeout((signal) => fetch(candidateUrl, { method: 'HEAD', signal, headers: { 'user-agent': 'prompt-gallery-r2-migrator/1.0' } }));
+        return {
+          ok: response.ok,
+          status: response.status,
+          contentType: (response.headers.get('content-type') || '').split(';')[0].toLowerCase(),
+          bytes: Number(response.headers.get('content-length') || 0),
+        };
+      }, `verify ${candidateUrl}`);
+    } catch (error) {
+      lastError = error;
+      console.warn(`[r2] public HEAD failed for ${candidateUrl}: ${error?.message || error}`);
+    }
+  }
+  throw lastError;
+}
+
+async function headR2(client, bucket, key) {
   return retry(async () => {
-    const response = await withTimeout((signal) => fetch(url, { method: 'HEAD', signal, headers: { 'user-agent': 'prompt-gallery-r2-migrator/1.0' } }));
+    const response = await client.send(new HeadObjectCommand({ Bucket: bucket, Key: key }));
     return {
-      ok: response.ok,
-      status: response.status,
-      contentType: (response.headers.get('content-type') || '').split(';')[0].toLowerCase(),
-      bytes: Number(response.headers.get('content-length') || 0),
+      ok: true,
+      status: response.$metadata?.httpStatusCode || 200,
+      contentType: (response.ContentType || '').split(';')[0].toLowerCase(),
+      bytes: Number(response.ContentLength || 0),
     };
-  }, `verify ${url}`);
+  }, `verify R2 object ${key}`);
 }
 
 async function uploadOne(client, bucket, key, data, metadata) {
@@ -313,13 +351,19 @@ async function main() {
         const key = keyFor(value, metadata.type);
         const r2Url = publicUrlFor(key, base);
         const uploadStatus = await uploadOne(client, bucket, key, await readFile(target), metadata);
-        const publicCheck = dryRun ? { ok: true, status: 200, contentType: metadata.type, bytes: metadata.bytes } : await headPublic(r2Url);
-        if (!publicCheck.ok || publicCheck.contentType !== metadata.type || (publicCheck.bytes && publicCheck.bytes !== metadata.bytes)) throw new Error(`R2 public check failed for ${r2Url}`);
+        const r2Check = dryRun
+          ? { ok: true, status: 200, contentType: metadata.type, bytes: metadata.bytes }
+          : await headR2(client, bucket, key);
+        if (!r2Check.ok || r2Check.contentType !== metadata.type || (r2Check.bytes && r2Check.bytes !== metadata.bytes)) {
+          throw new Error(`R2 object verification failed for ${key}`);
+        }
         const record = { sourceUrl: value, r2Url, key, sha256: metadata.sha256, bytes: metadata.bytes, contentType: metadata.type, status: 'verified', checkedAt: new Date().toISOString(), uploadStatus };
         records.set(value, record);
         manifest.assets[value] = record;
       } catch (error) {
-        failures.push({ value, error: String(error?.message || error), path: task.path });
+        const message = String(error?.message || error);
+        failures.push({ value, error: message, path: task.path });
+        console.error(`[r2] failed ${value}: ${message}`);
       }
     }
   }
