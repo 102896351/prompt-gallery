@@ -29,8 +29,8 @@ const ENGINE_SEO: Record<string, string> = {
 
 /**
  * 详情页 SEO title
- * 模板: {promptTitle} - {engine} AI Image Prompt · Ai Art Spell
- * 引擎优先取 prompt.engines 第一个有 SEO 值的；兜底 "AI Image"
+ * 模板: {promptTitle} - AI Image Prompt · Ai Art Spell
+ * 统一后缀，不再拼接引擎名（避免 "— Nano Banana Pro AI Image Prompt" 式重复长尾词）
  */
 export function getDetailSeoTitle(prompt: Prompt, displayTitle: string, locale: 'en' | 'zh' = 'en'): string {
   // 找第一个有 SEO 名的引擎
@@ -46,12 +46,10 @@ export function getDetailSeoTitle(prompt: Prompt, displayTitle: string, locale: 
   const subject = displayTitle.length > maxSubjectLength
     ? `${displayTitle.slice(0, maxSubjectLength - 1).trim()}…`
     : displayTitle;
-  const promptKeyword = engineName === 'AI Image'
-    ? 'AI Image Prompt'
-    : `${engineName} AI Image Prompt`;
-  const zhPromptKeyword = engineName === 'AI Image'
-    ? 'AI生图提示词'
-    : `${engineName} AI生图提示词`;
+  // 统一后缀：只保留 "AI Image Prompt" / "AI生图提示词"，不再拼接引擎名
+  // （之前为做长尾词把引擎名拼进标题，造成大量 "— Nano Banana Pro AI Image Prompt" 式重复）
+  const promptKeyword = 'AI Image Prompt';
+  const zhPromptKeyword = 'AI生图提示词';
   // 注意：Base.astro 会自动追加 "· Ai Art Spell"，这里只返回主体标题
   if (locale === 'zh') {
     return `${subject} - ${zhPromptKeyword}`;
