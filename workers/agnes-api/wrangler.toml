@@ -13,6 +13,11 @@ routes = [
 
 [vars]
 AGNES_API_BASE_URL = "https://apihub.agnes-ai.com/v1"
-AGNES_IMAGE_MODEL = "agnes-image-2.1-flash"
+# Fixed-IP reverse proxy (Tencent server, nginx:80 -> 127.0.0.1:8787).
+# Tried first by the worker; apihub direct stays as automatic fallback.
+# Uses the api subdomain over port 80: bare-IP fetches from Workers get 403,
+# and the origin has no TLS listener yet (https -> 522).
+AGNES_PROXY_URL = "http://api.aiartspell.art"
+AGNES_IMAGE_MODEL = "agnes-image-2.5-flash"
 AGNES_REQUEST_TIMEOUT_MS = "90000"
 ALLOWED_ORIGINS = "https://aiartspell.art,https://www.aiartspell.art,http://localhost:4321,http://127.0.0.1:4321"

@@ -1,6 +1,7 @@
 export interface Env {
   AGNES_API_KEY: string;
   AGNES_API_BASE_URL?: string;
+  AGNES_PROXY_URL?: string;
   AGNES_IMAGE_MODEL?: string;
   AGNES_REQUEST_TIMEOUT_MS?: string;
   ALLOWED_ORIGINS?: string;
@@ -138,8 +139,51 @@ async function readUpstreamJson(response: Response, signal: AbortSignal): Promis
   }
 }
 
+type ProxyResult =
+  | { ok: true; data: Record<string, unknown> }
+  | { ok: false; status?: number; rateLimited?: boolean };
+
+// Try the fixed-IP reverse proxy (Tencent server) first. It exposes the same
+// /v1/generate-image contract as this worker and injects its own Agnes key.
+async function tryProxy(
+  env: Env,
+  body: { model: string; prompt: string; ratio?: string; images: string[] },
+  signal: AbortSignal,
+): Promise<ProxyResult> {
+  const base = (env.AGNES_PROXY_URL || '').replace(/\/$/, '');
+  if (!base) return { ok: false };
+  try {
+    const upstream = await fetch(`${base}/v1/generate-image`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        accept: 'application/json',
+      },
+      body: JSON.stringify({
+        model: body.model,
+        prompt: body.prompt,
+        ...(body.ratio ? { ratio: body.ratio } : {}),
+        ...(body.images.length ? { image: body.images } : {}),
+      }),
+      signal,
+    });
+    if (upstream.ok) {
+      const parsed = (await readUpstreamJson(upstream, signal)) as Record<string, unknown>;
+      return { ok: true, data: parsed };
+    }
+    if (upstream.status === 429) return { ok: false, rateLimited: true, status: 429 };
+    // 4xx (bad request etc.) is worth surfacing, but any 5xx means the proxy
+    // leg is unhealthy -> fall back to the direct apihub call below.
+    if (upstream.status >= 500) return { ok: false, status: upstream.status };
+    return { ok: false, status: upstream.status };
+  } catch {
+    return { ok: false };
+  }
+}
+
 async function generate(request: Request, env: Env): Promise<Response> {
-  if (!env.AGNES_API_KEY) return respond(request, env, 503, errorPayload(503, 'missing_configuration', 'Agnes API is not configured'));
+  const proxyConfigured = Boolean(env.AGNES_PROXY_URL);
+  if (!env.AGNES_API_KEY && !proxyConfigured) return respond(request, env, 503, errorPayload(503, 'missing_configuration', 'Agnes API is not configured'));
   const body = await readJson(request);
   const prompt = typeof body.prompt === 'string' ? body.prompt.trim() : '';
   if (!prompt) fail(400, 'invalid_prompt', 'Prompt is required');
@@ -151,13 +195,26 @@ async function generate(request: Request, env: Env): Promise<Response> {
 
   const ratio = typeof body.ratio === 'string' && body.ratio.trim() ? body.ratio.trim() : undefined;
   if (ratio && !ALLOWED_RATIOS.has(ratio)) fail(400, 'invalid_ratio', 'Unsupported aspect ratio');
-  const model = typeof body.model === 'string' && body.model.trim() ? body.model.trim() : (env.AGNES_IMAGE_MODEL || DEFAULT_MODEL);
+  const requestedModel = typeof body.model === 'string' && body.model.trim() ? body.model.trim() : (env.AGNES_IMAGE_MODEL || DEFAULT_MODEL);
+  // Legacy image model id (2.1) transparently serves the 2.5 model since the 2026-09 migration.
+  const model = requestedModel === 'agnes-image-2.1-flash' ? (env.AGNES_IMAGE_MODEL || DEFAULT_MODEL) : requestedModel;
   if (model !== (env.AGNES_IMAGE_MODEL || DEFAULT_MODEL)) fail(400, 'unsupported_model', 'The selected image model is not available');
 
-  const apiBase = (env.AGNES_API_BASE_URL || DEFAULT_API_BASE).replace(/\/$/, '');
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs(env));
   try {
+    if (proxyConfigured) {
+      const proxy = await tryProxy(env, { model, prompt, ratio, images: images as string[] }, controller.signal);
+      if (proxy.ok) {
+        return respond(request, env, 200, { ...proxy.data, via: 'proxy' });
+      }
+      if (proxy.rateLimited) {
+        return respond(request, env, 429, errorPayload(429, 'provider_rate_limited', 'Agnes is rate-limited; try again later'));
+      }
+      console.warn(`[agnes-worker] proxy leg failed (status=${proxy.status ?? 'network'}), falling back to apihub`);
+    }
+
+    const apiBase = (env.AGNES_API_BASE_URL || DEFAULT_API_BASE).replace(/\/$/, '');
     const upstream = await fetch(`${apiBase}/images/generations`, {
       method: 'POST',
       headers: {
@@ -199,11 +256,21 @@ export default {
     const url = new URL(request.url);
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: corsHeaders(request, env) });
     if (url.pathname === '/api/agnes/health' && request.method === 'GET') {
+      let proxy: Record<string, unknown> = { configured: false };
+      if (env.AGNES_PROXY_URL) {
+        try {
+          const probe = await fetch(`${env.AGNES_PROXY_URL.replace(/\/$/, '')}/health`, { signal: AbortSignal.timeout(5_000) });
+          proxy = { configured: true, reachable: probe.ok, status: probe.status };
+        } catch (error) {
+          proxy = { configured: true, reachable: false, error: error instanceof Error ? error.message : 'probe failed' };
+        }
+      }
       return respond(request, env, 200, {
         ok: true,
         provider: 'agnes',
         model: env.AGNES_IMAGE_MODEL || DEFAULT_MODEL,
         configured: Boolean(env.AGNES_API_KEY),
+        proxy,
         persistentStorage: false,
       });
     }

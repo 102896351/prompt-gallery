@@ -11,7 +11,7 @@ const isZh = locale === 'zh';
 const apiUrl = import.meta.env.PUBLIC_AGNES_API_URL
   || (import.meta.env.DEV ? (import.meta.env.PUBLIC_AGNES_LOCAL_API_URL || '') : '');
 const modelOptions = [
-  { id: 'agnes-image-2.1-flash', label: 'Image Model 2.1 Flash' },
+  { id: 'agnes-image-2.5-flash', label: 'Image Model 2.5 Flash' },
 ];
 const defaultModel = modelOptions[0].id;
 
@@ -1233,7 +1233,7 @@ const copy = isZh
       if (!apiUrl || !prompt?.value.trim() || busy || prompt.value.length > MAX_PROMPT_LENGTH) return;
       const lastPrompt = prompt.value.trim();
       const ratio = form?.querySelector('input[name^="aspect-"]:checked')?.value || '1:1';
-      const modelId = modelSelect?.value || tool.dataset.modelDefault || 'agnes-image-2.1-flash';
+      const modelId = modelSelect?.value || tool.dataset.modelDefault || 'agnes-image-2.5-flash';
       setBusy(true);
       selectRatio(ratio);
       setState(text.sending);

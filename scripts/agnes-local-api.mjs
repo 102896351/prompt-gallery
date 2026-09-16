@@ -32,13 +32,19 @@ if (API_BASE_URL.protocol !== 'https:' && !['localhost', '127.0.0.1'].includes(A
   throw new Error('AGNES_API_BASE_URL must use HTTPS');
 }
 const MODEL_REGISTRY = Object.freeze({
+  'agnes-image-2.5-flash': {
+    providerModel: 'agnes-image-2.5-flash',
+    label: 'Agnes Image 2.5 Flash',
+    supports: { image: true, ratio: true, size: false },
+  },
+  // Legacy id kept for old cached frontends; upstream now serves 2.5.
   'agnes-image-2.1-flash': {
-    providerModel: 'agnes-image-2.1-flash',
-    label: 'Agnes Image 2.1 Flash',
+    providerModel: 'agnes-image-2.5-flash',
+    label: 'Agnes Image 2.5 Flash (legacy id)',
     supports: { image: true, ratio: true, size: false },
   },
 });
-const DEFAULT_MODEL_ID = process.env.AGNES_IMAGE_MODEL || 'agnes-image-2.1-flash';
+const DEFAULT_MODEL_ID = process.env.AGNES_IMAGE_MODEL || 'agnes-image-2.5-flash';
 if (!MODEL_REGISTRY[DEFAULT_MODEL_ID]) {
   throw new Error(`AGNES_IMAGE_MODEL is not registered: ${DEFAULT_MODEL_ID}`);
 }
