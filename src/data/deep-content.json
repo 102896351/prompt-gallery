@@ -5572,5 +5572,62 @@
     "prompt": "Scene: type: “product showcase” camera_angle: “eye‑level, close‑up portrait” lens: type: “macro 100mm” effects: “shallow depth of field, bokeh background” Character: identity: ethnicity: “Japanese” gender: “girl” hair: “Brown medium length hair with cat ears, sharply focused” outfit: style: “windy, dressy, Idol costumes that resemble high school girl uniforms, fabric details crisp” pose: description: “static, slight turn, one hand on hip” body_orientation: “three‑quarter view” Hands_and_Gesture: right_hand: gesture: “holding a Japanese sword, blade horizontal across body” position: “at waist level” left_hand: gesture: “open hand, palm up” fingers: “neatly arranged” Lighting: type: “studio three‑point” mood: “commercial, polished” Style: “character design sheet, clean white background”"
    }
   ]
+ },
+ "nano-banana-pro-is-finally-out": {
+  "intro": "You get a black-and-white portrait of an elderly bearded man rendered in photorealistic detail. The composition captures his full face, emphasizing deep-set eyes and fine wrinkles across the skin texture. Strong directional natural light strikes from one side, creating pronounced shadows that sculpt his features and add dramatic contrast to the monochrome rendering. The image uses a 1:1 square aspect ratio, which frames the face symmetrically and works well for social media or profile display. It is useful for photographers studying portrait lighting, AI art enthusiasts testing the nano-banana-pro model against Gemini for realism quality, and anyone needing high-resolution character references for illustration work. Situations include comparing output fidelity between the two tools, building a character sheet for narrative projects, and testing how well each model handles grayscale skin texture. A placeholder exists in the prompt describing a side-by-side comparison layout — readers should fill that section with their preferred visual arrangement if desired.",
+  "faq": [
+   {
+    "q": "Which tool produces the best result for this Nano Banana Pro Is Finally Out! prompt: nano-banana-pro or Gemini?",
+    "a": "Nano-banana-pro generally handles photorealistic black-and-white portraits better due to its optimized detail rendering pipeline. Gemini may produce slightly softer skin textures and less precise shadow definition under strong directional light. Test both and compare the wrinkle detail and contrast response at 1:1 ratio."
+   },
+   {
+    "q": "Why does my output look too soft or lack realistic skin texture?",
+    "a": "This likely occurs because the model under-renders fine-detail textures when the prompt does not explicitly weight terms like 'high resolution' and 'very realistic photo-style' strongly enough. Add emphasis brackets around 'fine wrinkles' and 'strong natural light from a side,' or increase the prompt weight on texture descriptors to push the model toward sharper surface detail."
+   },
+   {
+    "q": "Can I use this generated portrait for commercial client work?",
+    "a": "Usage rights depend on the platform policy for nano-banana-pro and Gemini. Both tools typically grant commercial licensing for AI-generated outputs unless stated otherwise in their terms. Always review the current license agreement for the specific tool you use before delivering final assets to clients."
+   },
+   {
+    "q": "How do I swap \"Nano Banana Pro Is Finally Out!\" from an elderly man to a different person?",
+    "a": "Replace 'elderly bearded man, full face, deep set eyes, fine wrinkles' with your desired subject description — for example, 'young woman with silver hair, close-up, sharp eyes, smooth skin.' Keep the lighting, style, and ratio parameters unchanged so the monochrome contrast and composition remain consistent across subject swaps."
+   }
+  ],
+  "howTo": [
+   {
+    "title": "Select nano-banana-pro as primary tool",
+    "body": "Choose nano-banana-pro over Gemini because this prompt requires high-fidelity photorealistic rendering of skin texture and facial detail. The elderly bearded man subject with deep set eyes and fine wrinkles demands the portrait-specific optimization nano-banana-pro provides, making it the correct tool for this realism-heavy generation."
+   },
+   {
+    "title": "Set aspect ratio to 1:1 square",
+    "body": "Configure the canvas to 1:1 aspect ratio before generating. A square frame centers both subjects equally in the side-by-side comparison layout, ensuring the old Nano Banana on the left and the portrait placeholder on the right receive balanced visual weight within the composition without cropping."
+   },
+   {
+    "title": "Fill the portrait placeholder precisely",
+    "body": "Insert the full portrait description into the placeholder: a black and white elderly bearded man in full face view with deep set eyes and fine wrinkles. Specify strong natural light from the side and very realistic photo-style. This level of specificity prevents the model from producing generic or stylized faces instead of the requested photorealism."
+   },
+   {
+    "title": "Prioritize sharpness and detail sliders",
+    "body": "Increase the detail and clarity controls on nano-banana-pro to emphasize the fine wrinkles and strong natural light from the side described in the prompt. Raise resolution settings so the black and white tonal range renders cleanly without introducing softness that would weaken the photorealistic impact of the portrait style."
+   },
+   {
+    "title": "Prevent text prompt leaking into image",
+    "body": "The most likely failure is the model rendering the announcement text 'Nano Banana Pro is finally out' or banana emojis inside the image. Add invisible padding around the prompt body, explicitly separate the promotional header from the portrait description using clear delimiter language, and verify the output contains only the photographic portrait before iterating further."
+   }
+  ],
+  "variations": [
+   {
+    "label": "Cinematic warm-cool contrast",
+    "prompt": "Black and white portrait of an elderly bearded man, full face, deep set eyes, fine wrinkles. Cinematic lighting with strong warm key light from the right and cool fill from the left, creating dramatic contrast across the face. Shallow depth of field blurs the background softly. High resolution, very realistic photo-style, 1:1 aspect ratio, side-by-side layout with old Nano Banana visible on the left."
+   },
+   {
+    "label": "Clean minimal background",
+    "prompt": "Black and white portrait of an elderly bearded man, full face, deep set eyes, fine wrinkles. Clean seamless light gray studio background with no distractions. Even diffused natural light from the front-side, minimizing harsh shadows. High resolution, very realistic photo-style, sharp focus on the eyes and facial texture throughout. 1:1 aspect ratio, side-by-side comparison with old Nano Banana on the left."
+   },
+   {
+    "label": "Tight product-focused composition",
+    "prompt": "Side-by-side comparison shot: old Nano Banana device positioned on the left third, a black and white close-up portrait of an elderly bearded man filling the right two-thirds. Full face, deep set eyes, fine wrinkles visible. Strong directional natural light from the side sculpting both subjects. Clean dark studio background. High resolution, very realistic photo-style, 1:1 aspect ratio."
+   }
+  ]
  }
 }
