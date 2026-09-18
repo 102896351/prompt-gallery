@@ -4,6 +4,7 @@ import PromptImage from '../../components/PromptImage.astro';
 import PromptCard from '../../components/PromptCard.astro';
 import AgnesHomeComposer from '../../components/AgnesHomeComposer.astro';
 import { prompts, promptCategories, getRelatedPrompts } from '../../data/prompts';
+import deepContentJson from '../../data/deep-content.json';
 import { getCompatibleEngines } from '../../data/engines';
 import { getDetailSeoTitle, getDetailSeoDescription } from '../../utils/seo';
 import { en } from '../../i18n';
@@ -38,6 +39,24 @@ const textForModelDetection = [prompt.prompt, prompt.rawBlock, fullPrompt].filte
 const displayTitle = safeEnglishTitle(prompt.titleEn, prompt.title, prompt.slug);
 // 英文页面：优先使用 taglineEn（如果有），否则 fallback 到 tagline（原文）
 const displayTagline = prompt.taglineEn || prompt.tagline;
+// 深度内容（逐页人工/模型生成的独有内容；仅部分页面有）
+// 没有 deep 的页面继续走下面的通用模板逻辑，行为不变
+type DeepItem = {
+  intro: string;
+  howTo: Array<{ title: string; body: string }>;
+  faq: Array<{ q: string; a: string }>;
+  variations: Array<{ label: string; prompt: string }>;
+};
+const deep = (deepContentJson as Record<string, DeepItem>)[prompt.slug] || null;
+// 逐页独有的 meta description：取 intro 的前 1-2 个完整句子，控制在 ~155 字符
+const deepDescription = (() => {
+  if (!deep || !deep.intro) return null;
+  const flat = deep.intro.replace(/\s+/g, ' ').trim();
+  if (flat.length <= 155) return flat;
+  const window = flat.slice(0, 200);
+  const m = window.match(/^([\s\S]{100,155}?[.!?])\s/);
+  return m ? m[1].trim() : flat.slice(0, 152).replace(/\s+\S*$/, '') + '…';
+})();
 // 分类标签：英文页用 label
 const displayCatLabel = cat?.label ?? prompt.category;
 // 引擎显示名（按 locale 翻译）
@@ -141,10 +160,14 @@ const faqItems: Array<{ q: string; a: string }> = [
     a: `Check the original source (${prompt.source.platform}) for licensing terms. This page only curates the prompt text — image rights follow the source author's policy.`,
   },
 ];
+// 有逐页深度内容时用深度 FAQ（每条都针对该 prompt），否则沿用上面的通用 4 条
+const finalFaqItems: Array<{ q: string; a: string }> = deep?.faq?.length >= 3
+  ? deep.faq.map((f) => ({ q: String(f.q).trim(), a: String(f.a).trim() }))
+  : faqItems;
 const faqLd = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
-  mainEntity: faqItems.map(item => ({
+  mainEntity: finalFaqItems.map(item => ({
     '@type': 'Question',
     name: item.q,
     acceptedAnswer: { '@type': 'Answer', text: item.a },
@@ -170,7 +193,7 @@ const metaKeywords = [
 const optimizedH1 = `${displayTitle} — AI Image Prompt`;
 ---
 
-<Base title={getDetailSeoTitle(prompt, displayTitle, 'en')} description={getDetailSeoDescription(prompt, displayTitle, 'en')} ogImage={prompt.images[0]?.src}>
+<Base title={getDetailSeoTitle(prompt, displayTitle, 'en')} description={deepDescription || getDetailSeoDescription(prompt, displayTitle, 'en')} ogImage={prompt.images[0]?.src}>
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(articleLd)} />
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(faqLd)} />
@@ -205,7 +228,11 @@ const optimizedH1 = `${displayTitle} — AI Image Prompt`;
       </div>
 
       <h1>{optimizedH1}</h1>
-      <p class="tagline">{displayTagline}</p>
+      {displayTagline && <p class="tagline">{displayTagline}</p>}
+
+      {deep?.intro && (
+        <div class="detail-intro" set:html={deep.intro.split(/\n\s*\n/).map((p: string) => `<p>${p.trim().replace(/\s+/g, ' ')}</p>`).join('')} />
+      )}
 
       <div class="detail-actions">
         <button type="button" class="btn primary" data-copy-target="prompt-full" id="copy-btn">
@@ -344,7 +371,19 @@ const optimizedH1 = `${displayTitle} — AI Image Prompt`;
           </>
         )}
 
-        {prompt.reusable && prompt.prompt.includes('[') && (
+        {deep?.howTo?.length >= 3 ? (
+          <>
+            <h2>How to use</h2>
+            <ol class="howto-list">
+              {deep.howTo.map((s) => (
+                <li class="howto-step">
+                  <span class="howto-title">{s.title}</span>
+                  <p>{s.body}</p>
+                </li>
+              ))}
+            </ol>
+          </>
+        ) : prompt.reusable && prompt.prompt.includes('[') ? (
           <>
             <h2>How to use</h2>
             <p>
@@ -360,12 +399,31 @@ const optimizedH1 = `${displayTitle} — AI Image Prompt`;
               </div>
             )}
           </>
+        ) : null}
+
+        {deep?.variations?.length >= 2 && (
+          <section class="variations-block" aria-label="Prompt variations">
+            <h2>Prompt variations</h2>
+            <p class="variations-sub">Rewrites of this prompt for different looks. Copy one and paste it into your tool.</p>
+            {deep.variations.map((v) => (
+              <div class="variation-item">
+                <h3>{v.label}</h3>
+                <div class="prompt-display">
+                  <button type="button" class="prompt-copy-btn" data-prompt-copy aria-label={`Copy variation: ${v.label}`}>
+                    <span class="copy-default">📋 Copy</span>
+                    <span class="copy-success hidden">✓ Copied</span>
+                  </button>
+                  <pre><code>{v.prompt}</code></pre>
+                </div>
+              </div>
+            ))}
+          </section>
         )}
 
         <!-- FAQ 区块：用户长尾搜索 + Google 富媒体片段 -->
         <section class="faq-block" aria-label="Frequently asked questions">
           <h2>Frequently asked questions</h2>
-          {faqItems.map((item) => (
+          {finalFaqItems.map((item) => (
             <details class="faq-item">
               <summary>{item.q}</summary>
               <p>{item.a}</p>
@@ -780,6 +838,73 @@ const optimizedH1 = `${displayTitle} — AI Image Prompt`;
     margin-bottom: 6px;
   }
   /* ---- FAQ 区块 (long-tail SEO + 提升停留时间) ---- */
+  /* ---- 逐页深度内容：导语 / 分步 / 变体 ---- */
+  .detail-intro {
+    margin: 14px 0 4px;
+    color: var(--text-soft);
+    font-size: 15px;
+    line-height: 1.75;
+    max-width: 68ch;
+  }
+  .detail-intro p { margin: 0 0 12px; }
+  .detail-intro p:last-child { margin-bottom: 0; }
+  .howto-list {
+    margin: 0 0 8px;
+    padding: 0;
+    list-style: none;
+    counter-reset: howto;
+  }
+  .howto-step {
+    counter-increment: howto;
+    position: relative;
+    padding: 0 0 14px 34px;
+    border-left: 1px solid var(--border);
+    margin-left: 9px;
+  }
+  .howto-step:last-child { border-left-color: transparent; padding-bottom: 0; }
+  .howto-step::before {
+    content: counter(howto);
+    position: absolute;
+    left: -13px;
+    top: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--accent-soft);
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .howto-title {
+    display: block;
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .howto-step p {
+    margin: 0;
+    color: var(--text-soft);
+    font-size: 14px;
+    line-height: 1.65;
+  }
+  .variations-block { margin: 32px 0; }
+  .variations-sub {
+    margin: -8px 0 16px;
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+  .variation-item { margin-bottom: 18px; }
+  .variation-item h3 {
+    margin: 0 0 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+  }
   .faq-block {
     margin: 32px 0;
     padding: 20px 24px;
