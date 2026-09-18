@@ -230,10 +230,6 @@ const optimizedH1 = `${displayTitle} — AI Image Prompt`;
       <h1>{optimizedH1}</h1>
       {displayTagline && <p class="tagline">{displayTagline}</p>}
 
-      {deep?.intro && (
-        <div class="detail-intro" set:html={deep.intro.split(/\n\s*\n/).map((p: string) => `<p>${p.trim().replace(/\s+/g, ' ')}</p>`).join('')} />
-      )}
-
       <div class="detail-actions">
         <button type="button" class="btn primary" data-copy-target="prompt-full" id="copy-btn">
           <span class="copy-default">📋 Copy prompt</span>
@@ -337,6 +333,14 @@ const optimizedH1 = `${displayTitle} — AI Image Prompt`;
           <div class="label">Our take</div>
           <p style="margin: 0; color: var(--text);">{prompt.verdict}</p>
         </div>
+
+        <!-- 深度导语（逐页独有），放在 Our take 之后、The prompt 之前 -->
+        {deep?.intro && (
+          <section class="about-block">
+            <h2>About this prompt</h2>
+            <div class="detail-intro" set:html={deep.intro.split(/\n\s*\n/).map((p: string) => `<p>${p.trim().replace(/\s+/g, ' ')}</p>`).join('')} />
+          </section>
+        )}
 
         <!-- 完整 prompt（隐藏的 copy source） -->
         <pre id="prompt-full" class="prompt-source" style="display:none;">{fullPrompt}</pre>
@@ -839,6 +843,20 @@ const optimizedH1 = `${displayTitle} — AI Image Prompt`;
   }
   /* ---- FAQ 区块 (long-tail SEO + 提升停留时间) ---- */
   /* ---- 逐页深度内容：导语 / 分步 / 变体 ---- */
+  .about-block {
+    margin: 28px 0;
+    padding: 20px 22px;
+    background: var(--bg-soft, rgba(0, 0, 0, 0.02));
+    border: 1px solid var(--border, rgba(0, 0, 0, 0.08));
+    border-radius: 12px;
+  }
+  .about-block h2 {
+    margin: 0 0 10px;
+    font-size: 17px;
+  }
+  .about-block .detail-intro {
+    margin: 0;
+  }
   .detail-intro {
     margin: 14px 0 4px;
     color: var(--text-soft);
