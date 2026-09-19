@@ -31,7 +31,13 @@ const canonicalPathname = normalizePathname(Astro.url.pathname);
 const canonical = new URL(canonicalPathname, siteBase).toString();
 // OG 图：页面级优先，否则用默认图（JPG 格式，社交平台对 SVG 抓取常常失败）
 const defaultOgImage = new URL('og-default.jpg', siteBase).toString();
-const resolvedOgImage = ogImage || defaultOgImage;
+const resolvedOgImageRaw = ogImage || defaultOgImage;
+// FB 的图片缓存按图片 URL 记账：站点故障期被污染的预览图，重新抓取页面也刷不掉，
+// 追加版本参数让社交平台把 og:image 当新图重新抓取。以后图源变更时可改此版本号。
+const OG_IMG_VER = 'v=20260919';
+const resolvedOgImage = resolvedOgImageRaw.includes('?')
+  ? `${resolvedOgImageRaw}&${OG_IMG_VER}`
+  : `${resolvedOgImageRaw}?${OG_IMG_VER}`;
 
 // 语言切换：工具页保持当前上下文，其余页面切到对端首页
 // 用相对路径而非绝对 URL，否则 dev 环境会跳到生产域名
