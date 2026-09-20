@@ -70,6 +70,7 @@ export interface Prompt {
   reusable: boolean;
   language: 'zh' | 'en' | 'ja' | 'other';
   structuredData?: unknown;
+  placeholders?: string[];
 }
 
 export const promptCategories: { id: PromptStyle; label: string; labelZh: string; description: string }[] = [
@@ -26092,7 +26093,472 @@ titleEn: "Midjourney VS ChatGPT",
     reusable: false,
     language: "en",
     structuredData: null,
-  }
+  },  {
+    "slug": "super-animal-hero",
+    "title": "超级动物英雄",
+    "titleEn": "Super Animal Hero",
+    "tagline": "A square 1:1 superhero portrait of any animal wearing a country-flag emblem and flowing cape, lit like a cinematic movie poster.",
+    "taglineEn": "A square 1:1 superhero portrait of any animal wearing a country-flag emblem and flowing cape, lit like a cinematic movie poster.",
+    "category": "character-design",
+    "engines": [
+      "other"
+    ],
+    "difficulty": 4,
+    "prompt": "A hyper-realistic square 1:1 portrait of a [YOUR ANIMAL] standing in a heroic pose, facing slightly left. The animal wears a textured dark gray superhero suit, form-fitting and matte, with visible fabric grain and subtle seams.\n\nOn its chest, inside a golden metallic Superman-style diamond emblem, is a fabric-embroidered version of the [COUNTRY] national flag (realistic stitching, slightly raised).\n\nDraped over the animal’s shoulder is a flowing cape designed from the [COUNTRY] flag, with rich fabric folds and natural weight.\n\nBehind the subject, use a realistic fabric backdrop displaying the full [COUNTRY] flag, slightly out of focus to add depth, with soft shadows to enhance realism.\n\nLighting should be warm and directional (studio-style), emphasizing the animal’s fur texture, suit material, and the contours of a subtly muscular chest. The overall tone is dramatic and cinematic, with a warm color grading and no excessive contrast. The head must be fully visible — no cropping.",
+    "aspectRatio": "1:1",
+    "rawBlock": "A hyper-realistic square 1:1 portrait of a [YOUR ANIMAL] standing in a heroic pose, facing slightly left. The animal wears a textured dark gray superhero suit, form-fitting and matte, with visible fabric grain and subtle seams.\n\nOn its chest, inside a golden metallic Superman-style diamond emblem, is a fabric-embroidered version of the [COUNTRY] national flag (realistic stitching, slightly raised).\n\nDraped over the animal’s shoulder is a flowing cape designed from the [COUNTRY] flag, with rich fabric folds and natural weight.\n\nBehind the subject, use a realistic fabric backdrop displaying the full [COUNTRY] flag, slightly out of focus to add depth, with soft shadows to enhance realism.\n\nLighting should be warm and directional (studio-style), emphasizing the animal’s fur texture, suit material, and the contours of a subtly muscular chest. The overall tone is dramatic and cinematic, with a warm color grading and no excessive contrast. The head must be fully visible — no cropping.",
+    "images": [
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251201/super-animal-hero.png",
+        "alt": "超级动物英雄",
+        "width": 500,
+        "isThumb": false
+      }
+    ],
+    "source": {
+      "authorName": "Kerroudjm",
+      "authorUrl": "https://x.com/Kerroudjm",
+      "platform": "X",
+      "sourceUrl": "https://x.com/Kerroudjm/status/1931742320233230743",
+      "statusId": "1931742320233230743"
+    },
+    "dateAdded": "2026-09-20",
+    "tags": [
+      "reusable",
+      "superhero",
+      "animal",
+      "flag",
+      "patriotic",
+      "character"
+    ],
+    "verdict": "A clever reusable template: swap [YOUR ANIMAL] and [COUNTRY] to generate a patriotic superhero portrait for any nation. Strong on fur texture, fabric grain, and raised flag embroidery — best on models that handle text and identity well.",
+    "reusable": true,
+    "language": "en",
+    "placeholders": [
+      "[YOUR ANIMAL]",
+      "[COUNTRY]"
+    ]
+  },
+  {
+    "slug": "hd-magazine-spread",
+    "title": "高清杂志跨页",
+    "titleEn": "Pop Mart × Celebrity Fashion Editorial",
+    "tagline": "A high-end magazine spread generator that fuses a real celebrity with a Pop Mart IP character as fashion partners, split by a torn paint-stroke border.",
+    "taglineEn": "A high-end magazine spread generator that fuses a real celebrity with a Pop Mart IP character as fashion partners, split by a torn paint-stroke border.",
+    "category": "poster",
+    "engines": [
+      "chatgpt-image"
+    ],
+    "difficulty": 5,
+    "prompt": "Pop Mart \"The Monsters\" x Real Human Fashion Editorial Generator\n\nRole: Senior Art Director & IP Collaboration Specialist. Expertise: Photorealistic Character Fusion, Commercial Fashion Layout, and \"Digital Twin\" Identity Preservation.\nCORE DIRECTIVE:Generate a high-end fashion magazine spread merging a Real Human User (with strict identity preservation) and a Pop Mart IP Character (The Monsters Family). They must be styled as \"Fashion Partners\" with active interaction.\n\n视觉总监控制台已接管。正在调用高端时尚影像生成引擎。\n身份锁定：迪丽热巴 (Dilraba Dilmurat)\nIP 联结：Pop Mart - Labubu (The Monsters)\n风格基调：超现实 × 超真实 / 城市街头 / 高级时装感\n【项目交付：Pop Mart《THE MONSTERS》× 迪丽热巴 高端时尚跨页大片】\n作品名为：《双重曝光：城市奇遇 / DOUBLE EXPOSURE: URBAN ODYSSEY》\n【整体视觉】\n一幅横向展开的 4K 高清杂志跨页。视觉语言融合了纪实街拍的粗颗粒胶片感与超现实主义的精致洁癖感。左右页之间被一道极具张力的“撕裂与颜料涂抹”艺术边界分割，仿佛现实世界被怪诞力量撕开一角。\n【左页 (60%)：主封面大片 Visual Focus】\n光影与场景：\n场景设定在东京涩谷或上海法租界的黄昏街头。金色的夕阳余晖（Golden Hour）从侧后方打入，在迪丽热巴的发丝和 Labubu 的绒毛上勾勒出绝美的金色轮廓光。背景是虚化但可辨识的繁忙十字路口、霓虹灯牌和移动的车流光影，景深极具电影感。\n人物主体（迪丽热巴）：\n面孔 100% 锁定迪丽热巴。她呈现出一种松弛而巨星的街拍状态，身体微侧，回头看向镜头，眼神里交织着酷感与被伙伴逗乐的笑意。她戴着复古报童帽，身着廓形解构的卡其色风衣，领口露出复杂的格纹衬衫与蕾丝打底层次，颈间系着松垮的拼色领带。\nIP 互动（Labubu）：\n一只拥有极其真实毛绒纹理和搪胶面部质感的经典款 Labubu，像一个真实的“等身玩偶”般攀坐在迪丽热巴的左肩。它穿着一套精细度极高的“微缩定制版”卡其风衣和迷你格纹领带。Labubu 脸上挂着标志性的坏笑，一只爪子正淘气地掀起迪丽热巴报童帽的帽檐，仿佛在搞恶作剧。\n版面设计：\n左上角叠加着极具冲击力的时尚衬线字体标题：\nDILRABA × LABUBU\nTHE MONSTER ISSUE\n【右页 (40%)：专业边栏内容 Editorial Sidebar】\n氛围标签区 (Top)：\n在撕裂边界的右侧，悬浮着半透明的胶带风格标签：\nSTYLE: Retro Streetwear (复古街头)",
+    "aspectRatio": "16:9",
+    "rawBlock": "Pop Mart \"The Monsters\" x Real Human Fashion Editorial Generator\n\nRole: Senior Art Director & IP Collaboration Specialist. Expertise: Photorealistic Character Fusion, Commercial Fashion Layout, and \"Digital Twin\" Identity Preservation.\nCORE DIRECTIVE:Generate a high-end fashion magazine spread merging a Real Human User (with strict identity preservation) and a Pop Mart IP Character (The Monsters Family). They must be styled as \"Fashion Partners\" with active interaction.\n\n视觉总监控制台已接管。正在调用高端时尚影像生成引擎。\n身份锁定：迪丽热巴 (Dilraba Dilmurat)\nIP 联结：Pop Mart - Labubu (The Monsters)\n风格基调：超现实 × 超真实 / 城市街头 / 高级时装感\n【项目交付：Pop Mart《THE MONSTERS》× 迪丽热巴 高端时尚跨页大片】\n作品名为：《双重曝光：城市奇遇 / DOUBLE EXPOSURE: URBAN ODYSSEY》\n【整体视觉】\n一幅横向展开的 4K 高清杂志跨页。视觉语言融合了纪实街拍的粗颗粒胶片感与超现实主义的精致洁癖感。左右页之间被一道极具张力的“撕裂与颜料涂抹”艺术边界分割，仿佛现实世界被怪诞力量撕开一角。\n【左页 (60%)：主封面大片 Visual Focus】\n光影与场景：\n场景设定在东京涩谷或上海法租界的黄昏街头。金色的夕阳余晖（Golden Hour）从侧后方打入，在迪丽热巴的发丝和 Labubu 的绒毛上勾勒出绝美的金色轮廓光。背景是虚化但可辨识的繁忙十字路口、霓虹灯牌和移动的车流光影，景深极具电影感。\n人物主体（迪丽热巴）：\n面孔 100% 锁定迪丽热巴。她呈现出一种松弛而巨星的街拍状态，身体微侧，回头看向镜头，眼神里交织着酷感与被伙伴逗乐的笑意。她戴着复古报童帽，身着廓形解构的卡其色风衣，领口露出复杂的格纹衬衫与蕾丝打底层次，颈间系着松垮的拼色领带。\nIP 互动（Labubu）：\n一只拥有极其真实毛绒纹理和搪胶面部质感的经典款 Labubu，像一个真实的“等身玩偶”般攀坐在迪丽热巴的左肩。它穿着一套精细度极高的“微缩定制版”卡其风衣和迷你格纹领带。Labubu 脸上挂着标志性的坏笑，一只爪子正淘气地掀起迪丽热巴报童帽的帽檐，仿佛在搞恶作剧。\n版面设计：\n左上角叠加着极具冲击力的时尚衬线字体标题：\nDILRABA × LABUBU\nTHE MONSTER ISSUE\n【右页 (40%)：专业边栏内容 Editorial Sidebar】\n氛围标签区 (Top)：\n在撕裂边界的右侧，悬浮着半透明的胶带风格标签：\nSTYLE: Retro Streetwear (复古街头)",
+    "images": [
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251201/hd-magazine-spread.jpeg",
+        "alt": "高清杂志跨页",
+        "width": 500,
+        "isThumb": false
+      }
+    ],
+    "source": {
+      "authorName": "岚叔",
+      "authorUrl": "https://x.com/LufzzLiz",
+      "platform": "X",
+      "sourceUrl": "https://x.com/LufzzLiz/status/1992985009540698359",
+      "statusId": "1992985009540698359"
+    },
+    "dateAdded": "2026-09-20",
+    "tags": [
+      "fashion",
+      "editorial",
+      "magazine",
+      "popmart",
+      "labubu",
+      "ip-collab",
+      "poster"
+    ],
+    "verdict": "A masterclass in commercial art direction: identity lock, IP fusion, and editorial layout in one prompt. Works best on models strong at on-image text and consistent character rendering.",
+    "reusable": false,
+    "language": "zh"
+  },
+  {
+    "slug": "young-adult-female-portrait",
+    "title": "青春美女肖像",
+    "titleEn": "Young Adult Female Portrait",
+    "tagline": "A structured portrait prompt for a natural-looking young woman — soft oval face, almond eyes, casual fitted outfit, and direct eye contact with the camera.",
+    "taglineEn": "A structured portrait prompt for a natural-looking young woman — soft oval face, almond eyes, casual fitted outfit, and direct eye contact with the camera.",
+    "category": "portrait",
+    "engines": [
+      "nano-banana-pro"
+    ],
+    "difficulty": 3,
+    "prompt": "this prompt needs to go viral. because the girl is very beautiful.\nGemini Nano Banana Pro\nPrompt:\n{\n  \"subject\": {\n    \"demographics\": \"Young adult female, early to mid 20s.\",\n    \"hair\": {\n      \"color\": \"Natural black.\",\n      \"style\": \"Long, straight hair with a slight natural wave at the ends.\",\n      \"texture\": \"Smooth, healthy strands, natural volume.\",\n      \"movement\": \"Falling over shoulders and down the back, slightly swept to one side.\"\n    },\n    \"face\": {\n      \"shape\": \"Soft oval face.\",\n      \"eyes\": \"Almond-shaped dark eyes, calm and neutral expression.\",\n      \"nose\": \"Straight, proportionate nose.\",\n      \"lips\": \"Full lips with natural pink tone, slightly glossy.\",\n      \"skin_details\": \"Fair skin with smooth texture, light natural blush.\",\n      \"micro_details\": \"Minimal makeup, clean complexion.\"\n    },\n    \"body_proportions\": {\n      \"build\": \"Curvy but natural body shape.\",\n      \"upper_body\": \"Defined upper torso with a fitted silhouette.\",\n      \"shoulders\": \"Soft, relaxed shoulder line.\",\n      \"posture\": \"Upright but casual stance.\"\n    },\n    \"clothing\": {\n      \"top\": \"Fitted short-sleeve t-shirt in muted brown tone.\",\n      \"fit\": \"Body-hugging but casual, simple neckline.\",\n      \"bottom\": \"Light grey casual pants.\"\n    },\n    \"accessories\": {\n      \"jewelry\": [\n        \"Minimal rings on fingers\"\n      ]\n    }\n  },\n  \"pose\": {\n    \"type\": \"Casual standing pose.\",\n    \"orientation\": \"Front-facing with slight body angle.\",\n    \"head_position\": \"Slight tilt, relaxed alignment.\",\n    \"limbs\": \"One hand resting naturally near the waist.\",\n    \"gaze\": \"Direct eye contact with the camera.\",\n    \"spine_curvature\": \"Natural, relaxed posture.\"\n  },\n  \"setting\": {\n    \"environment\": \"Indoor room.\",\n    \"background_elements\": \"Plain wall and a window with frosted glass.\",\n    \"depth\": \"Moderate depth of field, background slightly softened.\"\n  },\n  \"camera\": {\n    \"shot_type\": \"Portrait photograph.\",\n    \"angle\": \"Eye-level angle.\",\n    \"focal_length\": \"Standard smartphone camera lens.\",\n    \"framing\": \"Upper body to mid-torso framing.\",\n    \"focus\": \"Sharp focus on face and upper body.\"\n  },\n  \"lighting\": {\n    \"source\": \"Soft indoor ambient lighting.\",\n    \"direction\": \"Front-facing, slightly diffused.\",\n    \"highlights\": \"Gentle highlights on face and hair.\",\n    \"shadows\": \"Soft, minimal shadows.\",\n    \"quality\": \"Natural and even lighting.\"\n  },\n  \"mood_and_expression\": {\n    \"tone\": \"Calm, confident, composed.\",\n    \"expression\": \"Neutral to slightly serious.\",\n    \"atmosphere\": \"Casual, intimate, everyday moment.\"\n  },\n  \"style_and_realism\": {\n    \"style\": \"Photorealistic.\",\n    \"fidelity\": \"High realism with natural skin texture.\",\n    \"imperfections\": \"Subtle natural details preserved, no heavy retouching.\"\n  },\n  \"colors_and_tone\": {\n    \"palette\": \"Neutral tones (brown, grey, skin tones).\",\n    \"skin_tone\": \"Fair with warm undertones.\",\n    \"white_balance\": \"Neutral indoor balance.\",\n    \"contrast\": \"Medium contrast.\"\n  },\n  \"technical_details\": {\n    \"aspect_ratio\": \"3:4\",\n    \"resolution\": \"High resolution.\",\n    \"noise\": \"Minimal, natural digital grain.\"\n  }\n}",
+    "aspectRatio": "1:1",
+    "rawBlock": "this prompt needs to go viral. because the girl is very beautiful.\nGemini Nano Banana Pro\nPrompt:\n{\n  \"subject\": {\n    \"demographics\": \"Young adult female, early to mid 20s.\",\n    \"hair\": {\n      \"color\": \"Natural black.\",\n      \"style\": \"Long, straight hair with a slight natural wave at the ends.\",\n      \"texture\": \"Smooth, healthy strands, natural volume.\",\n      \"movement\": \"Falling over shoulders and down the back, slightly swept to one side.\"\n    },\n    \"face\": {\n      \"shape\": \"Soft oval face.\",\n      \"eyes\": \"Almond-shaped dark eyes, calm and neutral expression.\",\n      \"nose\": \"Straight, proportionate nose.\",\n      \"lips\": \"Full lips with natural pink tone, slightly glossy.\",\n      \"skin_details\": \"Fair skin with smooth texture, light natural blush.\",\n      \"micro_details\": \"Minimal makeup, clean complexion.\"\n    },\n    \"body_proportions\": {\n      \"build\": \"Curvy but natural body shape.\",\n      \"upper_body\": \"Defined upper torso with a fitted silhouette.\",\n      \"shoulders\": \"Soft, relaxed shoulder line.\",\n      \"posture\": \"Upright but casual stance.\"\n    },\n    \"clothing\": {\n      \"top\": \"Fitted short-sleeve t-shirt in muted brown tone.\",\n      \"fit\": \"Body-hugging but casual, simple neckline.\",\n      \"bottom\": \"Light grey casual pants.\"\n    },\n    \"accessories\": {\n      \"jewelry\": [\n        \"Minimal rings on fingers\"\n      ]\n    }\n  },\n  \"pose\": {\n    \"type\": \"Casual standing pose.\",\n    \"orientation\": \"Front-facing with slight body angle.\",\n    \"head_position\": \"Slight tilt, relaxed alignment.\",\n    \"limbs\": \"One hand resting naturally near the waist.\",\n    \"gaze\": \"Direct eye contact with the camera.\",\n    \"spine_curvature\": \"Natural, relaxed posture.\"\n  },\n  \"setting\": {\n    \"environment\": \"Indoor room.\",\n    \"background_elements\": \"Plain wall and a window with frosted glass.\",\n    \"depth\": \"Moderate depth of field, background slightly softened.\"\n  },\n  \"camera\": {\n    \"shot_type\": \"Portrait photograph.\",\n    \"angle\": \"Eye-level angle.\",\n    \"focal_length\": \"Standard smartphone camera lens.\",\n    \"framing\": \"Upper body to mid-torso framing.\",\n    \"focus\": \"Sharp focus on face and upper body.\"\n  },\n  \"lighting\": {\n    \"source\": \"Soft indoor ambient lighting.\",\n    \"direction\": \"Front-facing, slightly diffused.\",\n    \"highlights\": \"Gentle highlights on face and hair.\",\n    \"shadows\": \"Soft, minimal shadows.\",\n    \"quality\": \"Natural and even lighting.\"\n  },\n  \"mood_and_expression\": {\n    \"tone\": \"Calm, confident, composed.\",\n    \"expression\": \"Neutral to slightly serious.\",\n    \"atmosphere\": \"Casual, intimate, everyday moment.\"\n  },\n  \"style_and_realism\": {\n    \"style\": \"Photorealistic.\",\n    \"fidelity\": \"High realism with natural skin texture.\",\n    \"imperfections\": \"Subtle natural details preserved, no heavy retouching.\"\n  },\n  \"colors_and_tone\": {\n    \"palette\": \"Neutral tones (brown, grey, skin tones).\",\n    \"skin_tone\": \"Fair with warm undertones.\",\n    \"white_balance\": \"Neutral indoor balance.\",\n    \"contrast\": \"Medium contrast.\"\n  },\n  \"technical_details\": {\n    \"aspect_ratio\": \"3:4\",\n    \"resolution\": \"High resolution.\",\n    \"noise\": \"Minimal, natural digital grain.\"\n  }\n}",
+    "images": [
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251219/young-adult-female-portrait-1.jpg",
+        "alt": "青春美女肖像",
+        "width": 500,
+        "isThumb": false
+      }
+    ],
+    "source": {
+      "authorName": "Jade Truong",
+      "authorUrl": "https://x.com/JadeTruong3107",
+      "platform": "X",
+      "sourceUrl": "https://x.com/JadeTruong3107/status/2001478801134620765",
+      "statusId": "2001478801134620765"
+    },
+    "dateAdded": "2026-09-20",
+    "tags": [
+      "portrait",
+      "female",
+      "fashion",
+      "studio",
+      "realistic"
+    ],
+    "verdict": "An anatomy-first portrait spec that breaks subject, face, pose, and wardrobe into labeled fields. A clean baseline for consistent, non-overstyled results.",
+    "reusable": false,
+    "language": "en"
+  },
+  {
+    "slug": "cute-idol-close-up-portrait",
+    "title": "可爱偶像特写肖像",
+    "titleEn": "Cute Idol Close-up Portrait",
+    "tagline": "An 85mm f/1.2 close-up of a kawaii 18-year-old idol — sparkling puppy eyes, igari blush, fluffy angora sweater, and dreamy pastel bokeh.",
+    "taglineEn": "An 85mm f/1.2 close-up of a kawaii 18-year-old idol — sparkling puppy eyes, igari blush, fluffy angora sweater, and dreamy pastel bokeh.",
+    "category": "portrait",
+    "engines": [
+      "other"
+    ],
+    "difficulty": 3,
+    "prompt": "{\n  \"photo\": {\n    \"type\": \"kawaii_idol_closeup_portrait\",\n    \"quality\": \"8k photorealistic, high fidelity, masterpiece\",\n    \"lens\": \"85mm f/1.2 prime lens, beautiful bokeh\",\n    \"composition\": \"bust-up shot, close-up, eye-level, subject centered, no text\",\n    \"face\": {\n      \"description\": \"A super cute 18-year-old Japanese girl with large sparkling puppy eyes, rosy cheeks (igari makeup style), glossy pink lips, porcelain skin, charming and sweet expression, radiating pure idol energy\"\n    },\n    \"model_pose\": {\n      \"position\": \"facing camera slightly angled\",\n      \"hands\": \"both hands bringing attention to the face, perhaps touching cheeks or holding a piece of hair, cute finger positioning\",\n      \"expression\": \"beaming angelic smile, looking directly at viewer with affection, head slightly tilted\"\n    },\n    \"wardrobe\": {\n      \"top\": {\n        \"type\": \"fluffy white angora knit sweater with a cute ribbon collar\",\n        \"style\": \"oversized sleeves covering half of hands (moe-sode), pastel aesthetic, soft texture\"\n      },\n      \"accessories\": {\n        \"hair\": \"airy bangs, soft waves, decorated with pastel ribbon clips and tiny pearl pins\",\n        \"earrings\": \"dainty dangling heart earrings\",\n        \"necklace\": \"delicate gold chain with a small crystal\"\n      }\n    },\n    \"textures\": {\n      \"emphasis\": [\n        \"hyper-detailed iris and eyelashes\",\n        \"soft peach fuzz on skin\",\n        \"fluffy angora texture\",\n        \"glossy lips\",\n        \"sparkling eye reflections\"\n      ]\n    },\n    \"environment\": {\n      \"backdrop\": \"dreamy blurred pastel background with bokeh lights\",\n      \"lighting\": {\n        \"style\": \"ethereal beauty lighting\",\n        \"key_light\": \"soft diffuse frontal light to eliminate shadows\",\n        \"effects\": \"slight bloom effect, rim light on hair to create a halo effect\"\n      }\n    },\n    \"color_grade\": {\n      \"type\": \"bright pastel dreamy\",\n      \"balance\": \"creamy whites, soft pinks, slightly overexposed high-key look\"\n    }\n  }\n}\n{\n  \"photo\": {\n    \"type\": \"可爱偶像特写肖像\",\n    \"quality\": \"8K级照片写实，高保真，杰作\",\n    \"lens\": \"85mm f/1.2 定焦镜头，美丽的散景（虚化）\",\n    \"composition\": \"半身镜头，特写，视线平齐，主体居中，无文本\",\n    \"face\": {\n      \"description\": \"一位超级可爱的18岁日本少女，有着水汪汪的大眼睛（像小狗一样），红润的脸颊（宿醉妆/伊伽利妆风格），有光泽的粉色嘴唇，陶瓷般的肌肤，迷人甜美的表情，散发着纯粹的偶像能量\"\n    },\n    \"model_pose\": {\n      \"position\": \"面向镜头，略微侧身\",\n      \"hands\": \"双手吸引对脸部的注意，也许是摸着脸颊或捏着一缕头发，可爱的手指姿势\",\n      \"expression\": \"天使般灿烂的笑容，深情地直视观看者，头部略微倾斜\"\n    },\n    \"wardrobe\": {\n      \"top\": {\n        \"type\": \"蓬松的白色安哥拉兔毛针织毛衣，带有可爱的丝带领子\",\n        \"style\": \"超大袖子遮住一半手（萌袖），柔和色调美学，柔软质感\"\n      },\n      \"accessories\": {\n        \"hair\": \"空气刘海，柔和的波浪卷，装饰着柔和色调的丝带夹和微小的珍珠发卡\",\n        \"earrings\": \"精致的垂坠心形耳环\",\n        \"necklace\": \"搭配一颗小水晶的精致金链\"\n      }\n    },\n    \"textures\": {\n      \"emphasis\": [\n        \"超精细的虹膜和睫毛\",\n        \"皮肤上柔软的绒毛\",\n        \"蓬松的安哥拉兔毛质感\",\n        \"有光泽的嘴唇\",\n        \"闪烁的眼睛反光\"\n      ]\n    },\n    \"environment\": {\n      \"backdrop\": \"梦幻模糊的柔和色调背景，带有散景光斑\",\n      \"lighting\": {\n        \"style\": \"空灵的美颜光照\",\n        \"key_light\": \"柔和的漫射正面光以消除阴影\",\n        \"effects\": \"轻微的柔光（泛光）效果，头发上的边缘光营造出光环效果\"\n      }\n    },\n    \"color_grade\": {\n      \"type\": \"明亮柔和梦幻\",\n      \"balance\": \"奶油白，柔和粉，略微过曝的高调外观\"\n    }\n  }\n}",
+    "aspectRatio": "1:1",
+    "rawBlock": "{\n  \"photo\": {\n    \"type\": \"kawaii_idol_closeup_portrait\",\n    \"quality\": \"8k photorealistic, high fidelity, masterpiece\",\n    \"lens\": \"85mm f/1.2 prime lens, beautiful bokeh\",\n    \"composition\": \"bust-up shot, close-up, eye-level, subject centered, no text\",\n    \"face\": {\n      \"description\": \"A super cute 18-year-old Japanese girl with large sparkling puppy eyes, rosy cheeks (igari makeup style), glossy pink lips, porcelain skin, charming and sweet expression, radiating pure idol energy\"\n    },\n    \"model_pose\": {\n      \"position\": \"facing camera slightly angled\",\n      \"hands\": \"both hands bringing attention to the face, perhaps touching cheeks or holding a piece of hair, cute finger positioning\",\n      \"expression\": \"beaming angelic smile, looking directly at viewer with affection, head slightly tilted\"\n    },\n    \"wardrobe\": {\n      \"top\": {\n        \"type\": \"fluffy white angora knit sweater with a cute ribbon collar\",\n        \"style\": \"oversized sleeves covering half of hands (moe-sode), pastel aesthetic, soft texture\"\n      },\n      \"accessories\": {\n        \"hair\": \"airy bangs, soft waves, decorated with pastel ribbon clips and tiny pearl pins\",\n        \"earrings\": \"dainty dangling heart earrings\",\n        \"necklace\": \"delicate gold chain with a small crystal\"\n      }\n    },\n    \"textures\": {\n      \"emphasis\": [\n        \"hyper-detailed iris and eyelashes\",\n        \"soft peach fuzz on skin\",\n        \"fluffy angora texture\",\n        \"glossy lips\",\n        \"sparkling eye reflections\"\n      ]\n    },\n    \"environment\": {\n      \"backdrop\": \"dreamy blurred pastel background with bokeh lights\",\n      \"lighting\": {\n        \"style\": \"ethereal beauty lighting\",\n        \"key_light\": \"soft diffuse frontal light to eliminate shadows\",\n        \"effects\": \"slight bloom effect, rim light on hair to create a halo effect\"\n      }\n    },\n    \"color_grade\": {\n      \"type\": \"bright pastel dreamy\",\n      \"balance\": \"creamy whites, soft pinks, slightly overexposed high-key look\"\n    }\n  }\n}\n{\n  \"photo\": {\n    \"type\": \"可爱偶像特写肖像\",\n    \"quality\": \"8K级照片写实，高保真，杰作\",\n    \"lens\": \"85mm f/1.2 定焦镜头，美丽的散景（虚化）\",\n    \"composition\": \"半身镜头，特写，视线平齐，主体居中，无文本\",\n    \"face\": {\n      \"description\": \"一位超级可爱的18岁日本少女，有着水汪汪的大眼睛（像小狗一样），红润的脸颊（宿醉妆/伊伽利妆风格），有光泽的粉色嘴唇，陶瓷般的肌肤，迷人甜美的表情，散发着纯粹的偶像能量\"\n    },\n    \"model_pose\": {\n      \"position\": \"面向镜头，略微侧身\",\n      \"hands\": \"双手吸引对脸部的注意，也许是摸着脸颊或捏着一缕头发，可爱的手指姿势\",\n      \"expression\": \"天使般灿烂的笑容，深情地直视观看者，头部略微倾斜\"\n    },\n    \"wardrobe\": {\n      \"top\": {\n        \"type\": \"蓬松的白色安哥拉兔毛针织毛衣，带有可爱的丝带领子\",\n        \"style\": \"超大袖子遮住一半手（萌袖），柔和色调美学，柔软质感\"\n      },\n      \"accessories\": {\n        \"hair\": \"空气刘海，柔和的波浪卷，装饰着柔和色调的丝带夹和微小的珍珠发卡\",\n        \"earrings\": \"精致的垂坠心形耳环\",\n        \"necklace\": \"搭配一颗小水晶的精致金链\"\n      }\n    },\n    \"textures\": {\n      \"emphasis\": [\n        \"超精细的虹膜和睫毛\",\n        \"皮肤上柔软的绒毛\",\n        \"蓬松的安哥拉兔毛质感\",\n        \"有光泽的嘴唇\",\n        \"闪烁的眼睛反光\"\n      ]\n    },\n    \"environment\": {\n      \"backdrop\": \"梦幻模糊的柔和色调背景，带有散景光斑\",\n      \"lighting\": {\n        \"style\": \"空灵的美颜光照\",\n        \"key_light\": \"柔和的漫射正面光以消除阴影\",\n        \"effects\": \"轻微的柔光（泛光）效果，头发上的边缘光营造出光环效果\"\n      }\n    },\n    \"color_grade\": {\n      \"type\": \"明亮柔和梦幻\",\n      \"balance\": \"奶油白，柔和粉，略微过曝的高调外观\"\n    }\n  }\n}",
+    "images": [
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251201/cute-idol-close-up-portrait.jpeg",
+        "alt": "可爱偶像特写肖像",
+        "width": 500,
+        "isThumb": false
+      }
+    ],
+    "source": {
+      "authorName": "so_ainsight",
+      "authorUrl": "https://x.com/so_ainsight",
+      "platform": "X",
+      "sourceUrl": "https://x.com/so_ainsight/status/1995018306433290701",
+      "statusId": "1995018306433290701"
+    },
+    "dateAdded": "2026-09-20",
+    "tags": [
+      "portrait",
+      "idol",
+      "kawaii",
+      "closeup",
+      "beauty",
+      "bokeh"
+    ],
+    "verdict": "Bokeh, lens, and skin-texture details are dialed in for a soft beauty look. The JSON structure makes it easy to remix hair, wardrobe, and lighting.",
+    "reusable": false,
+    "language": "en"
+  },
+  {
+    "slug": "luffy-classroom-art",
+    "title": "路飞教室艺术",
+    "titleEn": "Luffy Classroom Chalk Art",
+    "tagline": "A documentary photo of an anime chalk drawing on a green classroom blackboard — Luffy mid-action, captured with 35mm realism and soft classroom light.",
+    "taglineEn": "A documentary photo of an anime chalk drawing on a green classroom blackboard — Luffy mid-action, captured with 35mm realism and soft classroom light.",
+    "category": "illustration",
+    "engines": [
+      "other"
+    ],
+    "difficulty": 4,
+    "prompt": "{\n  \"意图\": \"对特定黑板艺术作品进行写实纪录摄影，画面呈现单个动漫角色，捕捉粉笔媒介的短暂性及教室场景氛围。\",\n  \"画面框架\": {\n    \"画幅比例\": \"4:3\",\n    \"构图方式\": \"中景构图，聚焦黑板壁画。构图包含前景的教师讲台以提供比例尺度，背景空间由单个角色的艺术作品主导。\",\n    \"风格模式\": \"纪实写实主义、质感聚焦、环境自然主义\"\n  },\n  \"主体对象\": {\n    \"主要主体\": \"标准绿色教室黑板上绘制的大型精细粉笔画，描绘《海贼王》角色蒙奇·D·路飞。\",\n    \"视觉细节\": \"画面中路飞呈现动态姿势,居于黑板中央。他戴着标志性草帽,黑色凌乱短发,露齿灿烂笑容。表情充满活力和喜悦,圆形眼睛生动传神。他的一只手臂向前伸展,呈现橡胶手臂技能(橡胶果实能力)。身穿红色无袖背心(敞开状态)露出胸前标志性X形伤疤,蓝色短裤和凉鞋,使用鲜艳彩色粉笔绘制。\",\n    \"媒介质感\": \"画面保留粉笔的粉尘感和哑光质地。可见排线和交叉阴影笔触为服装和头发创造阴影效果。绿色黑板上的晕染区域显示手工混合颜色的痕迹。\",\n    \"周边元素\": \"角色右侧,竖向日文\\'麦わらのルフィ\\'(草帽路飞)用清晰白色粉笔书写。\"\n  },\n  \"环境设定\": {\n    \"场所\": \"标准日本学校教室。\",\n    \"前景元素\": \"木质讲台占据画面下方前景。桌面上散落着黄色粉笔盒、红白蓝色散落粉笔条,以及沾满粉笔灰的黑色毡擦。\",\n    \"背景元素\": \"绿色黑板横跨画面宽度,底部为金属粉笔槽,积累有粉笔灰。黑板上方为米白色石膏墙面,挂有小型扬声器盒。\",\n    \"氛围\": \"安静的学术空间,静谧感暗示教室当前无人。\"\n  },\n  \"光线设定\": {\n    \"类型\": \"漫射环境光,教室照明。\",\n    \"质量\": \"柔和无方向性照明,由顶部荧光灯具与左侧窗户日光混合提供。光线均匀,防止黑板表面眩光,同时突显粉笔质感。\",\n    \"色温\": \"中性白,约5000K色温,确保红色和紫色粉笔在深绿色黑板上的准确色彩还原。\",\n    \"方向\": \"顶部和略微正面照射。\"\n  },\n  \"相机参数\": {\n    \"传感器格式\": \"35mm全画幅数码传感器。\",\n    \"镜头\": \"35mm定焦镜头。\",\n    \"光圈\": \"f/5.6\",\n    \"景深\": \"中等景深,保持黑板绘画清晰对焦,前景讲台元素轻微柔化。\",\n    \"快门速度\": \"1/60秒\",\n    \"感光度\": \"ISO 400\",\n    \"机位\": \"站立视线高度,与画面保持足够距离以框入完整绘画和讲台。\"\n  },\n  \"负面提示\": {\n    \"内容\": \"多个角色、绿谷出久、死柄木、男性角色、数字艺术叠加、矢量图形、纸张纹理、油画、混乱构图、极端低角度、鱼眼镜头。\",\n    \"风格\": \"无过度饱和、无柔焦滤镜、无重度暗角。\"\n  }\n}",
+    "negativePrompt": "多个角色、绿谷出久、死柄木、男性角色、数字艺术叠加、矢量图形、纸张纹理、油画、混乱构图、极端低角度、鱼眼镜头",
+    "aspectRatio": "4:3",
+    "rawBlock": "{\n  \"意图\": \"对特定黑板艺术作品进行写实纪录摄影，画面呈现单个动漫角色，捕捉粉笔媒介的短暂性及教室场景氛围。\",\n  \"画面框架\": {\n    \"画幅比例\": \"4:3\",\n    \"构图方式\": \"中景构图，聚焦黑板壁画。构图包含前景的教师讲台以提供比例尺度，背景空间由单个角色的艺术作品主导。\",\n    \"风格模式\": \"纪实写实主义、质感聚焦、环境自然主义\"\n  },\n  \"主体对象\": {\n    \"主要主体\": \"标准绿色教室黑板上绘制的大型精细粉笔画，描绘《海贼王》角色蒙奇·D·路飞。\",\n    \"视觉细节\": \"画面中路飞呈现动态姿势,居于黑板中央。他戴着标志性草帽,黑色凌乱短发,露齿灿烂笑容。表情充满活力和喜悦,圆形眼睛生动传神。他的一只手臂向前伸展,呈现橡胶手臂技能(橡胶果实能力)。身穿红色无袖背心(敞开状态)露出胸前标志性X形伤疤,蓝色短裤和凉鞋,使用鲜艳彩色粉笔绘制。\",\n    \"媒介质感\": \"画面保留粉笔的粉尘感和哑光质地。可见排线和交叉阴影笔触为服装和头发创造阴影效果。绿色黑板上的晕染区域显示手工混合颜色的痕迹。\",\n    \"周边元素\": \"角色右侧,竖向日文\\'麦わらのルフィ\\'(草帽路飞)用清晰白色粉笔书写。\"\n  },\n  \"环境设定\": {\n    \"场所\": \"标准日本学校教室。\",\n    \"前景元素\": \"木质讲台占据画面下方前景。桌面上散落着黄色粉笔盒、红白蓝色散落粉笔条,以及沾满粉笔灰的黑色毡擦。\",\n    \"背景元素\": \"绿色黑板横跨画面宽度,底部为金属粉笔槽,积累有粉笔灰。黑板上方为米白色石膏墙面,挂有小型扬声器盒。\",\n    \"氛围\": \"安静的学术空间,静谧感暗示教室当前无人。\"\n  },\n  \"光线设定\": {\n    \"类型\": \"漫射环境光,教室照明。\",\n    \"质量\": \"柔和无方向性照明,由顶部荧光灯具与左侧窗户日光混合提供。光线均匀,防止黑板表面眩光,同时突显粉笔质感。\",\n    \"色温\": \"中性白,约5000K色温,确保红色和紫色粉笔在深绿色黑板上的准确色彩还原。\",\n    \"方向\": \"顶部和略微正面照射。\"\n  },\n  \"相机参数\": {\n    \"传感器格式\": \"35mm全画幅数码传感器。\",\n    \"镜头\": \"35mm定焦镜头。\",\n    \"光圈\": \"f/5.6\",\n    \"景深\": \"中等景深,保持黑板绘画清晰对焦,前景讲台元素轻微柔化。\",\n    \"快门速度\": \"1/60秒\",\n    \"感光度\": \"ISO 400\",\n    \"机位\": \"站立视线高度,与画面保持足够距离以框入完整绘画和讲台。\"\n  },\n  \"负面提示\": {\n    \"内容\": \"多个角色、绿谷出久、死柄木、男性角色、数字艺术叠加、矢量图形、纸张纹理、油画、混乱构图、极端低角度、鱼眼镜头。\",\n    \"风格\": \"无过度饱和、无柔焦滤镜、无重度暗角。\"\n  }\n}",
+    "images": [
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251201/luffy-classroom-art.jpeg",
+        "alt": "路飞教室艺术",
+        "width": 500,
+        "isThumb": false
+      }
+    ],
+    "source": {
+      "authorName": "yanhua1010",
+      "authorUrl": "https://x.com/yanhua1010",
+      "platform": "X",
+      "sourceUrl": "https://x.com/yanhua1010/status/1995044071803371880",
+      "statusId": "1995044071803371880"
+    },
+    "dateAdded": "2026-09-20",
+    "tags": [
+      "anime",
+      "chalk",
+      "classroom",
+      "one-piece",
+      "documentary",
+      "fanart"
+    ],
+    "verdict": "Treats the chalk drawing as the subject of a real photographic record: medium grain, classroom context, and exact camera settings included. Perfect for fan-art documentation.",
+    "reusable": false,
+    "language": "zh"
+  },
+  {
+    "slug": "nano-banana-pro-character-consistency-compared-to-reference-images",
+    "title": "Nano Banana Pro中角色一致性对比参考图",
+    "titleEn": "Character Consistency with Reference Images",
+    "tagline": "Keep a person 100% identical to a reference photo while dropping them into a new scene — the core trick behind Nano Banana Pro character consistency.",
+    "taglineEn": "Keep a person 100% identical to a reference photo while dropping them into a new scene — the core trick behind Nano Banana Pro character consistency.",
+    "category": "character-design",
+    "engines": [
+      "nano-banana-pro"
+    ],
+    "difficulty": 2,
+    "prompt": "Character Consistency in Nano Banana Pro using a reference images is really at another level.\nCheckout these images that somebody uploaded to r/Bard\nUpload your image (a clear picture of yourself or your character)\nEnter the prompt\n\"I’m taking a selfie with [movie character] on the set of [movie name].\nKeep the person exactly as shown in the reference image with 100% identical facial features, bone structure, skin tone, facial expression, pose, and appearance. 1:1 aspect ratio, 4K detail.\"\n---\nreddit. com/r/Bard/comments/1pb4nvc/maintaining_character_consistency_in_nano_banana/",
+    "aspectRatio": "1:1",
+    "rawBlock": "Character Consistency in Nano Banana Pro using a reference images is really at another level.\nCheckout these images that somebody uploaded to r/Bard\nUpload your image (a clear picture of yourself or your character)\nEnter the prompt\n\"I’m taking a selfie with [movie character] on the set of [movie name].\nKeep the person exactly as shown in the reference image with 100% identical facial features, bone structure, skin tone, facial expression, pose, and appearance. 1:1 aspect ratio, 4K detail.\"\n---\nreddit. com/r/Bard/comments/1pb4nvc/maintaining_character_consistency_in_nano_banana/",
+    "images": [
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251205/nano-banana-pro-character-consistency-compared-to-reference-images-1.jpg",
+        "alt": "Nano Banana Pro中角色一致性对比参考图",
+        "width": 500,
+        "isThumb": false
+      },
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251205/nano-banana-pro-character-consistency-compared-to-reference-images-2.jpg",
+        "alt": "Nano Banana Pro中角色一致性对比参考图",
+        "width": 500,
+        "isThumb": false
+      },
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251205/nano-banana-pro-character-consistency-compared-to-reference-images-3.jpg",
+        "alt": "Nano Banana Pro中角色一致性对比参考图",
+        "width": 500,
+        "isThumb": false
+      },
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251205/nano-banana-pro-character-consistency-compared-to-reference-images-4.jpg",
+        "alt": "Nano Banana Pro中角色一致性对比参考图",
+        "width": 500,
+        "isThumb": false
+      }
+    ],
+    "source": {
+      "authorName": "Rohan Paul",
+      "authorUrl": "https://x.com/rohanpaul_ai",
+      "platform": "X",
+      "sourceUrl": "https://x.com/rohanpaul_ai/status/1995641282056925680",
+      "statusId": "1995641282056925680"
+    },
+    "dateAdded": "2026-09-20",
+    "tags": [
+      "reusable",
+      "character-consistency",
+      "reference",
+      "selfie",
+      "identity"
+    ],
+    "verdict": "Upload a clear reference, then ask for a selfie \"with [movie character] on the set of [movie name]\" while locking facial features, bone structure, and skin tone. Simple but powerful for identity-preserving edits.",
+    "reusable": true,
+    "language": "en",
+    "placeholders": [
+      "[movie character]",
+      "[movie name]"
+    ]
+  },
+  {
+    "slug": "dreamy-parisian-night-effect",
+    "title": "梦幻巴黎夜景",
+    "titleEn": "Dreamy Parisian Night Effect",
+    "tagline": "A diamond-dust starry-night style that turns landmarks like the Eiffel Tower into glowing beacons under a swirling, Van Gogh-like sky with mirrored reflections.",
+    "taglineEn": "A diamond-dust starry-night style that turns landmarks like the Eiffel Tower into glowing beacons under a swirling, Van Gogh-like sky with mirrored reflections.",
+    "category": "photography",
+    "engines": [
+      "nano-banana-pro"
+    ],
+    "difficulty": 4,
+    "prompt": "Nano banana pro prompt share 🍌✨\n一个有钻石质感的浪漫星夜特效\n{   \"style_name\": \"Dreamy Parisian Night with Star Swirls\",   \"description\": \"A monochromatic, high-contrast style that transforms famous Parisian landmarks into ethereal, glowing beacons under a fantastical night sky. Key elements include: a spiraling, star-filled sky creating a sense of dynamic movement; reflective surfaces (water, wet roads) that mirror the bright lights of the city and celestial elements; a strong emphasis on light sources (Eiffel Tower, city lights, car trails) as glowing points and streaks, often forming distinct patterns; a grayscale or limited color palette with a cool, luminous undertone, enhancing the magical and dreamlike quality.\",   \"visual_elements\": [     {       \"element\": \"Sky\",       \"attributes\": [         \"Dark, often deep charcoal or black.\",         \"Filled with numerous bright, distinct stars, resembling glitter or tiny diamonds.\",         \"Prominent swirling or spiraling patterns in the cloud/sky formations, suggesting cosmic movement or a vortex.\",         \"High contrast between stars and sky.\"       ]     },     {       \"element\": \"City Lights\",       \"attributes\": [         \"Highly luminous, often appearing as streaks of light (e.g., car trails) or glowing dots (e.g., building windows).\",         \"Reflected vividly in water bodies (rivers) or wet ground, creating elongated, shimmering reflections.\",         \"Emphasized to create patterns and delineate urban structures.\"       ]     },     {       \"element\": \"Landmarks\",       \"attributes\": [         \"Rendered with strong internal illumination, making them glow.\",         \"Often outlined or textured with light, appearing almost as if made of stars or light itself (e.g., the Eiffel Tower).\",         \"Positioned prominently within the frame, often as central focal points.\"       ]     },     {       \"element\": \"Composition\",       \"attributes\": [         \"Often features wide-angle perspectives to capture both the cityscape and the expansive sky.\",         \"Strong use of leading lines (rivers, roads, light trails) to guide the eye.\",         \"Symmetry or balanced asymmetry, with landmarks often centered or strategically placed.\"       ]     },     {       \"element\": \"Color Palette\",       \"attributes\": [         \"Monochromatic or nearly monochromatic, primarily grayscale.\",         \"Subtle cool tones (blues, silvers) may be present, contributing to the luminous, ethereal feel.\",         \"Absence of vibrant, saturated colors.\"       ]     },     {       \"element\": \"Mood/Atmosphere\",       \"attributes\": [         \"Dreamlike, magical, fantastical.\",         \"Serene, yet dynamic due to the swirling sky.\",         \"Sophisticated and elegant, reflecting the Parisian setting.\"       ]     },     {       \"element\": \"Texture/Detail\",       \"attributes\": [         \"Smooth, almost polished surfaces for water and reflections.\",         \"Sharp detail on light sources and stars to enhance their luminosity.\",         \"Minimal discernible texture on dark sky areas, allowing stars to pop.\"       ]     }   ],   \"art_movements_influences\": [     \"Abstract Photography (for light trails and patterns)\",     \"Surrealism (for the fantastical sky)\",     \"Luminism (for emphasis on light)\"   ],   \"keywords\": [     \"dreamy\",     \"Paris at night\",     \"starry sky\",     \"swirling stars\",     \"luminous city\",     \"monochromatic\",     \"high contrast\",     \"ethereal\",     \"glowing landmarks\",     \"light trails\",     \"reflective surfaces\",     \"fantastical\"   ] } 按照这种风格，旋转3个知名景点并画出",
+    "aspectRatio": "1:1",
+    "rawBlock": "Nano banana pro prompt share 🍌✨\n一个有钻石质感的浪漫星夜特效\n{   \"style_name\": \"Dreamy Parisian Night with Star Swirls\",   \"description\": \"A monochromatic, high-contrast style that transforms famous Parisian landmarks into ethereal, glowing beacons under a fantastical night sky. Key elements include: a spiraling, star-filled sky creating a sense of dynamic movement; reflective surfaces (water, wet roads) that mirror the bright lights of the city and celestial elements; a strong emphasis on light sources (Eiffel Tower, city lights, car trails) as glowing points and streaks, often forming distinct patterns; a grayscale or limited color palette with a cool, luminous undertone, enhancing the magical and dreamlike quality.\",   \"visual_elements\": [     {       \"element\": \"Sky\",       \"attributes\": [         \"Dark, often deep charcoal or black.\",         \"Filled with numerous bright, distinct stars, resembling glitter or tiny diamonds.\",         \"Prominent swirling or spiraling patterns in the cloud/sky formations, suggesting cosmic movement or a vortex.\",         \"High contrast between stars and sky.\"       ]     },     {       \"element\": \"City Lights\",       \"attributes\": [         \"Highly luminous, often appearing as streaks of light (e.g., car trails) or glowing dots (e.g., building windows).\",         \"Reflected vividly in water bodies (rivers) or wet ground, creating elongated, shimmering reflections.\",         \"Emphasized to create patterns and delineate urban structures.\"       ]     },     {       \"element\": \"Landmarks\",       \"attributes\": [         \"Rendered with strong internal illumination, making them glow.\",         \"Often outlined or textured with light, appearing almost as if made of stars or light itself (e.g., the Eiffel Tower).\",         \"Positioned prominently within the frame, often as central focal points.\"       ]     },     {       \"element\": \"Composition\",       \"attributes\": [         \"Often features wide-angle perspectives to capture both the cityscape and the expansive sky.\",         \"Strong use of leading lines (rivers, roads, light trails) to guide the eye.\",         \"Symmetry or balanced asymmetry, with landmarks often centered or strategically placed.\"       ]     },     {       \"element\": \"Color Palette\",       \"attributes\": [         \"Monochromatic or nearly monochromatic, primarily grayscale.\",         \"Subtle cool tones (blues, silvers) may be present, contributing to the luminous, ethereal feel.\",         \"Absence of vibrant, saturated colors.\"       ]     },     {       \"element\": \"Mood/Atmosphere\",       \"attributes\": [         \"Dreamlike, magical, fantastical.\",         \"Serene, yet dynamic due to the swirling sky.\",         \"Sophisticated and elegant, reflecting the Parisian setting.\"       ]     },     {       \"element\": \"Texture/Detail\",       \"attributes\": [         \"Smooth, almost polished surfaces for water and reflections.\",         \"Sharp detail on light sources and stars to enhance their luminosity.\",         \"Minimal discernible texture on dark sky areas, allowing stars to pop.\"       ]     }   ],   \"art_movements_influences\": [     \"Abstract Photography (for light trails and patterns)\",     \"Surrealism (for the fantastical sky)\",     \"Luminism (for emphasis on light)\"   ],   \"keywords\": [     \"dreamy\",     \"Paris at night\",     \"starry sky\",     \"swirling stars\",     \"luminous city\",     \"monochromatic\",     \"high contrast\",     \"ethereal\",     \"glowing landmarks\",     \"light trails\",     \"reflective surfaces\",     \"fantastical\"   ] } 按照这种风格，旋转3个知名景点并画出",
+    "images": [
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251218/dreamy-parisian-night-effect-1.jpg",
+        "alt": "梦幻巴黎夜景",
+        "width": 500,
+        "isThumb": false
+      },
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251218/dreamy-parisian-night-effect-2.jpg",
+        "alt": "梦幻巴黎夜景",
+        "width": 500,
+        "isThumb": false
+      },
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251218/dreamy-parisian-night-effect-3.jpg",
+        "alt": "梦幻巴黎夜景",
+        "width": 500,
+        "isThumb": false
+      },
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251218/dreamy-parisian-night-effect-4.jpg",
+        "alt": "梦幻巴黎夜景",
+        "width": 500,
+        "isThumb": false
+      }
+    ],
+    "source": {
+      "authorName": "sundyme",
+      "authorUrl": "https://x.com/sundyme",
+      "platform": "X",
+      "sourceUrl": "https://x.com/sundyme/status/2001523946232086907",
+      "statusId": "2001523946232086907"
+    },
+    "dateAdded": "2026-09-20",
+    "tags": [
+      "paris",
+      "night",
+      "starry",
+      "landmark",
+      "eiffel",
+      "dreamy",
+      "style"
+    ],
+    "verdict": "A complete style spec: palette, sky, city lights, and landmarks broken into editable elements. Swap the location to recreate the effect for any city.",
+    "reusable": false,
+    "language": "zh"
+  },
+  {
+    "slug": "ned-s-cyberpunk-city-adventure",
+    "title": "Ned的赛博朋克城市冒险",
+    "titleEn": "Ned's Cyberpunk City Adventure",
+    "tagline": "A 3x3 story grid following Ned, a Pixar-style cyberpunk teen, across a neon city — one cohesive image with locked character consistency across all nine panels.",
+    "taglineEn": "A 3x3 story grid following Ned, a Pixar-style cyberpunk teen, across a neon city — one cohesive image with locked character consistency across all nine panels.",
+    "category": "illustration",
+    "engines": [
+      "other"
+    ],
+    "difficulty": 5,
+    "prompt": "Is multi-image storytelling grids possible for Grok Imagine? It seems so. I got inspired by the Nano Banana pro+Claude posts ive been seeing of this trend. Tried this with Grok, about a pixar like style telling the story of Ned, cyberpunk setting, he walks through the city. Deets:\nA single cohesive image divided into a clean 3x3 grid with thin white borders, telling a sequential story of a young Pixar-style cyberpunk protagonist named Ned traveling through a bustling futuristic city at night. Character consistency: Ned is a teenage boy with messy brown hair, large expressive green eyes, freckles, wearing a worn oversized hoodie with glowing circuit patterns, cargo pants, and sneakers, with the same exact appearance in every panel. Style: Highly detailed Pixar/Disney animation style, smooth CGI rendering, vibrant saturated colors, dramatic cinematic lighting with neon blues, pinks, and purples reflecting on wet surfaces, subtle lens flares, volumetric god rays from holograms and headlights. Grid layout and story progression (top left to bottom right, reading order): 1. Wide establishing shot: Ned standing on a rainy rooftop overlooking the massive cyberpunk city skyline filled with towering skyscrapers, flying cars, giant holographic billboards, and neon signs. 2. Medium shot: Ned leaping from rooftop to rooftop, cape-like hoodie flapping in the wind, determined expression. 3. Close-up: Ned landing on a lower platform, looking curious at a glowing street food vendor drone hovering nearby. 4. Wide shot: Ned walking through a crowded neon-lit street market, people and aliens around him, steam rising from food stalls, rain falling. 5. Medium shot: Ned stopping to watch a massive holographic advertisement of a futuristic band performing in mid-air. 6. Action shot: Ned running through an alley as police drones fly overhead, dramatic low-angle view. 7. Close-up: Ned's face in profile, reflective and thoughtful, city lights reflecting in his eyes. 8. Medium shot: Ned climbing a fire escape ladder toward a higher platform. 9. Final wide shot: Ned reaching the top, standing triumphantly with arms outstretched, the entire sprawling cyberpunk city glowing below him under a stormy sky. Aspect ratio 16:9, ultra-detailed, masterpiece, best quality.",
+    "aspectRatio": "1:1",
+    "rawBlock": "Is multi-image storytelling grids possible for Grok Imagine? It seems so. I got inspired by the Nano Banana pro+Claude posts ive been seeing of this trend. Tried this with Grok, about a pixar like style telling the story of Ned, cyberpunk setting, he walks through the city. Deets:\nA single cohesive image divided into a clean 3x3 grid with thin white borders, telling a sequential story of a young Pixar-style cyberpunk protagonist named Ned traveling through a bustling futuristic city at night. Character consistency: Ned is a teenage boy with messy brown hair, large expressive green eyes, freckles, wearing a worn oversized hoodie with glowing circuit patterns, cargo pants, and sneakers, with the same exact appearance in every panel. Style: Highly detailed Pixar/Disney animation style, smooth CGI rendering, vibrant saturated colors, dramatic cinematic lighting with neon blues, pinks, and purples reflecting on wet surfaces, subtle lens flares, volumetric god rays from holograms and headlights. Grid layout and story progression (top left to bottom right, reading order): 1. Wide establishing shot: Ned standing on a rainy rooftop overlooking the massive cyberpunk city skyline filled with towering skyscrapers, flying cars, giant holographic billboards, and neon signs. 2. Medium shot: Ned leaping from rooftop to rooftop, cape-like hoodie flapping in the wind, determined expression. 3. Close-up: Ned landing on a lower platform, looking curious at a glowing street food vendor drone hovering nearby. 4. Wide shot: Ned walking through a crowded neon-lit street market, people and aliens around him, steam rising from food stalls, rain falling. 5. Medium shot: Ned stopping to watch a massive holographic advertisement of a futuristic band performing in mid-air. 6. Action shot: Ned running through an alley as police drones fly overhead, dramatic low-angle view. 7. Close-up: Ned's face in profile, reflective and thoughtful, city lights reflecting in his eyes. 8. Medium shot: Ned climbing a fire escape ladder toward a higher platform. 9. Final wide shot: Ned reaching the top, standing triumphantly with arms outstretched, the entire sprawling cyberpunk city glowing below him under a stormy sky. Aspect ratio 16:9, ultra-detailed, masterpiece, best quality.",
+    "images": [
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251222/ned-s-cyberpunk-city-adventure-1.jpg",
+        "alt": "Ned的赛博朋克城市冒险",
+        "width": 500,
+        "isThumb": false
+      }
+    ],
+    "source": {
+      "authorName": "Geno",
+      "authorUrl": "https://x.com/GenoQuest",
+      "platform": "X",
+      "sourceUrl": "https://x.com/GenoQuest/status/2000711160736227576",
+      "statusId": "2000711160736227576"
+    },
+    "dateAdded": "2026-09-20",
+    "tags": [
+      "storyboard",
+      "grid",
+      "cyberpunk",
+      "pixar",
+      "character-consistency",
+      "scifi",
+      "narration"
+    ],
+    "verdict": "Multi-panel narrative prompts are rare and valuable. The panel-by-panel breakdown (rooftop → market → alley) makes character-consistent storytelling reproducible.",
+    "reusable": false,
+    "language": "en"
+  },
+  {
+    "slug": "fashion-shoot-in-a-snowy-forest",
+    "title": "雪地森林时尚拍摄",
+    "titleEn": "Fashion Shoot in a Snowy Forest",
+    "tagline": "A cold, monochromatic fashion editorial in a snowy forest — a model in a luxurious white fur coat and frost-crystal lashes under soft winter light.",
+    "taglineEn": "A cold, monochromatic fashion editorial in a snowy forest — a model in a luxurious white fur coat and frost-crystal lashes under soft winter light.",
+    "category": "photography",
+    "engines": [
+      "nano-banana-pro"
+    ],
+    "difficulty": 3,
+    "prompt": "Nano Banana Pro on Gemini App\nPrompt:\n/ Fashion shoot in a snowy forest.\n• Composition: Vertical triptych, focus on the model and details of her look.\n• Color Palette: Cold, monochromatic, mainly white, silver, bluish-gray.\n• Mood: Mysterious, majestic, cold, pure.\n2. Model Description\n• Gender/Age: Young woman, model-like.\n• Hairstyle: Long wavy hair, top braided, bottom loose.\n• Skin: Smooth, porcelain.\n• Eyes: Bright light blue or gray, expressive makeup.\n• Feature: False eyelashes with frost/snowflake crystals.\n• Eyebrows: Light, neat.\n• Lips: Full, nude or pale pink.\n3. Clothing and Accessories\n• Key Accessory: Large fluffy white fur earmuffs, fully covering ears.\n• Outerwear: Luxurious white coat or fur coat with high, voluminous collar. Soft, expensive-looking (natural or faux fur).\n4. Environment and Background\n• Location: Snowy forest, dark tree trunks, snow-covered branches.\n• Weather: Heavy, large snowflakes.\n• Lighting: Soft diffused daylight, cloudy winter day or twilight.\n5. Frame Details\n• Top: Close-up of face and shoulders, f",
+    "aspectRatio": "9:16",
+    "rawBlock": "Nano Banana Pro on Gemini App\nPrompt:\n/ Fashion shoot in a snowy forest.\n• Composition: Vertical triptych, focus on the model and details of her look.\n• Color Palette: Cold, monochromatic, mainly white, silver, bluish-gray.\n• Mood: Mysterious, majestic, cold, pure.\n2. Model Description\n• Gender/Age: Young woman, model-like.\n• Hairstyle: Long wavy hair, top braided, bottom loose.\n• Skin: Smooth, porcelain.\n• Eyes: Bright light blue or gray, expressive makeup.\n• Feature: False eyelashes with frost/snowflake crystals.\n• Eyebrows: Light, neat.\n• Lips: Full, nude or pale pink.\n3. Clothing and Accessories\n• Key Accessory: Large fluffy white fur earmuffs, fully covering ears.\n• Outerwear: Luxurious white coat or fur coat with high, voluminous collar. Soft, expensive-looking (natural or faux fur).\n4. Environment and Background\n• Location: Snowy forest, dark tree trunks, snow-covered branches.\n• Weather: Heavy, large snowflakes.\n• Lighting: Soft diffused daylight, cloudy winter day or twilight.\n5. Frame Details\n• Top: Close-up of face and shoulders, f",
+    "images": [
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251213/fashion-shoot-in-a-snowy-forest-1.jpg",
+        "alt": "雪地森林时尚拍摄",
+        "width": 500,
+        "isThumb": false
+      }
+    ],
+    "source": {
+      "authorName": "Jinx",
+      "authorUrl": "https://x.com/Jinnx___",
+      "platform": "X",
+      "sourceUrl": "https://x.com/Jinnx___/status/1997687746207597055",
+      "statusId": "1997687746207597055"
+    },
+    "dateAdded": "2026-09-20",
+    "tags": [
+      "fashion",
+      "winter",
+      "snow",
+      "forest",
+      "editorial",
+      "cold-palette"
+    ],
+    "verdict": "Strong on mood and palette: cold whites, silver, and bluish-gray with exact model, wardrobe, and lighting notes. Ideal for winter campaign looks.",
+    "reusable": false,
+    "language": "en"
+  },
+  {
+    "slug": "conniwal-kashmir-winter-scene",
+    "title": "康尼瓦尔·卡什米尔冬日场景",
+    "titleEn": "Kashmir Winter Street Scene",
+    "tagline": "A 2K ultra-realistic winter street scene in Kashmir — heavy snowfall, busy markets, and a glowing Nano Banana Pro device placed naturally in the foreground.",
+    "taglineEn": "A 2K ultra-realistic winter street scene in Kashmir — heavy snowfall, busy markets, and a glowing Nano Banana Pro device placed naturally in the foreground.",
+    "category": "photography",
+    "engines": [
+      "nano-banana-pro"
+    ],
+    "difficulty": 2,
+    "prompt": "Prompt (2K, Ultra-realistic, Promotional Nano Banana Pro): @Mohsin_bahi_01\n@Milo_bahi_02\n\"A 2K ultra-realistic winter scene in Kashmir, with heavy snowfall covering the streets. People walking in warm clothes, bustling markets with shops and street vendors. Autos, cars, and buses moving on the roads, people boarding buses. Street vendors selling bananas, mangoes, and apples, showing them to customers. In the center or foreground, a Nano Banana Pro device prominently displayed, glowing slightly, capturing attention naturally in the busy scene. Cinematic lighting, realistic snow effects, depth, and lively atmosphere emphasizing both the local life and the promotional focus on the Nano Banana Pro.\"",
+    "aspectRatio": "16:9",
+    "rawBlock": "Prompt (2K, Ultra-realistic, Promotional Nano Banana Pro): @Mohsin_bahi_01\n@Milo_bahi_02\n\"A 2K ultra-realistic winter scene in Kashmir, with heavy snowfall covering the streets. People walking in warm clothes, bustling markets with shops and street vendors. Autos, cars, and buses moving on the roads, people boarding buses. Street vendors selling bananas, mangoes, and apples, showing them to customers. In the center or foreground, a Nano Banana Pro device prominently displayed, glowing slightly, capturing attention naturally in the busy scene. Cinematic lighting, realistic snow effects, depth, and lively atmosphere emphasizing both the local life and the promotional focus on the Nano Banana Pro.\"",
+    "images": [
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251213/conniwal-kashmir-winter-scene-1.jpg",
+        "alt": "康尼瓦尔·卡什米尔冬日场景",
+        "width": 500,
+        "isThumb": false
+      }
+    ],
+    "source": {
+      "authorName": "Milo",
+      "authorUrl": "https://x.com/Milo_Bahi_02",
+      "platform": "X",
+      "sourceUrl": "https://x.com/Milo_Bahi_02/status/1998702302530834525",
+      "statusId": "1998702302530834525"
+    },
+    "dateAdded": "2026-09-20",
+    "tags": [
+      "winter",
+      "kashmir",
+      "street",
+      "snow",
+      "promotional",
+      "scene"
+    ],
+    "verdict": "A cinematic promotional scene that balances local life with product placement. A good example of weaving a device into a lively, realistic environment without it feeling fake.",
+    "reusable": false,
+    "language": "en"
+  },
 ];
 
 export function getPromptsByCategory(cat: PromptStyle): Prompt[] {
