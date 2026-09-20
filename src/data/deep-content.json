@@ -6159,5 +6159,905 @@
     "prompt": "Crop to a tight foreground hero shot of the device with blurred market behind."
    }
   ]
+ },
+ "love-stories-from-the-long-river-of-history": {
+  "intro": "This prompt compresses a country’s romantic folklore into a single iconic image: a bridge built purely from that culture’s most romantic material, with the country name stamped in all-caps English in the corner. Swap the country to localize the symbolism — China maps to a magpie bridge over an ethereal heavenly palace, while European nations get a rose bridge against gothic landmarks. It is a ready-made template for cultural, giftable, or editorial romance visuals.",
+  "howTo": [
+   {
+    "title": "Pick the country",
+    "body": "Type the target country into the prompt’s country field. The preset already maps China, the UK, Italy, and France to specific bridge materials and backdrops."
+   },
+   {
+    "title": "Keep materials pure",
+    "body": "The brief forbids stone, gears, or mechanical textures. Stick to feathers, ink-mist, rose petals, or velvet so the bridge reads as romantic, not industrial."
+   },
+   {
+    "title": "Respect the China rule",
+    "body": "For China, do not reuse the Great Wall. Use the heavenly palace and starry void so the result feels mythic rather than literal."
+   },
+   {
+    "title": "Add the corner label",
+    "body": "Force the all-caps English country name in the top-left; it anchors the concept and makes the series instantly recognizable."
+   }
+  ],
+  "faq": [
+   {
+    "q": "Which model runs this best?",
+    "a": "The prompt is written for Midjourney’s role-play style. Run it in MJ v6/v7 and keep the structural cues — material, backdrop, label — explicit."
+   },
+   {
+    "q": "Can I add more countries?",
+    "a": "Yes. Copy the mapping pattern: choose one signature romantic material and one landmark backdrop per nation, then label it in caps."
+   },
+   {
+    "q": "Why no mechanical elements?",
+    "a": "The constraint keeps the bridge ethereal and symbolic. Metal or gears shift the mood toward sci-fi and break the romance brief."
+   }
+  ],
+  "variations": [
+   {
+    "label": "Monochrome ink wash",
+    "prompt": "Same bridge rendered in black ink-wash with a single red seal, for a traditional painting feel."
+   },
+   {
+    "label": "Festival night",
+    "prompt": "Add floating lanterns and a star-trail sky to turn the scene into a celebration illustration."
+   }
+  ]
+ },
+ "professional-camera-and-lighting-control-tips": {
+  "intro": "This is the single most reusable Nano Banana Pro tip in the batch: instead of hoping for a good shot, you declare the camera and lighting before the subject. The structured JSON forces you to specify angle, focal length, depth of field, and light setup, which is exactly what separates a flat AI image from a photographic one. Treat it as a control panel you fill in for every portrait or product shot.",
+  "howTo": [
+   {
+    "title": "Describe the scene",
+    "body": "Put the subject and environment into the \"scene\" block first; everything else is built around it."
+   },
+   {
+    "title": "Set the camera",
+    "body": "Choose perspective, lens type, and focus style. A 35mm or 50mm with shallow depth of field reads as \"real camera\" instantly."
+   },
+   {
+    "title": "Define the light",
+    "body": "Name the lighting setup, time of day, and mood. Soft window light or golden hour beats vague \"make it pretty\" every time."
+   },
+   {
+    "title": "Iterate one variable",
+    "body": "Change only angle or only light between renders so you learn what each control actually does."
+   }
+  ],
+  "faq": [
+   {
+    "q": "Do I need photography knowledge?",
+    "a": "No. The template teaches by example — copy it, then tweak one field at a time to build intuition."
+   },
+   {
+    "q": "Does it work on other models?",
+    "a": "It is tuned for Nano Banana Pro, but the same structure ports to Midjourney or Flux if you keep the camera keywords."
+   },
+   {
+    "q": "What breaks the effect?",
+    "a": "Leaving \"lighting\" vague, or asking for too many conflicting styles in one prompt."
+   }
+  ],
+  "variations": [
+   {
+    "label": "Noir version",
+    "prompt": "Same subject, hard side-light, high contrast black and white, deep shadows."
+   },
+   {
+    "label": "Product hero",
+    "prompt": "Swap to a 100mm macro, rim light, pure white sweep background for e-commerce."
+   }
+  ]
+ },
+ "japanese-beauty-maid-inspired-outfit-outdoor-photo": {
+  "intro": "A tightly specified character portrait: a young Japanese beauty in a maid-inspired outfit, shot three-quarter length outdoors with K-beauty styling and doll-like circle lenses. The strength is in the makeup and framing notes — soft airy hair, peach-pink shimmer, rosy blush, velvet matte lips — which keep the result cohesive rather than generic. Swap the outfit color and hair tone to reskin it.",
+  "howTo": [
+   {
+    "title": "Lock the framing",
+    "body": "Keep the three-quarter, lower-legs-up crop; it flatters the outfit and avoids awkward full-body distortion."
+   },
+   {
+    "title": "Match the makeup",
+    "body": "Follow the K-beauty notes exactly — shimmer shadow, curled lashes, circle lenses, gradient lips."
+   },
+   {
+    "title": "Control the outdoors",
+    "body": "Use soft natural light and a blurred background so the subject stays the focus."
+   },
+   {
+    "title": "Reskin safely",
+    "body": "Change only hair color, dress shade, or accessory; keep the lighting and pose."
+   }
+  ],
+  "faq": [
+   {
+    "q": "Which engine made the original?",
+    "a": "It was shared as a Meta AI example; on Nano Banana Pro or Midjourney the same notes still hold."
+   },
+   {
+    "q": "How do I avoid the \"doll\" look going too far?",
+    "a": "Lower the circle-lens enlargement and keep skin texture; the prompt already calls for soft, not plastic."
+   },
+   {
+    "q": "Can I make it indoor?",
+    "a": "Yes — move to a soft studio backdrop and keep the same styling for a cleaner editorial."
+   }
+  ],
+  "variations": [
+   {
+    "label": "Twintail casual",
+    "prompt": "Same maid outfit but twin tails, daytime park bench, brighter palette."
+   },
+   {
+    "label": "Evening version",
+    "prompt": "Night street, neon bokeh, deeper blush and glossy lips."
+   }
+  ]
+ },
+ "cinematic-fashion-grid-different-outfits-google-gemini-nano-banana": {
+  "intro": "Upload one photo and get a cinematic fashion grid: the same face and pose restyled across casual, formal, ethnic, streetwear, luxury, and sporty looks. The brief enforces consistent facial features and proportions so only clothing, styling, and accessories change — the exact behavior stylists and personal-branding creators want. Neutral background and soft studio light keep it magazine-grade.",
+  "howTo": [
+   {
+    "title": "Use one clear photo",
+    "body": "Pick a front-facing, well-lit portrait; likeness consistency depends on it."
+   },
+   {
+    "title": "Hold the pose",
+    "body": "Keep the same pose across all cells so the grid reads as one person, six wardrobes."
+   },
+   {
+    "title": "Neutralize the ground",
+    "body": "Use a plain backdrop so the outfits, not the setting, carry the layout."
+   },
+   {
+    "title": "Tune per look",
+    "body": "Adjust fabric and accessory detail per cell rather than regenerating the whole grid."
+   }
+  ],
+  "faq": [
+   {
+    "q": "Why does my face drift between cells?",
+    "a": "Low source-photo quality or conflicting pose notes. Re-upload a sharper front portrait and keep the pose line identical."
+   },
+   {
+    "q": "Can I add more than six looks?",
+    "a": "Yes — extend the list, but more cells dilute resolution per look."
+   },
+   {
+    "q": "Best use case?",
+    "a": "Personal styling reels, closet try-on posts, and client moodboards."
+   }
+  ],
+  "variations": [
+   {
+    "label": "Seasonal set",
+    "prompt": "Same grid but spring/summer/autumn/winter instead of style lanes."
+   },
+   {
+    "label": "Brand palette",
+    "prompt": "Recolor every outfit to one brand’s palette for a campaign sheet."
+   }
+  ]
+ },
+ "hyper-realistic-brand-architecture": {
+  "intro": "A parametric, hyper-realistic 3D exhibition booth you can re-skin per client: choose the style, form, material, accent color, and brand, and Nano Banana Pro renders it against a solid dark-grey studio backdrop. The clean angular geometry and tempered-glass material make it feel like a real trade-show render, not a toy. This is the most client-ready product prompt in the batch.",
+  "howTo": [
+   {
+    "title": "Fill the brackets",
+    "body": "Set STYLE (minimalist/futuristic), FORM (geometry), MATERIAL (metal/glass), COLOR (brand accent), BRAND."
+   },
+   {
+    "title": "Keep the grey studio",
+    "body": "The dark-grey background is what makes it premium; don’t swap it for a busy scene."
+   },
+   {
+    "title": "Mind the accent",
+    "body": "Use the brand’s signature color sparingly — on edges and one hero panel."
+   },
+   {
+    "title": "Render variations",
+    "body": "Change only FORM or MATERIAL to show the client two concepts from one prompt."
+   }
+  ],
+  "faq": [
+   {
+    "q": "Is this only for Tesla?",
+    "a": "No — \"Tesla\" in the example is just a default; replace BRAND and COLOR for any client."
+   },
+   {
+    "q": "Which model?",
+    "a": "Written for Gemini 3.0 Nano Banana Pro; Flux or SDXL can approximate with the same structure."
+   },
+   {
+    "q": "How do I make it bigger?",
+    "a": "Add scale cues — a tiny human figure or furniture — so the booth reads as two-story."
+   }
+  ],
+  "variations": [
+   {
+    "label": "Frosted glass",
+    "prompt": "Same form but matte frosted glass and a warm wood accent instead of anodized aluminum."
+   },
+   {
+    "label": "Night expo",
+    "prompt": "Add LED edge-lighting and a darker reflective floor for a launch-event feel."
+   }
+  ]
+ },
+ "glass-distortion-poster": {
+  "intro": "A punchy, on-trend poster recipe: a bold six-word slogan in extra-bold black type, warped by a 3D glass lens that refracts part of the text or layout, with the brand logo in the corner. The clean modern background and glossy lighting make it read as a real campaign. Drop in any brand name and it works.",
+  "howTo": [
+   {
+    "title": "Write the slogan first",
+    "body": "Keep it to six strong words; the glass effect needs negative space to distort."
+   },
+   {
+    "title": "Place the lens",
+    "body": "Put the refraction over a corner of the text or logo so the rest stays legible."
+   },
+   {
+    "title": "Corner the logo",
+    "body": "Brand mark top-corner, opposite the lens, so identity survives the distortion."
+   },
+   {
+    "title": "Lock the ratio",
+    "body": "Render at 1:1 for social; the composition is built square."
+   }
+  ],
+  "faq": [
+   {
+    "q": "Which tool?",
+    "a": "Shared without a named model; Nano Banana Pro and Midjourney both handle glass refraction well."
+   },
+   {
+    "q": "Why 1:1?",
+    "a": "Square keeps the centered slogan balanced and works everywhere from Instagram to print."
+   },
+   {
+    "q": "How do I avoid unreadable text?",
+    "a": "Distort only 20–30% of the type; the eye fills in the rest."
+   }
+  ],
+  "variations": [
+   {
+    "label": "Neon night",
+    "prompt": "Same poster but deep navy background, neon lens glow, glossy wet-floor reflection."
+   },
+   {
+    "label": "Editorial serif",
+    "prompt": "Swap the black sans for a high-contrast serif and soften the refraction."
+   }
+  ]
+ },
+ "high-fashion-european-model-electric-blue-faux-fur-coat": {
+  "intro": "A short, high-yield fashion prompt: a high-fashion European model in a luxurious electric-blue faux-fur coat, standing in a minimalist white studio with soft diffused side light. The crossed-arm pose, head tilt, bold red lips, and Hasselblad reference push it toward a real Vogue editorial rather than a flat mock-up.",
+  "howTo": [
+   {
+    "title": "Keep the studio empty",
+    "body": "Minimalist white ground is the whole point; clutter kills the luxury feel."
+   },
+   {
+    "title": "Use side light",
+    "body": "Soft diffused side light creates the ethereal glow on the fur."
+   },
+   {
+    "title": "Hold the pose",
+    "body": "Arms crossed, head tilted — confident, not stiff."
+   },
+   {
+    "title": "Add the wind",
+    "body": "A subtle fur movement sells the material better than a static shot."
+   }
+  ],
+  "faq": [
+   {
+    "q": "Why \"Hasselblad\"?",
+    "a": "It signals medium-format fashion rendering — sharp skin, gentle falloff — to the model."
+   },
+   {
+    "q": "Can I change the coat color?",
+    "a": "Yes; the prompt is color-agnostic apart from calling out electric blue."
+   },
+   {
+    "q": "Best platform?",
+    "a": "Nano Banana Pro handles fabric realism; Midjourney gives more editorial mood."
+   }
+  ],
+  "variations": [
+   {
+    "label": "Crimson version",
+    "prompt": "Same pose but a crimson faux-fur coat and cooler studio light."
+   },
+   {
+    "label": "Outdoor couture",
+    "prompt": "Move to a marble terrace, golden hour, coat catching the wind."
+   }
+  ]
+ },
+ "artistic-red-blue-double-exposure-effect-nano-banana-pro": {
+  "intro": "A tasteful double-exposure technique: the base pose stays in cyan while an offset clone is colored red, creating a clean ghosting effect. The brief preserves skin texture, tattoos, and contrast, and works best when the two poses differ only slightly — as if captured a moment apart. It is a controlled art effect, not a messy overlap.",
+  "howTo": [
+   {
+    "title": "Start from one photo",
+    "body": "Upload a clear portrait; the effect clones and recolors it, so likeness is automatic."
+   },
+   {
+    "title": "Shift the clone subtly",
+    "body": "Change only head angle or expression between the two poses — too much movement ruins the ghost."
+   },
+   {
+    "title": "Separate the channels",
+    "body": "Base layer cyan, second layer red, then offset for the double-exposure gap."
+   },
+   {
+    "title": "Protect texture",
+    "body": "Keep skin and tattoo detail visible; don’t let the red wash them out."
+   }
+  ],
+  "faq": [
+   {
+    "q": "Do I need two photos?",
+    "a": "No — the prompt generates the second pose from the first; one upload is enough."
+   },
+   {
+    "q": "Why red and cyan?",
+    "a": "They are complementary, so the ghost reads clearly without muddying."
+   },
+   {
+    "q": "What if it looks like a glitch?",
+    "a": "Reduce the offset and make the pose change smaller."
+   }
+  ],
+  "variations": [
+   {
+    "label": "Gold and teal",
+    "prompt": "Same setup but base in teal, clone in gold for a warmer duotone."
+   },
+   {
+    "label": "Full body",
+    "prompt": "Extend the effect to a full-body dance pose, two frames mid-move."
+   }
+  ]
+ },
+ "nano-banana-pro-dynamic-moments-in-anime-style-japanese-living-room-by-atomu-ai": {
+  "intro": "A fan-art crossover that shows Nano Banana Pro can hold multiple copyrighted characters in one coherent scene: Goku, Naruto, Totoro, and Pikachu share a cozy Tokyo living room with warm lamp light and a polished wooden floor. The 35mm shallow depth of field and soft bloom keep it cinematic rather than flat.",
+  "howTo": [
+   {
+    "title": "Name each character",
+    "body": "List Goku, Naruto, Totoro, Pikachu explicitly with their signature traits."
+   },
+   {
+    "title": "Set the room",
+    "body": "Warm overhead lamp, wooden floor, Tokyo living-room props for cohesion."
+   },
+   {
+    "title": "Use 35mm DOF",
+    "body": "Shallow focus plus bloom on light sources gives the anime-realism look."
+   },
+   {
+    "title": "Mind the IP",
+    "body": "Keep it clearly non-commercial fan work; don’t sell or claim ownership."
+   }
+  ],
+  "faq": [
+   {
+    "q": "Will the characters stay on-model?",
+    "a": "Nano Banana Pro holds them well if you name each one; add \"canon outfit\" to be safe."
+   },
+   {
+    "q": "Can I swap the cast?",
+    "a": "Yes — replace with any four characters you want in the same room."
+   },
+   {
+    "q": "Is this commercial-safe?",
+    "a": "No. Fan art is fine for sharing, not for products or ads."
+   }
+  ],
+  "variations": [
+   {
+    "label": "Festival night",
+    "prompt": "Same cast but street festival, lanterns, fireworks in the window."
+   },
+   {
+    "label": "Cozy winter",
+    "prompt": "Add kotatsu, snow outside, warmer palette and steam from mugs."
+   }
+  ]
+ },
+ "infographic-card-cognition-and-circles": {
+  "intro": "A masterclass in AI infographic control. The brief builds a 9:16 hand-drawn card on paper texture, with red-and-black brush calligraphy for the title, and uses HTML spans to color specific words red — so the AI renders exact typography instead of guessing. The structure is reusable for any two-word thesis.",
+  "howTo": [
+   {
+    "title": "Write the thesis",
+    "body": "Pick two short Chinese phrases that contrast, e.g. a limit vs an opportunity."
+   },
+   {
+    "title": "Color with HTML",
+    "body": "Wrap the key words in <span style=\"color:red\"> so the model prints them red, not blue."
+   },
+   {
+    "title": "Keep brush style",
+    "body": "Specify red-black calligraphy and a paper-texture background for the editorial feel."
+   },
+   {
+    "title": "Limit the sections",
+    "body": "Two to four short sub-sections prevent the card from getting crowded."
+   }
+  ],
+  "faq": [
+   {
+    "q": "Which model?",
+    "a": "Shared for Sora or GPT-4o image; the HTML trick works in both."
+   },
+   {
+    "q": "Why paper texture?",
+    "a": "It makes the red calligraphy look printed, not digital, and adds warmth."
+   },
+   {
+    "q": "Can I do English text?",
+    "a": "Yes, but the red-span trick is most reliable with short CJK headlines."
+   }
+  ],
+  "variations": [
+   {
+    "label": "Dark mode",
+    "prompt": "Same card but near-black paper, red and white calligraphy, neon accent."
+   },
+   {
+    "label": "Three-part",
+    "prompt": "Extend to three contrast pairs in three stacked sections."
+   }
+  ]
+ },
+ "character-concept-sheet": {
+  "intro": "The canonical character-turnaround prompt: front, back, and side views plus close-ups of facial features and accessories, annotated with design notes on a glowing blueprint sheet. Fill the three brackets — character, color1, color2 — and you get a sellable concept sheet ready for a pitch or a style bible.",
+  "howTo": [
+   {
+    "title": "Name the character",
+    "body": "Put the subject into [character]; describe species, age, and silhouette."
+   },
+   {
+    "title": "Pick two trim colors",
+    "body": "color1 is the glowing blueprint trim, color2 the base structure."
+   },
+   {
+    "title": "Keep the ground white",
+    "body": "A clean white background makes the annotations readable."
+   },
+   {
+    "title": "Add notes",
+    "body": "Label components and materials so it reads as a real design sheet."
+   }
+  ],
+  "faq": [
+   {
+    "q": "Which tool?",
+    "a": "Shared generically; Midjourney and Nano Banana Pro both render blueprint sheets."
+   },
+   {
+    "q": "Why blueprint style?",
+    "a": "The glowing trim on white signals \"concept art\", not final illustration."
+   },
+   {
+    "q": "Can I add a backstory?",
+    "a": "Yes — add a short lore line in the annotations block."
+   }
+  ],
+  "variations": [
+   {
+    "label": "Tech sheet",
+    "prompt": "Same layout but holographic trim and a dark grid background."
+   },
+   {
+    "label": "Chibi set",
+    "prompt": "Add a chibi proportion row beneath the main views."
+   }
+  ]
+ },
+ "cinematic-outdoor-advertising-scene-modern-city-plaza-dusk": {
+  "intro": "A believable outdoor-ad mock-up: a massive premium headphone installation on a pedestal, with your uploaded portrait as the brand face on the packaging and earcup display. Real passers-by provide scale, and the dusk city backdrop sells the \"flagship launch\" mood. Strong for pitch decks and plausible fake campaigns.",
+  "howTo": [
+   {
+    "title": "Upload a clean portrait",
+    "body": "Your face becomes the brand hero on the product; use a high-res front shot."
+   },
+   {
+    "title": "Keep the scale cue",
+    "body": "Leave the walking people in; they make the installation feel realistically oversized."
+   },
+   {
+    "title": "Lock dusk light",
+    "body": "Soft ambient city lighting at dusk reads premium without harsh shadows."
+   },
+   {
+    "title": "Specify the product",
+    "body": "Name the product category and materials so the render stays on-brief."
+   }
+  ],
+  "faq": [
+   {
+    "q": "Is this a real ad?",
+    "a": "It is a fictional mock-up from your photo; label it clearly if shared publicly."
+   },
+   {
+    "q": "Which model?",
+    "a": "Built for Google Gemini Nano Banana with an image-to-image upload."
+   },
+   {
+    "q": "How do I change the product?",
+    "a": "Swap the product name and material; keep the plaza and dusk."
+   }
+  ],
+  "variations": [
+   {
+    "label": "Daytime launch",
+    "prompt": "Same scene but bright midday, glass towers, busier crowd."
+   },
+   {
+    "label": "Luxury watch",
+    "prompt": "Replace headphones with a giant watch on the pedestal."
+   }
+  ]
+ },
+ "costume-style-sticker-pack": {
+  "intro": "A complete sticker-sheet generator: upload one photo and get a pack of stickers across casual, traditional, luxury, streetwear, and fantasy outfits, with clean cut-out edges and bold outlines. Likeness and proportions stay consistent across every sticker, so it works for messaging apps, prints, or merch.",
+  "howTo": [
+   {
+    "title": "Use one clear selfie",
+    "body": "Front, even light; the pack preserves your face across all styles."
+   },
+   {
+    "title": "Define the lanes",
+    "body": "Keep the five style lanes; they give variety without losing likeness."
+   },
+   {
+    "title": "Bold the outline",
+    "body": "Thick outlines and soft shadows are what make it read as stickers."
+   },
+   {
+    "title": "Export cut-outs",
+    "body": "Render on transparent or white so each sticker can be lifted."
+   }
+  ],
+  "faq": [
+   {
+    "q": "Why do some stickers drift?",
+    "a": "Low source quality or too-wild pose changes; keep the base pose steady."
+   },
+   {
+    "q": "Which model?",
+    "a": "Made for Nano Banana Pro image-to-image from a photo."
+   },
+   {
+    "q": "Can I sell these?",
+    "a": "As long as the face is yours or licensed; the style itself is generic."
+   }
+  ],
+  "variations": [
+   {
+    "label": "Holiday pack",
+    "prompt": "Same face but festive lanes: santa, new-year, halloween, spring."
+   },
+   {
+    "label": "Pet version",
+    "prompt": "Upload a pet photo instead for an animal sticker pack."
+   }
+  ]
+ },
+ "low-poly-3d-render": {
+  "intro": "The most reusable 3D prompt in the batch: any subject becomes a faceted low-poly diorama in two flat tones, with soft ambient occlusion on a minimalist stage. The clean triangular geometry and visual simplicity make it perfect for icons, game assets, or a coherent low-poly series.",
+  "howTo": [
+   {
+    "title": "Name the subject",
+    "body": "Put any object or character into [subject]; keep it singular for clarity."
+   },
+   {
+    "title": "Choose two tones",
+    "body": "color1 and color2 are flat fills — pick a light and a dark for contrast."
+   },
+   {
+    "title": "Keep it minimal",
+    "body": "A plain stage and soft AO let the facets read as intentional."
+   },
+   {
+    "title": "Avoid detail",
+    "body": "Low-poly means few triangles; don’t ask for textures or gradients."
+   }
+  ],
+  "faq": [
+   {
+    "q": "Which tool?",
+    "a": "Shared generically; Midjourney, Nano Banana Pro, or Tripo all do low-poly."
+   },
+   {
+    "q": "Why only two colors?",
+    "a": "Flat two-tone shading is the signature low-poly look; more colors break it."
+   },
+   {
+    "q": "Can I make it a scene?",
+    "a": "Yes — add a second subject, but keep the palette to two tones."
+   }
+  ],
+  "variations": [
+   {
+    "label": "Pastel set",
+    "prompt": "Same subject but soft pastel color1 and color2 for a cute series."
+   },
+   {
+    "label": "Wireframe",
+    "prompt": "Add thin edge lines so the facets read as a blueprint diorama."
+   }
+  ]
+ },
+ "cinematic-half-body-portrait-couple-star-filled-universe": {
+  "intro": "A romantic cosmic effect that needs only one couple photo: the two silhouettes blend into a star-filled universe, with golden rim light outlining their faces and constellations drifting across the background. The slow cosmic motion blur and ethereal atmosphere make it a high-end anniversary or engagement post.",
+  "howTo": [
+   {
+    "title": "Upload one couple photo",
+    "body": "A clear half-body embrace; the effect merges the silhouettes into stars."
+   },
+   {
+    "title": "Keep the rim light",
+    "body": "Golden edge light on the faces is what separates them from the cosmos."
+   },
+   {
+    "title": "Add constellations",
+    "body": "Drifting stars in the background sell the \"universe\" without clutter."
+   },
+   {
+    "title": "Subtle motion",
+    "body": "A slight cosmic blur adds life; too much hides the couple."
+   }
+  ],
+  "faq": [
+   {
+    "q": "Which tool?",
+    "a": "Shared as a Grok Imagine effect; Nano Banana Pro can replicate it from a photo."
+   },
+   {
+    "q": "Do we need a space photo?",
+    "a": "No — the prompt generates the star field from the portrait silhouette."
+   },
+   {
+    "q": "Best format?",
+    "a": "Square or portrait; the glow works on both."
+   }
+  ],
+  "variations": [
+   {
+    "label": "Aurora night",
+    "prompt": "Same couple but green aurora instead of a star field."
+   },
+   {
+    "label": "Warm sunset cosmos",
+    "prompt": "Shift the rim light to amber and add a nebula glow."
+   }
+  ]
+ },
+ "grok-imagine-fashion-photography": {
+  "intro": "A long, detailed two-shot fashion brief for Grok Imagine: a woman in a red maxi gown seated inside a transparent luxury \"bag\" with a big red bow, plus a second 9:16 studio look. The specificity — pose, neckline, heels, environment — is exactly why Grok returns editorial-grade results instead of stock. It is a template you adapt per garment.",
+  "howTo": [
+   {
+    "title": "Describe garment precisely",
+    "body": "Name neckline, sleeves, length, and color; vague clothing yields generic output."
+   },
+   {
+    "title": "Set the pose",
+    "body": "Give a concrete pose — squatting, hand on knee, chin on hand — so the model commits."
+   },
+   {
+    "title": "Build the environment",
+    "body": "Define studio depth, lighting, and the packaging prop."
+   },
+   {
+    "title": "Make it two shots",
+    "body": "Keep both frames 9:16 so they pair as a carousel."
+   }
+  ],
+  "faq": [
+   {
+    "q": "Why is the prompt so long?",
+    "a": "Length is the point — Grok follows detailed direction far better than a one-liner."
+   },
+   {
+    "q": "Can I change the gown?",
+    "a": "Yes; keep the structure, swap garment, color, and pose."
+   },
+   {
+    "q": "Is it only Grok?",
+    "a": "Tuned for Grok Imagine, but Nano Banana Pro follows the same detail."
+   }
+  ],
+  "variations": [
+   {
+    "label": "Noir gown",
+    "prompt": "Same structure but black gown, spotlight, monochrome studio."
+   },
+   {
+    "label": "Outdoor couture",
+    "prompt": "Move the bag-prop concept to a marble terrace at golden hour."
+   }
+  ]
+ },
+ "capsules-pouring-from-transparent-bottle": {
+  "intro": "A DSLR-grade product poster: small glossy capsules spilling from a transparent medicine bottle onto a wet surface, with strong reflections, water droplets, and a soft elegant background. Swap the two capsule colors and the brand logo to make any supplement, candy, or skincare campaign shot in seconds.",
+  "howTo": [
+   {
+    "title": "Set the colors",
+    "body": "Define COLOR A and COLOR B for the capsule plastic and glass."
+   },
+   {
+    "title": "Drop the brand",
+    "body": "Put BRAND on the capsule and keep the floating 3D icon inside."
+   },
+   {
+    "title": "Keep it wet",
+    "body": "The wet surface and droplets are what sell the product photography."
+   },
+   {
+    "title": "Render square",
+    "body": "Use 1080x1080 / 1:1 so it drops straight into a feed."
+   }
+  ],
+  "faq": [
+   {
+    "q": "Which tool?",
+    "a": "Shared generically; Nano Banana Pro and Midjourney both do glossy product shots."
+   },
+   {
+    "q": "Why a transparent bottle?",
+    "a": "It shows the capsules inside and reads as premium packaging."
+   },
+   {
+    "q": "Can I change the product?",
+    "a": "Yes — pills, gummies, or beads all follow the same layout."
+   }
+  ],
+  "variations": [
+   {
+    "label": "Pastel skincare",
+    "prompt": "Same spill but soft pastel capsules, matte bottle, spa background."
+   },
+   {
+    "label": "Candy pop",
+    "prompt": "Bright multi-color capsules, playful background, sharper pop."
+   }
+  ]
+ },
+ "korean-style-outfit-elegant-casual-fashion-shot": {
+  "intro": "A precise K-fashion brief: a Korean woman in an alluring full-body look under soft overcast daylight — light-blue wide-leg denim, pointed mules, tortoiseshell glasses, leopard clutch, cardigan open at top and bottom. The overcast light and relaxed creases are what keep it from looking like a catalog and give it editorial calm.",
+  "howTo": [
+   {
+    "title": "Lock the wardrobe",
+    "body": "Follow the item list exactly; the mix is what makes it Korean-casual."
+   },
+   {
+    "title": "Use overcast light",
+    "body": "Soft diffuse daylight avoids harsh shadows and keeps skin clean."
+   },
+   {
+    "title": "Keep the pose playful",
+    "body": "Gentle wink, bright smile, hand on cardigan edge — glamour, not stiff."
+   },
+   {
+    "title": "Mind the creases",
+    "body": "Relaxed denim creases add realism; don’t smooth them away."
+   }
+  ],
+  "faq": [
+   {
+    "q": "Which tool?",
+    "a": "Shared as a Grok Imagine base prompt; Nano Banana Pro reproduces it well."
+   },
+   {
+    "q": "Can I change the outfit?",
+    "a": "Yes — keep the \"open cardigan + relaxed denim\" logic and swap colors."
+   },
+   {
+    "q": "Why overcast, not golden hour?",
+    "a": "Overcast gives even light that flatters casual daytime fashion."
+   }
+  ],
+  "variations": [
+   {
+    "label": "City commute",
+    "prompt": "Same look but Seoul street background, candid walking pose."
+   },
+   {
+    "label": "Date night",
+    "prompt": "Shift to a slip dress under the cardigan, warmer light."
+   }
+  ]
+ },
+ "embroidered-depiction": {
+  "intro": "A warm, handcrafted embroidery prompt: any subject rendered as textured threadwork on linen, with earthy two-tone floss and layered stitching for depth. The visible embroidery floss and folk aesthetic make it feel made-by-hand — great for merch, patches, or cozy branding.",
+  "howTo": [
+   {
+    "title": "Name the subject",
+    "body": "Put any object, animal, or word into [subject]; keep it simple for clean stitches."
+   },
+   {
+    "title": "Pick earthy tones",
+    "body": "color1 and color2 should be muted and natural, not neon."
+   },
+   {
+    "title": "Keep the linen",
+    "body": "A linen or canvas base is what sells the handcrafted feel."
+   },
+   {
+    "title": "Show the floss",
+    "body": "Visible thread and stitch direction add the folk personality."
+   }
+  ],
+  "faq": [
+   {
+    "q": "Which tool?",
+    "a": "Shared generically; Midjourney and Nano Banana Pro both do embroidery looks."
+   },
+   {
+    "q": "Why earthy colors?",
+    "a": "They read as traditional textile; bright primaries look like print, not stitch."
+   },
+   {
+    "q": "Can I embroider text?",
+    "a": "Yes — short words or monograms work best at this stitch scale."
+   }
+  ],
+  "variations": [
+   {
+    "label": "Hooped sampler",
+    "prompt": "Same subject inside an embroidery hoop on a wooden table."
+   },
+   {
+    "label": "Bright folk",
+    "prompt": "Keep linen but shift to saturated folk-art colors."
+   }
+  ]
+ },
+ "classic-comics-style-illustration": {
+  "intro": "A punchy superhero-comic recipe: a 2D cartoon subject charging forward in a dynamic pose, bold black outlines, vivid primaries, and expressive motion lines. Inspired by classic comics, it ships with --ar 3:2 and --v 7 flags, so it is a Midjourney prompt out of the box — drop in any subject and action pose.",
+  "howTo": [
+   {
+    "title": "Name the subject",
+    "body": "Put any hero, animal, or object into [subject]; keep it iconic."
+   },
+   {
+    "title": "Give a motion pose",
+    "body": "[dynamic action pose] — running, leaping, punching — drives the energy."
+   },
+   {
+    "title": "Keep bold ink",
+    "body": "Heavy black outlines and primary colors are the comic signature."
+   },
+   {
+    "title": "Use the flags",
+    "body": "--ar 3:2 for a cover crop, --v 7 for the comic model version."
+   }
+  ],
+  "faq": [
+   {
+    "q": "Is this Midjourney only?",
+    "a": "The flags are MJ, but the style ports to Nano Banana Pro if you drop them."
+   },
+   {
+    "q": "Why 3:2?",
+    "a": "A comic-cover crop; 1:1 also works for avatars."
+   },
+   {
+    "q": "How do I avoid a flat look?",
+    "a": "Strong motion lines and an exaggerated perspective add impact."
+   }
+  ],
+  "variations": [
+   {
+    "label": "Villain cover",
+    "prompt": "Same structure but a menacing pose, darker palette, jagged lines."
+   },
+   {
+    "label": "Team shot",
+    "prompt": "Two subjects back-to-back, split primary colors."
+   }
+  ]
  }
 }

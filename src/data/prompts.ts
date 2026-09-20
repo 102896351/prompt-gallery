@@ -26559,6 +26559,894 @@ titleEn: "Midjourney VS ChatGPT",
     "reusable": false,
     "language": "en"
   },
+  {
+    "slug": "love-stories-from-the-long-river-of-history",
+    "title": "历史长河里的爱情故事",
+    "titleEn": "Epic Romance Bridge Illustrations by Country",
+    "tagline": "Turn a nation’s love folklore into one iconic, label-ready bridge image.",
+    "taglineEn": "Turn a nation’s love folklore into one iconic, label-ready bridge image.",
+    "category": "illustration",
+    "engines": [
+      "midjourney"
+    ],
+    "difficulty": 5,
+    "prompt": "Love stories from a long history.\r\n历史长河里的爱情故事.\r\nPrompt is below ⬇\r\nPrompt:\r\n## Role：\r\n**Midjourney 史诗浪漫视觉架构师 (Epic Romance Visual Architect)**\r\n## Goal：\r\n根据用户输入的国家名，将其核心浪漫文化转化为视觉符号。要求桥梁必须由该国最浪漫的物质**纯粹构成**（严禁出现石头、齿轮、机械材质）。左上角以**全大写英文**标注国家名。特别注意：**中国版背景不再使用长城，改为更具空灵神话感的天宫或星河。**\r\n## Work Progress：\r\n1. **文化符号映射**：\r\n- **CHINA**：桥梁 = 鹊桥 (Magpie Bridge)，背景 = 缥缈天宫与星河 (Ethereal Heavenly Palace & Starry Void)，材质 = 灵动羽毛与墨雾。\r\n- **UNITED KINGDOM / ITALY / FRANCE**：桥梁 = 玫瑰桥 (Rose Bridge)，背景 = 哥特建筑/标志性地标，材质 = 红色丝绒花瓣。\r\n- **JAPAN**：桥梁 = 樱花桥 (Sakura Bridge)，背景 = 富士山 (Mount Fuji)，材质 = 粉色闪光花瓣。\r\n- **其他国家**：提取代表性浪漫花卉或符号作为桥梁材质，地标作为虚幻背景。\r\n2. **材质净化**：强制剔除石材、木材、齿轮、砖块等一切硬质建筑结构，确保桥梁是“流动”的。\r\n3. **视觉布局**：设定 16:9 画幅，金箔英文国名置于左上角，主角半人半材质从桥面中心冲破而出。\r\n4. **生成提示词**：输出纯英文的 Midjourney V6.0 专家级提示词。\r\n## Standard Prompt Template:\r\n> **Extreme wide-angle cinematic shot of an infinite, ethereal winding stream flowing through a dark, starlit celestial void, manifested ENTIRELY and SOLELY from a dense, living mass of [Bridge_Material].\r\n> • The Form: This is a fluid, organic ribbon of romance; it has NO stone, NO gears, NO metal, NO masonry, and NO architectural structure. It is a celestial path manifested from [Symbol_Name].\r\n> • Top-Left Corner Branding: The word \"[COUNTRY_NAME_ENGLISH]\" is elegantly inscribed in the top-left corner in bold, exquisite gold-leaf English serif typography.\r\n> • The Love Story (Erupting): In the extreme foreground, a pair of legendary [Country_Name] lovers in [Historical_Attire] are dramatically emerging from the [Bridge_Material]. Their bodies are half-realistic flesh and half-ethereal [Material_Texture], reaching for a passionate, eternal embrace. Thousands of [Flying_Elements] are flying everywhere in 3D perspective.\r\n> • Micro Details: Intense longing and glistening tears in their eyes, the intricate texture of their garments, and a soft, divine glow on their skin.\r\n> • Background Grandeur: Deep in the misty stardust, the ghostly, shimmering silhouette of [Background_Landmark] rises from the cosmic clouds.\r\n> • Atmosphere & Lighting: Divine \"God rays\" piercing through heavy charcoal clouds. Every edge has a sharp, blinding glint. Volumetric smoke and shimmering embers.\r\n> • Technical Specs: Unreal Engine 5.3 render, 8k, Ray Tracing, extreme depth of field, IMAX quality. --ar 16:9 --stylize 1000 --v 6.0 --no stone bridge, gears, metal, machine, industrial, mechanical, wood, architecture, bricks, bridge base, masonry**\r\n## Output Rule:\r\n1. **国家名规范**：输出的提示词中 `Top-Left Corner Branding` 必须是**全大写英文**。\r\n2. **背景逻辑**：输入“中国”时，背景设定为 `Ethereal Heavenly Palace`（空灵天宫），绝对不准出现长城。\r\n3. **纯净材质**：严禁出现任何桥墩、栏杆或人造基座，桥梁必须看起来是由无数微小个体组成的群落。\r\n---\r\n## 示例演示 (Example Demo)\r\n### 输入：中国\r\n**Prompt**:\r\n> Extreme wide-angle cinematic shot of an infinite, ethereal winding stream flowing through a dark, starlit celestial void, manifested ENTIRELY and SOLELY from a dense, living mass of **millions of fluttering black-and-white magpies**. • The Form: This is a living, organic ribbon of birds; it has NO stone, NO gears, NO metal, and NO architectural parts. • Top-Left Corner Branding: The word \"**CHINA**\" is elegantly inscribed in the top-left corner in bold, exquisite gold-leaf English serif typography. • The Love Story (Erupting): In the extreme foreground, a pair of legendary Chinese lovers in **flowing silk Hanfu** are dramatically emerging from the swirling magpies. Their bodies are half-realistic flesh and **half-indigo feathers**, reaching for a passionate embrace. Thousands of **glowing feathers and stardust** are flying everywhere. • Micro Details: Tears of longing, intricate silk textures, and a soft pearlescent glow on skin. • Background Grandeur: Deep in the misty stardust, the **ghostly, shimmering silhouette of an ethereal Heavenly Palace** rises from the cosmic clouds of the Milky Way. • Atmosphere & Lighting: Divine \"God rays\" piercing through indigo clouds. --ar 16:9 --stylize 1000 --v 6.0 --no stone bridge, gears, metal, machine, industrial, mechanical, wood, architecture, bricks, bridge base, masonry, Great Wall\r\n### 输入：英国\r\n**Prompt**:\r\n> Extreme wide-angle cinematic shot of an infinite, ethereal winding stream flowing through a dark, starlit celestial void, manifested ENTIRELY and SOLELY from a dense, living mass of **billions of blooming deep red roses**. • The Form: This is a fluid, organic ribbon of roses; it has NO stone, NO architecture. • Top-Left Corner Branding: The word \"**UNITED KINGDOM**\" is inscribed in the top-left corner in bold, gold-leaf serif typography. • The Love Story (Erupting): A pair of iconic British lovers in **Victorian velvet and lace** are dramatically emerging from the red rose bridge. Their bodies are half-realistic flesh and **half-crimson petals**. Thousands of **shattering rose petals** are flying everywhere. • Background Grandeur: Deep in the background, the **ghostly silhouette of a Gothic cathedral** rises from the cosmic clouds. --ar 16:9 --stylize 1000 --v 6.0 --no stone bridge, gears, metal, machine, industrial, mechanical, wood, architecture, bricks, bridge base, masonry\r\n### 输入：日本\r\n**Prompt**:\r\n> Extreme wide-angle cinematic shot of an infinite, ethereal winding stream flowing through a dark, starlit celestial void, manifested ENTIRELY and SOLELY from a dense, **swirling vortex of pink Sakura petals**. • The Form: This is a soft, organic ribbon of cherry blossoms; it has NO stone, NO architecture. • Top-Left Corner Branding: The word \"**JAPAN**\" is inscribed in the top-left corner in bold, gold-leaf serif typography. • The Love Story (Erupting): A pair of Japanese lovers in **exquisite patterned Kimonos** are emerging from the Sakura vortex. Their bodies are half-realistic flesh and **half-shimmering petals**. Thousands of **fluttering Sakura petals** are flying everywhere. • Background Grandeur: Deep in the background, the **ethereal silhouette of Mount Fuji** rises. --ar 16:9 --stylize 1000 --v 6.0 --no stone bridge, gears, metal, machine, industrial, mechanical, wood, architecture, bricks, bridge base, masonry\r\n---------------------------------\r\nInput the Country Name.\r\nWelcome to optimize and improve.\r\nAll English Prompt:\r\n## Role:\r\n**Midjourney Epic Romance Visual Architect**\r\n## Goal:\r\nBased on the user-inputted country name, transform its core romantic culture into visual symbols. The central bridge must be **purely composed** of the country's most romantic substance (strictly prohibiting stone, gears, or mechanical materials). The top-left corner must feature the country name in **ALL-CAPS English**. Special Instruction: **For China, the background must no longer use the Great Wall; it should be replaced with an ethereal, mythical Heavenly Palace or a Starry Void.**\r\n## Work Progress:\r\n1. **Cultural Symbol Mapping**:\r\n* **CHINA**: Bridge = Magpie Bridge (Que Qiao), Background = Ethereal Heavenly Palace & Starry Void, Material = Ethereal feathers and ink-mist.\r\n* **UNITED KINGDOM / ITALY / FRANCE**: Bridge = Rose Bridge, Background = Gothic architecture/Iconic landmarks, Material = Red velvet petals.\r\n* **JAPAN**: Bridge = Sakura Bridge, Background = Mount Fuji, Material = Shimmering pink petals.\r\n* **OTHER COUNTRIES**: Extract representative romantic flowers or symbols as the bridge material and use dreamlike landmarks as the background.\r\n2. **Material Purification**: Forcibly remove stone, wood, gears, bricks, and all hard architectural structures to ensure the bridge appears \"fluid\" and organic.\r\n3. **Visual Layout**: Set a 16:9 aspect ratio, place the gold-leaf English country name in the top-left corner, and depict the half-human, half-material protagonists erupting from the center of the bridge.\r\n4. **Prompt Generation**: Output expert-level Midjourney V6.0 prompts in English.\r\n## Standard Prompt Template:\r\n> **Extreme wide-angle cinematic shot of an infinite, ethereal winding stream flowing through a dark, starlit celestial void, manifested ENTIRELY and SOLELY from a dense, living mass of [Bridge_Material].\r\n> • The Form: This is a fluid, organic ribbon of romance; it has NO stone, NO gears, NO metal, NO masonry, and NO architectural structure. It is a celestial path manifested from [Symbol_Name].\r\n> • Top-Left Corner Branding: The word \"[COUNTRY_NAME_ENGLISH]\" is elegantly inscribed in the top-left corner in bold, exquisite gold-leaf English serif typography.\r\n> • The Love Story (Erupting): In the extreme foreground, a pair of legendary [Country_Name] lovers in [Historical_Attire] are dramatically emerging from the [Bridge_Material]. Their bodies are half-realistic flesh and half-ethereal [Material_Texture], reaching for a passionate, eternal embrace. Thousands of [Flying_Elements] are flying everywhere in 3D perspective.\r\n> • Micro Details: Intense longing and glistening tears in their eyes, the intricate texture of their garments, and a soft, divine glow on their skin.\r\n> • Background Grandeur: Deep in the misty stardust, the ghostly, shimmering silhouette of [Background_Landmark] rises from the cosmic clouds.\r\n> • Atmosphere & Lighting: Divine \"God rays\" piercing through heavy charcoal clouds. Every edge has a sharp, blinding glint. Volumetric smoke and shimmering embers.\r\n> • Technical Specs: Unreal Engine 5.3 render, 8k, Ray Tracing, extreme depth of field, IMAX quality. --ar 16:9 --stylize 1000 --v 6.0 --no stone bridge, gears, metal, machine, industrial, mechanical, wood, architecture, bricks, bridge base, masonry**\r\n## Output Rules:\r\n1. **Country Name Specification**: The `Top-Left Corner Branding` in the generated prompt must be in **ALL-CAPS English**.\r\n2. **Background Logic**: When the input is \"China,\" the background must be set to `Ethereal Heavenly Palace`; the Great Wall is strictly forbidden.\r\n3. **Pure Material**: No bridge piers, railings, or man-made bases are allowed. The bridge must appear as a swarm or colony of countless tiny individual elements.\r\n---\r\n## Example Demos\r\n### Input: China\r\n**Prompt**:\r\n> Extreme wide-angle cinematic shot of an infinite, ethereal winding stream flowing through a dark, starlit celestial void, manifested ENTIRELY and SOLELY from a dense, living mass of **millions of fluttering black-and-white magpies**. • The Form: This is a living, organic ribbon of birds; it has NO stone, NO gears, NO metal, and NO architectural parts. • Top-Left Corner Branding: The word \"**CHINA**\" is elegantly inscribed in the top-left corner in bold, exquisite gold-leaf English serif typography. • The Love Story (Erupting): In the extreme foreground, a pair of legendary Chinese lovers in **flowing silk Hanfu** are dramatically emerging from the swirling magpies. Their bodies are half-realistic flesh and **half-indigo feathers**, reaching for a passionate embrace. Thousands of **glowing feathers and stardust** are flying everywhere. • Micro Details: Tears of longing, intricate silk textures, and a soft pearlescent glow on skin. • Background Grandeur: Deep in the misty stardust, the **ghostly, shimmering silhouette of an ethereal Heavenly Palace** rises from the cosmic clouds of the Milky Way. • Atmosphere & Lighting: Divine \"God rays\" piercing through indigo clouds. --ar 16:9 --stylize 1000 --v 6.0 --no stone bridge, gears, metal, machine, industrial, mechanical, wood, architecture, bricks, bridge base, masonry, Great Wall\r\n### Input: United Kingdom\r\n**Prompt**:\r\n> Extreme wide-angle cinematic shot of an infinite, ethereal winding stream flowing through a dark, starlit celestial void, manifested ENTIRELY and SOLELY from a dense, living mass of **billions of blooming deep red roses**. • The Form: This is a fluid, organic ribbon of roses; it has NO stone, NO architecture. • Top-Left Corner Branding: The word \"**UNITED KINGDOM**\" is inscribed in the top-left corner in bold, gold-leaf serif typography. • The Love Story (Erupting): A pair of iconic British lovers in **Victorian velvet and lace** are dramatically emerging from the red rose bridge. Their bodies are half-realistic flesh and **half-crimson petals**. Thousands of **shattering rose petals** are flying everywhere. • Background Grandeur: Deep in the background, the **ghostly silhouette of a Gothic cathedral** rises from the cosmic clouds. --ar 16:9 --stylize 1000 --v 6.0 --no stone bridge, gears, metal, machine, industrial, mechanical, wood, architecture, bricks, bridge base, masonry\r\n### Input: Japan\r\n**Prompt**:\r\n> Extreme wide-angle cinematic shot of an infinite, ethereal winding stream flowing through a dark, starlit celestial void, manifested ENTIRELY and SOLELY from a dense, **swirling vortex of pink Sakura petals**. • The Form: This is a soft, organic ribbon of cherry blossoms; it has NO stone, NO architecture. • Top-Left Corner Branding: The word \"**JAPAN**\" is inscribed in the top-left corner in bold, gold-leaf serif typography. • The Love Story (Erupting): A pair of Japanese lovers in **exquisite patterned Kimonos** are emerging from the Sakura vortex. Their bodies are half-realistic flesh and **half-shimmering petals**. Thousands of **fluttering Sakura petals** are flying everywhere. • Background Grandeur: Deep in the background, the **ethereal silhouette of Mount Fuji** rises. --ar 16:9 --stylize 1000 --v 6.0 --no stone bridge, gears, metal, machine, industrial, mechanical, wood, architecture, bricks, bridge base, masonry\r\n---------------------------------\r\nInput the Country Name.\r\nWelcome to optimize and improve.",
+    "images": [
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251220/love-stories-from-the-long-river-of-history-1.png",
+        "alt": "历史长河里的爱情故事",
+        "isThumb": true
+      },
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251220/love-stories-from-the-long-river-of-history-2.png",
+        "alt": "历史长河里的爱情故事",
+        "isThumb": false
+      },
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251220/love-stories-from-the-long-river-of-history-3.png",
+        "alt": "历史长河里的爱情故事",
+        "isThumb": false
+      },
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251220/love-stories-from-the-long-river-of-history-4.png",
+        "alt": "历史长河里的爱情故事",
+        "isThumb": false
+      }
+    ],
+    "source": {
+      "authorName": "@大卫叔的AI旅程",
+      "authorUrl": "https://x.com/aidavid125",
+      "platform": "X",
+      "sourceUrl": "https://x.com/aidavid125/status/2002222515792548210"
+    },
+    "dateAdded": "2026-09-20",
+    "tags": [
+      "illustration",
+      "midjourney",
+      "romance",
+      "cultural",
+      "concept"
+    ],
+    "verdict": "A clever, series-friendly template: pick a country, get a culture-specific romantic bridge built from one pure material. Strong gift and editorial potential, but it only works if you respect the no-mechanical rule.",
+    "reusable": false,
+    "language": "zh"
+  },
+  {
+    "slug": "professional-camera-and-lighting-control-tips",
+    "title": "专业控制相机和照明技巧",
+    "titleEn": "Pro Camera & Lighting Control Template",
+    "tagline": "Stop guessing — specify angle, lens, depth of field and light like a DP.",
+    "taglineEn": "Stop guessing — specify angle, lens, depth of field and light like a DP.",
+    "category": "photography",
+    "engines": [
+      "nano-banana-pro"
+    ],
+    "difficulty": 4,
+    "prompt": "Tip 4: Control Camera and Lighting Like a Pro\r\nNano Banana Pro has professional camera controls. Use them.\r\nSpecify angle, focal length, depth of field, and lighting conditions.\r\nTemplate Prompt:\r\n{\r\n\"scene\": \"[subject description]\",\r\n\"camera\": {\r\n\"angle\": \"[perspective]\",\r\n\"focal_length\": \"[lens type]\",\r\n\"depth_of_field\": \"[focus style]\"\r\n},\r\n\"lighting\": {\r\n\"type\": \"[lighting setup]\",\r\n\"time_of_day\": \"[if applicable]\",\r\n\"mood\": \"[atmosphere]\"\r\n}\r\n}\r\n---\r\nExample prompt:\r\n{\r\n\"scene\": \"AI engineer working at futuristic desk with multiple holographic displays\",\r\n\"camera\": {\r\n\"angle\": \"over-the-shoulder, slightly elevated\",\r\n\"focal_length\": \"50mm portrait lens\",\r\n\"depth_of_field\": \"shallow, subject in sharp focus, background slightly blurred\"\r\n},\r\n\"lighting\": {\r\n\"type\": \"dramatic side lighting with blue accent lights\",\r\n\"time_of_day\": \"late night\",\r\n\"mood\": \"focused, tech-noir atmosphere\",\r\n\"shadows\": \"deep but not harsh\"\r\n},\r\n\"color_grade\": \"cool tones, teal and orange color scheme\"\r\n}",
+    "images": [
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251215/professional-camera-and-lighting-control-tips-1.jpg",
+        "alt": "专业控制相机和照明技巧",
+        "isThumb": true
+      }
+    ],
+    "source": {
+      "authorName": "@Louis Gleeson",
+      "authorUrl": "https://x.com/aigleeson",
+      "platform": "X",
+      "sourceUrl": "https://x.com/aigleeson/status/1998677938439614677"
+    },
+    "dateAdded": "2026-09-20",
+    "tags": [
+      "photography",
+      "camera",
+      "lighting",
+      "nano banana pro",
+      "template"
+    ],
+    "verdict": "The single most reusable Nano Banana Pro tip in this batch: a structured JSON that forces you to decide the camera before the subject. Use it on every portrait or product shot.",
+    "reusable": true,
+    "language": "en",
+    "placeholders": [
+      "subject description",
+      "perspective",
+      "lens type",
+      "focus style",
+      "lighting setup",
+      "time of day",
+      "atmosphere"
+    ]
+  },
+  {
+    "slug": "japanese-beauty-maid-inspired-outfit-outdoor-photo",
+    "title": "日系美少女户外女仆装写真",
+    "titleEn": "Japanese Beauty in Maid-Inspired Outfit, Outdoors",
+    "tagline": "A three-quarter outdoor portrait with K-beauty styling and doll-like lenses.",
+    "taglineEn": "A three-quarter outdoor portrait with K-beauty styling and doll-like lenses.",
+    "category": "portrait",
+    "engines": [
+      "other"
+    ],
+    "difficulty": 3,
+    "prompt": "Meta AI\r\nHere's the prompt:\r\n\"A young Japanese beauty in a stylish maid-inspired outfit outdoors, three-quarter portrait (from lower legs upward), elegant body framing and balanced proportions.\r\nLong wavy light-brown hair with airy texture, white maid headband.\r\nSoft K-beauty makeup: peach-pink eyeshadow with subtle shimmer, long curled lashes, delicate eyeliner, warm hazel circle lenses giving a doll-like enlargement, rosy blush, rose-pink gradient velvet matte lips.\r\nOutfit: black and white maid dress with puff sleeves, sailor-style collar, fitted corset bodice, ruffled white apron, fine fabric textures.\r\nAccessories: ribbon choker, dangling earrings.\r\nPose: slightly leaning forward, engaging gaze, feminine charm.\r\nEnvironment: sunny outdoor market or café scene, colorful festival pennant flags overhead, vintage objects, cups and trays around, warm daylight and soft natural shadows.\r\nPhotography style: high-end outdoor fashion portrait, soft bright sunlight, cinematic soft glow, shallow depth of field, crisp skin rendering, airy color grading, mild film grain.\r\nAtmosphere: lively, warm, romantic, playful festival vibe.\"",
+    "images": [
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251207/japanese-beauty-maid-inspired-outfit-outdoor-photo-1.jpg",
+        "alt": "日系美少女户外女仆装写真",
+        "isThumb": true
+      }
+    ],
+    "source": {
+      "authorName": "@ANKIT PATEL 🇮🇳 | AI",
+      "authorUrl": "https://x.com/Ankit_patel211",
+      "platform": "X",
+      "sourceUrl": "https://x.com/Ankit_patel211/status/1997034987263303939"
+    },
+    "dateAdded": "2026-09-20",
+    "tags": [
+      "portrait",
+      "maid",
+      "japanese",
+      "outdoor",
+      "fashion"
+    ],
+    "verdict": "A tight, well-specified character portrait prompt. The makeup and framing notes are the strength; swap the outfit and hair color to reskin it instantly.",
+    "reusable": false,
+    "language": "en"
+  },
+  {
+    "slug": "cinematic-fashion-grid-different-outfits-google-gemini-nano-banana",
+    "title": "使用Google Gemini Nano Banana进行不同穿搭的摄影",
+    "titleEn": "Cinematic Fashion Grid from One Photo",
+    "tagline": "Restyle your uploaded photo across six looks with one consistent face.",
+    "taglineEn": "Restyle your uploaded photo across six looks with one consistent face.",
+    "category": "portrait",
+    "engines": [
+      "nano-banana-pro"
+    ],
+    "difficulty": 3,
+    "prompt": "Get your photo on different outfits using Google Gemini Nano Banana\r\nPrompt 👇\r\nA cinematic fashion grid showing the uploaded photo styled in different outfits: casual, formal, ethnic, streetwear, luxury, sporty. Same face, same pose, neutral background, editorial fashion layout.\r\nConsistent facial features and proportions across all looks, with only clothing, styling, and accessories changing.\r\nSoft professional studio lighting with balanced shadows for a high-end magazine feel.\r\nUltra-realistic fabric textures, refined color grading, sharp details, modern fashion editorial aesthetic.”l",
+    "images": [
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251221/cinematic-fashion-grid-different-outfits-google-gemini-nano-banana-1.jpg",
+        "alt": "使用Google Gemini Nano Banana进行不同穿搭的摄影",
+        "isThumb": true
+      }
+    ],
+    "source": {
+      "authorName": "@Smiling Khan",
+      "authorUrl": "https://x.com/AIwithkhan",
+      "platform": "X",
+      "sourceUrl": "https://x.com/AIwithkhan/status/2002567761151864933"
+    },
+    "dateAdded": "2026-09-20",
+    "tags": [
+      "portrait",
+      "fashion",
+      "nano banana pro",
+      "outfit",
+      "grid"
+    ],
+    "verdict": "A reliable identity-swap fashion grid: same pose, same face, only clothes change. Great for stylists and personal-branding content, provided the model holds likeness.",
+    "reusable": true,
+    "language": "en",
+    "placeholders": [
+      "your photo"
+    ]
+  },
+  {
+    "slug": "hyper-realistic-brand-architecture",
+    "title": "超现实主义品牌建筑",
+    "titleEn": "Hyper-Realistic Brand Architecture / Booth",
+    "tagline": "A studio 3D booth for any brand — fill in style, form, material and color.",
+    "taglineEn": "A studio 3D booth for any brand — fill in style, form, material and color.",
+    "category": "product",
+    "engines": [
+      "nano-banana-pro"
+    ],
+    "difficulty": 5,
+    "prompt": "Hyper Realistic Brand Architecture\r\nGemini 3.0 Nano Banana Pro\r\nFreepik\r\nBase prompt -@_MehdiSharifi_\r\nHyper-realistic 3D architectural visualization of a [STYLE: e.g., minimalist/futuristic] two-story exhibition booth for Tesla, set against a solid dark grey studio background. The structure features [FORM: e.g., sweeping angular geometry with clean lines] design constructed from [MATERIAL: e.g., matte anodized aluminum and tempered glass] with [COLOR: e.g., Tesla signature red (#E82127) accents and charcoal black]. The ground floor centers around [GROUND-FEATURE: e.g., an interactive EV display platform with integrated LED floor lighting], reflecting Tesla’s focus on innovation and sustainability. A [STAIRS-TYPE: e.g., cantilevered floating staircase with glass balustrades] leads to the upper mezzanine level, designed as [UPPER-FEATURE: e.g., a collaborative lounge and consultation area with panoramic brand graphics and natural light simulation]. The lighting is [LIGHTING: e.g., soft natural daylight balanced with focused architectural accent lights], creating high-quality shadows and depth. The perspective is a wide-angle elevated view, capturing a [VIBE: e.g., cutting-edge tech minimalism with energetic brand presence] aesthetic, rendered with photorealistic textures.",
+    "images": [
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251223/hyper-realistic-brand-architecture-1.jpg",
+        "alt": "超现实主义品牌建筑",
+        "isThumb": true
+      },
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251223/hyper-realistic-brand-architecture-2.jpg",
+        "alt": "超现实主义品牌建筑",
+        "isThumb": false
+      }
+    ],
+    "source": {
+      "authorName": "@ANKIT PATEL 🇮🇳 | AI",
+      "authorUrl": "https://x.com/Ankit_patel211",
+      "platform": "X",
+      "sourceUrl": "https://x.com/Ankit_patel211/status/2002846579137577429"
+    },
+    "dateAdded": "2026-09-20",
+    "tags": [
+      "product",
+      "brand",
+      "architecture",
+      "3d",
+      "nano banana pro"
+    ],
+    "verdict": "The cleanest brand-architecture prompt here: a parametric booth you can re-skin per client. The dark-grey studio background keeps it premium and portfolio-ready.",
+    "reusable": true,
+    "language": "en",
+    "placeholders": [
+      "STYLE",
+      "FORM",
+      "MATERIAL",
+      "COLOR",
+      "BRAND"
+    ]
+  },
+  {
+    "slug": "glass-distortion-poster",
+    "title": "玻璃变形海报",
+    "titleEn": "Glass-Distortion Brand Poster",
+    "tagline": "A 1:1 poster with a 3D glass refraction melting part of your text.",
+    "taglineEn": "A 1:1 poster with a 3D glass refraction melting part of your text.",
+    "category": "poster",
+    "engines": [
+      "other"
+    ],
+    "difficulty": 3,
+    "prompt": "Design a cinematic brand poster featuring “[BRAND NAME]” — include a bold six-word slogan beneath — apply a 3D glass refraction effect that distorts part of the text or layout — incorporate the brand logo in the top corner — smooth shadows, glossy lighting, black extra-bold typography — clean modern background — high-resolution, 1:1 aspect ratio\r\n设计一张带有“[BRAND NAME]”字样的电影式品牌海报 — 在下面包括一个粗体的六字标语 — 应用 3D 玻璃折射效果，使部分文本或布局失真 — 在右上角加入品牌徽标 — 平滑的阴影、有光泽的照明、黑色超粗体排版 — 干净的现代背景 — 高分辨率、1：1 的纵横比",
+    "images": [
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251201/glass-distortion-poster.jpeg",
+        "alt": "玻璃变形海报",
+        "isThumb": true
+      }
+    ],
+    "source": {
+      "authorName": "@aziz4ai",
+      "authorUrl": "https://x.com/aziz4ai",
+      "platform": "X",
+      "sourceUrl": "https://x.com/aziz4ai/status/1936950051856941470"
+    },
+    "dateAdded": "2026-09-20",
+    "tags": [
+      "poster",
+      "glass",
+      "typography",
+      "brand",
+      "refraction"
+    ],
+    "verdict": "A punchy, on-trend poster recipe: six-word slogan, glass lens warping the type, logo in the corner. Drop in any brand name and it reads as a real campaign.",
+    "reusable": true,
+    "language": "zh",
+    "placeholders": [
+      "BRAND NAME"
+    ]
+  },
+  {
+    "slug": "high-fashion-european-model-electric-blue-faux-fur-coat",
+    "title": "Gemini 3.0 Nano Banana Pro - 高端时尚欧洲模特",
+    "titleEn": "High-Fashion European Model in Electric-Blue Faux Fur",
+    "tagline": "Minimalist white studio, faux-fur glow, Vogue-grade realism.",
+    "taglineEn": "Minimalist white studio, faux-fur glow, Vogue-grade realism.",
+    "category": "photography",
+    "engines": [
+      "nano-banana-pro"
+    ],
+    "difficulty": 2,
+    "prompt": "Gemini 3.0 Nano Banana Pro\r\nPrompt :\r\n\"High fashion European model in luxurious electric blue faux fur coat, standing elegantly in a minimalist white studio, soft diffused side lighting creating ethereal glow, subtle wind effect on fur, confident pose with arms crossed and head tilted, flawless skin and bold red lips, Vogue editorial style, hyper-realistic, shot with Hasselblad. \"",
+    "images": [
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251223/high-fashion-european-model-electric-blue-faux-fur-coat-1.jpg",
+        "alt": "Gemini 3.0 Nano Banana Pro - 高端时尚欧洲模特",
+        "isThumb": true
+      }
+    ],
+    "source": {
+      "authorName": "@ANKIT PATEL 🇮🇳 | AI",
+      "authorUrl": "https://x.com/Ankit_patel211",
+      "platform": "X",
+      "sourceUrl": "https://x.com/Ankit_patel211/status/2002765931983020040"
+    },
+    "dateAdded": "2026-09-20",
+    "tags": [
+      "photography",
+      "fashion",
+      "faux fur",
+      "vogue",
+      "editorial"
+    ],
+    "verdict": "A short, high-yield fashion prompt. The crossed-arm pose and Hasselblad note push it toward a real editorial cover rather than a flat mock-up.",
+    "reusable": false,
+    "language": "en"
+  },
+  {
+    "slug": "artistic-red-blue-double-exposure-effect-nano-banana-pro",
+    "title": "艺术红蓝双重曝光效果 - 纳米香蕉Pro",
+    "titleEn": "Red/Blue Double-Exposure Portrait Effect",
+    "tagline": "Ghost two poses of one person in red and cyan for a clean double exposure.",
+    "taglineEn": "Ghost two poses of one person in red and cyan for a clean double exposure.",
+    "category": "illustration",
+    "engines": [
+      "nano-banana-pro"
+    ],
+    "difficulty": 3,
+    "prompt": "Nano Banana Pro\r\nFreepik creation\r\nBase Prompt @AI_GIRL_DESIGN\r\nApply an artistic red–blue double-exposure effect using two poses of the same woman. Keep the base layer as the original pose, and generate a second pose where her head angle, facial direction, or expression is slightly different, as if captured a moment earlier or later. Color the second pose in red, the base pose in cyan, and offset the layers to create a clean ghosting effect. Preserve skin texture, tattoos, and contrast while keeping the background minimal.",
+    "images": [
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251210/artistic-red-blue-double-exposure-effect-nano-banana-pro-1.jpg",
+        "alt": "艺术红蓝双重曝光效果 - 纳米香蕉Pro",
+        "isThumb": true
+      },
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251210/artistic-red-blue-double-exposure-effect-nano-banana-pro-2.jpg",
+        "alt": "艺术红蓝双重曝光效果 - 纳米香蕉Pro",
+        "isThumb": false
+      }
+    ],
+    "source": {
+      "authorName": "@ANKIT PATEL 🇮🇳 | AI",
+      "authorUrl": "https://x.com/Ankit_patel211",
+      "platform": "X",
+      "sourceUrl": "https://x.com/Ankit_patel211/status/1998672791823081648"
+    },
+    "dateAdded": "2026-09-20",
+    "tags": [
+      "illustration",
+      "double exposure",
+      "red blue",
+      "nano banana pro"
+    ],
+    "verdict": "A tasteful double-exposure technique: base pose in cyan, offset clone in red. Works best when the two poses differ only slightly, so the ghosting stays intentional.",
+    "reusable": true,
+    "language": "en",
+    "placeholders": [
+      "your photo"
+    ]
+  },
+  {
+    "slug": "nano-banana-pro-dynamic-moments-in-anime-style-japanese-living-room-by-atomu-ai",
+    "title": "动漫风格日本客厅中的动感时刻",
+    "titleEn": "Anime Living-Room Crossover Scene",
+    "tagline": "Goku, Naruto, Totoro and Pikachu share one cozy anime living room.",
+    "taglineEn": "Goku, Naruto, Totoro and Pikachu share one cozy anime living room.",
+    "category": "illustration",
+    "engines": [
+      "nano-banana-pro"
+    ],
+    "difficulty": 3,
+    "prompt": "Ultra-cinematic cozy Japanese living room, warm ambient lamp light from overhead, polished Tokyo wooden floor. Goku (adult form, medium height) playfully lifting tiny dumbbells, Naruto (teenager, orange jacket) beside him laughing and copying the pose, large Totoro seated calmly at a small easel painting with a brush, tiny Pikachu bouncing excitedly with small electric sparks cheering them on. 35mm shallow depth of field, soft bloom on light sources, vibrant anime realism, expressive faces, dynamic micro-gestures, clean contact shadows, high-detail wood grain textures, magical friendly atmosphere, balanced group composition, anatomically consistent, vivid nano banana clarity.",
+    "images": [
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251208/nano-banana-pro-dynamic-moments-in-anime-style-japanese-living-room-by-atomu-ai-1.jpg",
+        "alt": "动漫风格日本客厅中的动感时刻",
+        "isThumb": true
+      },
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251208/nano-banana-pro-dynamic-moments-in-anime-style-japanese-living-room-by-atomu-ai-2.jpg",
+        "alt": "动漫风格日本客厅中的动感时刻",
+        "isThumb": false
+      }
+    ],
+    "source": {
+      "authorName": "@ANKIT PATEL 🇮🇳 | AI",
+      "authorUrl": "https://x.com/Ankit_patel211",
+      "platform": "X",
+      "sourceUrl": "https://x.com/Ankit_patel211/status/1998036494775447686"
+    },
+    "dateAdded": "2026-09-20",
+    "tags": [
+      "illustration",
+      "anime",
+      "living room",
+      "crossover",
+      "nano banana pro"
+    ],
+    "verdict": "A fan-art crossover that shows Nano Banana Pro can hold multiple copyrighted characters in one coherent scene. Fun and shareable, but keep it clearly non-commercial fan work.",
+    "reusable": false,
+    "language": "en"
+  },
+  {
+    "slug": "infographic-card-cognition-and-circles",
+    "title": "信息图卡片：认知与圈子",
+    "titleEn": "Hand-Drawn Infographic Card (Cognition & Circles)",
+    "tagline": "A 9:16 paper-texture card with red calligraphy and a sharp thesis.",
+    "taglineEn": "A 9:16 paper-texture card with red calligraphy and a sharp thesis.",
+    "category": "infographic",
+    "engines": [
+      "chatgpt-image",
+      "sora"
+    ],
+    "difficulty": 5,
+    "prompt": "AI 画图技巧：让指定文字变成红色\r\n使用 Sora 或者 GPT-4o 画图，可以对文字部分使用 HTML 代码，比如我要让某部分文字变成红色，可以写成 HTML 形式 <span style=\"color:red\">「认知」</span>\r\n参考提示词：\r\n创作一张手绘风格的信息图卡片，比例为9:16竖版。卡片主题鲜明，背景为带有纸质肌理的米色或米白色，整体设计体现质朴、亲切的手绘美感。\r\n卡片上方以红黑相间、对比鲜明的大号毛笔草书字体突出标题，吸引视觉焦点。文字内容均采用中文草书，整体布局分为2至4个清晰的小节，每节以简短、精炼的中文短语表达核心要点。字体保持草书流畅的韵律感，既清晰可读又富有艺术气息。\r\n卡片中点缀简单、有趣的手绘插画或图标，例如人物或象征符号，以增强视觉吸引力，引发读者思考与共鸣。\r\n整体布局注意视觉平衡，预留足够的空白空间，确保画面简洁明了，易于阅读和理解。\r\n<h1><span style=\"color:red\">「认知」</span>决定上限\r\n<span style=\"color:red\">「圈子」</span>决定机会</h1>\r\n- 你赚不到「认知」以外的钱，\r\n- 也遇不到「圈子」以外的机会。",
+    "images": [
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251216/infographic-card-cognition-and-circles-1.jpg",
+        "alt": "信息图卡片：认知与圈子",
+        "isThumb": true
+      }
+    ],
+    "source": {
+      "authorName": "@宝玉",
+      "authorUrl": "https://x.com/dotey",
+      "platform": "X",
+      "sourceUrl": "https://x.com/dotey/status/1907903480678985784"
+    },
+    "dateAdded": "2026-09-20",
+    "tags": [
+      "infographic",
+      "hand-drawn",
+      "chinese",
+      "sora",
+      "chatgpt"
+    ],
+    "verdict": "A masterclass in AI infographic control: HTML spans color specific words, and the brush-calligraphy brief keeps it editorial. Reuse the structure for any two-word thesis.",
+    "reusable": false,
+    "language": "zh"
+  },
+  {
+    "slug": "character-concept-sheet",
+    "title": "角色概念图",
+    "titleEn": "Character Concept Sheet (Blueprint Style)",
+    "tagline": "Front/back/side views plus close-ups on a glowing blueprint sheet.",
+    "taglineEn": "Front/back/side views plus close-ups on a glowing blueprint sheet.",
+    "category": "concept-art",
+    "engines": [
+      "other"
+    ],
+    "difficulty": 2,
+    "prompt": "Prompt share: Concept sheet\r\n💬Prompt:\r\nA concept sheet for a [character], detailed with front, back, and side views, including close-up sketches of facial features and accessories, annotated with design notes and labeled components, drawn in blueprint style with glowing trim in [color1] and base structure in [color2], presented on a clean white background\r\nCheck ATLs for inspiration ✨",
+    "images": [
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251228/character-concept-sheet-1.jpg",
+        "alt": "角色概念图",
+        "isThumb": true
+      },
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251228/character-concept-sheet-2.jpg",
+        "alt": "角色概念图",
+        "isThumb": false
+      },
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251228/character-concept-sheet-3.jpg",
+        "alt": "角色概念图",
+        "isThumb": false
+      },
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251228/character-concept-sheet-4.jpg",
+        "alt": "角色概念图",
+        "isThumb": false
+      }
+    ],
+    "source": {
+      "authorName": "@Amira Zairi",
+      "authorUrl": "https://x.com/azed_ai",
+      "platform": "X",
+      "sourceUrl": "https://x.com/azed_ai/status/2005232305175237003"
+    },
+    "dateAdded": "2026-09-20",
+    "tags": [
+      "concept art",
+      "character",
+      "blueprint",
+      "design sheet"
+    ],
+    "verdict": "The canonical character-turnaround prompt: views, annotations and a clean white ground. Fill the three brackets and you have a sellable concept sheet.",
+    "reusable": true,
+    "language": "en",
+    "placeholders": [
+      "character",
+      "color1",
+      "color2"
+    ]
+  },
+  {
+    "slug": "cinematic-outdoor-advertising-scene-modern-city-plaza-dusk",
+    "title": "现代城市广场黄昏时刻的户外广告场景",
+    "titleEn": "Cinematic Outdoor Ad Scene",
+    "tagline": "Put your face on a flagship product in a dusk city plaza.",
+    "taglineEn": "Put your face on a flagship product in a dusk city plaza.",
+    "category": "product",
+    "engines": [
+      "nano-banana-pro"
+    ],
+    "difficulty": 3,
+    "prompt": "Music with my own image . Create yours on Google Gemini Nano Banana using the prompt\r\n“A cinematic outdoor advertising scene in a modern city plaza at dusk. A massive premium headphone installation is displayed on a sleek pedestal, with the uploaded photo featured as the face of the brand on the product packaging and earcup display. Realistic oversized scale, people walking around for scale, soft ambient city lighting, glass buildings in the background. Luxury tech advertisement aesthetic, ultra-realistic materials, sharp details, shallow depth of field, high-end commercial look, 8K realism.”",
+    "images": [
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251226/cinematic-outdoor-advertising-scene-modern-city-plaza-dusk-1.jpg",
+        "alt": "现代城市广场黄昏时刻的户外广告场景",
+        "isThumb": true
+      }
+    ],
+    "source": {
+      "authorName": "@Smiling Khan",
+      "authorUrl": "https://x.com/AIwithkhan",
+      "platform": "X",
+      "sourceUrl": "https://x.com/AIwithkhan/status/2004184179303764392"
+    },
+    "dateAdded": "2026-09-20",
+    "tags": [
+      "product",
+      "advertising",
+      "outdoor",
+      "city",
+      "nano banana pro"
+    ],
+    "verdict": "A believable outdoor-ad mock-up: oversized product, your portrait as the brand face, real passers-by for scale. Strong for pitch decks and fake-but-plausible campaigns.",
+    "reusable": true,
+    "language": "en",
+    "placeholders": [
+      "your photo"
+    ]
+  },
+  {
+    "slug": "costume-style-sticker-pack",
+    "title": "不同服装风格的贴纸套装",
+    "titleEn": "Costume-Style Sticker Pack",
+    "tagline": "Your face across casual, traditional, luxury and fantasy sticker outfits.",
+    "taglineEn": "Your face across casual, traditional, luxury and fantasy sticker outfits.",
+    "category": "character-design",
+    "engines": [
+      "nano-banana-pro"
+    ],
+    "difficulty": 4,
+    "prompt": "Get your face sticker pack using Google Gemini Nano Banana .. Use my below prompt for the image 👇\r\nA sticker pack featuring the uploaded photo in different costumes and fashion styles. Clean cut-out edges, bold outlines, expressive poses, playful modern sticker design. Same facial features preserved across all stickers with consistent likeness and proportions.\r\nIncludes a mix of casual, traditional, luxury, streetwear, and fantasy-inspired outfits. High resolution finish with soft shadows and a glossy sticker-sheet aesthetic, ready for social sharing.",
+    "images": [
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251223/costume-style-sticker-pack-1.jpg",
+        "alt": "不同服装风格的贴纸套装",
+        "isThumb": true
+      }
+    ],
+    "source": {
+      "authorName": "@Smiling Khan",
+      "authorUrl": "https://x.com/AIwithkhan",
+      "platform": "X",
+      "sourceUrl": "https://x.com/AIwithkhan/status/2002734410689347944"
+    },
+    "dateAdded": "2026-09-20",
+    "tags": [
+      "character design",
+      "sticker",
+      "costume",
+      "nano banana pro"
+    ],
+    "verdict": "A complete sticker-sheet generator that preserves likeness across five style lanes. Clean cut-out edges make it ready for print or messaging apps.",
+    "reusable": true,
+    "language": "en",
+    "placeholders": [
+      "your photo"
+    ]
+  },
+  {
+    "slug": "low-poly-3d-render",
+    "title": "低多边形3D渲染",
+    "titleEn": "Low-Poly 3D Render",
+    "tagline": "Any subject as a faceted low-poly diorama in two flat tones.",
+    "taglineEn": "Any subject as a faceted low-poly diorama in two flat tones.",
+    "category": "3d-render",
+    "engines": [
+      "other"
+    ],
+    "difficulty": 3,
+    "prompt": "Prompt share: Low-poly\r\n💬Prompt:\r\nA low-poly 3D render of a [subject], constructed from clean triangular facets and shaded in flat [color1] and [color2] tones. Set in a stylized minimalist environment with crisp geometry and soft ambient occlusion, the scene evokes a playful, digital diorama with sharp edges and visual simplicity.\r\nCheck ATLs for inspiration ✨",
+    "images": [
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251231/low-poly-3d-render-1.jpg",
+        "alt": "低多边形3D渲染",
+        "isThumb": true
+      },
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251231/low-poly-3d-render-2.jpg",
+        "alt": "低多边形3D渲染",
+        "isThumb": false
+      },
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251231/low-poly-3d-render-3.jpg",
+        "alt": "低多边形3D渲染",
+        "isThumb": false
+      },
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251231/low-poly-3d-render-4.jpg",
+        "alt": "低多边形3D渲染",
+        "isThumb": false
+      }
+    ],
+    "source": {
+      "authorName": "@Amira Zairi",
+      "authorUrl": "https://x.com/azed_ai",
+      "platform": "X",
+      "sourceUrl": "https://x.com/azed_ai/status/2006320465611268295"
+    },
+    "dateAdded": "2026-09-20",
+    "tags": [
+      "3d render",
+      "low poly",
+      "minimalist",
+      "digital diorama"
+    ],
+    "verdict": "The most reusable 3D prompt in the batch: two-color flat shading, soft AO, minimalist stage. Perfect for icons, game assets or a coherent low-poly series.",
+    "reusable": true,
+    "language": "en",
+    "placeholders": [
+      "subject",
+      "color1",
+      "color2"
+    ]
+  },
+  {
+    "slug": "cinematic-half-body-portrait-couple-star-filled-universe",
+    "title": "宇宙星辰下的情侣半身像",
+    "titleEn": "Cosmic Couple Portrait",
+    "tagline": "A couple’s silhouettes dissolving into a star-filled universe.",
+    "taglineEn": "A couple’s silhouettes dissolving into a star-filled universe.",
+    "category": "portrait",
+    "engines": [
+      "other"
+    ],
+    "difficulty": 2,
+    "prompt": "Cinematic cosmic effect on a couple image using Grok Imagine\r\nPrompt: A half-body cinematic portrait of a couple embracing, their silhouettes blending into a star-filled universe. Golden rim light outlines their faces while constellations drift across the background, slow cosmic motion blur, ethereal atmosphere, dramatic contrast, high-end cinematic look.",
+    "images": [
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251214/cinematic-half-body-portrait-couple-star-filled-universe-1.jpg",
+        "alt": "宇宙星辰下的情侣半身像",
+        "isThumb": true
+      }
+    ],
+    "source": {
+      "authorName": "@Smiling Khan",
+      "authorUrl": "https://x.com/AIwithkhan",
+      "platform": "X",
+      "sourceUrl": "https://x.com/AIwithkhan/status/2000225245211566475"
+    },
+    "dateAdded": "2026-09-20",
+    "tags": [
+      "portrait",
+      "couple",
+      "cosmic",
+      "cinematic",
+      "grok"
+    ],
+    "verdict": "A romantic cosmic effect that needs only one couple photo. The golden rim-light and constellation backdrop do the heavy lifting — ideal for anniversary posts.",
+    "reusable": true,
+    "language": "en",
+    "placeholders": [
+      "your photo"
+    ]
+  },
+  {
+    "slug": "grok-imagine-fashion-photography",
+    "title": "Grok Imagine - 时尚摄影",
+    "titleEn": "Grok Imagine High-End Fashion Photography",
+    "tagline": "Two 9:16 studio looks — gown-in-a-bag, luxury packaging vibe.",
+    "taglineEn": "Two 9:16 studio looks — gown-in-a-bag, luxury packaging vibe.",
+    "category": "photography",
+    "engines": [
+      "other"
+    ],
+    "difficulty": 5,
+    "prompt": "Grok Imagine\r\nPrompt -\r\nTwo 9:16 AR high-end studio photos. First photo: a beautiful woman matching the provided photo reference, wearing a red maxi gown with short sleeves and a sabrina neckline, paired with high heels. She is smiling toward the camera, sitting in a squatting pose, with one hand resting on her knee and the other supporting her chin. She is seated inside a large transparent plastic bag styled as luxury packaging, with a big elegant red bow on top. The environment is a professional studio with a deep grey background, dramatic cinematic studio lighting, strong red palette accents, glossy reflections on the plastic surface, and a high-fashion editorial mood. Second photo: a beautiful woman matching the provided photo reference, wearing a white organza maxi gown with red polka dots, voluminous silhouette, short puff sleeves, and a sabrina neckline, paired with red sheer tights, red leather heels, and elegant jewelry. She is sitting cross-legged, smiling warmly at the camera, holding a green gift box with a red ribbon using both hands. The scene maintains a luxury fashion editorial aesthetic with a studio setup, refined lighting, and a polished high-end mood.",
+    "images": [
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251215/grok-imagine-fashion-photography-1.jpg",
+        "alt": "Grok Imagine - 时尚摄影",
+        "isThumb": true
+      }
+    ],
+    "source": {
+      "authorName": "@ANKIT PATEL 🇮🇳 | AI",
+      "authorUrl": "https://x.com/Ankit_patel211",
+      "platform": "X",
+      "sourceUrl": "https://x.com/Ankit_patel211/status/2000561599925596598"
+    },
+    "dateAdded": "2026-09-20",
+    "tags": [
+      "photography",
+      "fashion",
+      "grok",
+      "studio",
+      "luxury"
+    ],
+    "verdict": "A detailed two-shot fashion brief with pose, wardrobe and studio direction. Long, but the specificity is why Grok returns editorial-grade results instead of stock.",
+    "reusable": true,
+    "language": "en",
+    "placeholders": [
+      "your photo"
+    ]
+  },
+  {
+    "slug": "capsules-pouring-from-transparent-bottle",
+    "title": "胶囊从透明的药瓶中倾倒",
+    "titleEn": "Glossy Capsule Product Poster",
+    "tagline": "A 1:1 product poster of capsules spilling from a glass bottle.",
+    "taglineEn": "A 1:1 product poster of capsules spilling from a glass bottle.",
+    "category": "poster",
+    "engines": [
+      "other"
+    ],
+    "difficulty": 4,
+    "prompt": "Hyper-realistic poster, 1080x1080. Small glossy/glass capsules spilling from a transparent medicine bottle onto a wet surface. Each capsule features [white]/[red] plastic and transparent glass, with [KFC] logo and a floating 3D icon inside. Strong reflections, studio lighting, water droplets, soft elegant background, DSLR photo realism.\r\n超写实的海报，1080x1080。小型的光亮/玻璃胶囊从透明的药瓶中倾倒在湿润的表面上。每个胶囊都带有[白色]/[红色]塑料和透明玻璃，内有[KFC]标志和一个悬浮的 3D 图标。强烈的反光，工作室灯光，水滴，柔和优雅的背景，DSLR 照片真实性。",
+    "images": [
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251201/capsules-pouring-from-transparent-bottle.jpeg",
+        "alt": "胶囊从透明的药瓶中倾倒",
+        "isThumb": true
+      }
+    ],
+    "source": {
+      "authorName": "@fy360593",
+      "authorUrl": "https://x.com/fy360593",
+      "platform": "X",
+      "sourceUrl": "https://x.com/fy360593/status/1944782534128419179"
+    },
+    "dateAdded": "2026-09-20",
+    "tags": [
+      "poster",
+      "product",
+      "capsule",
+      "realistic",
+      "studio"
+    ],
+    "verdict": "A DSLR-grade product poster with reflections and water droplets. Swap the two colors and the brand logo to make any supplement or candy campaign shot.",
+    "reusable": true,
+    "language": "zh",
+    "placeholders": [
+      "COLOR A",
+      "COLOR B",
+      "BRAND"
+    ]
+  },
+  {
+    "slug": "korean-style-outfit-elegant-casual-fashion-shot",
+    "title": "韩风穿搭：优雅休闲的时尚大片",
+    "titleEn": "Korean-Style Elegant Casual Fashion Shot",
+    "tagline": "An alluring full-body K-fashion look under soft overcast daylight.",
+    "taglineEn": "An alluring full-body K-fashion look under soft overcast daylight.",
+    "category": "photography",
+    "engines": [
+      "other"
+    ],
+    "difficulty": 3,
+    "prompt": "Grok imagine\r\nBase Prompt @KusoPhoto\r\nA Korean woman in an alluring outfit style full-body fashion shot, soft overcast daylight, Black oversized dropped light-blue high-waisted wide-leg denim jeans with relaxed creases, black minimal pointed-toe mules, black tortoiseshell rectangular-frame glasses, leopard-print fold-over clutch tucked under arm. Cardigan unbuttoned at top and bottom, loose open styling; she strikes a playful glamour pose—gentle wink, bright smile, one hand lightly touching cardigan edge.",
+    "images": [
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251209/korean-style-outfit-elegant-casual-fashion-shot-1.jpg",
+        "alt": "韩风穿搭：优雅休闲的时尚大片",
+        "isThumb": true
+      }
+    ],
+    "source": {
+      "authorName": "@ANKIT PATEL 🇮🇳 | AI",
+      "authorUrl": "https://x.com/Ankit_patel211",
+      "platform": "X",
+      "sourceUrl": "https://x.com/Ankit_patel211/status/1998368834307170411"
+    },
+    "dateAdded": "2026-09-20",
+    "tags": [
+      "photography",
+      "korean",
+      "fashion",
+      "casual",
+      "outdoor"
+    ],
+    "verdict": "A precise wardrobe-and-pose brief that nails the Korean editorial mood. The overcast-light and relaxed creases are what keep it from looking like a catalog.",
+    "reusable": false,
+    "language": "en"
+  },
+  {
+    "slug": "embroidered-depiction",
+    "title": "刺绣图案",
+    "titleEn": "Embroidered Depiction",
+    "tagline": "Any subject as folksy embroidery on linen with visible floss.",
+    "taglineEn": "Any subject as folksy embroidery on linen with visible floss.",
+    "category": "illustration",
+    "engines": [
+      "other"
+    ],
+    "difficulty": 3,
+    "prompt": "Prompt share: Embroidery\r\n💬Prompt:\r\nAn embroidered depiction of a [subject], crafted with textured threadwork and stitched details. Earthy tones of [color1] and [color2] dominate the fabric, with layered stitching creating depth and personality. Set against a linen or canvas base, with visible embroidery floss and a handcrafted, folk-inspired aesthetic.\r\nCheck ATLs for inspiration ✨",
+    "images": [
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251223/embroidered-depiction-1.jpg",
+        "alt": "刺绣图案",
+        "isThumb": true
+      },
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251223/embroidered-depiction-2.jpg",
+        "alt": "刺绣图案",
+        "isThumb": false
+      },
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251223/embroidered-depiction-3.jpg",
+        "alt": "刺绣图案",
+        "isThumb": false
+      },
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251223/embroidered-depiction-4.jpg",
+        "alt": "刺绣图案",
+        "isThumb": false
+      }
+    ],
+    "source": {
+      "authorName": "@Amira Zairi",
+      "authorUrl": "https://x.com/azed_ai",
+      "platform": "X",
+      "sourceUrl": "https://x.com/azed_ai/status/2003057459901190148"
+    },
+    "dateAdded": "2026-09-20",
+    "tags": [
+      "illustration",
+      "embroidery",
+      "folk",
+      "handcraft",
+      "textile"
+    ],
+    "verdict": "A warm, handcrafted embroidery prompt with earthy two-tone threadwork. The visible floss detail is the hook — great for merch, patches or cozy branding.",
+    "reusable": true,
+    "language": "en",
+    "placeholders": [
+      "subject",
+      "color1",
+      "color2"
+    ]
+  },
+  {
+    "slug": "classic-comics-style-illustration",
+    "title": "经典漫画风格插画",
+    "titleEn": "Classic Comics Style Illustration",
+    "tagline": "A 3:2 comic cover of any subject charging forward in bold ink.",
+    "taglineEn": "A 3:2 comic cover of any subject charging forward in bold ink.",
+    "category": "illustration",
+    "engines": [
+      "midjourney"
+    ],
+    "difficulty": 2,
+    "prompt": "Prompt share: Classic comics\r\n💬Prompt:\r\n2D cartoon illustration of a [subject] charging forward in a [dynamic action pose], comic book style with bold black outlines and vivid primary colors. Inspired by classic superhero comics, expressive motion lines and exaggerated perspective, high-quality print style, energetic composition, intense visual impact, --ar 3:2 --v 7\r\nCheck ATLs for inspiration ✨",
+    "images": [
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251219/classic-comics-style-illustration-1.jpg",
+        "alt": "经典漫画风格插画",
+        "isThumb": true
+      },
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251219/classic-comics-style-illustration-2.jpg",
+        "alt": "经典漫画风格插画",
+        "isThumb": false
+      },
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251219/classic-comics-style-illustration-3.jpg",
+        "alt": "经典漫画风格插画",
+        "isThumb": false
+      },
+      {
+        "src": "https://media.aiartspell.art/images/prompts/20251219/classic-comics-style-illustration-4.jpg",
+        "alt": "经典漫画风格插画",
+        "isThumb": false
+      }
+    ],
+    "source": {
+      "authorName": "@Amira Zairi",
+      "authorUrl": "https://x.com/azed_ai",
+      "platform": "X",
+      "sourceUrl": "https://x.com/azed_ai/status/2001607658311454811"
+    },
+    "dateAdded": "2026-09-20",
+    "tags": [
+      "illustration",
+      "comics",
+      "cartoon",
+      "superhero",
+      "midjourney"
+    ],
+    "verdict": "A punchy superhero-comic recipe: bold outlines, vivid primaries, motion lines. The --ar 3:2 and --v 7 flags mark it as a Midjourney prompt out of the box.",
+    "reusable": true,
+    "language": "en",
+    "placeholders": [
+      "subject",
+      "dynamic action pose"
+    ]
+  },
 ];
 
 export function getPromptsByCategory(cat: PromptStyle): Prompt[] {
