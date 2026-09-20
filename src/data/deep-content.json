@@ -5629,5 +5629,535 @@
     "prompt": "Side-by-side comparison shot: old Nano Banana device positioned on the left third, a black and white close-up portrait of an elderly bearded man filling the right two-thirds. Full face, deep set eyes, fine wrinkles visible. Strong directional natural light from the side sculpting both subjects. Clean dark studio background. High resolution, very realistic photo-style, 1:1 aspect ratio."
    }
   ]
+ },
+ "super-animal-hero": {
+  "intro": "Swap [YOUR ANIMAL] and [COUNTRY] and you get a square 1:1 patriotic superhero portrait built around real fabric and fur detail. The subject stands in a heroic near-profile pose wearing a matte dark-gray suit, with a golden Superman-style emblem embroidered from the chosen flag and a flowing flag cape draped over one shoulder. A softly blurred flag backdrop adds depth and keeps focus on the character. It reads as a clean mascot or national-themed avatar rather than a busy illustration, which makes it strong for social posts and profile art. Best on models that handle on-subject text and woven textures without smudging the emblem.",
+  "howTo": [
+   {
+    "title": "Choose your animal and nation",
+    "body": "Decide the [YOUR ANIMAL] (a fox, eagle, panda, etc.) and the [COUNTRY] whose flag you want embroidered and draped. Concrete choices give cleaner emblem stitching than vague ones."
+   },
+   {
+    "title": "Lock the 1:1 square frame",
+    "body": "Keep the aspect ratio at 1:1. Square framing centers the hero pose and works best for avatars and feed cards."
+   },
+   {
+    "title": "Pick an engine strong on text and cloth",
+    "body": "Use Midjourney, Flux, or Sora-class models that render small emblem text and fabric grain cleanly. Avoid engines that blur fine lettering on the chest."
+   },
+   {
+    "title": "Review the emblem and cape",
+    "body": "Check that the flag embroidery is legible and the cape folds read as real cloth, not a flat graphic. Re-roll if the stitching looks painted-on."
+   }
+  ],
+  "faq": [
+   {
+    "q": "Which tool generates this best?",
+    "a": "Models with reliable on-subject text and texture—Midjourney, Flux, or Sora—tend to keep the embroidered emblem sharp. Nano Banana Pro also works if you emphasize fabric grain in the prompt."
+   },
+   {
+    "q": "Can I change the pose or add a city skyline?",
+    "a": "Yes. The template is pose-agnostic; add \"standing on a rooftop\" or \"against a city skyline\" to the backdrop line without touching the costume spec."
+   },
+   {
+    "q": "Why is the suit matte dark gray?",
+    "a": "A neutral matte suit keeps the colored flag emblem and cape as the focal points. Switch it to white or black if you want a different contrast."
+   },
+   {
+    "q": "What resolution should I export?",
+    "a": "1:1 at 1024 to 2048px is enough for social use. Upscale only if you plan to print the mascot."
+   }
+  ],
+  "variations": [
+   {
+    "label": "Group of heroes",
+    "prompt": "Replace the single subject with \"a trio of [YOUR ANIMAL] heroes\" sharing one emblem for a team mascot look."
+   },
+   {
+    "label": "Comic-book flat style",
+    "prompt": "Add \"flat comic-book coloring, bold ink outlines\" to turn the realistic render into a printable sticker sheet."
+   },
+   {
+    "label": "Action leap pose",
+    "prompt": "Change \"standing in a heroic pose\" to \"mid-leap, cape streaming\" for a more dynamic cover image."
+   }
+  ]
+ },
+ "hd-magazine-spread": {
+  "intro": "This editorial generator fuses a real human subject with a Pop Mart IP character into a high-end fashion magazine spread. It runs as an art-director role prompt that locks the person's identity, attaches the Labubu (The Monsters) IP as a \"fashion partner,\" and lays the pair out as a commercial double-page. On-image text and identity preservation are the hard parts, so the spec is built to protect both. Expect a stylized urban street fashion cover with surreal-meets-photoreal polish. It is the most art-direction-heavy prompt in this batch and rewards careful reference prep.",
+  "howTo": [
+   {
+    "title": "Prepare two clean references",
+    "body": "Have a clear portrait of the real person and a clean Labubu IP render. Identity lock works best when the face reference is front-lit and unobstructed."
+   },
+   {
+    "title": "Set the art-director role",
+    "body": "Keep the \"Senior Art Director & IP Collaboration Specialist\" framing so the model treats identity preservation and IP fusion as explicit constraints."
+   },
+   {
+    "title": "Generate, then fix on-image text",
+    "body": "chatgpt-image handles embedded text best; review the magazine title and any captions, and re-prompt the text layer if it garbles."
+   },
+   {
+    "title": "Match the cold editorial palette",
+    "body": "Keep the surreal x photoreal, urban-street, high-fashion tone consistent across both figures so the collab reads as one shoot."
+   }
+  ],
+  "faq": [
+   {
+    "q": "Which engine handles the on-image text?",
+    "a": "chatgpt-image (GPT-image) is the strongest for embedded magazine titles and captions. Midjourney and Nano Banana Pro can merge the figures but struggle with clean text."
+   },
+   {
+    "q": "Can I swap the celebrity or the IP?",
+    "a": "Yes, replace the identity-lock name and the IP character name. Keep the role framing so the new pair still fuses as fashion partners."
+   },
+   {
+    "q": "Is this safe for commercial use?",
+    "a": "Only if you own the rights to both the person’s likeness and the IP. For client work, use original characters or licensed assets."
+   },
+   {
+    "q": "What aspect ratio fits a magazine spread?",
+    "a": "Use a 3:2 or 16:9 double-page layout. Crop to 4:5 if you only need a cover thumbnail."
+   }
+  ],
+  "variations": [
+   {
+    "label": "Minimalist cover",
+    "prompt": "Strip the street scene and keep a plain studio backdrop for a cleaner single-subject cover."
+   },
+   {
+    "label": "Video cover version",
+    "prompt": "Add \"cinematic motion, slow push-in\" to preview an animated cover loop."
+   },
+   {
+    "label": "Different IP collab",
+    "prompt": "Swap Labubu for another collectible IP while keeping the identity-lock directive."
+   }
+  ]
+ },
+ "young-adult-female-portrait": {
+  "intro": "Built as a labeled portrait spec rather than a single sentence, this prompt breaks the subject into demographics, hair, face, pose, and wardrobe so you can edit one field without breaking the rest. The result is a calm, natural studio portrait of a young adult woman—early-to-mid 20s, soft oval face, almond eyes, full natural-pink lips—with no heavy styling. It is a reliable baseline for Nano Banana Pro when you want consistent, non-overstyled output. Think clean headshot energy, not glam retouching.",
+  "howTo": [
+   {
+    "title": "Fill the demographics and hair fields",
+    "body": "Set age range, hair color, and length first. Specifics like \"long straight black hair with a slight wave\" give the model fewer guesses."
+   },
+   {
+    "title": "Define the face precisely",
+    "body": "Lock face shape, eye shape, nose, and lip tone. The more neutral the expression, the easier consistent results become."
+   },
+   {
+    "title": "Choose studio lighting",
+    "body": "Keep a soft, even studio setup unless you want drama. Nano Banana Pro handles skin texture well under flat light."
+   },
+   {
+    "title": "Set aspect ratio and generate",
+    "body": "Use 1:1 or 4:5 for a portrait crop and generate on Nano Banana Pro; adjust wardrobe notes if the look feels too plain."
+   }
+  ],
+  "faq": [
+   {
+    "q": "Why use a structured JSON prompt here?",
+    "a": "Splitting the subject into labeled fields lets you tweak hair or wardrobe without rewriting the whole prompt, which keeps the face stable across runs."
+   },
+   {
+    "q": "How do I make her look older or younger?",
+    "a": "Edit only the \"demographics\" age line; leave the face and hair details so the likeness stays coherent."
+   },
+   {
+    "q": "Studio vs natural light—which reads better?",
+    "a": "Studio gives the cleanest skin and controllable shadows; natural light adds warmth but more variance. Pick studio for headshots."
+   },
+   {
+    "q": "My hands look wrong—how do I fix them?",
+    "a": "Add a negative note about extra or bent fingers, or crop to a bust-up composition so hands are minimal."
+   }
+  ],
+  "variations": [
+   {
+    "label": "Golden-hour outdoor",
+    "prompt": "Replace studio lighting with \"warm golden-hour window light\" for a softer, lifestyle feel."
+   },
+   {
+    "label": "Moody low-key",
+    "prompt": "Add \"low-key lighting, dark background\" to shift from clean headshot to editorial drama."
+   },
+   {
+    "label": "Candid laugh",
+    "prompt": "Change the neutral expression to \"mid-laugh, eyes crinkled\" for a livelier portrait."
+   }
+  ]
+ },
+ "cute-idol-close-up-portrait": {
+  "intro": "A kawaii idol close-up built around an 85mm f/1.2 prime look: tight bust-up framing, dreamy bokeh, and porcelain skin with igari rosy cheeks. The subject is an 18-year-old Japanese-style idol with large sparkling puppy eyes and a sweet, pure expression, hands gently framing the face. Because the spec is a JSON block, hair, wardrobe, and lighting are easy to remix. It lands as a soft beauty portrait rather than a staged studio shot, ideal for avatar and fan-art use.",
+  "howTo": [
+   {
+    "title": "Set the 85mm f/1.2 lens and bokeh",
+    "body": "Keep the prime-lens line so the background melts into creamy bokeh and the face stays tack-sharp."
+   },
+   {
+    "title": "Frame hands near the face",
+    "body": "Use the \"both hands touching cheeks or hair\" pose to add the idol’s signature cute gesture."
+   },
+   {
+    "title": "Dial in skin and makeup",
+    "body": "Specify porcelain skin, igari cheeks, and glossy pink lips; these define the kawaii read more than the outfit."
+   },
+   {
+    "title": "Generate and lightly retouch",
+    "body": "Output at 8k if available, then a gentle skin-smooth pass—avoid over-softening or it loses the photoreal edge."
+   }
+  ],
+  "faq": [
+   {
+    "q": "Which lens setting gives the bokeh?",
+    "a": "The 85mm f/1.2 prime line is what creates the shallow depth of field. Wider lenses (35mm) will not melt the background the same way."
+   },
+   {
+    "q": "Can I change the makeup style?",
+    "a": "Yes, edit the face block. Swap igari cheeks for a cooler tone or add eyelash detail without touching the lens setting."
+   },
+   {
+    "q": "Can this be a male idol instead?",
+    "a": "Change the \"18-year-old Japanese girl\" line to a male subject and keep the lens and bokeh for the same soft beauty look."
+   },
+   {
+    "q": "What crop works best?",
+    "a": "Bust-up, eye-level, subject centered. Avoid full-body here—the prompt is built for close-up intimacy."
+   }
+  ],
+  "variations": [
+   {
+    "label": "Cherry-blossom outdoor",
+    "prompt": "Add \"pink cherry-blossom backdrop, soft sunlight\" to move the idol outside while keeping the lens."
+   },
+   {
+    "label": "Concert stage lights",
+    "prompt": "Swap bokeh for \"colorful stage spotlights, haze\" for a live-show energy."
+   },
+   {
+    "label": "Selfie style",
+    "prompt": "Change to \"front-camera selfie angle, arm extended\" for a casual fan-selfie variant."
+   }
+  ]
+ },
+ "luffy-classroom-art": {
+  "intro": "Rather than drawing Luffy, this prompt photographs a chalk drawing of him on a real classroom blackboard. The spec is written as documentary realism: medium film grain, a wooden teacher’s desk in the foreground for scale, and exact camera settings included so the result reads as a found photograph, not digital art. Luffy appears mid-action with his straw hat, X-scar, and rubber-arm stretch, rendered in vivid chalk with visible dust and smudge blending. It is a clever fan-art angle that leans on texture and context more than character rendering.",
+  "howTo": [
+   {
+    "title": "Set the 4:3 documentary frame",
+    "body": "Keep the medium shot at 4:3 so the blackboard and desk both fit, mimicking a real camera capture."
+   },
+   {
+    "title": "Add foreground scale and context",
+    "body": "Include the wooden desk, chalk box, and dust-smudged eraser to sell the \"someone photographed this\" feeling."
+   },
+   {
+    "title": "Preserve chalk medium cues",
+    "body": "Keep references to dust, matte chalk, and hatch shading; removing them makes it look like flat vector art."
+   },
+   {
+    "title": "Tune grain and lighting",
+    "body": "A light natural classroom light plus subtle grain sells the photo. Avoid heavy HDR or it breaks the documentary tone."
+   }
+  ],
+  "faq": [
+   {
+    "q": "How do I make it look like a real photo?",
+    "a": "Keep the documentary realism cues—film grain, classroom context, exact camera settings—and avoid smooth digital cleanup."
+   },
+   {
+    "q": "Can I use a different anime character?",
+    "a": "Yes. Swap the Luffy description for any character and keep the chalk-medium and classroom framing."
+   },
+   {
+    "q": "Why 4:3 instead of widescreen?",
+    "a": "4:3 mirrors older camera captures and keeps the blackboard centered with room for the foreground desk."
+   },
+   {
+    "q": "What camera settings are suggested?",
+    "a": "The prompt includes aperture and focal-length style notes; mirror a 35 to 50mm lens at a moderate aperture for a natural school-photo look."
+   }
+  ],
+  "variations": [
+   {
+    "label": "Teacher drawing it",
+    "prompt": "Shift the scene to \"a teacher mid-draw, hand on chalk\" for a behind-the-scenes version."
+   },
+   {
+    "label": "Color chalk version",
+    "prompt": "Change \"vivid colored chalk\" emphasis to pastel tones for a softer board."
+   },
+   {
+    "label": "Different character cameo",
+    "prompt": "Add a second smaller chalk character beside Luffy for a duo panel."
+   }
+  ]
+ },
+ "nano-banana-pro-character-consistency-compared-to-reference-images": {
+  "intro": "Upload one clear reference photo and this Nano Banana Pro prompt drops you into a selfie \"with [movie character] on the set of [movie name]\" while locking your facial features, bone structure, skin tone, expression, pose, and appearance at 100%. It is a reusable identity-consistency template: the reference image is the anchor and the placeholder fields let you re-theme the scene infinitely. Expect a 1:1, 4K, believable composite where you stay recognizably you next to the character. This is the strongest use case for Nano Banana Pro’s reference-image strength.",
+  "howTo": [
+   {
+    "title": "Upload a clear reference first",
+    "body": "Use a well-lit, front-facing photo with a neutral expression. The cleaner the reference, the tighter the feature lock."
+   },
+   {
+    "title": "Fill the two placeholders",
+    "body": "Replace [movie character] and [movie name] with the exact names you want; vague placeholders weaken the set recreation."
+   },
+   {
+    "title": "Keep the 1:1 4K spec",
+    "body": "Leave the aspect ratio and 4K detail line intact so the composite stays sharp and feed-friendly."
+   },
+   {
+    "title": "Compare and re-roll",
+    "body": "Generate, then check that facial features match the reference; re-roll if skin tone or bone structure drifts."
+   }
+  ],
+  "faq": [
+   {
+    "q": "How does character consistency work here?",
+    "a": "Nano Banana Pro uses your uploaded reference as the identity anchor and preserves facial features, bone structure, and skin tone across the generated scene."
+   },
+   {
+    "q": "What makes a good reference image?",
+    "a": "Front-facing, even lighting, neutral expression, high resolution. Avoid hats or heavy shadows that hide features."
+   },
+   {
+    "q": "Can I include two characters?",
+    "a": "Yes, extend the prompt with a second [movie character] name, but keep the reference person locked as the selfie subject."
+   },
+   {
+    "q": "Which engine is required?",
+    "a": "Nano Banana Pro is specified because its reference-image consistency is the core of this template; other models may drift from your features."
+   }
+  ],
+  "variations": [
+   {
+    "label": "Group photo variant",
+    "prompt": "Change \"selfie with [movie character]\" to \"group photo with [movie character] and [second character]\"."
+   },
+   {
+    "label": "Different movie setting",
+    "prompt": "Swap [movie name] for a sequel or a different franchise while keeping the same reference."
+   },
+   {
+    "label": "Action pose",
+    "prompt": "Add \"mid-action, dynamic angle\" to break the static selfie framing."
+   }
+  ]
+ },
+ "dreamy-parisian-night-effect": {
+  "intro": "A complete style recipe that turns famous Parisian landmarks into glowing beacons under a star-swirled night sky. The spec is monochromatic and high-contrast: spiraling star-filled heavens, reflective wet streets and water mirroring the city’s lights, and light sources—the Eiffel Tower, car trails, city glow—rendered as bright points and streaks. Because the location is a named, swappable element, you can recreate the exact effect for any city. It is a mood piece first, a skyline second, and works best on Nano Banana Pro for clean light control.",
+  "howTo": [
+   {
+    "title": "Pick your landmark",
+    "body": "Name the specific structure (Eiffel Tower by default). The prompt is built so swapping the location keeps the whole style intact."
+   },
+   {
+    "title": "Lock the cool monochrome palette",
+    "body": "Keep the limited, luminous cool undertone; adding color breaks the dreamy single-tone magic."
+   },
+   {
+    "title": "Add the star-swirl sky",
+    "body": "The spiraling star field is the signature element—keep it dynamic, not a flat star dot pattern."
+   },
+   {
+    "title": "Mirror the light on reflective surfaces",
+    "body": "Call out wet roads and water so the city lights streak and double, which sells the ethereal mood."
+   }
+  ],
+  "faq": [
+   {
+    "q": "Which engine handles this style best?",
+    "a": "Nano Banana Pro gives the cleanest control over light points, streaks, and the monochrome palette described in the spec."
+   },
+   {
+    "q": "Can I use my own city?",
+    "a": "Yes, replace the Parisian landmark with any city’s icon; the style recipe (sky, reflection, palette) transfers directly."
+   },
+   {
+    "q": "How do I get the star swirls?",
+    "a": "Keep the \"spiraling, star-filled sky\" instruction explicit; generic \"starry night\" tends to flatten into dots."
+   },
+   {
+    "q": "Color or monochrome—which is stronger?",
+    "a": "Monochrome with a cool luminous undertone reads more magical; add a single accent color only if you want a focal pop."
+   }
+  ],
+  "variations": [
+   {
+    "label": "Tokyo neon version",
+    "prompt": "Swap the Eiffel Tower for Tokyo tower and keep the swirl sky for an eastern-city dream."
+   },
+   {
+    "label": "New York grid",
+    "prompt": "Use a Manhattan skyline with reflective wet avenues instead of Paris."
+   },
+   {
+    "label": "Venice canals",
+    "prompt": "Replace streets with canal reflections for a water-dominated variant."
+   }
+  ]
+ },
+ "ned-s-cyberpunk-city-adventure": {
+  "intro": "A 3x3 narrative grid that tells a sequential cyberpunk story about Ned, a Pixar-style teenage protagonist, walking through a neon city at night. Each of the nine panels advances the scene—rooftop, market, alley—while Ned’s look stays consistent: messy brown hair, big green eyes, freckles, glowing-circuit hoodie. The prompt is valuable because multi-panel storytelling grids are rare; the panel-by-panel breakdown makes character-consistent sequences reproducible. Best attempted on Grok Imagine or Nano Banana Pro + Claude flows that support grid layouts.",
+  "howTo": [
+   {
+    "title": "Define Ned once, reuse everywhere",
+    "body": "Lock his description (hair, eyes, freckles, hoodie) so all nine panels share one consistent character."
+   },
+   {
+    "title": "Plan the nine beats",
+    "body": "Sketch the rooftop to market to alley progression before generating so the grid reads as a story, not random scenes."
+   },
+   {
+    "title": "Set the clean 3x3 grid",
+    "body": "Keep thin white borders between panels; removing them merges the story and loses the storyboard feel."
+   },
+   {
+    "title": "Generate on a grid-capable tool",
+    "body": "Use Grok Imagine or a Nano Banana Pro + Claude combo that supports multi-image grids; single-image tools cannot hold the layout."
+   }
+  ],
+  "faq": [
+   {
+    "q": "Which tool actually makes image grids?",
+    "a": "Grok Imagine supports multi-panel grids; Nano Banana Pro paired with Claude can also assemble sequential panels. Pure Midjourney needs manual tiling."
+   },
+   {
+    "q": "How do I keep Ned consistent across panels?",
+    "a": "Repeat the exact character description in every panel prompt and avoid changing his hoodie or hair between beats."
+   },
+   {
+    "q": "Can I change the story or city?",
+    "a": "Yes, rewrite the nine beats and the setting; keep the character-lock line so Ned stays the same person."
+   },
+   {
+    "q": "How do I export the grid cleanly?",
+    "a": "Generate at high resolution and export the full 3x3 as one image; crop individual panels only if you need singles."
+   }
+  ],
+  "variations": [
+   {
+    "label": "Four-panel 2x2",
+    "prompt": "Reduce to four key beats for a faster, higher-detail storyboard."
+   },
+   {
+    "label": "No-border cinematic",
+    "prompt": "Drop the white borders and add letterbox bars for a film-still look."
+   },
+   {
+    "label": "Different protagonist",
+    "prompt": "Swap Ned’s description for another character while keeping the cyberpunk grid structure."
+   }
+  ]
+ },
+ "fashion-shoot-in-a-snowy-forest": {
+  "intro": "A vertical triptych fashion story shot in a snowy forest, built on a cold monochromatic palette—white, silver, and bluish-gray—with a mysterious, majestic, pure mood. The model is a young woman with braided-top, loose-bottom hair, frost-crystal lashes, and a luxurious white fur accessory, lit to emphasize winter stillness. Because the spec separates composition, palette, model, and wardrobe into labeled blocks, you can reshoot the look without rewriting the whole prompt. It is a strong winter-campaign frame for Nano Banana Pro.",
+  "howTo": [
+   {
+    "title": "Set the vertical triptych",
+    "body": "Keep three stacked panels focusing on model and look details; the triptych format carries the editorial rhythm."
+   },
+   {
+    "title": "Lock the cold palette",
+    "body": "Hold the white, silver, and bluish-gray range; introduce warm tones only as a deliberate accent."
+   },
+   {
+    "title": "Describe the model precisely",
+    "body": "Specify braided hair, frost-lash detail, and porcelain skin so the winter beauty reads clearly."
+   },
+   {
+    "title": "Light for stillness",
+    "body": "Soft, diffused snow light keeps the mood mysterious; avoid harsh sun that flattens the cold palette."
+   }
+  ],
+  "faq": [
+   {
+    "q": "Which engine fits this best?",
+    "a": "Nano Banana Pro handles the cold palette and skin/fur texture cleanly, making it the natural choice for this winter editorial."
+   },
+   {
+    "q": "How do I make it warmer?",
+    "a": "Shift the palette block from bluish-gray to amber and add golden-hour light; keep the triptych structure."
+   },
+   {
+    "q": "Triptych or single shot?",
+    "a": "Triptych shows the look across three details (face, outfit, environment); use single only for a hero crop."
+   },
+   {
+    "q": "Can I swap the wardrobe?",
+    "a": "Yes, edit the clothing block (coat, boots, accessory) without touching the palette or lighting."
+   }
+  ],
+  "variations": [
+   {
+    "label": "Sunset warm version",
+    "prompt": "Replace the cold palette with warm sunset tones for a contrasting season."
+   },
+   {
+    "label": "Male model",
+    "prompt": "Change the model description to a male subject and keep the fur-and-snow styling."
+   },
+   {
+    "label": "Full-body editorial",
+    "prompt": "Expand the triptych to include a wide environment panel for a campaign spread."
+   }
+  ]
+ },
+ "conniwal-kashmir-winter-scene": {
+  "intro": "A cinematic 2K promo scene of a Kashmir winter: heavy snowfall, busy markets, vendors, and moving vehicles, with a Nano Banana Pro device placed naturally in the foreground as the promotional hero. The strength here is balance—local life stays lively and realistic while the product glows just enough to draw the eye without looking pasted in. It is a clean example of weave-in product placement inside a real environment. Best on Nano Banana Pro for believable snow and crowd depth.",
+  "howTo": [
+   {
+    "title": "Set the winter street scene",
+    "body": "Keep heavy snow, markets, vendors, and moving traffic so the environment feels alive and local."
+   },
+   {
+    "title": "Place the device in foreground",
+    "body": "Put the Nano Banana Pro centrally or front, glowing slightly, so it reads as naturally captured, not composited."
+   },
+   {
+    "title": "Balance life and product",
+    "body": "Keep crowds and activity around the device; a deserted frame makes the placement obvious and stiff."
+   },
+   {
+    "title": "Light cinematically",
+    "body": "Use realistic snow lighting and depth so both the scene and the product stay sharp and atmospheric."
+   }
+  ],
+  "faq": [
+   {
+    "q": "How do I place the product naturally?",
+    "a": "Embed the device in the busy foreground with a slight glow and surrounding activity, rather than floating it on a blank background."
+   },
+   {
+    "q": "Which engine handles this?",
+    "a": "Nano Banana Pro renders convincing snow, crowd depth, and the subtle product glow described in the spec."
+   },
+   {
+    "q": "Can I change the location?",
+    "a": "Yes, swap Kashmir for any city or season; keep the \"device in lively foreground\" rule for natural placement."
+   },
+   {
+    "q": "What resolution should I target?",
+    "a": "2K is specified for promo clarity; render higher only if you need large-format print."
+   }
+  ],
+  "variations": [
+   {
+    "label": "Summer market version",
+    "prompt": "Replace snow with a sunny market for a warm-season promo variant."
+   },
+   {
+    "label": "Different device",
+    "prompt": "Swap the Nano Banana Pro for another product while keeping the crowd-foreground placement."
+   },
+   {
+    "label": "Product hero close-up",
+    "prompt": "Crop to a tight foreground hero shot of the device with blurred market behind."
+   }
+  ]
  }
 }
