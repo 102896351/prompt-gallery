@@ -4,9 +4,10 @@ interface Props {
   initialPrompt?: string;
   initialRatio?: '1:1' | '16:9' | '9:16';
   embedded?: boolean;
+  showPresets?: boolean;
 }
 
-const { locale = 'en', initialPrompt = '', initialRatio = '1:1', embedded = false } = Astro.props;
+const { locale = 'en', initialPrompt = '', initialRatio = '1:1', embedded = false, showPresets = true } = Astro.props;
 const isZh = locale === 'zh';
 const apiUrl = import.meta.env.PUBLIC_AGNES_API_URL
   || (import.meta.env.DEV ? (import.meta.env.PUBLIC_AGNES_LOCAL_API_URL || '') : '');
@@ -219,31 +220,33 @@ const copy = isZh
       </div>
     </header>
 
-    <section class="agnes-presets" data-presets aria-labelledby="agnes-presets-title">
-      <div class="agnes-presets-head">
-        <h2 id="agnes-presets-title">{copy.presetsTitle}</h2>
-        <p>{copy.presetsSubtitle}</p>
-      </div>
-      <div class="agnes-presets-grid">
-        {presets.map((preset) => (
-          <button
-            type="button"
-            class="agnes-preset-card"
-            data-preset-prompt={preset.prompt}
-            data-preset-ratio={preset.ratio}
-            aria-label={`${isZh ? preset.zhTitle : preset.title}: ${preset.prompt}`}
-          >
-            <span class="agnes-preset-thumb">
-              <img src={preset.image} alt={isZh ? preset.zhTitle : preset.title} loading="lazy" decoding="async" />
-            </span>
-            <span class="agnes-preset-meta">
-              <strong class="agnes-preset-title">{isZh ? preset.zhTitle : preset.title}</strong>
-              <span class="agnes-preset-prompt">{preset.prompt}</span>
-            </span>
-          </button>
-        ))}
-      </div>
-    </section>
+    {showPresets && (
+      <section class="agnes-presets" data-presets aria-labelledby="agnes-presets-title">
+        <div class="agnes-presets-head">
+          <h2 id="agnes-presets-title">{copy.presetsTitle}</h2>
+          <p>{copy.presetsSubtitle}</p>
+        </div>
+        <div class="agnes-presets-grid">
+          {presets.map((preset) => (
+            <button
+              type="button"
+              class="agnes-preset-card"
+              data-preset-prompt={preset.prompt}
+              data-preset-ratio={preset.ratio}
+              aria-label={`${isZh ? preset.zhTitle : preset.title}: ${preset.prompt}`}
+            >
+              <span class="agnes-preset-thumb">
+                <img src={preset.image} alt={isZh ? preset.zhTitle : preset.title} loading="lazy" decoding="async" />
+              </span>
+              <span class="agnes-preset-meta">
+                <strong class="agnes-preset-title">{isZh ? preset.zhTitle : preset.title}</strong>
+                <span class="agnes-preset-prompt">{preset.prompt}</span>
+              </span>
+            </button>
+          ))}
+        </div>
+      </section>
+    )}
 
     <div class="agnes-workspace">
       <form class="agnes-sidebar agnes-form" data-generator-form method="post">
