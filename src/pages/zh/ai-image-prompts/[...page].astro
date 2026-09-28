@@ -15,6 +15,7 @@
 
 import Base from '../../../layouts/Base.astro';
 import PromptCard from '../../../components/PromptCard.astro';
+import AdSense from '../../../components/AdSense.astro';
 import { prompts, promptCategories } from '../../../data/prompts';
 import { engines } from '../../../data/engines';
 import type { Prompt } from '../../../data/prompts';
@@ -148,6 +149,8 @@ const faqLd = isFirst
         共 {allPrompts.length} 条提示词 · 第 {page.currentPage} / {page.lastPage} 页
       </p>
 
+      <AdSense slot="display" class="archive-top-ad" />
+
       {
         isFirst && (
           <>
@@ -178,6 +181,8 @@ const faqLd = isFirst
           </>
         )
       }
+
+      <AdSense slot="in-feed" class="archive-filter-ad" />
 
       <h2 class="sub">{isFirst ? '全部 AI 生图提示词' : `第 ${page.currentPage} 页`}</h2>
 

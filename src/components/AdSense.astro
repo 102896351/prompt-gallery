@@ -1,0 +1,91 @@
+---
+// AdSense 手动广告位组件
+// 用法: <AdSense slot="display" />
+// 支持的 slot: 'auto' | 'display' | 'in-article' | 'in-feed' | 'multiplex'
+// 注意：自动广告 (auto-ads) 已经在 Base.astro 全局加载；这里的 "auto" slot 是指让 Google 自动填充的占位 ins。
+export interface Props {
+  slot?: 'auto' | 'display' | 'in-article' | 'in-feed' | 'multiplex';
+  // 是否占据全宽容器（display 广告默认 true）
+  fullWidthResponsive?: boolean;
+  // 额外的 className，用于控制间距
+  class?: string;
+  // 自定义最小高度，避免 CLS
+  minHeight?: string;
+}
+
+const {
+  slot = 'display',
+  fullWidthResponsive = true,
+  class: className = '',
+  minHeight = '90px',
+} = Astro.props;
+
+const adClient = 'ca-pub-1606763409380030';
+
+const formatMap = {
+  auto: 'auto',
+  display: 'auto',
+  'in-article': 'fluid',
+  'in-feed': 'fluid',
+  multiplex: 'autorelaxed',
+};
+
+const layoutKeyMap = {
+  multiplex: '-fb+5w+4e-db+86',
+};
+
+const dataFormat = formatMap[slot];
+const layoutKey = layoutKeyMap[slot as keyof typeof layoutKeyMap];
+---
+
+<div
+  class={`adsense-wrap ${slot}-ad ${className}`}
+  style={`min-height: ${minHeight};`}
+  aria-hidden="true"
+>
+  <ins
+    class="adsbygoogle"
+    style="display:block; text-align:center;"
+    data-ad-client={adClient}
+    data-ad-slot=""
+    data-ad-format={dataFormat}
+    data-full-width-responsive={fullWidthResponsive ? 'true' : 'false'}
+    {...(layoutKey ? { 'data-ad-layout-key': layoutKey } : {})}
+  />
+</div>
+
+<script is:inline>
+  (function () {
+    // 防止同一页面重复 push 报错
+    if (typeof window.adsbygoogle === 'undefined') {
+      window.adsbygoogle = [];
+    }
+    var wraps = document.querySelectorAll('.adsense-wrap:not([data-ads-pushed])');
+    wraps.forEach(function (w) {
+      w.setAttribute('data-ads-pushed', '1');
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      } catch (e) {
+        // AdSense 未加载或 blocked，静默忽略
+      }
+    });
+  })();
+</script>
+
+<style>
+  .adsense-wrap {
+    margin: 24px 0;
+    /* 广告未加载前保持最小高度，减少 CLS */
+    background: transparent;
+  }
+  .adsense-wrap:first-child {
+    margin-top: 0;
+  }
+  .adsense-wrap:last-child {
+    margin-bottom: 0;
+  }
+  /* 侧边栏广告紧凑一些 */
+  .adsense-wrap.sidebar-ad {
+    margin: 16px 0;
+  }
+</style>

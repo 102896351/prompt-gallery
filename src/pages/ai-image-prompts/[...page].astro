@@ -15,6 +15,7 @@
 
 import Base from '../../layouts/Base.astro';
 import PromptCard from '../../components/PromptCard.astro';
+import AdSense from '../../components/AdSense.astro';
 import { prompts, promptCategories } from '../../data/prompts';
 import { engines } from '../../data/engines';
 import type { Prompt } from '../../data/prompts';
@@ -143,6 +144,8 @@ const faqLd = isFirst
         {prompts.length} prompts · page {page.currentPage} of {page.lastPage}
       </p>
 
+      <AdSense slot="display" class="archive-top-ad" />
+
       {
         isFirst && (
           <>
@@ -176,6 +179,8 @@ const faqLd = isFirst
         )
       }
 
+      <AdSense slot="in-feed" class="archive-filter-ad" />
+
       <h2 class="sub">{isFirst ? 'All AI image prompts' : `Page ${page.currentPage}`}</h2>
 
       <div class="search-wrap">
@@ -200,6 +205,8 @@ const faqLd = isFirst
 
       <p class="empty hidden" id="empty-state">No prompts matched your search.</p>
 
+      <AdSense slot="display" class="archive-mid-ad" />
+
       <nav class="pager" aria-label="Pagination">
         {page.url.prev ? <a href={page.url.prev}>← Previous</a> : <span class="pager-off">← Previous</span>}
         <div class="pager-nums">
@@ -215,6 +222,8 @@ const faqLd = isFirst
         </div>
         {page.url.next ? <a href={page.url.next}>Next →</a> : <span class="pager-off">Next →</span>}
       </nav>
+
+      <AdSense slot="multiplex" class="archive-bottom-ad" />
 
       {
         isFirst && (

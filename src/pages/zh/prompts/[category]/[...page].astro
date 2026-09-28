@@ -5,6 +5,7 @@
 
 import Base from '../../../../layouts/Base.astro';
 import PromptCard from '../../../../components/PromptCard.astro';
+import AdSense from '../../../../components/AdSense.astro';
 import { prompts, promptCategories, type Prompt } from '../../../../data/prompts';
 
 // 按 slug 去重，与详情页（/zh/prompt，1228 页）一致
@@ -102,6 +103,8 @@ const itemListLd = {
       <h1>AI {cat.labelZh}提示词{suffix}</h1>
       <p class="page-count">共 {total} 条提示词 · 第 {page.currentPage} / {page.lastPage} 页</p>
 
+      <AdSense slot="display" class="category-top-ad" />
+
       {
         isFirst && (
           <p class="lead">
@@ -110,6 +113,8 @@ const itemListLd = {
           </p>
         )
       }
+
+      <AdSense slot="in-feed" class="category-grid-ad" />
 
       <div class="grid">
         {

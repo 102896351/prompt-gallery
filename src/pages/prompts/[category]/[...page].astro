@@ -5,6 +5,7 @@
 
 import Base from '../../../layouts/Base.astro';
 import PromptCard from '../../../components/PromptCard.astro';
+import AdSense from '../../../components/AdSense.astro';
 import { prompts, promptCategories, type Prompt } from '../../../data/prompts';
 
 export async function getStaticPaths({ paginate }: any) {
@@ -97,6 +98,8 @@ const itemListLd = {
       <h1>AI {cat.label} Prompts{suffix}</h1>
       <p class="page-count">{total} prompts · page {page.currentPage} of {page.lastPage}</p>
 
+      <AdSense slot="display" class="category-top-ad" />
+
       {
         isFirst && (
           <p class="lead">
@@ -107,6 +110,8 @@ const itemListLd = {
         )
       }
 
+      <AdSense slot="in-feed" class="category-grid-ad" />
+
       <div class="grid">
         {
           page.data.map((p: Prompt) => (
@@ -116,6 +121,8 @@ const itemListLd = {
           ))
         }
       </div>
+
+      <AdSense slot="display" class="category-mid-ad" />
 
       <nav class="pager" aria-label="Pagination">
         {page.url.prev ? <a href={page.url.prev}>← Previous</a> : <span class="pager-off">← Previous</span>}

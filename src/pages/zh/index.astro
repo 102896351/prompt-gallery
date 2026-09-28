@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import PromptCard from '../../components/PromptCard.astro';
+import AdSense from '../../components/AdSense.astro';
 import AgnesHomeComposer from '../../components/AgnesHomeComposer.astro';
 import { prompts, promptCategories, type Prompt } from '../../data/prompts';
 import { engines } from '../../data/engines';
@@ -168,6 +169,8 @@ const itemListLd = {
 
   <AgnesHomeComposer locale="zh" />
 
+  <AdSense slot="display" class="hero-ad" />
+
   <section class="homepage-intro" aria-label="关于 AI 生图提示词库">
     <div class="container">
       <p><strong>AI生图提示词与 AI绘画提示词</strong>，配有示例图片、可复用创意和主题合集，覆盖人像、产品摄影、海报、3D、插画和电影感图片生成。</p>
@@ -291,6 +294,8 @@ const itemListLd = {
           浏览全部 {prompts.length} 条提示词 →
         </a>
       </div>
+
+      <AdSense slot="multiplex" class="grid-ad" />
 
       <p class="empty hidden" id="empty-state">{t.section.emptyState}</p>
     </div>
