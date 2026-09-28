@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import PromptCard from '../components/PromptCard.astro';
-import AgnesHomeComposer from '../components/AgnesHomeComposer.astro';
+import AgnesImageGenerator from '../components/AgnesImageGenerator.astro';
 import { prompts, promptCategories, type Prompt } from '../data/prompts';
 import { engines } from '../data/engines';
 import { en } from '../i18n';
@@ -104,20 +104,10 @@ const itemListLd = {
       </h1>
       <p class="hero-subtitle">Browse copy-ready AI image prompts and AI art prompts with real examples, then send any idea to our online AI Image Studio.</p>
       <p class="hero-keywords">Portrait prompts · product photography prompts · poster prompts · 3D prompts · illustration prompts · cinematic prompts</p>
-      <div class="search-wrap">
-        <input
-          type="text"
-          id="prompt-search"
-          placeholder={t.hero.searchPlaceholder}
-          autocomplete="off"
-          aria-label="Search prompts"
-        />
-        <button type="button" class="search-clear" data-search-clear aria-label="Clear search" hidden>×</button>
-      </div>
     </div>
   </section>
 
-  <AgnesHomeComposer locale="en" />
+  <AgnesImageGenerator locale="en" embedded />
 
   <section class="homepage-intro" aria-label="About the AI image prompt library">
     <div class="container">
@@ -384,173 +374,4 @@ const itemListLd = {
     color: #fff;
   }
   /* 分页样式已移除（瀑布流模式） */
-  /* ---- 精选轮播 (水平滚动 carousel) ---- */
-  .carousel {
-    position: relative;
-    margin: 0 0 8px;
-  }
-  .carousel-track {
-    display: flex;
-    gap: 12px;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    scroll-snap-type: x mandatory;
-    padding: 8px 4px 16px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    scrollbar-color: var(--border) transparent;
-  }
-  .carousel-track::-webkit-scrollbar { height: 6px; }
-  .carousel-track::-webkit-scrollbar-track { background: transparent; }
-  .carousel-track::-webkit-scrollbar-thumb {
-    background: var(--border);
-    border-radius: 3px;
-  }
-  .carousel-slide {
-    flex: 0 0 240px;  /* 固定宽度，不收缩 */
-    scroll-snap-align: start;
-    box-sizing: border-box;
-  }
-  .carousel-arrow {
-    position: absolute;
-    top: 40%;
-    transform: translateY(-50%);
-    z-index: 5;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 1px solid var(--border);
-    background: rgba(255, 255, 255, 0.95);
-    color: var(--text);
-    font-size: 22px;
-    line-height: 1;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.15s, border-color 0.15s, opacity 0.15s;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }
-  .carousel-arrow:hover {
-    background: #fff;
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-  .carousel-arrow[aria-disabled="true"] {
-    opacity: 0.3;
-    cursor: default;
-    pointer-events: none;
-  }
-  .carousel-prev { left: -8px; }
-  .carousel-next { right: -8px; }
-  .carousel-dots {
-    display: flex;
-    justify-content: center;
-    gap: 6px;
-    margin-top: 4px;
-  }
-  .carousel-dot {
-    width: 6px;
-    height: 6px;
-    padding: 0;
-    border: 0;
-    border-radius: 50%;
-    background: var(--border);
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .carousel-dot.active {
-    background: var(--accent);
-    width: 18px;
-    border-radius: 3px;
-  }
-  @media (max-width: 900px) {
-    .carousel-slide { flex: 0 0 200px; }
-    .carousel-arrow { width: 32px; height: 32px; font-size: 18px; }
-  }
-  @media (max-width: 560px) {
-    .carousel-slide { flex: 0 0 160px; }
-  }
 </style>
-
-<script is:inline>
-
-  // ===== Homepage search/filter =====
-  (function () {
-    const search = document.getElementById('prompt-search');
-    const pills = document.querySelectorAll('#filter-pills .pill');
-    const grid = document.getElementById('prompt-grid');    const emptyState = document.getElementById('empty-state');
-    const count = document.getElementById('result-count');
-    if (!grid || !search) return;
-
-    let activeCat = 'all';
-    let activeQuery = new URLSearchParams(window.location.search).get('q')?.trim() || '';
-    if (activeQuery) search.value = activeQuery;
-
-    function apply() {
-      let visible = 0;
-      const wraps = grid.querySelectorAll('.card-wrap');
-      const query = activeQuery.toLowerCase().trim();
-      wraps.forEach((w) => {
-        const cat = w.dataset.cat;
-        const tags = w.dataset.tags || '';
-        const engines = w.dataset.engines || '';
-        const author = w.dataset.author || '';
-        const name = w.dataset.name || '';
-        const matchCat = activeCat === 'all' || cat === activeCat;
-        const matchQuery = !query ||
-          name.includes(query) ||
-          tags.toLowerCase().includes(query) ||
-          engines.toLowerCase().includes(query) ||
-          author.includes(query);
-        const matchFilter = matchCat && matchQuery;
-        const show = matchFilter;
-        w.style.display = show ? '' : 'none';
-        if (show) visible++;
-      });
-      if (emptyState) emptyState.classList.toggle('hidden', visible > 0);
-      if (count) {
-        const total = wraps.length;
-        count.textContent = visible === total
-          ? `${total} prompts`
-          : `${visible} of ${total} prompts`;
-      }
-    }
-
-    search.addEventListener('input', (e) => {
-      activeQuery = e.target.value;
-      syncClearBtn();
-      apply();
-    });
-
-    // ===== 搜索清除按钮：输入内容后显示，点击清空 =====
-    const clearBtn = document.querySelector('[data-search-clear]');
-    function syncClearBtn() {
-      if (clearBtn) clearBtn.hidden = !search.value;
-    }
-    if (clearBtn) {
-      clearBtn.addEventListener('click', () => {
-        search.value = '';
-        activeQuery = '';
-        clearBtn.hidden = true;
-        apply();
-        search.focus();
-      });
-      syncClearBtn();
-    }
-
-    // 分类 pill 已改为真实聚合页链接（/prompts/<cat>/），不再做客户端筛选
-
-    // 初始化：调用一次 apply 让 pager-info 显示初始状态
-    apply();
-
-    // 回车 -> 跳转聚合页做全站搜索（首页只渲染最新 48 条，搜不全）
-    search.addEventListener('keydown', (e) => {
-      if (e.key !== 'Enter') return;
-      const q = search.value.trim();
-      window.location.href = q
-        ? `/ai-image-prompts/?q=${encodeURIComponent(q)}`
-        : `/ai-image-prompts/`;
-    });
-  })();
-</script>
