@@ -1,7 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
 import PromptCard from '../../components/PromptCard.astro';
-import AdSense from '../../components/AdSense.astro';
 import AgnesHomeComposer from '../../components/AgnesHomeComposer.astro';
 import { prompts, promptCategories, type Prompt } from '../../data/prompts';
 import { engines } from '../../data/engines';
@@ -169,7 +168,6 @@ const itemListLd = {
 
   <AgnesHomeComposer locale="zh" />
 
-  <AdSense slot="display" class="hero-ad" />
 
   <section class="homepage-intro" aria-label="关于 AI 生图提示词库">
     <div class="container">
@@ -295,7 +293,6 @@ const itemListLd = {
         </a>
       </div>
 
-      <AdSense slot="multiplex" class="grid-ad" />
 
       <p class="empty hidden" id="empty-state">{t.section.emptyState}</p>
     </div>

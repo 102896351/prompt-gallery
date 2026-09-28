@@ -1,7 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
 import PromptCard from '../components/PromptCard.astro';
-import AdSense from '../components/AdSense.astro';
 import AgnesHomeComposer from '../components/AgnesHomeComposer.astro';
 import { prompts, promptCategories, type Prompt } from '../data/prompts';
 import { engines } from '../data/engines';
@@ -178,7 +177,6 @@ const itemListLd = {
     </div>
   </section>
 
-  <AdSense slot="display" class="hero-ad" />
 
   <section class="homepage-discovery section" aria-labelledby="browse-categories-title">
     <div class="container">
@@ -204,7 +202,6 @@ const itemListLd = {
     </div>
   </section>
 
-  <AdSense slot="in-feed" class="category-ad" />
 
   <section class="homepage-discovery section" aria-labelledby="browse-models-title">
     <div class="container">
@@ -226,7 +223,6 @@ const itemListLd = {
     </div>
   </section>
 
-  <AdSense slot="display" class="models-ad" />
 
   <!-- Featured + Specials: two-column row -->
   <section class="section" id="featured">
@@ -264,7 +260,6 @@ const itemListLd = {
     </div>
   </section>
 
-  <AdSense slot="in-article" class="featured-ad" />
 
   <!-- All prompts, filterable -->
   <section class="section" id="all">
@@ -303,7 +298,6 @@ const itemListLd = {
         </a>
       </div>
 
-      <AdSense slot="multiplex" class="grid-ad" />
 
       <p class="empty hidden" id="empty-state">{t.section.emptyState}</p>
     </div>

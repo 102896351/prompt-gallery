@@ -2,7 +2,6 @@
 import Base from '../../layouts/Base.astro';
 import PromptImage from '../../components/PromptImage.astro';
 import PromptCard from '../../components/PromptCard.astro';
-import AdSense from '../../components/AdSense.astro';
 import AgnesHomeComposer from '../../components/AgnesHomeComposer.astro';
 import { prompts, promptCategories, getRelatedPrompts } from '../../data/prompts';
 import { getCompatibleEngines } from '../../data/engines';
@@ -312,7 +311,6 @@ const optimizedH1 = `${displayTitle} — AI Image Prompt`;
           <p style="margin: 0; color: var(--text);">{prompt.verdict}</p>
         </div>
 
-        <AdSense slot="in-article" class="detail-mid-ad" />
 
         <!-- 完整 prompt（隐藏的 copy source） -->
         <pre id="prompt-full" class="prompt-source" style="display:none;">{fullPrompt}</pre>
@@ -365,7 +363,6 @@ const optimizedH1 = `${displayTitle} — AI Image Prompt`;
           </>
         )}
 
-        <AdSense slot="display" class="detail-prompt-ad" />
 
         <!-- FAQ 区块：用户长尾搜索 + Google 富媒体片段 -->
         <section class="faq-block" aria-label="Frequently asked questions">
@@ -419,7 +416,6 @@ const optimizedH1 = `${displayTitle} — AI Image Prompt`;
           )}
         </div>
 
-        <AdSense slot="display" class="sidebar-ad" minHeight="250px" />
 
         <!-- 适用引擎列表（B 列表型卡片，整张卡可点跳转） -->
         <section class="engines-list" aria-label="Compatible AI engines">
@@ -451,7 +447,6 @@ const optimizedH1 = `${displayTitle} — AI Image Prompt`;
       </aside>
     </div>
 
-    <AdSense slot="multiplex" class="detail-bottom-ad" />
 
     {related.length > 0 && (
       <section class="section">
