@@ -10,51 +10,6 @@ const t = zh;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const siteBase = Astro.site ?? new URL('https://prompt-gallery.example.com');
 
-const featuredSlugs = [
-  'sci-fi-sculptural-representation-zhi-zi-and-trisolar-system',
-  'cloud-white-earphone-making-process-share',
-  'shout-with-me-and-i-will-be-your-girlfriend',
-  'artistic-elevation-street-fighter-character-portfolio',
-  'dress-from-the-inside-out-clothing-isn-t-just-a-uniform',
-  'atmospheric-haze-scene',
-  'today-post-text-clothing-first-step',
-  'fireworks-over-waterfront-city-at-night',
-  'ingredient-orbit-shot',
-  'silhouette-photography',
-  'hero-gazing-out-at-the-stormy-sea',
-  'the-architecture-of-becoming',
-  'exploring-the-miniature-world',
-  'mcdonalds-advertising-workflow-sharing',
-  'baoyu-teacher-s-movie-style-miniature-diorama',
-  'teach-easily-create-edc-image-conventional-mystery-box-mode-full-analysis',
-  'mirror-product-photography',
-  'product-interaction-photography-powder-explosion',
-  'gemini-nano-banana-pro-product-shot',
-  'infographic-indian-man-yoga-steps-aesthetics',
-  'exaggerated-perspective-illustration-style-analysis',
-  'nano-banana-pro-dragon-ball-z-style-q-version-pseudo-3d-illustration',
-  'one-piece-style-devil-fruit-ability-transformation',
-  'miniature-world-inside-a-sphere',
-  'wuta-zhenri-poster-contest',
-  'kling-o1-poster-generation',
-  'text-rendering-parameters-in-image-prompts',
-  'porcelain-sculpture-figurine-friens-dreamlike-art',
-  'high-end-leather-clutch',
-  'surreal-bird-fantasy',
-  'cyber-business-card',
-  'time-traveling-filter-old-photograph-restoration',
-  'transparent-typographic-garment-nanobanana-ver1-2-guide',
-  'a-mesmerizing-passage-of-time-at-shanghai-bund',
-  'y2k-aesthetic-city-impression-collage-poster',
-  'nano-banana-pro-t0r7mf',
-  'ultra-cute-isometric-3d-minature-chengdu-city-diorama-with-panda-theme',
-  'eternal-cycle-of-architecture-of-mortality',
-  'perfect-miniature-banknote',
-  'floating-product-photography',
-];
-const featured = featuredSlugs
-  .map((s) => prompts.find((p) => p.slug === s))
-  .filter(Boolean) as Prompt[];
 
 // Hero banner：使用统一的本地横幅背景，避免首页首屏加载多张远程图片
 const bannerImage = `${base}/banner_bg.jpg`;
@@ -67,14 +22,10 @@ const sorted = [...prompts].sort((a, b) => {
   const score = (p: Prompt) => (p.images.length >= 2 ? 4 : 0) + (p.reusable ? 3 : 0) + (p.language === 'en' ? 2 : 0) + Math.min(p.difficulty, 5);
   return score(b) - score(a);
 });
-// grid 排除已展示的 featured 6 条，避免重复
-const featuredSet = new Set(featuredSlugs);
-const sortedExcludingFeatured = sorted.filter((p) => !featuredSet.has(p.slug));
-
 // 首页只渲染「最新 48 条」（与英文站一致）。全量交由 /ai-image-prompts/ 分页承载。
 // 原先渲染全部 1,188 条 → HTML 达 2MB、1,252 条内链，稀释权重也拖慢抓取。
 const HOME_LATEST_COUNT = 48;
-const latest = sortedExcludingFeatured.slice(0, HOME_LATEST_COUNT);
+const latest = sorted.slice(0, HOME_LATEST_COUNT);
 
 const categoryCards = promptCategories.map((category) => {
   const matches = prompts.filter((prompt) => prompt.category === category.id);
@@ -116,7 +67,7 @@ const itemListLd = {
   description: t.siteTagline,
   url: new URL('/zh/', siteBase).toString(),
   numberOfItems: prompts.length,
-  itemListElement: [...featured, ...sorted.filter((p) => !featuredSet.has(p.slug))].slice(0, 50).map((p, i) => ({
+  itemListElement: sorted.slice(0, 50).map((p, i) => ({
     '@type': 'ListItem',
     position: i + 1,
     name: p.title,
@@ -216,43 +167,6 @@ const itemListLd = {
             <span><strong>{model.nameZh}提示词</strong><small>{model.count} 条案例</small></span>
           </a>
         ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- Featured + Specials: two-column row -->
-  <section class="section" id="featured">
-    <div class="container">
-      <div class="fs-row">
-        <!-- LEFT: 精品 8 张小卡片横滚 -->
-        <div class="fs-col">
-          <div class="fs-col-head">
-            <h2>{t.section.featured}</h2>
-            <span class="count">{t.section.countPicks(featured.length)}</span>
-          </div>
-          <p class="editorial-meta" style="font-size: 12px; margin: 0 0 12px;">
-            为 AI 图像生成社区精选
-          </p>
-          <div class="carousel" data-featured-carousel data-per-page="8">
-            <div class="carousel-track" data-featured-track>
-              {featured.map((p, i) => (
-                <div class="carousel-slide" data-featured-slide>
-                  <PromptCard
-                    prompt={p}
-                    base={base}
-                    overlay={true}
-                    newTab={true}
-                    eager={i < 2}
-                    fetchpriority={i < 2 ? 'high' : 'auto'}
-                  />
-                </div>
-              ))}
-            </div>
-            <button type="button" class="carousel-arrow carousel-prev" data-featured-prev aria-label="上一组">‹</button>
-            <button type="button" class="carousel-arrow carousel-next" data-featured-next aria-label="下一组">›</button>
-            <div class="carousel-dots" data-featured-dots></div>
-          </div>
-        </div>
       </div>
     </div>
   </section>
@@ -542,81 +456,12 @@ const itemListLd = {
 
 <script is:inline>
   // ===== 精选轮播 (水平滚动, 每次滑 1 张) =====
-  (function () {
-    const carousel = document.querySelector('[data-featured-carousel]');
-    if (!carousel) return;
-    const track = carousel.querySelector('[data-featured-track]');
-    const slides = carousel.querySelectorAll('[data-featured-slide]');
-    const prevBtn = carousel.querySelector('[data-featured-prev]');
-    const nextBtn = carousel.querySelector('[data-featured-next]');
-    const dotsBox = carousel.querySelector('[data-featured-dots]');
-    const total = slides.length;
-    if (total === 0) return;
-    let timer = null;
-
-    function stepWidth() {
-      if (slides.length === 0) return 252;
-      const slide = slides[0];
-      const style = window.getComputedStyle(track);
-      const gap = parseFloat(style.gap) || 12;
-      return slide.getBoundingClientRect().width + gap;
-    }
-    function visibleCount() {
-      return Math.max(1, Math.floor(track.clientWidth / stepWidth()));
-    }
-
-    function updateArrows() {
-      const scrollLeft = track.scrollLeft;
-      const max = track.scrollWidth - track.clientWidth - 2;
-      if (prevBtn) prevBtn.setAttribute('aria-disabled', scrollLeft < 2 ? 'true' : 'false');
-      if (nextBtn) nextBtn.setAttribute('aria-disabled', scrollLeft >= max ? 'true' : 'false');
-    }
-    function next() { track.scrollBy({ left: stepWidth(), behavior: 'smooth' }); }
-    function prev() { track.scrollBy({ left: -stepWidth(), behavior: 'smooth' }); }
-
-    prevBtn?.addEventListener('click', () => { prev(); stopAuto(); });
-    nextBtn?.addEventListener('click', () => { next(); stopAuto(); });
-
-    let scrollTicking = false;
-    track.addEventListener('scroll', () => {
-      if (!scrollTicking) {
-        window.requestAnimationFrame(() => { updateArrows(); scrollTicking = false; });
-        scrollTicking = true;
-      }
-    });
-
-    if (dotsBox) dotsBox.style.display = 'none';
-
-    function startAuto() {
-      stopAuto();
-      timer = setInterval(() => {
-        const max = track.scrollWidth - track.clientWidth - 2;
-        if (track.scrollLeft >= max) {
-          track.scrollTo({ left: 0, behavior: 'smooth' });
-        } else {
-          next();
-        }
-      }, 4000);
-    }
-    function stopAuto() { if (timer) { clearInterval(timer); timer = null; } }
-    carousel.addEventListener('mouseenter', stopAuto);
-    carousel.addEventListener('mouseleave', startAuto);
-    document.addEventListener('visibilitychange', () => {
-      document.hidden ? stopAuto() : startAuto();
-    });
-    window.addEventListener('resize', updateArrows);
-
-    updateArrows();
-    startAuto();
-  })();
 
   // ===== 首页搜索/筛选 =====
   (function () {
     const search = document.getElementById('prompt-search');
     const pills = document.querySelectorAll('#filter-pills .pill');
-    const grid = document.getElementById('prompt-grid');
-    const featuredGrid = document.getElementById('featured-grid');
-    const emptyState = document.getElementById('empty-state');
+    const grid = document.getElementById('prompt-grid');    const emptyState = document.getElementById('empty-state');
     const count = document.getElementById('result-count');
     if (!grid || !search) return;
 
@@ -650,9 +495,6 @@ const itemListLd = {
         count.textContent = visible === total
           ? `${total} 条提示词`
           : `${visible} / ${total} 条`;
-      }
-      if (featuredGrid) {
-        featuredGrid.parentElement.parentElement.style.display = query ? 'none' : '';
       }
     }
 
