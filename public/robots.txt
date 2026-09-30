@@ -52,4 +52,4 @@ Allow: /
 User-agent: Bytespider
 Allow: /
 
-Sitemap: https://aiartspell.art/sitemap-index.xml
+Sitemap: https://aiartspell.art/sitemap-0.xml
