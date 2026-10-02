@@ -1,5 +1,5 @@
 ---
-title: How to Write AI Art Prompts: The Complete Beginner's Guide
+title: "How to Write AI Art Prompts: The Complete Beginner's Guide"
 description: A practical framework for writing AI image-generation prompts that actually work — subject, style, composition, lighting, and aspect ratio, with copy-paste examples and a free in-browser generator.
 pubDate: 2026-10-02
 topic: Guides
