@@ -5,6 +5,7 @@ export const en = {
   nav: {
     categories: 'Categories',
     collections: 'Collections',
+    blog: 'Blog',
     featured: 'Featured',
     tools: 'AI Tools',
     imageGenerator: 'AI Image',

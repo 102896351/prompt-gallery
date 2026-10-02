@@ -7,6 +7,7 @@ export const zh: Messages = {
   nav: {
     categories: '分类',
     collections: '专题',
+    blog: '博客',
     featured: '精选',
     tools: 'AI 工具',
     imageGenerator: 'AI 生图',

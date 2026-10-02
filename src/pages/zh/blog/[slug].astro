@@ -1,0 +1,123 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blogZh', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const { title, description, pubDate, updatedDate, cover, topic, readingTime } = post.data;
+const dateStr = pubDate.toISOString().slice(0, 10);
+const updatedStr = updatedDate ? updatedDate.toISOString().slice(0, 10) : null;
+const blogPostLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description,
+  datePublished: pubDate.toISOString(),
+  dateModified: (updatedDate ?? pubDate).toISOString(),
+  image: cover,
+  author: { '@type': 'Organization', name: 'Ai Art Spell' },
+  publisher: { '@type': 'Organization', name: 'Ai Art Spell' },
+  inLanguage: 'zh-Hans',
+  mainEntityOfPage: new URL(Astro.url.pathname, Astro.site).toString(),
+};
+---
+<Base title={title} description={description} ogImage={cover}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(blogPostLd)} />
+  <article class="blog-post">
+    <div class="container blog-wrap">
+      <header class="blog-header">
+        <a href="/zh/blog/" class="blog-back">← 全部指南</a>
+        <span class="blog-topic">{topic}</span>
+        <h1>{title}</h1>
+        <p class="blog-meta">
+          发布于 {dateStr}{updatedStr ? ` · 更新于 ${updatedStr}` : ''}{readingTime ? ` · ${readingTime}` : ''}
+        </p>
+      </header>
+      <div class="prose">
+        <Content />
+      </div>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .blog-wrap { max-width: 760px; padding-top: 56px; padding-bottom: 64px; }
+  .blog-header { margin-bottom: 28px; }
+  .blog-back {
+    display: inline-block;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 18px;
+    text-decoration: none;
+  }
+  .blog-back:hover { color: var(--accent); }
+  .blog-topic {
+    display: inline-block;
+    padding: 3px 12px;
+    background: var(--accent-bg);
+    color: var(--accent);
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .blog-header h1 {
+    font-size: clamp(28px, 4vw, 40px);
+    line-height: 1.25;
+    margin: 0 0 12px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+  .blog-meta {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin: 0;
+  }
+  .prose h2 {
+    font-size: 23px;
+    margin: 36px 0 12px;
+    font-weight: 700;
+  }
+  .prose h3 {
+    font-size: 18px;
+    margin: 26px 0 10px;
+    font-weight: 700;
+  }
+  .prose p { color: var(--text-soft); line-height: 1.9; margin: 0 0 16px; }
+  .prose ul, .prose ol { color: var(--text-soft); padding-left: 22px; margin: 0 0 16px; }
+  .prose li { margin-bottom: 8px; line-height: 1.8; }
+  .prose a { color: var(--accent-soft); text-decoration: underline; text-underline-offset: 2px; }
+  .prose a:hover { color: var(--accent); }
+  .prose strong { color: var(--text); font-weight: 700; }
+  .prose blockquote {
+    margin: 20px 0;
+    padding: 12px 18px;
+    border-left: 3px solid var(--accent);
+    background: var(--accent-bg);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    color: var(--text-soft);
+    line-height: 1.8;
+  }
+  .prose code {
+    background: var(--bg-soft);
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-size: 0.88em;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .prose img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius);
+    margin: 8px 0 16px;
+  }
+  .prose hr { border: none; border-top: 1px solid var(--border, rgba(0,0,0,0.1)); margin: 32px 0; }
+</style>
