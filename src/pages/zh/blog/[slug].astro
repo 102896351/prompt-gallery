@@ -41,6 +41,9 @@ const blogPostLd = {
           发布于 {dateStr}{updatedStr ? ` · 更新于 ${updatedStr}` : ''}{readingTime ? ` · ${readingTime}` : ''}
         </p>
       </header>
+      {cover && (
+        <img class="blog-cover" src={cover} alt={title} width={1200} height={630} />
+      )}
       <div class="prose">
         <Content />
       </div>
@@ -75,6 +78,16 @@ const blogPostLd = {
     margin: 0 0 12px;
     font-weight: 800;
     letter-spacing: -0.01em;
+  }
+  .blog-cover {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1200 / 630;
+    object-fit: cover;
+    border-radius: var(--radius);
+    margin: 0 0 28px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.08);
   }
   .blog-meta {
     color: var(--text-muted);
