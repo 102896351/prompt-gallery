@@ -3,7 +3,7 @@ title: "如何写 AI 绘画提示词：新手完整指南"
 description: 一套能直接上手的 AI 生图提示词框架——主体、风格、构图、光影、画幅，附可复制的示例和免安装的在线生图工具。
 pubDate: 2026-10-02
 topic: 指南
-cover: https://media.aiartspell.art/images/prompts/20251219/nano-banana-pro-front-view-1.jpg
+cover: https://media.aiartspell.art/images/prompts/20251224/minimalist-monochromatic-purple-studio-portrait-1.jpg
 readingTime: 9 分钟
 draft: false
 ---
