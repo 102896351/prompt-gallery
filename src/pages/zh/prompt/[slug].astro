@@ -1,1229 +1,1229 @@
----
-import Base from '../../../layouts/Base.astro';
-import PromptImage from '../../../components/PromptImage.astro';
-import PromptCard from '../../../components/PromptCard.astro';
-import AgnesHomeComposer from '../../../components/AgnesHomeComposer.astro';
-import { prompts, promptCategories, getRelatedPrompts } from '../../../data/prompts';
-import { getCompatibleEngines } from '../../../data/engines';
-import { getDetailSeoTitle, getDetailSeoDescription } from '../../../utils/seo';
-import { zh } from '../../../i18n';
-
-export function getStaticPaths() {
-  return prompts.map((p) => ({
-    params: { slug: p.slug },
-    props: { prompt: p },
-  }));
-}
-
-const { prompt } = Astro.props;
-
-const t = zh;
-const messages = zh;
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const cat = promptCategories.find((c) => c.id === prompt.category);
-const related = getRelatedPrompts(prompt.slug, 8);
-const fullPrompt = prompt.structuredData ? JSON.stringify(prompt.structuredData, null, 2) : prompt.prompt;
-const imageToolUrl = `${base}/zh/tools/agnes-image/?prompt=${encodeURIComponent(fullPrompt)}`;
-const normalizedRatio = prompt.aspectRatio === '16:9'
-  ? '16:9'
-  : prompt.aspectRatio === '9:16' || /^(2:3|3:4)$/.test(prompt.aspectRatio || '')
-    ? '9:16'
-    : '1:1';
-// 适用引擎列表（详情页底部"适用于"区块用）
-const compatibleEngines = getCompatibleEngines(prompt.engines);
-const verifiedEngineKeys = new Set(prompt.engines.filter((k: string) => k !== 'other'));
-// 用于模型识别的文本：合并 prompt 原文 + structuredData（保证原文里的 "Gemini" 等关键词能被识别）
-const textForModelDetection = [prompt.prompt, prompt.rawBlock, fullPrompt].filter(Boolean).join('\n');
-// 中文页面：分类标签用 labelZh
-const displayCatLabel = cat?.labelZh ?? cat?.label ?? prompt.category;
-// 中文页面：标题用原文（中文用户直接看原标题）
-const displayTitle = prompt.title;
-// 引擎显示名（按 locale 翻译）
-const engineLabel = (key: string) => (messages.engines as Record<string, string>)[key] ?? key;
-
-// 从 prompt 文本中识别额外提到的模型/工具（按从大到小顺序，避免 Nano Banana 抢 Gemini）
-const MODEL_PATTERNS: [RegExp, string][] = [
-  [/\b(Gemini(?:\s*Nano\s*Banana)?(?:\s*Pro)?)\b/gi, 'gemini'],
-  [/\b(Nano\s*Banana(?:\s*Pro)?)\b/gi, 'nano-banana-pro'],
-  [/\b(ChatGPT|GPT-4o?|GPT\s*Image)\b/gi, 'chatgpt-image'],
-  [/\b(Midjourney|MJ)\b/gi, 'midjourney'],
-  [/\b(Stable\s*Diffusion|SD\s*XL|SD3?)\b/gi, 'stable-diffusion'],
-  [/\b(Flux(?:\s*\.?\s*1)?)\b/gi, 'flux'],
-  [/\b(Sora)\b/gi, 'sora'],
-  [/\b(Veo)\b/gi, 'veo'],
-  [/\b(Kling|可灵)\b/gi, 'kling'],
-  [/\b(DALL[\s-]?E)\b/gi, 'chatgpt-image'],
-  [/\b(Hailuo|海螺)\b/gi, 'other'],
-  [/\b(Imagen)\b/gi, 'gemini'],
-];
-// 跑所有 pattern，按 match 区间去重（避免 Gemini 区间内的 Nano Banana 重复添加）
-const detectedEngines = new Set<string>(prompt.engines);
-for (const [re, key] of MODEL_PATTERNS) {
-  re.lastIndex = 0;
-  if (re.test(textForModelDetection)) detectedEngines.add(key);
-}
-const displayEngines = [...detectedEngines]
-  .map(k => engineLabel(k))
-  .filter(Boolean);
-// 标签显示名
-const tagLabel = (key: string) => (messages.tags as Record<string, string>)[key] ?? key;
-
-// 站点基础 URL（上线时只需改 astro.config.mjs 的 site，无需改这里）
-const siteBase = Astro.site ?? new URL('https://prompt-gallery.example.com');
-const pageUrl = new URL(`/zh/prompt/${prompt.slug}/`, siteBase).toString();
-const homeUrl = new URL('/zh/', siteBase).toString();
-const catUrl = new URL(`/zh/#${prompt.category}`, siteBase).toString();
-
-// JSON-LD Article（CreativeWork 的子类型，利于 Google 收录长文式 prompt 卡片页）
-const articleLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Article',
-  headline: prompt.title,
-  name: prompt.title,
-  description: prompt.tagline,
-  url: pageUrl,
-  mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
-  datePublished: prompt.dateAdded,
-  dateModified: prompt.dateAdded,
-  dateCreated: prompt.dateAdded,
-  author: {
-    '@type': 'Person',
-    name: prompt.source.authorName,
-    url: prompt.source.authorUrl,
-  },
-  publisher: {
-    '@type': 'Organization',
-    name: 'Ai Art Spell',
-    logo: { '@type': 'ImageObject', url: new URL('favicon.jpg', siteBase).toString() },
-  },
-  keywords: prompt.tags.join(', '),
-  ...(prompt.images[0] ? { image: [prompt.images[0].src] } : {}),
-  ...(prompt.aspectRatio ? { aspectRatio: prompt.aspectRatio } : {}),
-  ...(prompt.source.sourceUrl ? { sourceOrganization: { '@type': 'WebSite', url: prompt.source.sourceUrl } } : {}),
-};
-
-// JSON-LD BreadcrumbList（首页 > 分类 > prompt）
-const breadcrumbLd = {
-  '@context': 'https://schema.org',
-  '@type': 'BreadcrumbList',
-  itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Ai Art Spell', item: homeUrl },
-    { '@type': 'ListItem', position: 2, name: displayCatLabel, item: catUrl },
-    { '@type': 'ListItem', position: 3, name: prompt.title, item: pageUrl },
-  ],
-};
-
-// SEO 长尾：取第一个非 "other" 引擎作为显示名，兜底 "AI 图像"
-const primaryEngineKey = prompt.engines.find(e => e !== 'other') || prompt.engines[0] || 'other';
-const engineName = engineLabel(primaryEngineKey);
-
-// JSON-LD FAQPage（中文版问题用中文，吃百度/搜狗长尾词）
-const faqItems: Array<{ q: string; a: string }> = [
-  {
-    q: `这条「${prompt.title}」提示词是什么？`,
-    a: prompt.tagline || `用于 ${engineName} AI 图像生成的${displayCatLabel}提示词。`,
-  },
-  {
-    q: '这条提示词适用于哪些 AI 工具？',
-    a: `兼容：${displayEngines.join('、')}。复制后粘贴到任一工具即可生成图片。`,
-  },
-  {
-    q: '怎么使用这条提示词？',
-    a: prompt.reusable && prompt.placeholders?.length
-      ? `这是可复用模板，请将 ${prompt.placeholders.slice(0, 2).map(p => '`' + p + '`').join('、')} 等占位符替换为你自己的内容，然后粘贴到 ${engineName} 即可。`
-      : `点击上方"复制提示词"按钮，粘贴到 ${engineName} 或其他兼容的 AI 图像生成工具中生成。可根据具体需求微调提示词。`,
-  },
-  {
-    q: '生成的图片可以商用吗？',
-    a: `请查阅原始来源（${prompt.source.platform}）的授权条款。本站仅整理提示词文本，图片版权归原作者所有。`,
-  },
-];
-const faqLd = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: faqItems.map(item => ({
-    '@type': 'Question',
-    name: item.q,
-    acceptedAnswer: { '@type': 'Answer', text: item.a },
-  })),
-};
-
-// meta keywords: Bing/Yandex 用
-const metaKeywords = [
-  prompt.title,
-  `${engineName} 提示词`,
-  `${displayCatLabel}提示词`,
-  `${engineName} ${displayCatLabel}`,
-  ...prompt.tags,
-  ...displayEngines,
-  'AI 图像生成',
-  '提示词库',
-  '一键复制',
-].join('，');
-
-// 优化 <h1>：包含引擎 + use case 长尾词
-const optimizedH1 = `${prompt.title} — AI生图提示词`;
----
-
-<Base title={getDetailSeoTitle(prompt, prompt.title, 'zh')} description={getDetailSeoDescription(prompt, prompt.title, 'zh')} ogImage={prompt.images[0]?.src}>
-  <script slot="head" type="application/ld+json" set:html={JSON.stringify(articleLd)} />
-  <script slot="head" type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
-  <script slot="head" type="application/ld+json" set:html={JSON.stringify(faqLd)} />
-  <Fragment slot="head">
-    <meta name="keywords" content={metaKeywords} />
-  </Fragment>
-
-  <div class="container">
-    <!-- 视觉面包屑导航（与 JSON-LD BreadcrumbList 对应） -->
-    <nav class="breadcrumb" aria-label="面包屑">
-      <a href={`${base}/zh/`}>首页</a>
-      <span class="breadcrumb-sep">/</span>
-      <a href={`${base}/zh/#all`}>全部提示词</a>
-      <span class="breadcrumb-sep">/</span>
-      <a href={`${base}/zh/#${prompt.category}`}>{displayCatLabel}</a>
-      <span class="breadcrumb-sep">/</span>
-      <span class="breadcrumb-current" aria-current="page">{displayTitle.slice(0, 30)}{displayTitle.length > 30 ? '...' : ''}</span>
-    </nav>
-
-    <div class="detail-head">
-      <p style="margin: 0 0 12px; font-size: 13px;">
-        <a href={`${base}/zh/`} style="color: var(--text-soft); text-decoration: none;">← 返回首页</a>
-      </p>
-      <div class="detail-pills">
-        <span class="pill active">{displayCatLabel}</span>
-        {prompt.engines.filter(e => e !== 'other').map(e => (
-          <span class="badge engine">{engineLabel(e)}</span>
-        ))}
-        <span class={`badge diff-${prompt.difficulty}`}>难度 {prompt.difficulty}/5</span>
-        {prompt.reusable && <span class="badge host">{tagLabel('reusable')}</span>}
-      </div>
-
-      <h1>{optimizedH1}</h1>
-      <p class="tagline">{prompt.tagline}</p>
-
-      <div class="detail-actions">
-        <button type="button" class="btn primary" data-copy-target="prompt-full" id="copy-btn">
-          <span class="copy-default">📋 复制提示词</span>
-          <span class="copy-success hidden">✓ 已复制</span>
-        </button>
-        <a href={imageToolUrl} class="btn primary">🎨 生成同款图片</a>
-        <a href={prompt.source.sourceUrl} target="_blank" rel="noopener" class="btn source-link-hidden">
-          在 {prompt.source.platform} 查看原文 →
-        </a>
-      </div>
-    </div>
-
-    <AgnesHomeComposer
-      locale="zh"
-      initialPrompt={prompt.prompt}
-      initialRatio={normalizedRatio}
-      floatingMode="detail"
-    />
-
-    <div class="detail-grid">
-      <div class="prose">
-        {prompt.images.length > 0 && (
-          <div class="prompt-gallery" data-gallery>
-            <button
-              type="button"
-              class="prompt-main-image"
-              data-gallery-trigger="0"
-              aria-label={`查看第 1 / ${prompt.images.length} 张图片`}
-            >
-              <PromptImage
-                src={prompt.images[0].src}
-                alt={prompt.images[0].alt ?? prompt.title}
-                width={prompt.images[0].width}
-                className="prompt-main-image-img"
-                eager={true}
-                fetchpriority="high"
-              />
-              <span class="prompt-image-count">
-                <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
-                  <path fill="currentColor" d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
-                </svg>
-                <span>1 / {prompt.images.length}</span>
-              </span>
-            </button>
-
-            {prompt.images.length > 1 && (
-              <div class="prompt-thumbs" role="tablist" aria-label="图片画廊">
-                {prompt.images.map((img, i) => (
-                  <button
-                    type="button"
-                    class={`prompt-thumb${i === 0 ? ' active' : ''}`}
-                    data-gallery-trigger={String(i)}
-                    data-gallery-src={img.src}
-                    aria-label={`显示第 ${i + 1} 张`}
-                    aria-selected={i === 0 ? 'true' : 'false'}
-                  >
-                    <PromptImage
-                      src={img.src}
-                      alt={img.alt ?? prompt.title}
-                      width={img.width}
-                      className="prompt-thumb-img"
-                    />
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {prompt.images.length > 0 && (
-          <div class="lightbox" data-lightbox hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="图片查看器">
-            <button class="lightbox-close" data-lightbox-close aria-label="关闭">×</button>
-            <button class="lightbox-prev" data-lightbox-prev aria-label="上一张">‹</button>
-            <button class="lightbox-next" data-lightbox-next aria-label="下一张">›</button>
-            <div class="lightbox-stage">
-              {prompt.images.map((img, i) => (
-                <img
-                  src={img.src}
-                  alt={img.alt ?? prompt.title}
-                  class={`lightbox-img${i === 0 ? ' active' : ''}`}
-                  data-lightbox-img={String(i)}
-                  loading="lazy"
-                  decoding="async"
-                />
-              ))}
-            </div>
-            <div class="lightbox-meta">
-              <span data-lightbox-counter>1 / {prompt.images.length}</span>
-              <span data-lightbox-caption>{prompt.images[0].alt ?? prompt.title}</span>
-            </div>
-          </div>
-        )}
-
-        <div class="verdict-box">
-          <div class="label">编辑点评</div>
-          <p style="margin: 0; color: var(--text);">{prompt.verdict}</p>
-        </div>
-
-
-        <pre id="prompt-full" class="prompt-source" style="display:none;">{fullPrompt}</pre>
-
-        <h2>提示词内容</h2>
-        <div class="prompt-display">
-          <button type="button" class="prompt-copy-btn" data-prompt-copy aria-label="复制提示词">
-            <span class="copy-default">📋 复制</span>
-            <span class="copy-success hidden">✓ 已复制</span>
-          </button>
-          <pre><code>{fullPrompt}</code></pre>
-        </div>
-
-        {prompt.negativePrompt && (
-          <>
-            <h2>反向提示词</h2>
-            <div class="prompt-display">
-              <button type="button" class="prompt-copy-btn" data-prompt-copy aria-label="复制反向提示词">
-                <span class="copy-default">📋 复制</span>
-                <span class="copy-success hidden">✓ 已复制</span>
-              </button>
-              <pre><code>{prompt.negativePrompt}</code></pre>
-            </div>
-          </>
-        )}
-
-        {prompt.aspectRatio && (
-          <>
-            <h2>画面比例</h2>
-            <p><code>{prompt.aspectRatio}</code></p>
-          </>
-        )}
-
-        {prompt.reusable && prompt.prompt.includes('[') && (
-          <>
-            <h2>使用方法</h2>
-            <p>
-              这是一个<strong>可复用的模板</strong>。请把占位符（如 <code>[INSERT CITY NAME]</code>）替换成你自己的内容，再发送给图像生成模型。
-            </p>
-            {prompt.placeholders && prompt.placeholders.length > 0 && (
-              <div class="prompt-placeholders">
-                {prompt.placeholders.map((ph) => (
-                  <code class="placeholder-chip">{ph}</code>
-                ))}
-              </div>
-            )}
-          </>
-        )}
-
-
-        <!-- FAQ 区块：长尾搜索 + Google 富媒体片段 -->
-        <section class="faq-block" aria-label="常见问题">
-          <h2>常见问题</h2>
-          {faqItems.map((item) => (
-            <details class="faq-item">
-              <summary>{item.q}</summary>
-              <p>{item.a}</p>
-            </details>
-          ))}
-        </section>
-
-        <section class="source-section-hidden">
-          <h2>来源</h2>
-          <div class="source-box">
-          <div class="source-author">
-            <strong>@{prompt.source.authorName}</strong>
-            {prompt.source.authorUrl && (
-              <a href={prompt.source.authorUrl} target="_blank" rel="noopener">主页 ↗</a>
-            )}
-          </div>
-          <div class="source-platform">
-            平台：<strong>{prompt.source.platform}</strong>
-            {prompt.source.statusId && <span class="source-status"> · status {prompt.source.statusId}</span>}
-          </div>
-          <a href={prompt.source.sourceUrl} target="_blank" rel="noopener" class="source-url">
-            {prompt.source.sourceUrl} →
-          </a>
-          </div>
-        </section>
-      </div>
-
-      <aside>
-        <div class="specs">
-          <h3>速览</h3>
-          <div class="spec-row"><span class="k">分类</span><span class="v">{displayCatLabel}</span></div>
-          <div class="spec-row"><span class="k">使用的模型</span><span class="v">{displayEngines.join('、')}</span></div>
-          {prompt.aspectRatio && (
-            <div class="spec-row"><span class="k">画面比例</span><span class="v">{prompt.aspectRatio}</span></div>
-          )}
-          <div class="spec-row"><span class="k">难度</span><span class="v">{prompt.difficulty}/5</span></div>
-          <div class="spec-row"><span class="k">可复用</span><span class="v">{prompt.reusable ? '是' : '否'}</span></div>
-          <div class="spec-row"><span class="k">原文语言</span><span class="v">{prompt.language.toUpperCase()}</span></div>
-          <div class="spec-row"><span class="k">收录日期</span><span class="v">{prompt.dateAdded}</span></div>
-          {prompt.tags.length > 0 && (
-            <div class="spec-row">
-              <span class="k">标签</span>
-              <span class="v">{prompt.tags.join(', ')}</span>
-            </div>
-          )}
-        </div>
-
-
-        <!-- 适用引擎列表（B 列表型卡片，整张卡可点跳转） -->
-        <section class="engines-list" aria-label="适用 AI 引擎">
-          <h3>适用于以下 AI 工具</h3>
-          <p class="engines-sub">复制下方提示词，粘贴到任一工具即可使用。带 ✓ 的是已验证可用的引擎。</p>
-          <div class="engine-rows">
-            {compatibleEngines.map((e) => {
-              const verified = verifiedEngineKeys.has(e.key);
-              return (
-                <a href={e.url} target="_blank" rel="noopener" class="engine-row">
-                  {e.icon ? (
-                    <img class="engine-logo" src={e.icon} alt={e.nameZh} loading="lazy" width="32" height="32" />
-                  ) : (
-                    <span class="engine-emoji" aria-hidden="true">{e.emoji}</span>
-                  )}
-                  <span class="engine-info">
-                    <span class="engine-name">
-                      {e.nameZh}
-                      {verified && <span class="engine-verified" title="已验证可用">✓</span>}
-                    </span>
-                    <span class="engine-desc">{e.descZh}</span>
-                  </span>
-                  <span class="engine-arrow" aria-hidden="true">→</span>
-                </a>
-              );
-            })}
-          </div>
-        </section>
-      </aside>
-    </div>
-
-
-    {related.length > 0 && (
-      <section class="section">
-        <div class="section-head">
-          <h2>相似提示词</h2>
-          <a href={`${base}/zh/#all`} class="see-all">查看全部 →</a>
-        </div>
-        <div class="grid">
-          {related.map((p) => <PromptCard prompt={p} base={base} />)}
-        </div>
-      </section>
-    )}
-  </div>
-</Base>
-
-<style>
-  /* 视觉面包屑导航（与 JSON-LD BreadcrumbList 对应） */
-  .breadcrumb {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 6px;
-    padding: 20px 0 8px;
-    font-size: 13px;
-    color: var(--text-muted);
-  }
-  .breadcrumb a {
-    color: var(--text-soft);
-    text-decoration: none;
-  }
-  .breadcrumb a:hover { color: var(--accent-soft); }
-  .breadcrumb-sep {
-    color: var(--border);
-    margin: 0 2px;
-  }
-  .breadcrumb-current {
-    color: var(--text);
-    font-weight: 500;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 30ch;
-  }
-
-  .back-link {
-    color: var(--text-muted);
-    font-size: 14px;
-    display: inline-block;
-    margin-bottom: 16px;
-  }
-  .back-link:hover { color: var(--accent-soft); }
-  .detail-pills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 16px;
-  }
-  .detail-head h1 {
-    font-size: clamp(28px, 4vw, 40px);
-    line-height: 1.2;
-    margin: 0 0 12px;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-  }
-  .detail-head .tagline {
-    font-size: 17px;
-    color: var(--text-soft);
-    margin: 0 0 24px;
-    -webkit-line-clamp: unset;
-  }
-  .detail-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 32px;
-  }
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 10px 18px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    background: var(--bg-card);
-    color: var(--text);
-    font-size: 14px;
-    font-family: inherit;
-    cursor: pointer;
-    transition: all 0.15s;
-    text-decoration: none;
-  }
-  .btn:hover { border-color: var(--accent); color: var(--text); }
-  .btn.primary {
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    border-color: transparent;
-    color: #ffffff;
-    font-weight: 600;
-  }
-  .btn.primary:hover { filter: brightness(1.1); color: #ffffff; }
-  .copy-success.hidden { display: none; }
-
-  .detail-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 280px;
-    gap: 48px;
-  }
-  @media (max-width: 900px) {
-    .detail-grid { grid-template-columns: 1fr; }
-  }
-  .prose h2 {
-    font-size: 20px;
-    margin: 32px 0 12px;
-    font-weight: 700;
-  }
-  .prose p { color: var(--text-soft); }
-
-  /* 主图 + 缩略图条带 + Lightbox */
-  .prompt-gallery {
-    margin-bottom: 32px;
-  }
-  .prompt-main-image {
-    position: relative;
-    display: block;
-    width: 100%;
-    /* No aspect-ratio: tall images (vertical 9:16, square collages,
-       portrait crops) used to be force-cropped to 16:10 with
-       object-fit: cover, hiding the top/bottom of the actual
-       prompt output. The user explicitly asked for the forced
-       16:10 to go. Now image height is intrinsic; the wrapper
-       auto-sizes to the image. */
-    max-height: 85vh;
-    overflow: hidden;
-    border-radius: var(--radius);
-    background: var(--bg-soft);
-    border: 1px solid var(--border);
-    cursor: zoom-in;
-    padding: 0;
-    font-family: inherit;
-  }
-  .prompt-main-image:hover { border-color: var(--accent); }
-  .prompt-main-image :global(img) {
-    width: 100%;
-    height: auto;
-    max-height: 85vh;
-    object-fit: contain;
-    display: block;
-    transition: transform 0.3s;
-  }
-  .prompt-main-image:hover :global(img) {
-    transform: scale(1.03);
-  }
-  .prompt-image-count {
-    position: absolute;
-    right: 12px;
-    bottom: 12px;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    background: rgba(11, 13, 18, 0.78);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 999px;
-    color: var(--text);
-    font-size: 12px;
-    font-weight: 500;
-    pointer-events: none;
-  }
-
-  .prompt-thumbs {
-    display: flex;
-    gap: 8px;
-    overflow-x: auto;
-    margin-top: 8px;
-    padding-bottom: 4px;
-    scrollbar-width: thin;
-  }
-  .prompt-thumb {
-    flex: 0 0 auto;
-    width: 88px;
-    height: 88px;
-    padding: 0;
-    border-radius: var(--radius-sm);
-    overflow: hidden;
-    background: var(--bg-soft);
-    border: 2px solid transparent;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.15s;
-    opacity: 0.6;
-  }
-  .prompt-thumb:hover { opacity: 0.9; }
-  .prompt-thumb.active {
-    opacity: 1;
-    border-color: var(--accent);
-  }
-  .prompt-thumb :global(img) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  .lightbox[hidden] { display: none; }
-  .lightbox {
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-    background: rgba(0, 0, 0, 0.92);
-    backdrop-filter: blur(4px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-  }
-  .lightbox-stage {
-    position: relative;
-    max-width: min(1200px, 92vw);
-    max-height: 82vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .lightbox-img {
-    display: none;
-    max-width: 100%;
-    max-height: 82vh;
-    object-fit: contain;
-    border-radius: var(--radius-sm);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  }
-  .lightbox-img.active { display: block; }
-
-  .lightbox-close,
-  .lightbox-prev,
-  .lightbox-next {
-    position: absolute;
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: var(--text);
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.15s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .lightbox-close {
-    top: 20px;
-    right: 20px;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    font-size: 24px;
-    line-height: 1;
-  }
-  .lightbox-prev,
-  .lightbox-next {
-    top: 50%;
-    transform: translateY(-50%);
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    font-size: 32px;
-    line-height: 1;
-  }
-  .lightbox-prev { left: 20px; }
-  .lightbox-next { right: 20px; }
-  .lightbox-close:hover,
-  .lightbox-prev:hover,
-  .lightbox-next:hover {
-    background: rgba(236, 72, 153, 0.25);
-    border-color: var(--accent);
-  }
-
-  .lightbox-meta {
-    position: absolute;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 8px 16px;
-    background: rgba(11, 13, 18, 0.78);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 999px;
-    color: var(--text);
-    font-size: 13px;
-    max-width: 80vw;
-  }
-  .lightbox-meta [data-lightbox-counter] {
-    color: var(--accent-soft);
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-  }
-  .lightbox-meta [data-lightbox-caption] {
-    color: var(--text-soft);
-    max-width: 50ch;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  /* ---- 适用引擎列表 (B 列表型) ---- */
-  .engines-list {
-    margin: 20px 0 0;
-    padding: 18px;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-  }
-  .engines-list h3 {
-    font-size: 14px;
-    font-weight: 700;
-    margin: 0 0 6px;
-    color: var(--text);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
-  .engines-heading {
-    font-size: 18px;
-    font-weight: 700;
-    margin: 0 0 8px;
-    color: var(--text);
-  }
-  .engines-sub {
-    color: var(--text-muted);
-    font-size: 12px;
-    margin: 0 0 12px;
-    line-height: 1.4;
-  }
-  .engine-rows {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .engine-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px 10px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text);
-    text-decoration: none;
-    transition: border-color 0.15s, background 0.15s, transform 0.05s;
-  }
-  .engine-row:hover {
-    border-color: var(--accent);
-    background: var(--accent-bg);
-  }
-  .engine-row:active { transform: scale(0.99); }
-  .engine-emoji {
-    font-size: 22px;
-    line-height: 1;
-    width: 28px;
-    text-align: center;
-    flex-shrink: 0;
-  }
-  .engine-logo {
-    width: 28px;
-    height: 28px;
-    object-fit: contain;
-    flex-shrink: 0;
-    border-radius: 6px;
-    background: #fff;
-  }
-  .engine-info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-    min-width: 0;
-  }
-  .engine-name {
-    font-weight: 600;
-    font-size: 13px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    line-height: 1.3;
-  }
-  .engine-verified {
-    font-size: 11px;
-    color: #16a34a;
-    font-weight: 700;
-  }
-  .engine-desc {
-    color: var(--text-soft);
-    font-size: 11px;
-    line-height: 1.35;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  .engine-arrow {
-    color: var(--text-muted);
-    font-size: 16px;
-    flex-shrink: 0;
-    transition: transform 0.15s, color 0.15s;
-  }
-  .engine-row:hover .engine-arrow {
-    color: var(--accent);
-    transform: translateX(2px);
-  }
-
-  .prompt-images {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 8px;
-    margin-bottom: 32px;
-    border-radius: var(--radius);
-    overflow: hidden;
-  }
-
-  .verdict-box {
-    padding: 16px 20px;
-    background: var(--accent-bg);
-    border: 1px solid var(--accent);
-    border-radius: var(--radius);
-    margin-bottom: 24px;
-  }
-  .verdict-box .label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--accent-soft);
-    font-weight: 700;
-    margin-bottom: 6px;
-  }
-  /* ---- FAQ 区块 ---- */
-  .faq-block {
-    margin: 32px 0;
-    padding: 20px 24px;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-  }
-  .faq-block h2 {
-    font-size: 18px;
-    margin: 0 0 16px;
-    color: var(--text);
-    font-weight: 700;
-  }
-  .faq-item {
-    border-top: 1px solid var(--border);
-    padding: 12px 0;
-  }
-  .faq-item:first-child { border-top: none; padding-top: 0; }
-  .faq-item summary {
-    cursor: pointer;
-    font-weight: 600;
-    color: var(--text);
-    list-style: none;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 15px;
-  }
-  .faq-item summary::-webkit-details-marker { display: none; }
-  .faq-item summary::before {
-    content: '+';
-    font-weight: 400;
-    font-size: 20px;
-    color: var(--accent);
-    line-height: 1;
-    flex-shrink: 0;
-    width: 14px;
-    text-align: center;
-  }
-  .faq-item[open] summary::before { content: '−'; }
-  .faq-item p {
-    margin: 10px 0 0 22px;
-    color: var(--text-soft);
-    font-size: 14px;
-    line-height: 1.6;
-  }
-
-  .prompt-display {
-    background: var(--bg-soft);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 16px;
-    padding-top: 48px;
-    overflow-x: auto;
-    position: relative;
-  }
-  /* 右上角复制按钮 */
-  .prompt-copy-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 6px 12px;
-    font-size: 12px;
-    color: var(--text);
-    cursor: pointer;
-    transition: background 0.15s, border-color 0.15s;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    z-index: 1;
-  }
-  .prompt-copy-btn:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-  .prompt-copy-btn .copy-success { color: #16a34a; }
-  .prompt-copy-btn .copy-success.hidden { display: none; }
-  .prompt-copy-btn .copy-default.hidden { display: none; }
-  .prompt-display pre {
-    margin: 0;
-    color: var(--text);
-    font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, monospace;
-    font-size: 13px;
-    line-height: 1.55;
-    white-space: pre-wrap;
-    word-break: break-word;
-  }
-
-  .prompt-placeholders {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 12px;
-  }
-  .placeholder-chip {
-    padding: 4px 10px;
-    background: rgba(245, 158, 11, 0.12);
-    border: 1px solid var(--amber);
-    color: var(--amber);
-    border-radius: 999px;
-    font-size: 12px;
-    font-family: ui-monospace, monospace;
-  }
-
-  .source-link-hidden,
-  .source-section-hidden {
-    display: none !important;
-  }
-
-  /* 来源区块（默认隐藏，保留 DOM/数据，未来移除 hidden class 即恢复） */
-  .source-box {
-    padding: 16px;
-    background: var(--bg-soft);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    font-size: 14px;
-  }
-  .source-author { margin-bottom: 6px; }
-  .source-author a {
-    margin-left: 8px;
-    color: var(--accent-soft);
-    font-size: 12px;
-  }
-  .source-platform { color: var(--text-soft); font-size: 13px; margin-bottom: 8px; }
-  .source-status { color: var(--text-muted); font-size: 11px; font-family: monospace; }
-  .source-url {
-    display: block;
-    color: var(--accent-soft);
-    font-family: ui-monospace, monospace;
-    font-size: 12px;
-    word-break: break-all;
-  }
-
-  .cc-notice {
-    margin-top: 24px;
-    padding: 12px 16px;
-    background: var(--bg-soft);
-    border-left: 3px solid var(--accent);
-    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-    font-size: 13px;
-    color: var(--text-soft);
-  }
-  .cc-notice a { color: var(--accent-soft); }
-
-  .specs {
-    padding: 18px;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    margin-bottom: 16px;
-  }
-  .specs h3 {
-    margin: 0 0 12px;
-    font-size: 14px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-muted);
-    font-weight: 600;
-  }
-  .spec-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 12px;
-    padding: 6px 0;
-    border-bottom: 1px dashed var(--border);
-    font-size: 13px;
-  }
-  .spec-row:last-child { border-bottom: none; }
-  .spec-row .k { color: var(--text-muted); flex-shrink: 0; }
-  .spec-row .v {
-    color: var(--text);
-    text-align: right;
-    word-break: break-word;
-  }
-
-  .cc-card {
-    padding: 14px 18px;
-    background: var(--bg-soft);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    font-size: 13px;
-  }
-  .cc-card h3 {
-    margin: 0 0 8px;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-muted);
-    font-weight: 600;
-  }
-  .cc-card a { color: var(--accent-soft); }
-
-  .badge.diff-1 { background: rgba(34, 197, 94, 0.12); border-color: var(--green); color: var(--green); }
-  .badge.diff-2 { background: rgba(34, 197, 94, 0.12); border-color: var(--green); color: var(--green); }
-  .badge.diff-3 { background: rgba(245, 158, 11, 0.12); border-color: var(--amber); color: var(--amber); }
-  .badge.diff-4 { background: rgba(245, 158, 11, 0.12); border-color: var(--amber); color: var(--amber); }
-  .badge.diff-5 { background: rgba(239, 68, 68, 0.12); border-color: var(--red); color: var(--red); }
-
-  .see-all {
-    color: var(--accent-soft);
-    font-size: 14px;
-    text-decoration: none;
-  }
-  .see-all:hover { color: var(--accent); }
-</style>
-
-<script is:inline>
-  (function () {
-    // ===== Copy prompt button =====
-    const btn = document.getElementById('copy-btn');
-    const src = document.getElementById('prompt-full');
-    if (btn && src) {
-      btn.addEventListener('click', async () => {
-        try {
-          await navigator.clipboard.writeText(src.textContent || '');
-          const def = btn.querySelector('.copy-default');
-          const ok = btn.querySelector('.copy-success');
-          if (def && ok) {
-            def.classList.add('hidden');
-            ok.classList.remove('hidden');
-            setTimeout(() => {
-              def.classList.remove('hidden');
-              ok.classList.add('hidden');
-            }, 1800);
-          }
-        } catch (e) {
-          const range = document.createRange();
-          range.selectNode(src);
-          const sel = window.getSelection();
-          sel.removeAllRanges();
-          sel.addRange(range);
-        }
-      });
-    }
-
-    // ===== Inline copy buttons (代码框右上角) =====
-    document.querySelectorAll('[data-prompt-copy]').forEach((btn) => {
-      btn.addEventListener('click', async () => {
-        const container = btn.closest('.prompt-display');
-        if (!container) return;
-        const pre = container.querySelector('pre');
-        const text = pre ? (pre.textContent || '') : '';
-        try {
-          await navigator.clipboard.writeText(text);
-          const def = btn.querySelector('.copy-default');
-          const ok = btn.querySelector('.copy-success');
-          if (def && ok) {
-            def.classList.add('hidden');
-            ok.classList.remove('hidden');
-            setTimeout(() => {
-              def.classList.remove('hidden');
-              ok.classList.add('hidden');
-            }, 1800);
-          }
-        } catch (e) {
-          if (pre) {
-            const range = document.createRange();
-            range.selectNode(pre);
-            const sel = window.getSelection();
-            sel.removeAllRanges();
-            sel.addRange(range);
-          }
-        }
-      });
-    });
-
-    // ===== Image gallery + lightbox =====
-    const gallery = document.querySelector('[data-gallery]');
-    const lightbox = document.querySelector('[data-lightbox]');
-    if (!gallery || !lightbox) return;
-
-    const triggers = gallery.querySelectorAll('[data-gallery-trigger]');
-    const mainCount = gallery.querySelector('.prompt-image-count span:last-child');
-    const thumbs = gallery.querySelectorAll('.prompt-thumb');
-    const lightboxImgs = lightbox.querySelectorAll('[data-lightbox-img]');
-    const counterEl = lightbox.querySelector('[data-lightbox-counter]');
-    const captionEl = lightbox.querySelector('[data-lightbox-caption]');
-    const total = lightboxImgs.length;
-    let current = 0;
-
-    function setMain(idx) {
-      current = idx;
-      const mainImgEl = gallery.querySelector('.prompt-main-image img');
-      const target = lightboxImgs[idx];
-      if (mainImgEl && target) {
-        mainImgEl.src = target.src;
-        mainImgEl.alt = target.alt || '';
-      }
-      if (mainCount) mainCount.textContent = `${idx + 1} / ${total}`;
-      thumbs.forEach((t, i) => {
-        t.classList.toggle('active', i === idx);
-        t.setAttribute('aria-selected', i === idx ? 'true' : 'false');
-      });
-    }
-
-    function openLightbox(idx) {
-      current = idx;
-      lightbox.hidden = false;
-      lightbox.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
-      showLightboxImg(idx);
-    }
-
-    function closeLightbox() {
-      lightbox.hidden = true;
-      lightbox.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
-    }
-
-    function showLightboxImg(idx) {
-      current = idx;
-      lightboxImgs.forEach((img, i) => {
-        img.classList.toggle('active', i === idx);
-      });
-      if (counterEl) counterEl.textContent = `${idx + 1} / ${total}`;
-      if (captionEl) {
-        const target = lightboxImgs[idx];
-        captionEl.textContent = target ? (target.alt || '') : '';
-      }
-    }
-
-    function nav(delta) {
-      const next = (current + delta + total) % total;
-      if (!lightbox.hidden) {
-        showLightboxImg(next);
-      } else {
-        setMain(next);
-      }
-    }
-
-    triggers.forEach((t) => {
-      t.addEventListener('click', (e) => {
-        e.preventDefault();
-        const idx = parseInt(t.getAttribute('data-gallery-trigger'), 10) || 0;
-        if (t.classList.contains('prompt-main-image')) {
-          openLightbox(idx);
-        } else {
-          setMain(idx);
-        }
-      });
-    });
-
-    lightbox.querySelector('[data-lightbox-close]')?.addEventListener('click', closeLightbox);
-    lightbox.querySelector('[data-lightbox-prev]')?.addEventListener('click', () => nav(-1));
-    lightbox.querySelector('[data-lightbox-next]')?.addEventListener('click', () => nav(1));
-
-    lightbox.addEventListener('click', (e) => {
-      if (e.target === lightbox) closeLightbox();
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (lightbox.hidden) return;
-      if (e.key === 'Escape') closeLightbox();
-      else if (e.key === 'ArrowLeft') nav(-1);
-      else if (e.key === 'ArrowRight') nav(1);
-    });
-  })();
+---
+import Base from '../../../layouts/Base.astro';
+import PromptImage from '../../../components/PromptImage.astro';
+import PromptCard from '../../../components/PromptCard.astro';
+import AgnesHomeComposer from '../../../components/AgnesHomeComposer.astro';
+import { prompts, promptCategories, getRelatedPrompts } from '../../../data/prompts';
+import { getCompatibleEngines } from '../../../data/engines';
+import { getDetailSeoTitle, getDetailSeoDescription } from '../../../utils/seo';
+import { zh } from '../../../i18n';
+
+export function getStaticPaths() {
+  return prompts.map((p) => ({
+    params: { slug: p.slug },
+    props: { prompt: p },
+  }));
+}
+
+const { prompt } = Astro.props;
+
+const t = zh;
+const messages = zh;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const cat = promptCategories.find((c) => c.id === prompt.category);
+const related = getRelatedPrompts(prompt.slug, 8);
+const fullPrompt = prompt.structuredData ? JSON.stringify(prompt.structuredData, null, 2) : prompt.prompt;
+const imageToolUrl = `${base}/zh/tools/agnes-image/?prompt=${encodeURIComponent(fullPrompt)}`;
+const normalizedRatio = prompt.aspectRatio === '16:9'
+  ? '16:9'
+  : prompt.aspectRatio === '9:16' || /^(2:3|3:4)$/.test(prompt.aspectRatio || '')
+    ? '9:16'
+    : '1:1';
+// 适用引擎列表（详情页底部"适用于"区块用）
+const compatibleEngines = getCompatibleEngines(prompt.engines);
+const verifiedEngineKeys = new Set(prompt.engines.filter((k: string) => k !== 'other'));
+// 用于模型识别的文本：合并 prompt 原文 + structuredData（保证原文里的 "Gemini" 等关键词能被识别）
+const textForModelDetection = [prompt.prompt, prompt.rawBlock, fullPrompt].filter(Boolean).join('\n');
+// 中文页面：分类标签用 labelZh
+const displayCatLabel = cat?.labelZh ?? cat?.label ?? prompt.category;
+// 中文页面：标题用原文（中文用户直接看原标题）
+const displayTitle = prompt.title;
+// 引擎显示名（按 locale 翻译）
+const engineLabel = (key: string) => (messages.engines as Record<string, string>)[key] ?? key;
+
+// 从 prompt 文本中识别额外提到的模型/工具（按从大到小顺序，避免 Nano Banana 抢 Gemini）
+const MODEL_PATTERNS: [RegExp, string][] = [
+  [/\b(Gemini(?:\s*Nano\s*Banana)?(?:\s*Pro)?)\b/gi, 'gemini'],
+  [/\b(Nano\s*Banana(?:\s*Pro)?)\b/gi, 'nano-banana-pro'],
+  [/\b(ChatGPT|GPT-4o?|GPT\s*Image)\b/gi, 'chatgpt-image'],
+  [/\b(Midjourney|MJ)\b/gi, 'midjourney'],
+  [/\b(Stable\s*Diffusion|SD\s*XL|SD3?)\b/gi, 'stable-diffusion'],
+  [/\b(Flux(?:\s*\.?\s*1)?)\b/gi, 'flux'],
+  [/\b(Sora)\b/gi, 'sora'],
+  [/\b(Veo)\b/gi, 'veo'],
+  [/\b(Kling|可灵)\b/gi, 'kling'],
+  [/\b(DALL[\s-]?E)\b/gi, 'chatgpt-image'],
+  [/\b(Hailuo|海螺)\b/gi, 'other'],
+  [/\b(Imagen)\b/gi, 'gemini'],
+];
+// 跑所有 pattern，按 match 区间去重（避免 Gemini 区间内的 Nano Banana 重复添加）
+const detectedEngines = new Set<string>(prompt.engines);
+for (const [re, key] of MODEL_PATTERNS) {
+  re.lastIndex = 0;
+  if (re.test(textForModelDetection)) detectedEngines.add(key);
+}
+const displayEngines = [...detectedEngines]
+  .map(k => engineLabel(k))
+  .filter(Boolean);
+// 标签显示名
+const tagLabel = (key: string) => (messages.tags as Record<string, string>)[key] ?? key;
+
+// 站点基础 URL（上线时只需改 astro.config.mjs 的 site，无需改这里）
+const siteBase = Astro.site ?? new URL('https://prompt-gallery.example.com');
+const pageUrl = new URL(`/zh/prompt/${prompt.slug}/`, siteBase).toString();
+const homeUrl = new URL('/zh/', siteBase).toString();
+const catUrl = new URL(`/zh/#${prompt.category}`, siteBase).toString();
+
+// JSON-LD Article（CreativeWork 的子类型，利于 Google 收录长文式 prompt 卡片页）
+const articleLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: prompt.title,
+  name: prompt.title,
+  description: prompt.tagline,
+  url: pageUrl,
+  mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
+  datePublished: prompt.dateAdded,
+  dateModified: prompt.dateAdded,
+  dateCreated: prompt.dateAdded,
+  author: {
+    '@type': 'Person',
+    name: prompt.source.authorName,
+    url: prompt.source.authorUrl,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Ai Art Spell',
+    logo: { '@type': 'ImageObject', url: new URL('favicon.jpg', siteBase).toString() },
+  },
+  keywords: prompt.tags.join(', '),
+  ...(prompt.images[0] ? { image: [prompt.images[0].src] } : {}),
+  ...(prompt.aspectRatio ? { aspectRatio: prompt.aspectRatio } : {}),
+  ...(prompt.source.sourceUrl ? { sourceOrganization: { '@type': 'WebSite', url: prompt.source.sourceUrl } } : {}),
+};
+
+// JSON-LD BreadcrumbList（首页 > 分类 > prompt）
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Ai Art Spell', item: homeUrl },
+    { '@type': 'ListItem', position: 2, name: displayCatLabel, item: catUrl },
+    { '@type': 'ListItem', position: 3, name: prompt.title, item: pageUrl },
+  ],
+};
+
+// SEO 长尾：取第一个非 "other" 引擎作为显示名，兜底 "AI 图像"
+const primaryEngineKey = prompt.engines.find(e => e !== 'other') || prompt.engines[0] || 'other';
+const engineName = engineLabel(primaryEngineKey);
+
+// JSON-LD FAQPage（中文版问题用中文，吃百度/搜狗长尾词）
+const faqItems: Array<{ q: string; a: string }> = [
+  {
+    q: `这条「${prompt.title}」提示词是什么？`,
+    a: prompt.tagline || `用于 ${engineName} AI 图像生成的${displayCatLabel}提示词。`,
+  },
+  {
+    q: '这条提示词适用于哪些 AI 工具？',
+    a: `兼容：${displayEngines.join('、')}。复制后粘贴到任一工具即可生成图片。`,
+  },
+  {
+    q: '怎么使用这条提示词？',
+    a: prompt.reusable && prompt.placeholders?.length
+      ? `这是可复用模板，请将 ${prompt.placeholders.slice(0, 2).map(p => '`' + p + '`').join('、')} 等占位符替换为你自己的内容，然后粘贴到 ${engineName} 即可。`
+      : `点击上方"复制提示词"按钮，粘贴到 ${engineName} 或其他兼容的 AI 图像生成工具中生成。可根据具体需求微调提示词。`,
+  },
+  {
+    q: '生成的图片可以商用吗？',
+    a: `请查阅原始来源（${prompt.source.platform}）的授权条款。本站仅整理提示词文本，图片版权归原作者所有。`,
+  },
+];
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map(item => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
+  })),
+};
+
+// meta keywords: Bing/Yandex 用
+const metaKeywords = [
+  prompt.title,
+  `${engineName} 提示词`,
+  `${displayCatLabel}提示词`,
+  `${engineName} ${displayCatLabel}`,
+  ...prompt.tags,
+  ...displayEngines,
+  'AI 图像生成',
+  '提示词库',
+  '一键复制',
+].join('，');
+
+// 优化 <h1>：包含引擎 + use case 长尾词
+const optimizedH1 = `${prompt.title} — AI生图提示词`;
+---
+
+<Base title={getDetailSeoTitle(prompt, prompt.title, 'zh')} description={getDetailSeoDescription(prompt, prompt.title, 'zh')} ogImage={prompt.images[0]?.src}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(articleLd)} />
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+  <Fragment slot="head">
+    <meta name="keywords" content={metaKeywords} />
+  </Fragment>
+
+  <div class="container">
+    <!-- 视觉面包屑导航（与 JSON-LD BreadcrumbList 对应） -->
+    <nav class="breadcrumb" aria-label="面包屑">
+      <a href={`${base}/zh/`}>首页</a>
+      <span class="breadcrumb-sep">/</span>
+      <a href={`${base}/zh/#all`}>全部提示词</a>
+      <span class="breadcrumb-sep">/</span>
+      <a href={`${base}/zh/#${prompt.category}`}>{displayCatLabel}</a>
+      <span class="breadcrumb-sep">/</span>
+      <span class="breadcrumb-current" aria-current="page">{displayTitle.slice(0, 30)}{displayTitle.length > 30 ? '...' : ''}</span>
+    </nav>
+
+    <div class="detail-head">
+      <p style="margin: 0 0 12px; font-size: 13px;">
+        <a href={`${base}/zh/`} style="color: var(--text-soft); text-decoration: none;">← 返回首页</a>
+      </p>
+      <div class="detail-pills">
+        <span class="pill active">{displayCatLabel}</span>
+        {prompt.engines.filter(e => e !== 'other').map(e => (
+          <span class="badge engine">{engineLabel(e)}</span>
+        ))}
+        <span class={`badge diff-${prompt.difficulty}`}>难度 {prompt.difficulty}/5</span>
+        {prompt.reusable && <span class="badge host">{tagLabel('reusable')}</span>}
+      </div>
+
+      <h1>{optimizedH1}</h1>
+      <p class="tagline">{prompt.tagline}</p>
+
+      <div class="detail-actions">
+        <button type="button" class="btn primary" data-copy-target="prompt-full" id="copy-btn">
+          <span class="copy-default">📋 复制提示词</span>
+          <span class="copy-success hidden">✓ 已复制</span>
+        </button>
+        <a href={imageToolUrl} class="btn primary">🎨 生成同款图片</a>
+        <a href={prompt.source.sourceUrl} target="_blank" rel="noopener" class="btn source-link-hidden">
+          在 {prompt.source.platform} 查看原文 →
+        </a>
+      </div>
+    </div>
+
+    <AgnesHomeComposer
+      locale="zh"
+      initialPrompt={prompt.prompt}
+      initialRatio={normalizedRatio}
+      floatingMode="detail"
+    />
+
+    <div class="detail-grid">
+      <div class="prose">
+        {prompt.images.length > 0 && (
+          <div class="prompt-gallery" data-gallery>
+            <button
+              type="button"
+              class="prompt-main-image"
+              data-gallery-trigger="0"
+              aria-label={`查看第 1 / ${prompt.images.length} 张图片`}
+            >
+              <PromptImage
+                src={prompt.images[0].src}
+                alt={prompt.images[0].alt ?? prompt.title}
+                width={prompt.images[0].width}
+                className="prompt-main-image-img"
+                eager={true}
+                fetchpriority="high"
+              />
+              <span class="prompt-image-count">
+                <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+                  <path fill="currentColor" d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                </svg>
+                <span>1 / {prompt.images.length}</span>
+              </span>
+            </button>
+
+            {prompt.images.length > 1 && (
+              <div class="prompt-thumbs" role="tablist" aria-label="图片画廊">
+                {prompt.images.map((img, i) => (
+                  <button
+                    type="button"
+                    class={`prompt-thumb${i === 0 ? ' active' : ''}`}
+                    data-gallery-trigger={String(i)}
+                    data-gallery-src={img.src}
+                    aria-label={`显示第 ${i + 1} 张`}
+                    aria-selected={i === 0 ? 'true' : 'false'}
+                  >
+                    <PromptImage
+                      src={img.src}
+                      alt={img.alt ?? prompt.title}
+                      width={img.width}
+                      className="prompt-thumb-img"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {prompt.images.length > 0 && (
+          <div class="lightbox" data-lightbox hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="图片查看器">
+            <button class="lightbox-close" data-lightbox-close aria-label="关闭">×</button>
+            <button class="lightbox-prev" data-lightbox-prev aria-label="上一张">‹</button>
+            <button class="lightbox-next" data-lightbox-next aria-label="下一张">›</button>
+            <div class="lightbox-stage">
+              {prompt.images.map((img, i) => (
+                <img
+                  src={img.src}
+                  alt={img.alt ?? prompt.title}
+                  class={`lightbox-img${i === 0 ? ' active' : ''}`}
+                  data-lightbox-img={String(i)}
+                  loading="lazy"
+                  decoding="async"
+                />
+              ))}
+            </div>
+            <div class="lightbox-meta">
+              <span data-lightbox-counter>1 / {prompt.images.length}</span>
+              <span data-lightbox-caption>{prompt.images[0].alt ?? prompt.title}</span>
+            </div>
+          </div>
+        )}
+
+        <div class="verdict-box">
+          <div class="label">编辑点评</div>
+          <p style="margin: 0; color: var(--text);">{prompt.verdict}</p>
+        </div>
+
+
+        <pre id="prompt-full" class="prompt-source" style="display:none;">{fullPrompt}</pre>
+
+        <h2>提示词内容</h2>
+        <div class="prompt-display">
+          <button type="button" class="prompt-copy-btn" data-prompt-copy aria-label="复制提示词">
+            <span class="copy-default">📋 复制</span>
+            <span class="copy-success hidden">✓ 已复制</span>
+          </button>
+          <pre><code>{fullPrompt}</code></pre>
+        </div>
+
+        {prompt.negativePrompt && (
+          <>
+            <h2>反向提示词</h2>
+            <div class="prompt-display">
+              <button type="button" class="prompt-copy-btn" data-prompt-copy aria-label="复制反向提示词">
+                <span class="copy-default">📋 复制</span>
+                <span class="copy-success hidden">✓ 已复制</span>
+              </button>
+              <pre><code>{prompt.negativePrompt}</code></pre>
+            </div>
+          </>
+        )}
+
+        {prompt.aspectRatio && (
+          <>
+            <h2>画面比例</h2>
+            <p><code>{prompt.aspectRatio}</code></p>
+          </>
+        )}
+
+        {prompt.reusable && prompt.prompt.includes('[') && (
+          <>
+            <h2>使用方法</h2>
+            <p>
+              这是一个<strong>可复用的模板</strong>。请把占位符（如 <code>[INSERT CITY NAME]</code>）替换成你自己的内容，再发送给图像生成模型。
+            </p>
+            {prompt.placeholders && prompt.placeholders.length > 0 && (
+              <div class="prompt-placeholders">
+                {prompt.placeholders.map((ph) => (
+                  <code class="placeholder-chip">{ph}</code>
+                ))}
+              </div>
+            )}
+          </>
+        )}
+
+
+        <!-- FAQ 区块：长尾搜索 + Google 富媒体片段 -->
+        <section class="faq-block" aria-label="常见问题">
+          <h2>常见问题</h2>
+          {faqItems.map((item) => (
+            <details class="faq-item">
+              <summary>{item.q}</summary>
+              <p>{item.a}</p>
+            </details>
+          ))}
+        </section>
+
+        <section class="source-section-hidden">
+          <h2>来源</h2>
+          <div class="source-box">
+          <div class="source-author">
+            <strong>@{prompt.source.authorName}</strong>
+            {prompt.source.authorUrl && (
+              <a href={prompt.source.authorUrl} target="_blank" rel="noopener">主页 ↗</a>
+            )}
+          </div>
+          <div class="source-platform">
+            平台：<strong>{prompt.source.platform}</strong>
+            {prompt.source.statusId && <span class="source-status"> · status {prompt.source.statusId}</span>}
+          </div>
+          <a href={prompt.source.sourceUrl} target="_blank" rel="noopener" class="source-url">
+            {prompt.source.sourceUrl} →
+          </a>
+          </div>
+        </section>
+      </div>
+
+      <aside>
+        <div class="specs">
+          <h3>速览</h3>
+          <div class="spec-row"><span class="k">分类</span><span class="v">{displayCatLabel}</span></div>
+          <div class="spec-row"><span class="k">使用的模型</span><span class="v">{displayEngines.join('、')}</span></div>
+          {prompt.aspectRatio && (
+            <div class="spec-row"><span class="k">画面比例</span><span class="v">{prompt.aspectRatio}</span></div>
+          )}
+          <div class="spec-row"><span class="k">难度</span><span class="v">{prompt.difficulty}/5</span></div>
+          <div class="spec-row"><span class="k">可复用</span><span class="v">{prompt.reusable ? '是' : '否'}</span></div>
+          <div class="spec-row"><span class="k">原文语言</span><span class="v">{prompt.language.toUpperCase()}</span></div>
+          <div class="spec-row"><span class="k">收录日期</span><span class="v">{prompt.dateAdded}</span></div>
+          {prompt.tags.length > 0 && (
+            <div class="spec-row">
+              <span class="k">标签</span>
+              <span class="v">{prompt.tags.join(', ')}</span>
+            </div>
+          )}
+        </div>
+
+
+        <!-- 适用引擎列表（B 列表型卡片，整张卡可点跳转） -->
+        <section class="engines-list" aria-label="适用 AI 引擎">
+          <h3>适用于以下 AI 工具</h3>
+          <p class="engines-sub">复制下方提示词，粘贴到任一工具即可使用。带 ✓ 的是已验证可用的引擎。</p>
+          <div class="engine-rows">
+            {compatibleEngines.map((e) => {
+              const verified = verifiedEngineKeys.has(e.key);
+              return (
+                <a href={e.url} target="_blank" rel="noopener" class="engine-row">
+                  {e.icon ? (
+                    <img class="engine-logo" src={e.icon} alt={e.nameZh} loading="lazy" width="32" height="32" />
+                  ) : (
+                    <span class="engine-emoji" aria-hidden="true">{e.emoji}</span>
+                  )}
+                  <span class="engine-info">
+                    <span class="engine-name">
+                      {e.nameZh}
+                      {verified && <span class="engine-verified" title="已验证可用">✓</span>}
+                    </span>
+                    <span class="engine-desc">{e.descZh}</span>
+                  </span>
+                  <span class="engine-arrow" aria-hidden="true">→</span>
+                </a>
+              );
+            })}
+          </div>
+        </section>
+      </aside>
+    </div>
+
+
+    {related.length > 0 && (
+      <section class="section">
+        <div class="section-head">
+          <h2>相似提示词</h2>
+          <a href={`${base}/zh/#all`} class="see-all">查看全部 →</a>
+        </div>
+        <div class="grid">
+          {related.map((p) => <PromptCard prompt={p} base={base} />)}
+        </div>
+      </section>
+    )}
+  </div>
+</Base>
+
+<style>
+  /* 视觉面包屑导航（与 JSON-LD BreadcrumbList 对应） */
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 20px 0 8px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .breadcrumb a {
+    color: var(--text-soft);
+    text-decoration: none;
+  }
+  .breadcrumb a:hover { color: var(--accent-soft); }
+  .breadcrumb-sep {
+    color: var(--border);
+    margin: 0 2px;
+  }
+  .breadcrumb-current {
+    color: var(--text);
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 30ch;
+  }
+
+  .back-link {
+    color: var(--text-muted);
+    font-size: 14px;
+    display: inline-block;
+    margin-bottom: 16px;
+  }
+  .back-link:hover { color: var(--accent-soft); }
+  .detail-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .detail-head h1 {
+    font-size: clamp(28px, 4vw, 40px);
+    line-height: 1.2;
+    margin: 0 0 12px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .detail-head .tagline {
+    font-size: 17px;
+    color: var(--text-soft);
+    margin: 0 0 24px;
+    -webkit-line-clamp: unset;
+  }
+  .detail-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text);
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-decoration: none;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--text); }
+  .btn.primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    border-color: transparent;
+    color: #ffffff;
+    font-weight: 600;
+  }
+  .btn.primary:hover { filter: brightness(1.1); color: #ffffff; }
+  .copy-success.hidden { display: none; }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap: 48px;
+  }
+  @media (max-width: 900px) {
+    .detail-grid { grid-template-columns: 1fr; }
+  }
+  .prose h2 {
+    font-size: 20px;
+    margin: 32px 0 12px;
+    font-weight: 700;
+  }
+  .prose p { color: var(--text-soft); }
+
+  /* 主图 + 缩略图条带 + Lightbox */
+  .prompt-gallery {
+    margin-bottom: 32px;
+  }
+  .prompt-main-image {
+    position: relative;
+    display: block;
+    width: 100%;
+    /* No aspect-ratio: tall images (vertical 9:16, square collages,
+       portrait crops) used to be force-cropped to 16:10 with
+       object-fit: cover, hiding the top/bottom of the actual
+       prompt output. The user explicitly asked for the forced
+       16:10 to go. Now image height is intrinsic; the wrapper
+       auto-sizes to the image. */
+    max-height: 85vh;
+    overflow: hidden;
+    border-radius: var(--radius);
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    cursor: zoom-in;
+    padding: 0;
+    font-family: inherit;
+  }
+  .prompt-main-image:hover { border-color: var(--accent); }
+  .prompt-main-image :global(img) {
+    width: 100%;
+    height: auto;
+    max-height: 85vh;
+    object-fit: contain;
+    display: block;
+    transition: transform 0.3s;
+  }
+  .prompt-main-image:hover :global(img) {
+    transform: scale(1.03);
+  }
+  .prompt-image-count {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: rgba(11, 13, 18, 0.78);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 500;
+    pointer-events: none;
+  }
+
+  .prompt-thumbs {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    margin-top: 8px;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
+  }
+  .prompt-thumb {
+    flex: 0 0 auto;
+    width: 88px;
+    height: 88px;
+    padding: 0;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: var(--bg-soft);
+    border: 2px solid transparent;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+    opacity: 0.6;
+  }
+  .prompt-thumb:hover { opacity: 0.9; }
+  .prompt-thumb.active {
+    opacity: 1;
+    border-color: var(--accent);
+  }
+  .prompt-thumb :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .lightbox[hidden] { display: none; }
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.92);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .lightbox-stage {
+    position: relative;
+    max-width: min(1200px, 92vw);
+    max-height: 82vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .lightbox-img {
+    display: none;
+    max-width: 100%;
+    max-height: 82vh;
+    object-fit: contain;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  }
+  .lightbox-img.active { display: block; }
+
+  .lightbox-close,
+  .lightbox-prev,
+  .lightbox-next {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: var(--text);
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .lightbox-close {
+    top: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-size: 24px;
+    line-height: 1;
+  }
+  .lightbox-prev,
+  .lightbox-next {
+    top: 50%;
+    transform: translateY(-50%);
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    font-size: 32px;
+    line-height: 1;
+  }
+  .lightbox-prev { left: 20px; }
+  .lightbox-next { right: 20px; }
+  .lightbox-close:hover,
+  .lightbox-prev:hover,
+  .lightbox-next:hover {
+    background: rgba(236, 72, 153, 0.25);
+    border-color: var(--accent);
+  }
+
+  .lightbox-meta {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 8px 16px;
+    background: rgba(11, 13, 18, 0.78);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    color: var(--text);
+    font-size: 13px;
+    max-width: 80vw;
+  }
+  .lightbox-meta [data-lightbox-counter] {
+    color: var(--accent-soft);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .lightbox-meta [data-lightbox-caption] {
+    color: var(--text-soft);
+    max-width: 50ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  /* ---- 适用引擎列表 (B 列表型) ---- */
+  .engines-list {
+    margin: 20px 0 0;
+    padding: 18px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .engines-list h3 {
+    font-size: 14px;
+    font-weight: 700;
+    margin: 0 0 6px;
+    color: var(--text);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .engines-heading {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 8px;
+    color: var(--text);
+  }
+  .engines-sub {
+    color: var(--text-muted);
+    font-size: 12px;
+    margin: 0 0 12px;
+    line-height: 1.4;
+  }
+  .engine-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .engine-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    text-decoration: none;
+    transition: border-color 0.15s, background 0.15s, transform 0.05s;
+  }
+  .engine-row:hover {
+    border-color: var(--accent);
+    background: var(--accent-bg);
+  }
+  .engine-row:active { transform: scale(0.99); }
+  .engine-emoji {
+    font-size: 22px;
+    line-height: 1;
+    width: 28px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .engine-logo {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    flex-shrink: 0;
+    border-radius: 6px;
+    background: #fff;
+  }
+  .engine-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+  }
+  .engine-name {
+    font-weight: 600;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    line-height: 1.3;
+  }
+  .engine-verified {
+    font-size: 11px;
+    color: #16a34a;
+    font-weight: 700;
+  }
+  .engine-desc {
+    color: var(--text-soft);
+    font-size: 11px;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .engine-arrow {
+    color: var(--text-muted);
+    font-size: 16px;
+    flex-shrink: 0;
+    transition: transform 0.15s, color 0.15s;
+  }
+  .engine-row:hover .engine-arrow {
+    color: var(--accent);
+    transform: translateX(2px);
+  }
+
+  .prompt-images {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 8px;
+    margin-bottom: 32px;
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .verdict-box {
+    padding: 16px 20px;
+    background: var(--accent-bg);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    margin-bottom: 24px;
+  }
+  .verdict-box .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent-soft);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  /* ---- FAQ 区块 ---- */
+  .faq-block {
+    margin: 32px 0;
+    padding: 20px 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .faq-block h2 {
+    font-size: 18px;
+    margin: 0 0 16px;
+    color: var(--text);
+    font-weight: 700;
+  }
+  .faq-item {
+    border-top: 1px solid var(--border);
+    padding: 12px 0;
+  }
+  .faq-item:first-child { border-top: none; padding-top: 0; }
+  .faq-item summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::before {
+    content: '+';
+    font-weight: 400;
+    font-size: 20px;
+    color: var(--accent);
+    line-height: 1;
+    flex-shrink: 0;
+    width: 14px;
+    text-align: center;
+  }
+  .faq-item[open] summary::before { content: '−'; }
+  .faq-item p {
+    margin: 10px 0 0 22px;
+    color: var(--text-soft);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .prompt-display {
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    padding-top: 48px;
+    overflow-x: auto;
+    position: relative;
+  }
+  /* 右上角复制按钮 */
+  .prompt-copy-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    color: var(--text);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    z-index: 1;
+  }
+  .prompt-copy-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .prompt-copy-btn .copy-success { color: #16a34a; }
+  .prompt-copy-btn .copy-success.hidden { display: none; }
+  .prompt-copy-btn .copy-default.hidden { display: none; }
+  .prompt-display pre {
+    margin: 0;
+    color: var(--text);
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.55;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .prompt-placeholders {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 12px;
+  }
+  .placeholder-chip {
+    padding: 4px 10px;
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid var(--amber);
+    color: var(--amber);
+    border-radius: 999px;
+    font-size: 12px;
+    font-family: ui-monospace, monospace;
+  }
+
+  .source-link-hidden,
+  .source-section-hidden {
+    display: none !important;
+  }
+
+  /* 来源区块（默认隐藏，保留 DOM/数据，未来移除 hidden class 即恢复） */
+  .source-box {
+    padding: 16px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 14px;
+  }
+  .source-author { margin-bottom: 6px; }
+  .source-author a {
+    margin-left: 8px;
+    color: var(--accent-soft);
+    font-size: 12px;
+  }
+  .source-platform { color: var(--text-soft); font-size: 13px; margin-bottom: 8px; }
+  .source-status { color: var(--text-muted); font-size: 11px; font-family: monospace; }
+  .source-url {
+    display: block;
+    color: var(--accent-soft);
+    font-family: ui-monospace, monospace;
+    font-size: 12px;
+    word-break: break-all;
+  }
+
+  .cc-notice {
+    margin-top: 24px;
+    padding: 12px 16px;
+    background: var(--bg-soft);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-size: 13px;
+    color: var(--text-soft);
+  }
+  .cc-notice a { color: var(--accent-soft); }
+
+  .specs {
+    padding: 18px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 16px;
+  }
+  .specs h3 {
+    margin: 0 0 12px;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+  .spec-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    padding: 6px 0;
+    border-bottom: 1px dashed var(--border);
+    font-size: 13px;
+  }
+  .spec-row:last-child { border-bottom: none; }
+  .spec-row .k { color: var(--text-muted); flex-shrink: 0; }
+  .spec-row .v {
+    color: var(--text);
+    text-align: right;
+    word-break: break-word;
+  }
+
+  .cc-card {
+    padding: 14px 18px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 13px;
+  }
+  .cc-card h3 {
+    margin: 0 0 8px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+  .cc-card a { color: var(--accent-soft); }
+
+  .badge.diff-1 { background: rgba(34, 197, 94, 0.12); border-color: var(--green); color: var(--green); }
+  .badge.diff-2 { background: rgba(34, 197, 94, 0.12); border-color: var(--green); color: var(--green); }
+  .badge.diff-3 { background: rgba(245, 158, 11, 0.12); border-color: var(--amber); color: var(--amber); }
+  .badge.diff-4 { background: rgba(245, 158, 11, 0.12); border-color: var(--amber); color: var(--amber); }
+  .badge.diff-5 { background: rgba(239, 68, 68, 0.12); border-color: var(--red); color: var(--red); }
+
+  .see-all {
+    color: var(--accent-soft);
+    font-size: 14px;
+    text-decoration: none;
+  }
+  .see-all:hover { color: var(--accent); }
+</style>
+
+<script is:inline>
+  (function () {
+    // ===== Copy prompt button =====
+    const btn = document.getElementById('copy-btn');
+    const src = document.getElementById('prompt-full');
+    if (btn && src) {
+      btn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(src.textContent || '');
+          const def = btn.querySelector('.copy-default');
+          const ok = btn.querySelector('.copy-success');
+          if (def && ok) {
+            def.classList.add('hidden');
+            ok.classList.remove('hidden');
+            setTimeout(() => {
+              def.classList.remove('hidden');
+              ok.classList.add('hidden');
+            }, 1800);
+          }
+        } catch (e) {
+          const range = document.createRange();
+          range.selectNode(src);
+          const sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
+        }
+      });
+    }
+
+    // ===== Inline copy buttons (代码框右上角) =====
+    document.querySelectorAll('[data-prompt-copy]').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const container = btn.closest('.prompt-display');
+        if (!container) return;
+        const pre = container.querySelector('pre');
+        const text = pre ? (pre.textContent || '') : '';
+        try {
+          await navigator.clipboard.writeText(text);
+          const def = btn.querySelector('.copy-default');
+          const ok = btn.querySelector('.copy-success');
+          if (def && ok) {
+            def.classList.add('hidden');
+            ok.classList.remove('hidden');
+            setTimeout(() => {
+              def.classList.remove('hidden');
+              ok.classList.add('hidden');
+            }, 1800);
+          }
+        } catch (e) {
+          if (pre) {
+            const range = document.createRange();
+            range.selectNode(pre);
+            const sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+          }
+        }
+      });
+    });
+
+    // ===== Image gallery + lightbox =====
+    const gallery = document.querySelector('[data-gallery]');
+    const lightbox = document.querySelector('[data-lightbox]');
+    if (!gallery || !lightbox) return;
+
+    const triggers = gallery.querySelectorAll('[data-gallery-trigger]');
+    const mainCount = gallery.querySelector('.prompt-image-count span:last-child');
+    const thumbs = gallery.querySelectorAll('.prompt-thumb');
+    const lightboxImgs = lightbox.querySelectorAll('[data-lightbox-img]');
+    const counterEl = lightbox.querySelector('[data-lightbox-counter]');
+    const captionEl = lightbox.querySelector('[data-lightbox-caption]');
+    const total = lightboxImgs.length;
+    let current = 0;
+
+    function setMain(idx) {
+      current = idx;
+      const mainImgEl = gallery.querySelector('.prompt-main-image img');
+      const target = lightboxImgs[idx];
+      if (mainImgEl && target) {
+        mainImgEl.src = target.src;
+        mainImgEl.alt = target.alt || '';
+      }
+      if (mainCount) mainCount.textContent = `${idx + 1} / ${total}`;
+      thumbs.forEach((t, i) => {
+        t.classList.toggle('active', i === idx);
+        t.setAttribute('aria-selected', i === idx ? 'true' : 'false');
+      });
+    }
+
+    function openLightbox(idx) {
+      current = idx;
+      lightbox.hidden = false;
+      lightbox.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      showLightboxImg(idx);
+    }
+
+    function closeLightbox() {
+      lightbox.hidden = true;
+      lightbox.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    function showLightboxImg(idx) {
+      current = idx;
+      lightboxImgs.forEach((img, i) => {
+        img.classList.toggle('active', i === idx);
+      });
+      if (counterEl) counterEl.textContent = `${idx + 1} / ${total}`;
+      if (captionEl) {
+        const target = lightboxImgs[idx];
+        captionEl.textContent = target ? (target.alt || '') : '';
+      }
+    }
+
+    function nav(delta) {
+      const next = (current + delta + total) % total;
+      if (!lightbox.hidden) {
+        showLightboxImg(next);
+      } else {
+        setMain(next);
+      }
+    }
+
+    triggers.forEach((t) => {
+      t.addEventListener('click', (e) => {
+        e.preventDefault();
+        const idx = parseInt(t.getAttribute('data-gallery-trigger'), 10) || 0;
+        if (t.classList.contains('prompt-main-image')) {
+          openLightbox(idx);
+        } else {
+          setMain(idx);
+        }
+      });
+    });
+
+    lightbox.querySelector('[data-lightbox-close]')?.addEventListener('click', closeLightbox);
+    lightbox.querySelector('[data-lightbox-prev]')?.addEventListener('click', () => nav(-1));
+    lightbox.querySelector('[data-lightbox-next]')?.addEventListener('click', () => nav(1));
+
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (lightbox.hidden) return;
+      if (e.key === 'Escape') closeLightbox();
+      else if (e.key === 'ArrowLeft') nav(-1);
+      else if (e.key === 'ArrowRight') nav(1);
+    });
+  })();
 </script>
