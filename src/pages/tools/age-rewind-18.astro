@@ -1,0 +1,480 @@
+---
+import Base from '../../layouts/Base.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const siteBase = Astro.site ?? new URL('https://aiartspell.art');
+const cover = new URL('/tool-covers/age-rewind-18.jpg', siteBase).toString();
+const ogImageUrl = cover;
+const pageUrl = new URL('/tools/age-rewind-18/', siteBase).toString();
+
+const primaryPrompt = `Make the person in this photo look 18 years old again (age rewind / de-aging edit).
+Keep the exact same identity: identical facial bone structure, eye shape, nose, lips, expression, pose, clothing, framing, background and lighting.
+Only reverse the signs of aging: smooth wrinkles and fine lines, restore firm youthful skin and soft facial volume, fade age spots, brighten the eyes, add subtle healthy colour to the complexion.
+HAIR RULE - do not keep white, silver or grey hair: recolour the hair to the natural young hair colour that matches this person's ethnicity (East Asian: black or dark brown; Caucasian: brown, dark blonde or blonde; African: black or dark brown; South Asian, Latina/o or Middle Eastern: dark brown or black). Hair should look dense, healthy and naturally glossy, with the original hairstyle preserved.
+Keep the original photographic style, colour grading, grain and depth of field. Photorealistic, visible skin pores and texture, no plastic skin, no beautifying filter, no face swap, no new person, no cartoon or illustration, no text or watermark.`;
+
+const zhPrompt = `把照片里的人物返老还童，变成 18 岁的样子。严格保留同一个人：五官比例、眼型、鼻唇、神态表情、姿势、服装、构图、背景和光线都不变。
+只逆转年龄痕迹：淡化皱纹与细纹、恢复紧致饱满的年轻肤质、淡化老年斑、眼神更清亮、气色红润自然。
+头发规则——头发绝对不能是白色、银白或灰白色：请按照人物的人种恢复成自然的年轻发色（东亚人：黑色或深棕色；欧美白人：棕色、深金或金色；非洲裔：黑色或深棕色；南亚、拉美、中东：深棕色或黑色），发量浓密、有自然光泽，并保留原来的发型。
+保持原照片的摄影风格、色调、颗粒与景深不变。真实摄影质感，保留皮肤纹理与毛孔，不要塑料磨皮脸、不要换脸、不要新增人物、不要卡通化、不要文字或水印。`;
+
+const ctaHref = `${base}/tools/agnes-image/?prompt=${encodeURIComponent(primaryPrompt)}`;
+
+const rules = [
+  {
+    n: '01',
+    title: 'Say "18 years old", not "make them look younger"',
+    body: 'Vague instructions produce a light skin-smoothing pass and nothing else. An explicit target age gives the model a concrete facial reference: fuller cheeks, firmer jawline, brighter eyes, fewer fine lines. Also add "young adult, not a child" if the model keeps pushing the face into teenage or childish proportions.',
+  },
+  {
+    n: '02',
+    title: 'Explicitly forbid white and grey hair',
+    body: 'This is the single most common failure. Age rewind changes the face but the model preserves the most visually dominant feature of the input - white hair - so you get a young face with silver hair. Positive instructions like "youthful hair" rarely override it. Write a hard negative rule: hair must NOT be white, silver or grey; remove every white strand.',
+  },
+  {
+    n: '03',
+    title: 'Tie hair colour to the person\'s ethnicity',
+    body: 'If you only say "give them black hair", a Caucasian grandmother comes back with jet-black hair and no longer looks like herself; say "blonde" and an East Asian grandfather gets blonde hair. Let the model infer a natural young hair colour from the person\'s ethnicity, then list the expected range as examples. It keeps the de-aged face believable and the identity intact.',
+  },
+  {
+    n: '04',
+    title: 'Lock the identity before anything else',
+    body: 'Put "keep the same identity - bone structure, eyes, expression, pose, clothing, background and lighting" before the editing instructions. Without it, image models happily generate a generic attractive 18-year-old instead of the person in your photo.',
+  },
+];
+
+const steps = [
+  { title: 'Pick a clear source photo', text: 'A front-facing or three-quarter portrait with the whole head visible, even lighting and an unobstructed face works best. Avoid heavy shadows across the eyes, sunglasses, hats that hide the hairline, or very low-resolution scans.' },
+  { title: 'Open an image-to-image editor', text: 'Age rewind is an edit, not a text-to-image generation. Switch to Image to Image (reference-image mode) and upload the portrait. Our free AI Image Studio supports reference images up to 5 MB each, with no account required.' },
+  { title: 'Paste the prompt', text: 'Copy the full prompt above into the description box. Keep the hair rule and the identity lock - deleting either one is what causes the two classic failures (silver hair, or a completely different face).' },
+  { title: 'Set the edit strength and ratio', text: 'Use the original aspect ratio. Start with a moderate reference strength so the face structure stays put; if wrinkles or grey hair survive, raise it slightly. Generate 3-4 variants and compare them side by side.' },
+  { title: 'Refine with a short follow-up', text: 'If only one detail is wrong, ask for a targeted fix on the generated image, e.g. "darken all remaining grey strands to natural dark brown, keep the face and everything else unchanged". Small corrections beat rewriting the whole prompt.' },
+];
+
+const settings = [
+  ['Mode', 'Image to image / reference image', 'Text-to-image cannot preserve the person in your photo.'],
+  ['Reference strength', 'Start moderate, around 50-70%', 'Too low leaves wrinkles and grey hair; too high replaces the face.'],
+  ['Aspect ratio', 'Same as the original photo', 'Prevents recomposition and cropped shoulders.'],
+  ['Batch size', '3-4 variants', 'Hair colour and skin texture vary between runs; pick the most believable one.'],
+  ['Negative prompt', 'white hair, grey hair, silver hair, wrinkles, aged skin, face swap, plastic skin, cartoon, text, watermark', 'Reinforces the two rules that models most often ignore.'],
+];
+
+const variants = [
+  {
+    title: 'Two people / family photo',
+    note: 'Use when several people share the frame. The word "every" matters.',
+    text: `Apply the same 18-year-old age rewind to EVERY person in this photo, one by one. Each person keeps their own face, expression, pose and clothing. For EACH person, remove all white, silver and grey hair and restore the natural young hair colour that matches that individual's ethnicity. Keep the group composition, background and lighting unchanged. Photorealistic, no face swap, no missing or extra people.`,
+  },
+  {
+    title: 'Faded or black-and-white archive photo',
+    note: 'Adds restoration without turning the result into a modern studio portrait.',
+    text: `Restore this old photograph and make the person in it look 18 years old again. Keep the exact same identity and the original pose, clothing and composition. Repair scratches, dust and fading, add gentle natural colourisation, and keep the period photographic character. The hair must NOT be white, silver or grey: recolour it to a natural young shade matching the person's ethnicity, with soft realistic texture. No modern retouching, no plastic skin, no AI illustration look.`,
+  },
+  {
+    title: 'Male subject with short hair or a beard',
+    note: 'Prevents the model from adding long hair or shaving the face clean.',
+    text: `Make the man in this photo look 18 years old again while keeping the same person. Preserve the short haircut, hairline, beard or moustache shape, expression, clothing and background. Remove every white, silver and grey strand and restore a natural young hair colour matching his ethnicity (East Asian: black or dark brown; Caucasian: brown or dark blonde; African: black or dark brown). Youthful firm skin, subtle texture, photorealistic, no face swap, no change of hairstyle.`,
+  },
+  {
+    title: 'ID / passport style portrait',
+    note: 'Keeps the neutral, documentary look of the original.',
+    text: `De-age the person in this ID-style portrait to 18 years old. Keep the exact same facial identity, neutral expression, head angle, plain background, even lighting and clothing. Only soften aging signs. The hair must NOT be white, silver or grey: restore a natural young hair colour appropriate to the person's ethnicity. Do not smile, do not restyle the hair, do not change the background, do not add makeup or beautifying filters. Photorealistic ID photo quality.`,
+  },
+  {
+    title: 'Hair-only correction (second pass)',
+    note: 'Run this on an output where the face is right but the hair is still white.',
+    text: `Only edit the hair in this image. Remove all white, silver and grey strands completely and recolour the hair to the natural young colour matching this person's ethnicity, keeping the original hairstyle, hairline and volume. Do NOT change the face, skin, expression, clothing, background, lighting or colours anywhere else. Everything except the hair must stay pixel-identical.`,
+  },
+];
+
+const fixes = [
+  ['White or grey hair is still there', 'Move the hair rule to the first line, add "remove every white, silver and grey strand", slightly raise the edit strength, or run the hair-only correction variant as a second pass.'],
+  ['It looks like a different person', 'Strengthen the identity lock, lower the reference strength, and remove any wording about beauty or attractiveness. Reference-image mode with two photos of the same person also helps.'],
+  ['Skin looks like plastic or wax', 'Add "visible skin pores and natural texture, no blur, no beauty filter" and cut any "flawless / perfect skin" wording.'],
+  ['Clothes or background changed', 'Add "only edit the face and hair; keep everything else pixel-identical" and use the original aspect ratio.'],
+  ['Only one person changed in a group shot', 'Write "EVERY person, all N people" explicitly and state the number of people in the frame.'],
+  ['Hair colour does not match the ethnicity', 'Replace the general instruction with the person\'s ethnicity plus the exact colour range, e.g. "East Asian woman: natural black hair, not blonde".'],
+  ['The face looks like a child, not 18', 'Add "young adult, 18 years old, mature facial proportions, not a child, not a teenager".'],
+];
+
+const faqs = [
+  {
+    q: 'What is an AI age rewind prompt?',
+    a: 'It is an image-to-image instruction that asks an AI model to reverse visible signs of aging in a photograph while keeping the same person. A reliable de-aging prompt states a target age, locks the identity, and explicitly handles hair colour, because white hair is the detail models most often fail to update.',
+  },
+  {
+    q: 'Why does the hair stay white after de-aging?',
+    a: 'Image models treat white hair as a dominant visual feature of the input and try to preserve it for consistency. The fix is an explicit negative instruction - hair must NOT be white, silver or grey - plus a replacement colour derived from the person\'s ethnicity, so the model has something specific to generate instead.',
+  },
+  {
+    q: 'Should I write the hair colour based on the person\'s ethnicity?',
+    a: 'Yes. A single universal hair colour breaks the likeness: black hair on a Caucasian subject or blonde hair on an East Asian subject reads as a different person. Let the model infer a natural young shade from ethnicity and list plausible examples, then keep the original hairstyle.',
+  },
+  {
+    q: 'Will the person still be recognisable?',
+    a: 'Usually yes, as long as you keep the identity lock at the top of the prompt and use a moderate reference strength. Generate several variants and compare the eyes, nose and jawline with the original - the best result is the one that still looks like the same human being, just younger.',
+  },
+  {
+    q: 'Which tools support this prompt?',
+    a: 'Any image editor that accepts a reference image plus a text instruction works: Nano Banana Pro, GPT Image, Gemini image editing, Midjourney image prompts, Flux or ComfyUI image-to-image workflows. The prompt above is tool-agnostic.',
+  },
+  {
+    q: 'Is this free, and can I use it on old family photos?',
+    a: 'Yes. You can copy the prompt and use it in our free AI Image Studio with no account, or paste it into any other editor you already use. It works well on scanned family photos too - use the archive-photo variant to handle fading and scratches at the same time.',
+  },
+];
+
+const howToLd = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'How to Make a Person Look 18 Again in a Photo with AI',
+  description: 'A step-by-step guide to de-aging a portrait with an AI image prompt, including the no-white-hair rule and ethnicity-aware hair colour.',
+  image: ogImageUrl,
+  totalTime: 'PT5M',
+  tool: [{ '@type': 'HowToTool', name: 'AI image-to-image editor or AI Image Studio' }],
+  supply: [{ '@type': 'HowToSupply', name: 'A clear portrait photograph' }],
+  step: steps.map((s, i) => ({
+    '@type': 'HowToStep',
+    position: i + 1,
+    name: s.title,
+    text: s.text,
+    url: `${pageUrl}#step-${i + 1}`,
+  })),
+};
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<Base
+  title="Back to 18: AI Age Rewind Photo Prompt (Free Guide)"
+  description="A copy-ready AI de-aging prompt that turns a portrait into an 18-year-old version: no white hair, natural hair colour matched to ethnicity, same identity preserved. Includes a step-by-step tutorial."
+  ogImage={ogImageUrl}
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(howToLd)} />
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+
+  <article class="guide">
+    <div class="container guide-wrap">
+      <header class="guide-hero">
+        <a class="crumb" href={`${base}/tools/`}>← All AI tools</a>
+        <span class="eyebrow">Photo editing guide · Copy-ready prompt</span>
+        <h1>Back to 18: the AI age-rewind prompt that actually works</h1>
+        <p class="lead">Turn an old portrait into a believable 18-year-old version of the same person — <strong>no white hair</strong>, <strong>hair colour matched to their ethnicity</strong>, and the face still recognisably theirs. One prompt, a five-step workflow, and fixes for every common failure.</p>
+
+        <figure class="hero-figure">
+          <img src={cover} alt="Before and after: an AI age-rewind edit turns a white-haired elderly woman into a dark-haired 18-year-old version of herself" width="224" height="169" />
+          <figcaption>Before / after — same person, same styling, 18 years old again. This is the look the prompt below is tuned for.</figcaption>
+        </figure>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary" href={ctaHref}>Open AI Image Studio →</a>
+          <a class="btn btn-ghost" href="#prompt">Jump to the prompt</a>
+        </div>
+        <p class="hero-note">Free, no account required. In the studio, switch to <strong>Image to Image</strong> and upload your portrait first — the prompt is prefilled for you.</p>
+      </header>
+
+      <div class="guide-body">
+        <section id="prompt" class="g-section">
+          <h2>The prompt</h2>
+          <p>Copy the whole block. It is written for image-to-image editing, so it assumes you have already uploaded the photo. The order is deliberate: identity first, aging changes second, hair rule third.</p>
+
+          <div class="prompt-card">
+            <div class="prompt-head">
+              <span class="prompt-label">Main prompt · English</span>
+              <button type="button" class="copy-btn" data-copy-target="prompt-main" data-copied="Copied!">Copy prompt</button>
+            </div>
+            <pre id="prompt-main">{primaryPrompt}</pre>
+          </div>
+
+          <details class="prompt-alt">
+            <summary>Chinese version / 中文版提示词</summary>
+            <div class="prompt-card">
+              <div class="prompt-head">
+                <span class="prompt-label">主提示词 · 中文</span>
+                <button type="button" class="copy-btn" data-copy-target="prompt-zh" data-copied="已复制">复制提示词</button>
+              </div>
+              <pre id="prompt-zh">{zhPrompt}</pre>
+            </div>
+          </details>
+
+          <p class="tip"><strong>Short version</strong> if your tool has a tight character limit: <em>"De-age the person in this photo to 18 years old, keep the exact same face and identity, remove all white/grey/silver hair and restore the natural young hair colour that matches their ethnicity, keep the original photo style."</em></p>
+        </section>
+
+        <section class="g-section" id="why">
+          <h2>Why these three rules matter</h2>
+          <p>Most age-rewind attempts fail in one of three predictable ways. The prompt above is built around preventing exactly those.</p>
+          <div class="rule-grid">
+            {rules.map((r) => (
+              <div class="rule-card">
+                <span class="rule-n">{r.n}</span>
+                <h3>{r.title}</h3>
+                <p>{r.body}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section class="g-section" id="steps">
+          <h2>Step-by-step: from photo to 18</h2>
+          <ol class="step-list">
+            {steps.map((s, i) => (
+              <li id={`step-${i + 1}`}>
+                <span class="step-n">{i + 1}</span>
+                <div>
+                  <h3>{s.title}</h3>
+                  <p>{s.text}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+          <a class="inline-cta" href={ctaHref}>Open the studio with this prompt preloaded →</a>
+        </section>
+
+        <section class="g-section" id="settings">
+          <h2>Recommended settings</h2>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Setting</th><th>Recommendation</th><th>Why</th></tr></thead>
+              <tbody>
+                {settings.map((row) => (
+                  <tr><td><strong>{row[0]}</strong></td><td>{row[1]}</td><td>{row[2]}</td></tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="g-section" id="variants">
+          <h2>Prompt variations for common situations</h2>
+          <p>Swap the main prompt for one of these when the photo is more complicated. Each one keeps the no-white-hair rule and the ethnicity-aware colour instruction.</p>
+          <div class="variant-list">
+            {variants.map((v, i) => (
+              <div class="variant-card">
+                <div class="variant-head">
+                  <div>
+                    <h3>{v.title}</h3>
+                    <p class="variant-note">{v.note}</p>
+                  </div>
+                  <button type="button" class="copy-btn" data-copy-target={`variant-${i}`} data-copied="Copied!">Copy</button>
+                </div>
+                <pre id={`variant-${i}`}>{v.text}</pre>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section class="g-section" id="troubleshooting">
+          <h2>Troubleshooting</h2>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>What went wrong</th><th>How to fix it</th></tr></thead>
+              <tbody>
+                {fixes.map((row) => (
+                  <tr><td><strong>{row[0]}</strong></td><td>{row[1]}</td></tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="g-section" id="faq">
+          <h2>Frequently asked questions</h2>
+          <div class="faq-list">
+            {faqs.map((f) => (
+              <details class="faq-item">
+                <summary>{f.q}</summary>
+                <p>{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        <section class="g-section related">
+          <h2>Keep exploring</h2>
+          <div class="related-grid">
+            <a href={`${base}/tools/agnes-image/`}><strong>Free AI Image Studio</strong><span>Upload a reference photo and run image-to-image edits online, no account needed.</span></a>
+            <a href={`${base}/prompts/portrait/`}><strong>AI portrait prompts</strong><span>Browse copy-ready portrait and photography prompts with real example images.</span></a>
+            <a href={`${base}/blog/how-to-write-ai-art-prompts/`}><strong>How to write AI art prompts</strong><span>The complete beginner guide to structure, constraints and iteration.</span></a>
+            <a href={`${base}/ai-image-prompts/`}><strong>All AI image prompts</strong><span>The full prompt library, filterable by category and model.</span></a>
+          </div>
+        </section>
+      </div>
+    </div>
+  </article>
+
+  <script is:inline>
+    document.addEventListener('click', function (e) {
+      const btn = e.target.closest('[data-copy-target]');
+      if (!btn) return;
+      const el = document.getElementById(btn.getAttribute('data-copy-target'));
+      if (!el) return;
+      const text = el.textContent.replace(/\s+$/, '');
+      const done = function () {
+        const old = btn.textContent;
+        btn.textContent = btn.getAttribute('data-copied') || 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(function () { btn.textContent = old; btn.classList.remove('copied'); }, 1800);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(function () {
+          const ta = document.createElement('textarea');
+          ta.value = text; document.body.appendChild(ta); ta.select();
+          try { document.execCommand('copy'); done(); } catch (err) {}
+          document.body.removeChild(ta);
+        });
+      }
+    });
+  </script>
+</Base>
+
+<style>
+  .guide-wrap { max-width: 860px; padding-top: 48px; padding-bottom: 72px; }
+  .crumb { display: inline-block; font-size: 13px; color: var(--text-muted); text-decoration: none; margin-bottom: 20px; }
+  .crumb:hover { color: var(--accent); }
+  .eyebrow {
+    display: inline-block; padding: 4px 12px; border-radius: 999px;
+    background: var(--accent-bg); color: var(--accent);
+    font-size: 12px; font-weight: 600; margin-bottom: 14px;
+  }
+  .guide-hero h1 {
+    font-size: clamp(30px, 4.6vw, 46px); line-height: 1.16;
+    letter-spacing: -0.025em; font-weight: 800; margin: 0 0 16px;
+  }
+  .lead { font-size: 16px; line-height: 1.75; color: var(--text-soft); margin: 0 0 26px; }
+  .lead strong { color: var(--text); }
+  .hero-figure {
+    margin: 0 0 24px; padding: 18px; border: 1px solid var(--border);
+    border-radius: var(--radius); background: var(--bg-card); text-align: center;
+  }
+  .hero-figure img {
+    display: block; width: 224px; max-width: 100%; height: auto;
+    margin: 0 auto 12px; border-radius: var(--radius-sm);
+  }
+  .hero-figure figcaption { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
+  .btn {
+    display: inline-block; padding: 11px 22px; border-radius: 999px;
+    font-size: 14px; font-weight: 600; text-decoration: none; transition: all .18s ease;
+  }
+  .btn-primary { background: var(--accent); color: #fff; border: 1px solid var(--accent); }
+  .btn-primary:hover { background: var(--accent-soft); border-color: var(--accent-soft); }
+  .btn-ghost { border: 1px solid var(--border); color: var(--text-soft); background: var(--bg-card); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .hero-note { font-size: 12px; color: var(--text-muted); line-height: 1.65; margin: 0; }
+  .hero-note strong { color: var(--text-soft); }
+
+  .guide-body { margin-top: 44px; }
+  .g-section { margin-bottom: 52px; scroll-margin-top: 84px; }
+  .g-section h2 {
+    font-size: clamp(22px, 3vw, 28px); font-weight: 800;
+    letter-spacing: -0.02em; margin: 0 0 12px;
+  }
+  .g-section > p { color: var(--text-soft); line-height: 1.8; margin: 0 0 18px; }
+
+  .prompt-card {
+    border: 1px solid var(--border); border-radius: var(--radius);
+    background: var(--bg-card); overflow: hidden; margin-bottom: 14px;
+  }
+  .prompt-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 10px 14px; border-bottom: 1px solid var(--border); background: var(--bg-soft);
+  }
+  .prompt-label { font-size: 12px; font-weight: 600; color: var(--text-muted); }
+  .copy-btn {
+    flex-shrink: 0; padding: 6px 14px; border-radius: 999px;
+    border: 1px solid var(--accent); background: var(--bg-card); color: var(--accent);
+    font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .18s ease;
+  }
+  .copy-btn:hover { background: var(--accent); color: #fff; }
+  .copy-btn.copied { background: var(--accent); color: #fff; }
+  .prompt-card pre {
+    margin: 0; padding: 16px 18px; white-space: pre-wrap; word-break: break-word;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 12.5px; line-height: 1.75; color: var(--text-soft);
+  }
+  .prompt-alt { margin-bottom: 16px; }
+  .prompt-alt > summary {
+    cursor: pointer; font-size: 13px; color: var(--accent);
+    margin-bottom: 12px; list-style-position: inside;
+  }
+  .tip {
+    padding: 12px 16px; border-left: 3px solid var(--accent);
+    background: var(--accent-bg); border-radius: 0 var(--radius) var(--radius) 0;
+    font-size: 13px; line-height: 1.75; color: var(--text-soft);
+  }
+
+  .rule-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .rule-card {
+    padding: 18px; border: 1px solid var(--border);
+    border-radius: var(--radius); background: var(--bg-card);
+  }
+  .rule-n { display: block; font-size: 12px; font-weight: 700; color: var(--accent); margin-bottom: 8px; }
+  .rule-card h3 { font-size: 15px; font-weight: 700; margin: 0 0 8px; line-height: 1.4; }
+  .rule-card p { font-size: 13px; line-height: 1.7; color: var(--text-soft); margin: 0; }
+
+  .step-list { list-style: none; padding: 0; margin: 0 0 18px; }
+  .step-list li {
+    display: flex; gap: 16px; padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .step-n {
+    flex: 0 0 30px; height: 30px; display: grid; place-items: center;
+    border-radius: 50%; background: var(--accent-bg); color: var(--accent);
+    font-size: 13px; font-weight: 700;
+  }
+  .step-list h3 { font-size: 15px; font-weight: 700; margin: 4px 0 6px; }
+  .step-list p { font-size: 13px; line-height: 1.75; color: var(--text-soft); margin: 0; }
+  .inline-cta { color: var(--accent); font-size: 14px; font-weight: 600; text-decoration: none; }
+  .inline-cta:hover { text-decoration: underline; }
+
+  .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { padding: 11px 14px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { background: var(--bg-soft); font-size: 12px; color: var(--text-muted); font-weight: 700; }
+  td { color: var(--text-soft); line-height: 1.65; }
+  td strong { color: var(--text); }
+  tbody tr:last-child td { border-bottom: none; }
+
+  .variant-list { display: grid; gap: 14px; }
+  .variant-card { border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg-card); overflow: hidden; }
+  .variant-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; padding: 14px 16px; }
+  .variant-head h3 { font-size: 15px; font-weight: 700; margin: 0 0 4px; }
+  .variant-note { font-size: 12px; color: var(--text-muted); margin: 0; line-height: 1.6; }
+  .variant-card pre {
+    margin: 0; padding: 14px 16px; border-top: 1px solid var(--border);
+    background: var(--bg-soft); white-space: pre-wrap; word-break: break-word;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 12px; line-height: 1.7; color: var(--text-soft);
+  }
+
+  .faq-list { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .faq-item { border-bottom: 1px solid var(--border); background: var(--bg-card); }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-item summary { padding: 14px 18px; cursor: pointer; font-size: 14px; font-weight: 600; list-style-position: inside; }
+  .faq-item p { margin: 0; padding: 0 18px 16px 18px; font-size: 13px; line-height: 1.8; color: var(--text-soft); }
+
+  .related-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .related-grid a {
+    display: flex; flex-direction: column; gap: 5px; padding: 15px 16px;
+    border: 1px solid var(--border); border-radius: var(--radius);
+    background: var(--bg-card); text-decoration: none; transition: border-color .18s ease, transform .18s ease;
+  }
+  .related-grid a:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .related-grid strong { font-size: 14px; color: var(--text); }
+  .related-grid span { font-size: 12px; line-height: 1.6; color: var(--text-muted); }
+
+  @media (max-width: 680px) {
+    .guide-wrap { padding-top: 32px; }
+    .rule-grid, .related-grid { grid-template-columns: 1fr; }
+    .hero-figure img { width: 100%; max-width: 260px; }
+    .variant-head { flex-direction: column; }
+  }
+</style>

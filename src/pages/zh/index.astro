@@ -113,6 +113,23 @@ const itemListLd = {
     </div>
   </section>
 
+  <!-- 站内特色功能入口：重返18岁 -->
+  <section class="feature-tool section" aria-labelledby="feature-tool-title">
+    <div class="container">
+      <a class="feature-tool-card" href={`${base}/zh/tools/age-rewind-18/`}>
+        <span class="feature-tool-media">
+          <img src={`${base}/tool-covers/age-rewind-18.jpg`} alt="效果对比：AI 返老还童把白发老奶奶变成深发的 18 岁年轻女性，仍是同一个人" width="224" height="169" loading="lazy" decoding="async" />
+        </span>
+        <span class="feature-tool-body">
+          <span class="feature-tool-badge">新功能 · 免费提示词教程</span>
+          <strong id="feature-tool-title">重返 18 岁：AI 照片返老还童</strong>
+          <span class="feature-tool-desc">把照片里的人物变成 18 岁的样子——头发不能是白色的，按人种恢复自然年轻发色，五官仍是同一个人。提供可直接复制的提示词、分步教程和常见翻车修法。</span>
+          <span class="feature-tool-cta">查看免费教程 →</span>
+        </span>
+      </a>
+    </div>
+  </section>
+
   <section class="homepage-discovery section" aria-labelledby="browse-categories-title">
     <div class="container">
       <div class="section-head">
@@ -324,12 +341,42 @@ const itemListLd = {
     .model-link-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .discovery-card img,
     .discovery-card-placeholder { height: 78px; }
+    .feature-tool-card { flex-direction: column; align-items: flex-start; gap: 14px; }
+    .feature-tool-media { flex: 0 0 auto; width: 100%; max-width: 280px; }
+    .feature-tool-media img { width: 100%; height: auto; aspect-ratio: 224 / 169; }
   }
   .editorial-meta {
     color: var(--text-muted);
     font-size: 13px;
     margin: 0 0 24px;
   }
+  /* 站内特色功能入口卡片：重返18岁 */
+  .feature-tool { padding-top: 12px; padding-bottom: 0; }
+  .feature-tool-card {
+    display: flex; align-items: center; gap: 22px;
+    padding: 18px; border: 1px solid var(--border); border-radius: var(--radius);
+    background: var(--bg-card); color: inherit; text-decoration: none;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+  }
+  .feature-tool-card:hover {
+    border-color: var(--accent);
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-2px);
+  }
+  .feature-tool-media { flex: 0 0 224px; }
+  .feature-tool-media img {
+    display: block; width: 224px; height: 169px;
+    object-fit: cover; border-radius: var(--radius-sm); background: var(--bg-soft);
+  }
+  .feature-tool-body { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; min-width: 0; }
+  .feature-tool-badge {
+    display: inline-block; padding: 3px 11px; border-radius: 999px;
+    background: var(--accent-bg); color: var(--accent); font-size: 11px; font-weight: 700;
+  }
+  .feature-tool-body strong { font-size: clamp(17px, 2.2vw, 21px); font-weight: 800; letter-spacing: -0.01em; }
+  .feature-tool-desc { color: var(--text-muted); font-size: 13px; line-height: 1.7; }
+  .feature-tool-cta { color: var(--accent); font-size: 13px; font-weight: 600; }
+
   /* 分页样式已移除（瀑布流模式） */
   .view-all-wrap {
     margin-top: 28px;
